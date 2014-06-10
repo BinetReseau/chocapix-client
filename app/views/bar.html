@@ -1,0 +1,24 @@
+<table id="body" cellpadding="0" cellspacing="0">
+	<tr>
+		<td ui-view="logo">
+			<a href="" class="image">
+				<img src="" alt="[LOGO]" />
+				<img src="" alt="[{{bar}}]" />
+			</a>
+		</td>
+		<td ui-view="header">
+		</td>
+	</tr>
+	<tr>
+		<td ui-view="menu" rowspan="2" valign="top"></td>
+		<td ui-view="form"></td>
+	</tr>
+	<tr>
+		<td ui-view="">
+		</td>
+	</tr>
+	<tr>
+		<td ui-view="footer" colspan="2">
+		</td>
+	</tr>
+</table>
