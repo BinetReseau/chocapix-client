@@ -13,7 +13,7 @@ angular.module('bars.API', [
 			},
 			route: function(path){
 				// return '/'+barId+'/'+path;
-				return '/../../bars-symfony/web/'+barId+'/'+path;
+				return '/../../bars-symfony/web/' + barId + (path=='' ? '' : '/'+path);
 			}
 		};
 }])
