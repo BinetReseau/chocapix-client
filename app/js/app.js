@@ -46,12 +46,18 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			})
 			.state('bar', {
 				url: "/:bar",
+				resolve: {
+					api: ['API' , '$stateParams', function(API, $stateParams){
+						API.setBarId($stateParams.bar);
+						return null;
+					}]
+				},
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: function($scope, $stateParams) {
+						controller: ['$scope', '$stateParams', function($scope, $stateParams) {
 							$scope.bar = $stateParams.bar;
-						}
+						}]
 					},
 					'form@bar': {
 						templateUrl: "views/form.html",
