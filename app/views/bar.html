@@ -1,24 +1,17 @@
-<table id="body" cellpadding="0" cellspacing="0">
-	<tr>
-		<td ui-view="logo">
-			<a href="" class="image">
-				<img src="" alt="[LOGO]" />
-				<img src="" alt="[{{bar}}]" />
-			</a>
-		</td>
-		<td ui-view="header">
-		</td>
-	</tr>
-	<tr>
-		<td ui-view="menu" rowspan="2" valign="top"></td>
-		<td ui-view="form"></td>
-	</tr>
-	<tr>
-		<td ui-view="">
-		</td>
-	</tr>
-	<tr>
-		<td ui-view="footer" colspan="2">
-		</td>
-	</tr>
-</table>
+<div class="container-fluid">
+	<div ui-view="menu" class="col-md-2">
+		<img src="" alt="[LOGO]" />
+		<img src="" alt="[{{bar}}]" />
+	</div>
+	<div class="col-md-10">
+		<div class="row" ui-view="header">
+		</div>
+		<div class="row">
+			<div class="col-md-12" ui-view="form">
+		</div>
+		<div class="row">
+			<div class="col-md-12" ui-view="">
+			</div>
+		</div>
+	</div>
+</div>

@@ -55,6 +55,9 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					},
 					'form@bar': {
 						templateUrl: "views/form.html",
+					},
+					'header@bar': {
+						templateUrl: "views/header.html",
 					}
 				}
 			})
