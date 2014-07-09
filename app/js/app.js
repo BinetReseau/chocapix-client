@@ -56,20 +56,22 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					}],
 					foods: ['API.Food', function(Food) {
 						return Food.query().$promise;
+					}],
+					users: ['API.User', function(User) {
+						return User.query().$promise;
 					}]
 				},
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: ['$scope', '$stateParams', 'foods', 'bar', function($scope, $stateParams, foods, bar) {
+						controller: ['$scope', '$stateParams', 'foods', 'bar', 'users', function($scope, $stateParams, foods, bar, users) {
 							$scope.bar = {
 							    id: $stateParams.bar,
-							    name: bar.name
+							    name: bar.name,
+							    users: users,
+							    search: '',
+							    foods: foods
                             };
-							$scope.food = {
-    							search: '',
-    							foods: foods
-							};
 						}]
 					},
 					'form@bar': {
@@ -101,6 +103,15 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				controller: function($scope, foods) {
 					$scope.foods = foods;
 				}
+			})
+			.state('bar.user', {
+				url: "/user",
+				abstract: true,
+				template:'<ui-view/>'
+			})
+			.state('bar.user.list', {
+				url: "/list",
+				templateUrl: "views/User/list.html"
 			})
 
 			// .state('state1', {

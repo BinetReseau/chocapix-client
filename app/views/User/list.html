@@ -1,0 +1,12 @@
+<table class="table table-striped table-hover">
+    <tr>
+        <th>Nom</th>
+        <th>Solde</th>
+        <th>Login</th>
+    </tr>
+    <tr ng-repeat="u in bar.users | filter:bar.search">
+        <td>{{ u.name }}</td>
+        <td>{{ u.client.money }} €</td>
+        <td>{{ u.login }}</td>
+    </tr>
+</table>
