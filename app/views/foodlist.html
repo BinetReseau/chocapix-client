@@ -4,7 +4,7 @@
         <th>Quantité</th>
         <th>Prix</th>
     </tr>
-    <tr ng-repeat="f in foods | filter:fSearch">
+    <tr ng-repeat="f in foods | filter:search.keyword">
         <td>{{ f.name }}</td>
         <td>{{ f.qty }}</td>
         <td>{{ f.price }} €</td>

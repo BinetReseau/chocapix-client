@@ -57,7 +57,9 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						templateUrl: "views/bar.html",
 						controller: ['$scope', '$stateParams', function($scope, $stateParams) {
 							$scope.bar = $stateParams.bar;
-							$scope.fSearch = '';
+							$scope.search = {
+    							keyword: ''
+							};
 						}]
 					},
 					'form@bar': {
