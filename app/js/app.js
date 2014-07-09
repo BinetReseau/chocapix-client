@@ -70,7 +70,8 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							    name: bar.name,
 							    users: users,
 							    search: '',
-							    foods: foods
+							    foods: foods,
+							    active: 'index'
                             };
 						}]
 					},
@@ -107,7 +108,10 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			.state('bar.user', {
 				url: "/user",
 				abstract: true,
-				template:'<ui-view/>'
+				template:'<ui-view/>',
+				controller: ['$scope', function($scope) {
+					$scope.bar.active = 'user';
+				}]
 			})
 			.state('bar.user.list', {
 				url: "/list",
