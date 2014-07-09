@@ -51,6 +51,9 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						API.setBarId($stateParams.bar);
 						return null;
 					}],
+					bar: ['API.Bar' , '$stateParams', function(Bar, $stateParams) {
+						return Bar.get().$promise;
+					}],
 					foods: ['API.Food', function(Food) {
 						return Food.query().$promise;
 					}]
@@ -58,8 +61,11 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: ['$scope', '$stateParams', 'foods', function($scope, $stateParams, foods) {
-							$scope.bar = $stateParams.bar;
+						controller: ['$scope', '$stateParams', 'foods', 'bar', function($scope, $stateParams, foods, bar) {
+							$scope.bar = {
+							    id: $stateParams.bar,
+							    name: bar.name
+                            };
 							$scope.food = {
     							search: '',
     							foods: foods

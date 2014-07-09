@@ -24,6 +24,10 @@ angular.module('bars.API', [
 	  query: {method:'GET', isArray:true}
 	});
   }])
+.factory('API.Bar', ['$resource', 'API',
+  function($resource, API){
+	return $resource(API.route(''));
+  }])
 .factory('API.Food', ['$resource', 'API',
   function($resource, API){
 	return $resource(API.route('food/:id'), {}, {
