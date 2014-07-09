@@ -57,6 +57,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						templateUrl: "views/bar.html",
 						controller: ['$scope', '$stateParams', function($scope, $stateParams) {
 							$scope.bar = $stateParams.bar;
+							$scope.fSearch = '';
 						}]
 					},
 					'form@bar': {
@@ -82,7 +83,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					}],
 				},
 				controller: ['$scope', 'foods', function($scope, foods){
-						$scope.foods=foods;
+					$scope.foods=foods;
 				}]
 			})
 			.state('bar.food.search', {
