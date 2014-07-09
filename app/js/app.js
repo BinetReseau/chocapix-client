@@ -47,18 +47,22 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			.state('bar', {
 				url: "/:bar",
 				resolve: {
-					api: ['API' , '$stateParams', function(API, $stateParams){
+					api: ['API' , '$stateParams', function(API, $stateParams) {
 						API.setBarId($stateParams.bar);
 						return null;
+					}],
+					foods: ['API.Food', function(Food) {
+						return Food.query().$promise;
 					}]
 				},
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: ['$scope', '$stateParams', function($scope, $stateParams) {
+						controller: ['$scope', '$stateParams', 'foods', function($scope, $stateParams, foods) {
 							$scope.bar = $stateParams.bar;
-							$scope.search = {
-    							keyword: ''
+							$scope.food = {
+    							search: '',
+    							foods: foods
 							};
 						}]
 					},
@@ -78,15 +82,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			})
 			.state('bar.food.list', {
 				url: "/list",
-				templateUrl: "views/foodlist.html",
-				resolve: {
-					foods: ['API.Food', function(Food){
-						return Food.query().$promise;
-					}],
-				},
-				controller: ['$scope', 'foods', function($scope, foods){
-					$scope.foods=foods;
-				}]
+				templateUrl: "views/foodlist.html"
 			})
 			.state('bar.food.search', {
 				url: "/search/:q",
