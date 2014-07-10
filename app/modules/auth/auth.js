@@ -13,20 +13,14 @@ angular.module('bars.auth', [
 			login: function(credentials){
 				return $injector.get('$http').post(API.route('auth/login'), credentials).then(
 					function(response){
-						$sessionStorage.auth.token=response.data.token;
+						$sessionStorage.auth.token = response.data.token;
 					},
 					function(response){
-						$sessionStorage.auth.token=null;
+						$sessionStorage.auth.token = null;
 					});
 			},
 			logout: function(){
-				return $injector.get('$http').get(API.route('auth/logout')).then(
-					function(response){
-						$sessionStorage.auth.token=null;
-					},
-					function(response){
-						$sessionStorage.auth.token=null;
-					});
+				$sessionStorage.auth.token = null;
 			},
 			isAuthenticated: function(){
 				return $sessionStorage.auth.token != null;
