@@ -1,7 +1,13 @@
 <div class="container-fluid">
 	<div ui-view="menu" class="col-md-2">
-		<h1 class="text-center">34€23</h1>
-		<br /><br /><br />
+		<form class="form-horizontal" role="form" ng-hide="bar.isAuthenticated" ng-submit="connexion(login, mdp)">
+            <input type="text" class="form-control" placeholder="Login" ng-model="login">
+            <input type="password" class="form-control" placeholder="Mot de passe" ng-model="mdp">
+            <div class="text-center">
+                <button type="submit" class="btn btn-default">Connexion</button>
+            </div>
+        </form>
+		<br /><br />
 		<ul class="nav nav-pills nav-stacked">
             <li ng-class="bar.active == 'index' && 'active'"><a title="Accueil du bar" ui-sref="bar({ bar: bar.id })"><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
             <li><a title="Historique"><span class="glyphicon glyphicon-list"></span> Historique</a></li>

@@ -36,14 +36,21 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: ['$scope', '$stateParams', 'foods', 'bar', 'users', function($scope, $stateParams, foods, bar, users) {
+						controller: ['$scope', '$stateParams', 'AuthService', 'foods', 'bar', 'users', function($scope, $stateParams, AuthService, foods, bar, users) {
 							$scope.bar = {
 							    id: $stateParams.bar,
 							    name: bar.name,
 							    users: users,
 							    search: '',
 							    foods: foods,
-							    active: 'index'
+							    active: 'index',
+							    isAuthenticated: AuthService.isAuthenticated()
+                            };
+                            $scope.connexion = function (login, mdp) {
+                                return AuthService.login({
+                                    login: login,
+                                    password: mdp
+                                });
                             };
 						}]
 					},
