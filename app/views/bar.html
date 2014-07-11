@@ -8,7 +8,7 @@
             </div>
         </form>
         <div ng-show="bar.isAuthenticated()" class="text-center">
-        <h1>{{ user.money }} €</h1>
+        <h1>{{ user.money | formatn }} €</h1>
         <h4><small>{{ user.name }}</small></h4>
         </div>
 		<br /><br />
