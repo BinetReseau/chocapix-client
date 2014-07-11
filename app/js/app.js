@@ -61,28 +61,35 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                             };
 
                             // For connexion:
-                            var resultLogin = {
-                            	ok: function(user) {
-                            		$scope.user = user;
-                            		$scope.login = {
-		                            	login: '',
-		                            	password: ''
-		                            };
-		                            $scope.inLogin = false;
-                            	},
-                            	error: function() {
-                            		$scope.loginError = true;
-                            		$scope.inLogin = false;
-                            		$scope.login.password = '';
-                            	}
-                            };
+                            // var resultLogin = {
+                            // 	ok: function(user) {
+                            // 		$scope.user = user;
+                            // 		$scope.login = {
+		                          //   	login: '',
+		                          //   	password: ''
+		                          //   };
+		                          //   $scope.inLogin = false;
+                            // 	},
+                            // 	error: function() {
+                            // 		$scope.loginError = true;
+                            // 		$scope.inLogin = false;
+                            // 		$scope.login.password = '';
+                            // 	}
+                            // };
                             $scope.connexion = function (login) {
                             	$scope.loginError = false;
                             	$scope.inLogin = true;
-                                AuthService.login(
-                                	login,
-                                	resultLogin
-                                );
+                                AuthService.login(login).then(
+                                	function(user) {
+	                            		$scope.user = user;
+	                            		$scope.login = {login: '', password: ''};
+			                            $scope.inLogin = false;
+	                            	}, function() {
+	                            		$scope.loginError = true;
+	                            		$scope.login.password = '';
+	                            		$scope.inLogin = false;
+	                            	}
+	                            );
                             };
 						}]
 					},

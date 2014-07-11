@@ -5,18 +5,18 @@ angular.module('bars.auth', [
 	'bars.API'
 ])
 
-.factory('AuthService', ['$injector', '$sessionStorage','API',
-	function ($injector, $sessionStorage, API) {
+.factory('AuthService', ['$injector', '$sessionStorage', '$q', 'API',
+	function ($injector, $sessionStorage, $q, API) {
 		return {
 			login: function(credentials, resultLogin) {
 				return $injector.get('$http').post(API.route('auth/login'), credentials).then(
 					function(response) {
 						$sessionStorage.auth.token = response.data.token;
-						resultLogin.ok(response.data.user);
+						return response.data.user;
 					},
 					function(response) {
 						$sessionStorage.auth.token = null;
-						resultLogin.error();
+						return $q.reject();
 					});
 			},
 			logout: function() {
