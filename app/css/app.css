@@ -4,3 +4,27 @@
     width: 64px;
     height: 64px;
 }
+
+.glyphicon-refresh-animate {
+    -webkit-animation: rotateThis 1s infinite linear;
+    -moz-animation: rotateThis 1s infinite linear;
+    -o-animation: rotateThis 1s infinite linear;
+    animation: rotateThis 1s infinite linear;
+}
+
+@-webkit-keyframes "rotateThis" {
+ from { 
+        -webkit-transform: rotate( 0deg );  
+    }
+ to  { 
+        -webkit-transform: rotate( 360deg ); 
+    }
+}
+@keyframes "rotateThis" {
+ from { 
+        -webkit-transform: rotate( 0deg );  
+    }
+ to  { 
+        -webkit-transform: rotate( 360deg ); 
+    }
+}
