@@ -100,7 +100,16 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			})
 			.state('bar.user.list', {
 				url: "/list",
-				templateUrl: "views/User/list.html"
+				templateUrl: "views/User/list.html",
+				controller: ['$scope', 'API.User', function($scope, User) {
+					$scope.bar.active = 'user';
+					$scope.updateUserList = function() {
+					    $scope.updatingUserList = true;
+    				    $scope.bar.users =  User.query({}, function () {
+        				    $scope.updatingUserList = false;
+    				    });
+					};
+				}]
 			})
 }]);
 
