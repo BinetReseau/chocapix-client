@@ -13,7 +13,7 @@ angular.module('bars.auth', [
 			login: function(credentials){
 				return $injector.get('$http').post(API.route('auth/login'), credentials).then(
 					function(response){
-						$sessionStorage.auth.token = response.data.url_safe_token;
+						$sessionStorage.auth.token = response.data.token;
 					},
 					function(response){
 						$sessionStorage.auth.token = null;
