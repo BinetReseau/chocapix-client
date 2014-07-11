@@ -8,8 +8,8 @@ Bienvenue sur l'extraordinaire site des bars d'étages.
     </tr>
     <tr ng-repeat="f in bar.foods | filter:bar.search">
         <td><a title="Voir les détails de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:f.id })">{{ f.name }}</a></td>
-        <td>{{ f.qty }}</td>
-        <td>{{ f.price }} €</td>
+        <td>{{ f.qty | formatn }}</td>
+        <td>{{ f.price | formatn }} €</td>
     </tr>
 </table>
 
@@ -21,7 +21,7 @@ Bienvenue sur l'extraordinaire site des bars d'étages.
     </tr>
     <tr ng-repeat="u in bar.users | filter:bar.search">
         <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.name }}</a></td>
-        <td>{{ u.money }} €</td>
+        <td>{{ u.money | formatn }} €</td>
         <td>{{ u.login }}</td>
     </tr>
 </table>
