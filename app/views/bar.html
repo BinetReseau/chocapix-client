@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div ui-view="menu" class="col-md-2">
-		<form class="form-horizontal" role="form" ng-hide="bar.isAuthenticated" ng-submit="connexion(login, mdp)">
+		<form class="form-horizontal" role="form" ng-hide="bar.isAuthenticated()" ng-submit="connexion(login, mdp)">
             <input type="text" class="form-control" placeholder="Login" ng-model="login">
             <input type="password" class="form-control" placeholder="Mot de passe" ng-model="mdp">
             <div class="text-center">

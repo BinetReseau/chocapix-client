@@ -44,7 +44,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							    search: '',
 							    foods: foods,
 							    active: 'index',
-							    isAuthenticated: AuthService.isAuthenticated()
+							    isAuthenticated: AuthService.isAuthenticated
                             };
                             $scope.connexion = function (login, mdp) {
                                 return AuthService.login({

@@ -7,13 +7,13 @@ angular.module('bars.auth', [
 
 .factory('AuthService', ['$injector', '$sessionStorage','API',
 	function ($injector, $sessionStorage, API) {
-		$sessionStorage.auth={};
-		$sessionStorage.auth.token=null;
+		$sessionStorage.auth = {};
+		$sessionStorage.auth.token = null;
 		return {
 			login: function(credentials){
 				return $injector.get('$http').post(API.route('auth/login'), credentials).then(
 					function(response){
-						$sessionStorage.auth.token = response.data.token;
+						$sessionStorage.auth.token = response.data.url_safe_token;
 					},
 					function(response){
 						$sessionStorage.auth.token = null;
@@ -35,9 +35,13 @@ angular.module('bars.auth', [
 	function (AuthService, $q) {
 		return {
 			request: function(config) {
-				config.headers = config.headers || {};
+				// config.headers = config.headers || {};
+				// if (AuthService.isAuthenticated()) {
+				// 	config.headers.Authorization = 'Bearer ' + AuthService.getToken();
+				// }
+				config.params = config.params || {};
 				if (AuthService.isAuthenticated()) {
-					config.headers.Authorization = 'Bearer ' + AuthService.getToken();
+					config.params["bearer"] = AuthService.getToken();
 				}
 				return config || $q.when(config);
 			},
