@@ -1,8 +1,12 @@
 <hr />
 <div class="text-center">
-	<h1>{{ FoodDetails.name }} <span class="label label-info">{{ FoodDetails.price }} €<span ng-hide="FoodDetails.unit == ''"> / {{ FoodDetails.unit }}</span></span></h1>
+	<h1>{{ FoodDetails.name }}</h1>
 </div>
-<br /><br />
+<br />
+<div class="row h4">
+	<div class="col-sm-2 text-right"><strong>Prix</strong></div>
+	<div class="col-sm-10"><span class="label label-info">{{ FoodDetails.price }} €<span ng-hide="FoodDetails.unit == ''"> / {{ FoodDetails.unit }}</span></span></div>
+</div>
 <div class="row h4">
 	<div class="col-sm-2 text-right"><strong>Stock</strong></div>
 	<div class="col-sm-10"><span class="label label-primary">{{ FoodDetails.qty }} {{ FoodDetails.unit == '' && (FoodDetails.name|affs:FoodDetails.qty) || FoodDetails.unit }}</span></div>
