@@ -4,7 +4,8 @@
 var barsApp = angular.module('bars.app', [
   'ui.router',
   'bars.auth',
-  'bars.API'
+  'bars.API',
+  'bars.filters'
 ]);
 
 barsApp.config(['$stateProvider', '$urlRouterProvider',
@@ -122,6 +123,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Stock/details.html",
 				controller: ['$scope', '$stateParams', 'API.Food', function($scope, $stateParams, Food) {
 					$scope.FoodDetails = Food.get({id: $stateParams.id});
+					$scope.buyQty = 1;
 				}]
 			})
 			.state('bar.food.search', {
