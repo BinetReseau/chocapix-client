@@ -21,7 +21,7 @@ Bienvenue sur l'extraordinaire site des bars d'étages.
     </tr>
     <tr ng-repeat="u in bar.users | filter:bar.search">
         <td>{{ u.name }}</td>
-        <td>{{ u.client.money }} €</td>
+        <td>{{ u.money }} €</td>
         <td>{{ u.login }}</td>
     </tr>
 </table>
