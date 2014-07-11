@@ -108,11 +108,18 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			})
 			.state('bar.food.list', {
 				url: "/list",
-				templateUrl: "views/foodlist.html"
+				templateUrl: "views/Stock/list.html"
+			})
+			.state('bar.food.detail', {
+				url: "/:id",
+				templateUrl: "views/Stock/details.html",
+				controller: ['$scope', '$stateParams', 'API.Food', function($scope, $stateParams, Food) {
+					$scope.FoodDetails = Food.get({id: $stateParams.id});
+				}]
 			})
 			.state('bar.food.search', {
 				url: "/search/:q",
-				templateUrl: "views/foodlist.html",
+				templateUrl: "views/Stock/list.html",
 				resolve:{
 					foods: ['API.Food', '$stateParams', function(Food, $stateParams){
 						return Food.search({q:$stateParams.q}).$promise;

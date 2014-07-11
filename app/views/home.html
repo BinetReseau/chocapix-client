@@ -7,7 +7,7 @@ Bienvenue sur l'extraordinaire site des bars d'étages.
         <th>Prix</th>
     </tr>
     <tr ng-repeat="f in bar.foods | filter:bar.search">
-        <td>{{ f.name }}</td>
+        <td><a title="Voir les détails de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:f.id })">{{ f.name }}</a></td>
         <td>{{ f.qty }}</td>
         <td>{{ f.price }} €</td>
     </tr>
