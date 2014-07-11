@@ -6,7 +6,7 @@
         <th>Login</th>
     </tr>
     <tr ng-repeat="u in bar.users | filter:bar.search">
-        <td>{{ u.name }}</td>
+        <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.name }}</a></td>
         <td>{{ u.money }} €</td>
         <td>{{ u.login }}</td>
     </tr>

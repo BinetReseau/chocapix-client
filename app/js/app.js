@@ -134,13 +134,19 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				url: "/list",
 				templateUrl: "views/User/list.html",
 				controller: ['$scope', 'API.User', function($scope, User) {
-					$scope.bar.active = 'user';
 					$scope.updateUserList = function() {
 					    $scope.updatingUserList = true;
     				    $scope.bar.users =  User.query({}, function () {
         				    $scope.updatingUserList = false;
     				    });
 					};
+				}]
+			})
+			.state('bar.user.detail', {
+				url: "/:id",
+				templateUrl: "views/User/detail.html",
+				controller: ['$scope', '$stateParams', 'API.User', function($scope, $stateParams, User) {
+					$scope.UserDetail = User.get({id: $stateParams.id});
 				}]
 			})
 }]);
