@@ -28,6 +28,10 @@ angular.module('bars.API', [
   function($resource, API){
 	return $resource(API.route(''));
   }])
+.factory('API.Me', ['$resource', 'API',
+  function($resource, API){
+	return $resource(API.route('auth/me'));
+  }])
 .factory('API.Food', ['$resource', 'API',
   function($resource, API){
 	return $resource(API.route('food/:id'), {}, {

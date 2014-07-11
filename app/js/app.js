@@ -31,12 +31,19 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					}],
 					users: ['API.User', function(User) {
 						return User.query().$promise;
+					}],
+					me: ['API.Me', 'AuthService', function(Me, AuthService) {
+						if (AuthService.isAuthenticated()) {
+							return Me.get().$promise;
+						} else {
+							return null;
+						}
 					}]
 				},
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: ['$scope', '$stateParams', 'AuthService', 'foods', 'bar', 'users', function($scope, $stateParams, AuthService, foods, bar, users) {
+						controller: ['$scope', '$stateParams', 'AuthService', 'foods', 'bar', 'users', 'me', function($scope, $stateParams, AuthService, foods, bar, users, me) {
 							$scope.bar = {
 							    id: $stateParams.bar,
 							    name: bar.name,
@@ -44,13 +51,38 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							    search: '',
 							    foods: foods,
 							    active: 'index',
-							    isAuthenticated: AuthService.isAuthenticated
+							    isAuthenticated: AuthService.isAuthenticated,
+							    logout: AuthService.logout
                             };
-                            $scope.connexion = function (login, mdp) {
-                                return AuthService.login({
-                                    login: login,
-                                    password: mdp
-                                });
+                            $scope.user = me;
+                            $scope.login = {
+                            	login: '',
+                            	password: ''
+                            };
+
+                            // For connexion:
+                            var resultLogin = {
+                            	ok: function(user) {
+                            		$scope.user = user;
+                            		$scope.login = {
+		                            	login: '',
+		                            	password: ''
+		                            };
+		                            $scope.inLogin = false;
+                            	},
+                            	error: function() {
+                            		$scope.loginError = true;
+                            		$scope.inLogin = false;
+                            		$scope.login.password = '';
+                            	}
+                            };
+                            $scope.connexion = function (login) {
+                            	$scope.loginError = false;
+                            	$scope.inLogin = true;
+                                AuthService.login(
+                                	login,
+                                	resultLogin
+                                );
                             };
 						}]
 					},

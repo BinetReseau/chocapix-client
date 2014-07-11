@@ -7,25 +7,25 @@ angular.module('bars.auth', [
 
 .factory('AuthService', ['$injector', '$sessionStorage','API',
 	function ($injector, $sessionStorage, API) {
-		$sessionStorage.auth = {};
-		$sessionStorage.auth.token = null;
 		return {
-			login: function(credentials){
+			login: function(credentials, resultLogin) {
 				return $injector.get('$http').post(API.route('auth/login'), credentials).then(
-					function(response){
+					function(response) {
 						$sessionStorage.auth.token = response.data.token;
+						resultLogin.ok(response.data.user);
 					},
-					function(response){
+					function(response) {
 						$sessionStorage.auth.token = null;
+						resultLogin.error();
 					});
 			},
-			logout: function(){
+			logout: function() {
 				$sessionStorage.auth.token = null;
 			},
-			isAuthenticated: function(){
+			isAuthenticated: function() {
 				return $sessionStorage.auth.token != null;
 			},
-			getToken: function(){
+			getToken: function() {
 				return $sessionStorage.auth.token;
 			}
 		};
