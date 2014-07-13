@@ -24,7 +24,7 @@
 			<form class="form-inline" role="form" ng-submit="buy(buyQty)">
 				<input type="number" class="form-control" step="any" ng-model="buyQty" size="4" style="width: 80px" />
 				<label>{{ FoodDetails.unit == '' && (FoodDetails.name|affs:buyQty) || FoodDetails.unit }}</label>
-				<input type="submit" class="btn btn-success" value="Valider{{ buyQty > 0 && ' pour ' + ((buyQty*FoodDetails.price) | formatn) + ' €' || '' }}" />
+				<input type="submit" class="btn btn-success" value="Valider{{ buyQty > 0 && ' pour ' + ((buyQty*FoodDetails.price) | formatn) + ' €' || '' }}" ng-class="buyQty <= 0 && 'disabled' || ''" />
 			</form>
 		</div>
 	</div>
