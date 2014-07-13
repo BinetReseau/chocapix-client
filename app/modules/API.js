@@ -30,7 +30,9 @@ angular.module('bars.API', [
   }])
 .factory('API.Me', ['$resource', 'API',
   function($resource, API){
-	return $resource(API.route('auth/me'));
+	return $resource(API.route('account/me'), {}, {
+	  all: {method:'GET', url:API.route('../nobar/auth/me'), isArray:false}
+	});
   }])
 .factory('API.Food', ['$resource', 'API',
   function($resource, API){

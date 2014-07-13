@@ -33,7 +33,14 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					users: ['API.User', function(User) {
 						return User.query().$promise;
 					}],
-					me: ['API.Me', 'AuthService', function(Me, AuthService) {
+					user: ['API.Me', 'AuthService', function(Me, AuthService) {
+						if (AuthService.isAuthenticated()) {
+							return Me.all().$promise;
+						} else {
+							return null;
+						}
+					}],
+					account: ['API.Me', 'AuthService', function(Me, AuthService) {
 						if (AuthService.isAuthenticated()) {
 							return Me.get().$promise;
 						} else {
@@ -44,7 +51,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				views: {
 					'@': {
 						templateUrl: "views/bar.html",
-						controller: ['$scope', '$stateParams', 'AuthService', 'foods', 'bar', 'users', 'me', function($scope, $stateParams, AuthService, foods, bar, users, me) {
+						controller: ['$scope', '$stateParams', 'AuthService', 'foods', 'bar', 'users', 'user', 'account', function($scope, $stateParams, AuthService, foods, bar, users, user, account) {
 							$scope.bar = {
 							    id: $stateParams.bar,
 							    name: bar.name,
@@ -54,16 +61,10 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							    active: 'index',
                             };
                             $scope.user = {
-                            	infos: me,
+                            	infos: user,
                             	isAuthenticated: AuthService.isAuthenticated,
 							    logout: AuthService.logout,
-                            	cAccount: function() {
-                            		for (var i = 0; i < this.infos.accounts.length; i++) {
-                            			if (this.infos.accounts[i].bar == $scope.bar.id) {
-                            				return this.infos.accounts[i];
-                            			}
-                            		}
-                            	}
+                            	account: account
                             }
                             $scope.login = {
                             	login: '',
@@ -123,7 +124,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 								if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == $stateParams.id) {
 									$scope.FoodDetails = Transaction.operations[i].item;
 								} else if (Transaction.operations[i].type == 'accountoperation') {
-									$scope.user.cAccount().money = Transaction.operations[i].account.money;
+									$scope.user.account.money = Transaction.operations[i].account.money;
 								}
 							}
 						});
