@@ -14,7 +14,7 @@ angular.module('bars.auth', [
 						$sessionStorage.auth.token = response.data.token;
 						return response.data.user;
 					},
-					function(response)fil {
+					function(response) {
 						$sessionStorage.auth.token = null;
 						return $q.reject();
 					});

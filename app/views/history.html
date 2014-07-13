@@ -1,0 +1,13 @@
+<a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'"><span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser</a><br /><br />
+<table class="table table-striped table-hover">
+    <tr>
+        <th>Nom</th>
+        <th>Date</th>
+        <th>Type</th>
+    </tr>
+    <tr ng-repeat="h in history">
+        <td></td>
+        <td>{{ h.timestamp }}</td>
+        <td>{{ h.type }}</td>
+    </tr>
+</table>

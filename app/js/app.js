@@ -170,6 +170,20 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					$scope.UserDetail = User.get({id: $stateParams.id});
 				}]
 			})
+			.state('bar.history', {
+				url: "/history",
+				templateUrl: "views/history.html",
+				controller: ['$scope', 'API.Transaction', function($scope, Transaction) {
+					$scope.bar.active = 'history';
+					$scope.history = Transaction.query();
+					$scope.updateHistory = function() {
+					    $scope.updatingHistory = true;
+    				    $scope.history =  Transaction.query({}, function () {
+        				    $scope.updatingHistory = false;
+    				    });
+					};
+				}]
+			})
 }]);
 
 barsApp.config(['$httpProvider',

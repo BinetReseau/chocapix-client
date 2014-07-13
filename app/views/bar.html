@@ -14,7 +14,7 @@
 		<br /><br />
 		<ul class="nav nav-pills nav-stacked">
             <li ng-class="bar.active == 'index' && 'active'"><a title="Accueil du bar" ui-sref="bar({ bar: bar.id })"><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
-            <li><a title="Historique"><span class="glyphicon glyphicon-list"></span> Historique</a></li>
+            <li ng-class="bar.active == 'history' && 'active'"><a title="Historique" ui-sref="bar.history({ bar: bar.id })"><span class="glyphicon glyphicon-list"></span> Historique</a></li>
             <li ng-class="bar.active == 'user' && 'active'"><a title="Utilisateurs du bar" ui-sref="bar.user.list({ bar: bar.id })"><span class="glyphicon glyphicon-user"></span> Utilisateurs</a></li>
             <li><a title="Administration"><span class="glyphicon glyphicon-dashboard"></span> Administration</a></li>
             <li><a title="Réglages"><span class="glyphicon glyphicon-wrench"></span> Préférences</a></li>
