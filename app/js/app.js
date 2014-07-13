@@ -166,16 +166,26 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			.state('bar.user.detail', {
 				url: "/:id",
 				templateUrl: "views/User/detail.html",
-				controller: ['$scope', '$stateParams', 'API.User', function($scope, $stateParams, User) {
-					$scope.UserDetail = User.get({id: $stateParams.id});
+				resolve:{
+					user: ['API.User', '$stateParams', function(User, $stateParams) {
+						return User.get({id: $stateParams.id}).$promise;
+					}]
+				},
+				controller: ['$scope', 'user', function($scope, user) {
+					$scope.UserDetail = user;
 				}]
 			})
 			.state('bar.history', {
 				url: "/history",
 				templateUrl: "views/history.html",
-				controller: ['$scope', 'API.Transaction', function($scope, Transaction) {
+				resolve:{
+					history: ['API.Transaction', '$stateParams', function(Transaction) {
+						return Transaction.query().$promise;
+					}]
+				},
+				controller: ['$scope', 'history', function($scope, history) {
 					$scope.bar.active = 'history';
-					$scope.history = Transaction.query();
+					$scope.history = history;
 					$scope.updateHistory = function() {
 					    $scope.updatingHistory = true;
     				    $scope.history =  Transaction.query({}, function () {
