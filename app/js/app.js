@@ -52,10 +52,19 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							    search: '',
 							    foods: foods,
 							    active: 'index',
-							    isAuthenticated: AuthService.isAuthenticated,
-							    logout: AuthService.logout
                             };
-                            $scope.user = me;
+                            $scope.user = {
+                            	infos: me,
+                            	isAuthenticated: AuthService.isAuthenticated,
+							    logout: AuthService.logout,
+                            	cAccount: function() {
+                            		for (var i = 0; i < this.infos.accounts.length; i++) {
+                            			if (this.infos.accounts[i].bar == $scope.bar.id) {
+                            				return this.infos.accounts[i];
+                            			}
+                            		}
+                            	}
+                            }
                             $scope.login = {
                             	login: '',
                             	password: ''
@@ -66,7 +75,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                             	$scope.inLogin = true;
                                 AuthService.login(login).then(
                                 	function(user) {
-	                            		$scope.user = user;
+	                            		$scope.user.infos = user;
 	                            		$scope.login = {login: '', password: ''};
 			                            $scope.inLogin = false;
 	                            	}, function() {
@@ -114,7 +123,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 								if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == $stateParams.id) {
 									$scope.FoodDetails = Transaction.operations[i].item;
 								} else if (Transaction.operations[i].type == 'accountoperation') {
-									$scope.user.money = Transaction.operations[i].account.money;
+									$scope.user.cAccount().money = Transaction.operations[i].account.money;
 								}
 							}
 						});
