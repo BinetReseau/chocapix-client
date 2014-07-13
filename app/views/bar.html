@@ -18,7 +18,7 @@
             <li ng-class="bar.active == 'user' && 'active'"><a title="Utilisateurs du bar" ui-sref="bar.user.list({ bar: bar.id })"><span class="glyphicon glyphicon-user"></span> Utilisateurs</a></li>
             <li><a title="Administration"><span class="glyphicon glyphicon-dashboard"></span> Administration</a></li>
             <li><a title="Réglages"><span class="glyphicon glyphicon-wrench"></span> Préférences</a></li>
-            <li><a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="bar.logout()"><span class="glyphicon glyphicon-off"></span> Déconnexion</a></li>
+            <li><a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="user.logout()"><span class="glyphicon glyphicon-off"></span> Déconnexion</a></li>
         </ul>
 	</div>
 	<div class="col-md-10">
