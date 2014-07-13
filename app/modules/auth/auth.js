@@ -9,12 +9,12 @@ angular.module('bars.auth', [
 	function ($injector, $sessionStorage, $q, API) {
 		return {
 			login: function(credentials, resultLogin) {
-				return $injector.get('$http').post(API.route('auth/login'), credentials).then(
+				return $injector.get('$http').post(API.route('../nobar/auth/login'), credentials).then(
 					function(response) {
 						$sessionStorage.auth.token = response.data.token;
 						return response.data.user;
 					},
-					function(response) {
+					function(response)fil {
 						$sessionStorage.auth.token = null;
 						return $q.reject();
 					});
