@@ -5,7 +5,8 @@ var barsApp = angular.module('bars.app', [
   'ui.router',
   'bars.auth',
   'bars.API',
-  'bars.filters'
+  'bars.filters',
+  'angularMoment'
 ]);
 
 barsApp.config(['$stateProvider', '$urlRouterProvider',
@@ -101,7 +102,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 								$scope.query = {
 									type: 'acheter',
 									qty: 1,
-									unit: null,
+									unit: '',
 									name: '',
 									food: null
 								};
@@ -148,6 +149,19 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 
 								if (foods.length == 1) {
 									$scope.query.food = foods[0];
+
+									if ($scope.query.unit != '' && $scope.query.food.unit != '') {
+										if ((/^k/i.test($scope.query.food.unit) && !/^k/i.test($scope.query.unit)) || (!/^m/i.test($scope.query.food.unit) && /^m/i.test($scope.query.unit))) {
+											$scope.query.qty *= 0.001;
+										} else if ((!/^k/i.test($scope.query.food.unit) && /^k/i.test($scope.query.unit)) || (/^m/i.test($scope.query.food.unit) && !/^m/i.test($scope.query.unit))) {
+											$scope.query.qty *= 1000;
+										} else if (/^c/i.test($scope.query.food.unit) && !/^c/i.test($scope.query.unit)) {
+											$scope.query.qty *= 100;
+										} else if (!/^c/i.test($scope.query.food.unit) && /^c/i.test($scope.query.unit)) {
+											$scope.query.qty *= 0.01;
+										}
+									}
+
 									$scope.query.unit = $scope.query.food.unit;
 								}
 
@@ -283,4 +297,8 @@ barsApp.config(['$httpProvider',
 	function ($httpProvider) {
 		$httpProvider.interceptors.push('AuthInterceptor');
 }]);
+
+barsApp.run(function(amMoment) {
+    amMoment.changeLanguage('fr');
+});
 

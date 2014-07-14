@@ -7,7 +7,7 @@
     </tr>
     <tr ng-repeat="h in history">
         <td></td>
-        <td>{{ h.timestamp }}</td>
+        <td>{{ h.timestamp | amCalendar }}</td>
         <td>{{ h.type }}</td>
     </tr>
 </table>
