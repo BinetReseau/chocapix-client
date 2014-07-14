@@ -158,16 +158,18 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 									return null;
 								}
 								var id = $scope.query.food.id;
-								var Transaction = Food.buy({item: id, qty: $scope.query.qty}, function () {
-									for (var  i = 0 ; i < Transaction.operations.length ; i++) {
-										if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
-											$scope.FoodDetails = Transaction.operations[i].item;
-										} else if (Transaction.operations[i].type == 'accountoperation') {
-											$scope.user.account.money = Transaction.operations[i].account.money;
+								if ($scope.query.type == 'acheter') {
+									var Transaction = Food.buy({item: id, qty: $scope.query.qty}, function () {
+										for (var  i = 0 ; i < Transaction.operations.length ; i++) {
+											if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
+												$scope.FoodDetails = Transaction.operations[i].item;
+											} else if (Transaction.operations[i].type == 'accountoperation') {
+												$scope.user.account.money = Transaction.operations[i].account.money;
+											}
 										}
-									}
-									$scope.bar.search = '';
-								});
+										$scope.bar.search = '';
+									});
+								}
 							};
 						}]
 					},
@@ -178,6 +180,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
     					templateUrl: "views/home.html",
         				controller: ['$scope', function($scope) {
         					$scope.bar.active = 'index';
+        					document.getElementById("queryf").focus();
         				}]
 					}
 				}
