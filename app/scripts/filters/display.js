@@ -3,6 +3,10 @@
 angular.module('bars.filters', [])
 .filter('formatn', function() { // format a number to be human readable
     return function(n) {
+      var negatif = n < 0;
+      if (negatif) {
+        n *= -1;
+      }
       n = Math.round(n*100)/100;
       var nombre = '' + Math.floor(n);
       var retour = '';
@@ -21,6 +25,9 @@ angular.module('bars.filters', [])
       if (decimal > 0) {
         decimal = '' + decimal;
         retour = retour + decimal.substring(1);
+      }
+      if (negatif) {
+        retour = "-" + retour;
       }
       return retour;
       };
