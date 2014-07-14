@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bars.filters', [])
-.filter('formatn', function() {
+.filter('formatn', function() { // format a number to be human readable
     return function(n) {
       n = Math.round(n*100)/100;
       var nombre = '' + Math.floor(n);
@@ -25,7 +25,16 @@ angular.module('bars.filters', [])
       return retour;
       };
   })
-  .filter('affs', function() {
+  .filter('affd', function() { // displays d' or de
+    return function(text) {
+      if (/^[aeiouy]/i.test(text)) {
+        return "d'";
+      } else {
+        return "de ";
+      }
+    };
+  })
+  .filter('affs', function() { // displays plurial or singular
     return function(text, n) {
       if (n >= 2) {
         return text + "s";

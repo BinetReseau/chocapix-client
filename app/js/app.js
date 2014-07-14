@@ -90,6 +90,70 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					},
 					'form@bar': {
 						templateUrl: "views/form.html",
+						controller: ['$scope', '$filter', function($scope, $filter) {
+							$scope.query = {
+								type: 'acheter',
+								qty: 1,
+								unit: null,
+								name: ''
+							};
+							$scope.analyse = function(q) {
+								$scope.query = {
+									type: 'acheter',
+									qty: 1,
+									unit: null,
+									name: '',
+									food: null
+								};
+								// Type: acheter|jeter|ajouter|appro
+								if (/acheter/i.test(q)) {
+									$scope.query.type = 'acheter';
+									q = q.replace(/acheter/gi, '');
+								} else if (/jeter/i.test(q)) {
+									$scope.query.type = 'jeter';
+									q = q.replace(/jeter/gi, '');
+								}
+
+								// Quantity + unit
+								if (/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig.test(q)) {
+									$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$2');
+									$scope.query.unit = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$4');
+									q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig, ' ');
+								} else if (/([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig.test(q)) {
+									$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '$2');
+									$scope.query.unit = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '$4');
+									q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '');
+								} else { // Quantity without unit
+									if (/1664/.test(q)) {
+										$scope.query.name = '1664';
+										q = q.replace(/1664/g, '');
+										$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/, '$1');
+									}
+									$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/g, '$2').trim();
+									if ($scope.query.qty == q.trim()) {
+										$scope.query.qty = 1;
+									}
+									q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '')
+								}
+
+								// Aliment
+								q = q.replace(/( de )|( d')/gi, '');
+								q = q.replace(/ +/g, '');
+								q = q.trim();
+								if ($scope.query.name == '') {
+									$scope.query.name = q;
+								}
+
+								var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
+
+								if (foods.length == 1) {
+									$scope.query.food = foods[0];
+									$scope.query.unit = $scope.query.food.unit;
+								}
+
+								return $scope.query;
+							};
+						}]
 					},
 					'header@bar': {
 						templateUrl: "views/header.html",
@@ -183,7 +247,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Transaction.query().$promise;
 					}]
 				},
-				controller: ['$scope', 'history', function($scope, history) {
+				controller: ['$scope', 'API.Transaction', 'history', function($scope, Transaction, history) {
 					$scope.bar.active = 'history';
 					$scope.history = history;
 					$scope.updateHistory = function() {

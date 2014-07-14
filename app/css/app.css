@@ -5,6 +5,10 @@
     height: 64px;
 }
 
+.legend {
+    color: gray;
+}
+
 .glyphicon-refresh-animate {
     -webkit-animation: rotateThis 1s infinite linear;
     -moz-animation: rotateThis 1s infinite linear;
