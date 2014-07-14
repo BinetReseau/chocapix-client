@@ -8,7 +8,7 @@
             </div>
         </form>
         <div ng-show="user.isAuthenticated()" class="text-center">
-        <h1><span ng-class="user.account.money <= 0 && 'label label-danger' || ''">{{ user.account.money | formatn }} €</span></h1>
+        <h1 ng-class="user.account.money <= 0 && 'animated wobble' || ''"><span ng-class="user.account.money <= 0 && 'label label-danger' || ''">{{ user.account.money | formatn }} €</span></h1>
         <h4><small>{{ user.infos.name }}</small></h4>
         </div>
 		<br /><br />
