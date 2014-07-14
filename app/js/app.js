@@ -90,7 +90,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					},
 					'form@bar': {
 						templateUrl: "views/form.html",
-						controller: ['$scope', '$filter', function($scope, $filter) {
+						controller: ['$scope', '$filter', 'API.Food', function($scope, $filter, Food) {
 							$scope.query = {
 								type: 'acheter',
 								qty: 1,
@@ -152,6 +152,22 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 								}
 
 								return $scope.query;
+							};
+							$scope.executeQuery = function() {
+								if ($scope.query.food === null) {
+									return null;
+								}
+								var id = $scope.query.food.id;
+								var Transaction = Food.buy({item: id, qty: $scope.query.qty}, function () {
+									for (var  i = 0 ; i < Transaction.operations.length ; i++) {
+										if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
+											$scope.FoodDetails = Transaction.operations[i].item;
+										} else if (Transaction.operations[i].type == 'accountoperation') {
+											$scope.user.account.money = Transaction.operations[i].account.money;
+										}
+									}
+									$scope.bar.search = '';
+								});
 							};
 						}]
 					},

@@ -1,4 +1,4 @@
-<form class="form-horizontal">
+<form class="form-horizontal" ng-submit="executeQuery()">
 	<div class="form-group">
 		<label for="q_alim" class="col-sm-2 control-label">Je veux</label>
 		<div class="col-sm-8">
@@ -10,6 +10,6 @@
 <span ng-hide="1">{{ analyse(bar.search) }}</span>
 <div class="row">
 	<div class="col-sm-8 col-sm-offset-2">
-		<span class="legend" ng-hide="query.food === null">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }} {{ query.qty | formatn }} <span ng-hide="query.unit == ''">{{ query.unit }} {{ query.food.name | affd }}{{ query.food.name }}</span><span ng-show="query.unit == ''">{{ query.food.name | affs:query.qty }}</span> pour {{ (query.qty*query.food.price) | formatn }} €.</span>
+		<span class="legend" ng-hide="query.food === null">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }} {{ query.qty | formatn }} <span ng-hide="query.unit == ''">{{ query.unit }} {{ query.food.name | affd }}{{ query.food.name }}</span><span ng-show="query.unit == ''">{{ query.food.name | affs:query.qty }}</span> pour {{ (query.qty*query.food.price) | formatn }} €.</span><br /><br /><br />
 	</div>
 </div>
