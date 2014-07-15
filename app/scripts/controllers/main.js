@@ -4,8 +4,8 @@ angular.module('bars.ctrl.main', [
 	'bars.filters'
 	])
 	.controller('MainBaseCtrl',
-		['$scope', '$stateParams', 'AuthService', 'foods', 'bar', 'users', 'user', 'account',
-		function($scope, $stateParams, AuthService, foods, bar, users, user, account) {
+		['$scope', '$stateParams', 'AuthService', 'API.Me', 'foods', 'bar', 'users', 'user', 'account',
+		function($scope, $stateParams, AuthService, Me, foods, bar, users, user, account) {
 			$scope.bar = {
 			    id: $stateParams.bar,
 			    name: bar.name,
@@ -31,6 +31,7 @@ angular.module('bars.ctrl.main', [
 	            AuthService.login(login).then(
 	            	function(user) {
 	            		$scope.user.infos = user;
+	            		$scope.user.account = Me.get();
 	            		$scope.login = {login: '', password: ''};
 	                    $scope.inLogin = false;
 	            	}, function() {

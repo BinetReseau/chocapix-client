@@ -7,6 +7,11 @@ angular.module('bars.auth', [
 
 .factory('AuthService', ['$injector', '$sessionStorage', '$q', 'API',
 	function ($injector, $sessionStorage, $q, API) {
+		if ($sessionStorage.auth === undefined) {
+			$sessionStorage.auth = {
+				token: null
+			};
+		}
 		return {
 			login: function(credentials, resultLogin) {
 				return $injector.get('$http').post(API.route('../nobar/auth/login'), credentials).then(

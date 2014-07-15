@@ -19,7 +19,12 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 		$stateProvider
 			.state('index', {
 				url: "/",
-				template: "<div ui-view>Rien</div>"
+				template: "<div ui-view><a title='Déconnexion' ng-click='deconnexion()'>Déconnexion</a></div>",
+				controller : function($scope, AuthService) {
+					$scope.deconnexion = function() {
+						AuthService.logout();
+					};
+				}
 			})
 			.state('bar', {
 				url: "/:bar",
