@@ -8,7 +8,7 @@
             </span>
             par 
             <span ng-repeat="o in h.operations | filter:'accountoperation'">
-                <a title="Voir la fiche de cet utilisateur" ui-sref="bar.user.detail({ bar: bar.id, id:o.account.user.id })">{{ o.account.user.name }}</a> ({{ o.deltamoney|formatn }}€)<span ng-show="!$last">,</span>
+                <a title="Voir la fiche de cet utilisateur" ui-sref="bar.user.detail({ bar: bar.id, id:o.account.user.id })">{{ o.account.user.name }}</a> ({{ o.deltamoney|formatn }}€)<span ng-show="!$last">,</span> 
             </span>
         </span>
     </li>
