@@ -4,7 +4,7 @@
         <span ng-show="h.type == 'buy'">
             {{ h.timestamp | amCalendar }} : achat de 
             <span ng-repeat="o in h.operations | filter:'stockoperation'">
-                {{ (-1)*o.deltaqty }} <span ng-hide="o.item.unit == ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-show="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span><span ng-show="!$last">,</span> 
+                {{ ((-1)*o.deltaqty)|formatn }} <span ng-hide="o.item.unit == ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-show="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span><span ng-show="!$last">,</span> 
             </span>
             par 
             <span ng-repeat="o in h.operations | filter:'accountoperation'">
