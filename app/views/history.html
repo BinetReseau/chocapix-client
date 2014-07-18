@@ -1,13 +1,15 @@
 <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'"><span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser</a><br /><br />
-<table class="table table-striped table-hover">
-    <tr>
-        <th>Nom</th>
-        <th>Date</th>
-        <th>Type</th>
-    </tr>
-    <tr ng-repeat="h in history">
-        <td></td>
-        <td>{{ h.timestamp | amCalendar }}</td>
-        <td>{{ h.type }}</td>
-    </tr>
-</table>
+<ul>
+    <li ng-repeat="h in history">
+        <span ng-show="h.type == 'buy'">
+            {{ h.timestamp | amCalendar }} : achat de 
+            <span ng-repeat="o in h.operations | filter:'stockoperation'">
+                {{ (-1)*o.deltaqty }} <span ng-hide="o.item.unit == ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-show="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span><span ng-show="!$last">,</span> 
+            </span>
+            par 
+            <span ng-repeat="o in h.operations | filter:'accountoperation'">
+                <a title="Voir la fiche de cet utilisateur" ui-sref="bar.user.detail({ bar: bar.id, id:o.account.user.id })">{{ o.account.user.name }}</a> ({{ o.deltamoney|formatn }}€)<span ng-show="!$last">,</span> 
+            </span>
+        </span>
+    </li>
+</ul>
