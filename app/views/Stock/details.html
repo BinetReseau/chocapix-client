@@ -5,11 +5,11 @@
 <br />
 <div class="row h4">
 	<div class="col-sm-2 text-right"><strong>Prix</strong></div>
-	<div class="col-sm-10"><span class="label label-info">{{ FoodDetails.price }} €<span ng-hide="FoodDetails.unit == ''"> / {{ FoodDetails.unit }}</span></span></div>
+	<div class="col-sm-10"><span class="label label-info">{{ FoodDetails.price|currency }}<span ng-hide="FoodDetails.unit == ''"> / {{ FoodDetails.unit }}</span></span></div>
 </div>
 <div class="row h4">
 	<div class="col-sm-2 text-right"><strong>Stock</strong></div>
-	<div class="col-sm-10"><span class="label label-primary">{{ FoodDetails.qty | formatn }} {{ FoodDetails.unit == '' && (FoodDetails.name|affs:FoodDetails.qty) || FoodDetails.unit }}</span></div>
+	<div class="col-sm-10"><span class="label label-primary">{{ FoodDetails.qty | number }} {{ FoodDetails.unit == '' && (FoodDetails.name|affs:FoodDetails.qty) || FoodDetails.unit }}</span></div>
 </div>
 <div class="row">
 		<div class="col-sm-2">
@@ -24,7 +24,7 @@
 			<form class="form-inline" role="form" ng-submit="buy(buyQty)">
 				<input type="number" class="form-control" step="any" ng-model="buyQty" size="4" style="width: 80px" />
 				<label>{{ FoodDetails.unit == '' && (FoodDetails.name|affs:buyQty) || FoodDetails.unit }}</label>
-				<input type="submit" class="btn btn-success" value="Valider{{ buyQty > 0 && ' pour ' + ((buyQty*FoodDetails.price) | formatn) + ' €' || '' }}" ng-class="buyQty <= 0 && 'disabled' || ''" />
+				<input type="submit" class="btn btn-success" value="Valider{{ buyQty > 0 && ' pour ' + ((buyQty*FoodDetails.price) | currency) || '' }}" ng-class="buyQty <= 0 && 'disabled' || ''" />
 			</form>
 		</div>
 	</div>

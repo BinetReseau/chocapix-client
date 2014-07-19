@@ -130,12 +130,11 @@ angular.module('bars.ctrl.main', [
 				// Type : donner
 				if ($scope.query.type == '' || $scope.query.type == 'donner') {
 					var q = qo;
-					$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/g, '$2');
+					$scope.query.qty = q.replace(/^(.*[^0-9€.])?([0-9]+(((\.)|€|(euro(s?)))[0-9]+)?).*$/g, '$2').replace(/€/, '.');
 					if ($scope.query.qty != q) {
 						q = q.replace(/(euros?)|€/i, '');
 						q = q.replace(/ à|a /i, '');
 						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '').trim();
-						console.log(q);
 
 						var users = $filter('filter')($scope.bar.users, q, false);
 						if (users.length == 1) {

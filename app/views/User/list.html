@@ -7,7 +7,7 @@
     </tr>
     <tr ng-repeat="u in bar.users | filter:bar.search">
         <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.name }}</a></td>
-        <td>{{ u.accounts[0].money | formatn }} €</td>
+        <td>{{ u.accounts[0].money | currency }}</td>
         <td>{{ u.login }}</td>
     </tr>
 </table>
