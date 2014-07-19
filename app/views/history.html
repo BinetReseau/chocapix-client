@@ -22,7 +22,7 @@
             {{h.timestamp | amCalendar }} : 
             <span ng-hide="displayDetail" ng-click="displayDetail = !displayDetail" ng-init="displayDetail = false" class="glyphicon glyphicon-expand"></span>
             <span ng-show="displayDetail" ng-click="displayDetail = !displayDetail"  class="glyphicon glyphicon-collapse-down"></span>
-             bouffe à plusieurs entre {{ (h.operations | filter:'accountoperation').length }} participants (ici il y aura le prix total)
+             bouffe à plusieurs entre {{ (h.operations | filter:'accountoperation').length }} participants ({{ prixTotal(h) }} €)
             <span ng-show="displayDetail">
                 <ul>
                     <li>Participants : 
