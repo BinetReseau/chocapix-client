@@ -40,8 +40,8 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					foods: ['API.Food', function(Food) {
 						return Food.query().$promise;
 					}],
-					users: ['API.User', function(User) {
-						return User.query().$promise;
+					accounts: ['API.Account', function(Account) {
+						return Account.query().$promise;
 					}],
 					user: ['API.Me', 'AuthService', function(Me, AuthService) {
 						if (AuthService.isAuthenticated()) {
@@ -118,8 +118,8 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				url: "/:id",
 				templateUrl: "views/User/detail.html",
 				resolve:{
-					user: ['API.User', '$stateParams', function(User, $stateParams) {
-						return User.get({id: $stateParams.id}).$promise;
+					user: ['API.Account', '$stateParams', function(Account, $stateParams) {
+						return Account.get({id: $stateParams.id}).$promise;
 					}]
 				},
 				controller: 'UserDetailCtrl'

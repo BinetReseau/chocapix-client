@@ -4,12 +4,12 @@ angular.module('bars.ctrl.main', [
 	'bars.filters'
 	])
 	.controller('MainBaseCtrl',
-		['$scope', '$stateParams', 'AuthService', 'API.Me', 'foods', 'bar', 'users', 'user', 'account',
-		function($scope, $stateParams, AuthService, Me, foods, bar, users, user, account) {
+		['$scope', '$stateParams', 'AuthService', 'API.Me', 'foods', 'bar', 'accounts', 'user', 'account',
+		function($scope, $stateParams, AuthService, Me, foods, bar, accounts, user, account) {
 			$scope.bar = {
 			    id: $stateParams.bar,
 			    name: bar.name,
-			    users: users,
+			    accounts: accounts,
 			    search: '',
 			    foods: foods,
 			    active: 'index',

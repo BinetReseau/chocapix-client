@@ -19,29 +19,35 @@ angular.module('bars.API', [
 }])
 
 .factory('API.User', ['$resource', 'API',
-  function($resource, API){
+  function($resource, API) {
 	return $resource(API.route('user/:id'), {}, {
 	  query: {method:'GET', isArray:true}
 	});
   }])
+.factory('API.Account', ['$resource', 'API',
+  function($resource, API) {
+	return $resource(API.route('account/:id'), {}, {
+	  query: {method:'GET', isArray:true}
+	});
+  }])
 .factory('API.Transaction', ['$resource', 'API',
-  function($resource, API){
+  function($resource, API) {
 	return $resource(API.route('transaction/:id'), {}, {
 	  query: {method:'GET', isArray:true}
 	});
   }])
 .factory('API.Bar', ['$resource', 'API',
-  function($resource, API){
+  function($resource, API) {
 	return $resource(API.route(''));
   }])
 .factory('API.Me', ['$resource', 'API',
-  function($resource, API){
+  function($resource, API) {
 	return $resource(API.route('account/me'), {}, {
 	  all: {method:'GET', url:API.route('../nobar/auth/me'), isArray:false}
 	});
   }])
 .factory('API.Food', ['$resource', 'API',
-  function($resource, API){
+  function($resource, API) {
 	return $resource(API.route('food/:id'), {}, {
 	  query: {method:'GET', isArray:true},
 	  search: {method:'GET', url:API.route('food/search/:q'), isArray:true},

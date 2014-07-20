@@ -3,11 +3,9 @@
     <tr>
         <th>Nom</th>
         <th>Solde</th>
-        <th>Login</th>
     </tr>
-    <tr ng-repeat="u in bar.users | filter:bar.search">
-        <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.name }}</a></td>
-        <td>{{ u.accounts[0].money | currency }}</td>
-        <td>{{ u.login }}</td>
+    <tr ng-repeat="u in bar.accounts | filter:bar.search">
+        <td><a title="En savoir plus sur {{ u.user.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.user.name }}</a></td>
+        <td>{{ u.money | currency }}</td>
     </tr>
 </table>
