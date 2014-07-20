@@ -51,6 +51,7 @@ angular.module('bars.API', [
 	return $resource(API.route('food/:id'), {}, {
 	  query: {method:'GET', isArray:true},
 	  search: {method:'GET', url:API.route('food/search/:q'), isArray:true},
-	  buy: {method:'POST', url:API.route('buy')}
+	  buy: {method:'POST', url:API.route('buy')},
+      jeter: {method: 'POST', url:API.route('jeter')}
 	});
   }]);

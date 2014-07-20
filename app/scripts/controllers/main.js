@@ -144,6 +144,61 @@ angular.module('bars.ctrl.main', [
 					}
 				}
 
+				// Type : jeter
+				if ($scope.query.type == '' || $scope.query.type == 'jeter') {
+					var q = qo;
+					// Quantity + unit
+					if (/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig.test(q)) {
+						$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$2');
+						$scope.query.unit = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$4');
+						q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig, ' ');
+					} else if (/([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig.test(q)) {
+						$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '$2');
+						$scope.query.unit = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '$4');
+						q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '');
+					} else { // Quantity without unit
+						if (/1664/.test(q)) {
+							$scope.query.name = '1664';
+							q = q.replace(/1664/g, '');
+							$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/, '$2');
+						}
+						$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/g, '$2').trim();
+						if ($scope.query.qty == q.trim()) {
+							$scope.query.qty = 1;
+						}
+						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '')
+					}
+
+					// Aliment
+					q = q.replace(/( de )|( d')/gi, '');
+					q = q.replace(/ +/g, '');
+					q = q.trim();
+					if ($scope.query.name == '') {
+						$scope.query.name = q;
+					}
+
+					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
+
+					if (foods.length == 1) {
+						$scope.query.type = 'jeter';
+						$scope.query.food = foods[0];
+
+						if ($scope.query.unit != '' && $scope.query.food.unit != '') {
+							if ((/^k/i.test($scope.query.food.unit) && !/^k/i.test($scope.query.unit)) || (!/^m/i.test($scope.query.food.unit) && /^m/i.test($scope.query.unit))) {
+								$scope.query.qty *= 0.001;
+							} else if ((!/^k/i.test($scope.query.food.unit) && /^k/i.test($scope.query.unit)) || (/^m/i.test($scope.query.food.unit) && !/^m/i.test($scope.query.unit))) {
+								$scope.query.qty *= 1000;
+							} else if (/^c/i.test($scope.query.food.unit) && !/^c/i.test($scope.query.unit)) {
+								$scope.query.qty *= 100;
+							} else if (!/^c/i.test($scope.query.food.unit) && /^c/i.test($scope.query.unit)) {
+								$scope.query.qty *= 0.01;
+							}
+						}
+
+						$scope.query.unit = $scope.query.food.unit;
+					}
+				}
+
 				return $scope.query;
 			};
 			$scope.executeQuery = function() {
@@ -158,6 +213,17 @@ angular.module('bars.ctrl.main', [
 								$scope.FoodDetails = Transaction.operations[i].item;
 							} else if (Transaction.operations[i].type == 'accountoperation') {
 								$scope.user.account.money = Transaction.operations[i].account.money;
+							}
+						}
+						$scope.bar.search = '';
+						$scope.bar.foods = Food.query({});
+					});
+				}
+				if ($scope.query.type == 'jeter') {
+					var Transaction = Food.jeter({item: id, qty: $scope.query.qty}, function () {
+						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
+							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
+								$scope.FoodDetails = Transaction.operations[i].item;
 							}
 						}
 						$scope.bar.search = '';

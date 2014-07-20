@@ -24,6 +24,16 @@
 			<span ng-show="query.type=='donner'">
 				{{ query.qty | currency }} à {{ query.user.user.name }}.
 			</span>
+			<span ng-show="query.type=='jeter'">
+				{{ query.qty | number }} 
+				<span ng-hide="query.unit == ''">
+					{{ query.unit }} {{ query.food.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:query.food.id })">{{ query.food.name }}</a>
+				</span>
+				<span ng-show="query.unit == ''">
+					<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:query.food.id })">{{ query.food.name | affs:query.qty }}</a>
+				</span>
+				à la poubelle.
+			</span>
 		</span><br /><br /><br />
 	</div>
 </div>
