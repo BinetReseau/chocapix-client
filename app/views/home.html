@@ -6,8 +6,8 @@
     </tr>
     <tr ng-repeat="f in bar.foods | filter:bar.search">
         <td><a title="Voir les détails de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:f.id })">{{ f.name }}</a></td>
-        <td>{{ f.qty | formatn }}<span ng-hide="f.unit == ''"> {{ f.unit }}</span></td>
-        <td>{{ f.price | formatn }} €<span ng-hide="f.unit == ''">/{{ f.unit }}</span></td>
+        <td>{{ f.qty | number }}<span ng-hide="f.unit == ''"> {{ f.unit }}</span></td>
+        <td>{{ f.price | currency }}<span ng-hide="f.unit == ''">/{{ f.unit }}</span></td>
     </tr>
 </table>
 
@@ -19,7 +19,7 @@
     </tr>
     <tr ng-repeat="u in bar.users | filter:bar.search">
         <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.name }}</a></td>
-        <td>{{ u.money | formatn }} €</td>
+        <td>{{ u.accounts[0].money | currency }}</td>
         <td>{{ u.login }}</td>
     </tr>
 </table>

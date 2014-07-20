@@ -14,6 +14,13 @@ angular.module('bars.ctrl.main', [
 			    foods: foods,
 			    active: 'index',
 	        };
+		    for (var i = 0; i < $scope.bar.users.length; i++) {
+		    	for (var j = 0; j < $scope.bar.users[i].accounts.length; j++) {
+		    		if ($scope.bar.users[i].accounts[j].bar != $stateParams.bar) {
+		    			$scope.bar.users[i].accounts.splice(j, 1);
+		    		}
+		    	};
+		    }
 	        $scope.user = {
 	        	infos: user,
 	        	isAuthenticated: AuthService.isAuthenticated,
