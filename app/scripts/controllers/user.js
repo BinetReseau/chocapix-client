@@ -3,8 +3,9 @@
 angular.module('bars.ctrl.user', [
 	])
 	.controller('UserDetailCtrl',
-		['$scope', 'user', function($scope, user) {
+		['$scope', 'user', 'history', function($scope, user, history) {
 			$scope.UserDetail = user;
+			$scope.history = history;
 		}])
 	.controller('UserListCtrl',
 		['$scope', 'API.Account', function($scope, Account) {
