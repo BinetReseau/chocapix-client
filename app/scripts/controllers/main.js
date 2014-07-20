@@ -220,7 +220,7 @@ angular.module('bars.ctrl.main', [
 					});
 				}
 				if ($scope.query.type == 'jeter') {
-					var Transaction = Food.jeter({item: id, qty: $scope.query.qty}, function () {
+					var Transaction = Food.throwaway({item: id, qty: $scope.query.qty}, function () {
 						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
 							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
 								$scope.FoodDetails = Transaction.operations[i].item;
