@@ -120,6 +120,9 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				resolve:{
 					user: ['API.Account', '$stateParams', function(Account, $stateParams) {
 						return Account.get({id: $stateParams.id}).$promise;
+					}],
+					history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
+						return Transaction.byAccount({id: $stateParams.id}).$promise;
 					}]
 				},
 				controller: 'UserDetailCtrl'
@@ -127,7 +130,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			.state('bar.history', {
 				url: "/history",
 				templateUrl: "views/history.html",
-				resolve:{
+				resolve: {
 					history: ['API.Transaction', '$stateParams', function(Transaction) {
 						return Transaction.query().$promise;
 					}]
