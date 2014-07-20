@@ -13,18 +13,18 @@
 </div>
 <div class="row">
 		<div class="col-sm-2">
-			<select class="form-control">
-				<option>Acheter</option>
+			<select class="form-control" ng-model="queryType">
+				<option value="buy">Acheter</option>
 				<option>Ajouter à la bouffe à plusieurs</option>
-				<option>Jeter</option>
+				<option value="throw">Jeter</option>
 				<option>Approvisionner</option>
 			</select>
 		</div>
 		<div class="col-sm-10">
-			<form class="form-inline" role="form" ng-submit="buy(buyQty)">
-				<input type="number" class="form-control" step="any" ng-model="buyQty" size="4" style="width: 80px" />
-				<label>{{ FoodDetails.unit == '' && (FoodDetails.name|affs:buyQty) || FoodDetails.unit }}</label>
-				<input type="submit" class="btn btn-success" value="Valider{{ buyQty > 0 && ' pour ' + ((buyQty*FoodDetails.price) | currency) || '' }}" ng-class="buyQty <= 0 && 'disabled' || ''" />
+			<form class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
+				<input type="number" class="form-control" step="any" ng-model="queryQty" size="4" style="width: 80px" />
+				<label>{{ FoodDetails.unit == '' && (FoodDetails.name|affs:queryQty) || FoodDetails.unit }}</label>
+				<input type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*FoodDetails.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
 			</form>
 		</div>
 	</div>
