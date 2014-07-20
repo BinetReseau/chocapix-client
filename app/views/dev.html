@@ -1,8 +1,21 @@
 <form class="form-horizontal" ng-submit="devURL(url)">
 	<div class="form-group">
 		<label for="q_dev" class="col-sm-2 control-label">api/{{ bar.id }}/</label>
-		<div class="col-sm-8">
-			<input type="search" id="q_dev" class="form-control" ng-model="url" />
+		<div class="col-sm-1">
+			<select ng-model="type" class="form-control">
+				<option value="GET">GET</option>
+				<option value="POST">POST</option>
+			</select>
+		</div>
+		<div class="col-sm-9">
+			<input type="text" id="q_dev" class="form-control" ng-model="url" />
+		</div>
+		<input type="submit" class="hide" />
+	</div>
+	<div class="form-group" ng-show="type == 'POST'">
+		<label for="q_param" class="col-sm-2 control-label">Paramètres</label>
+		<div class="col-sm-10">
+			<input type="text" id="q_param" class="form-control" ng-model="data" placeholder="a=2&b=34" />
 		</div>
 	</div>
 </form>
