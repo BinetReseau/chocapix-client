@@ -136,7 +136,7 @@ angular.module('bars.ctrl.main', [
 						q = q.replace(/ à|a /i, '');
 						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '').trim();
 
-						var users = $filter('filter')($scope.bar.users, q, false);
+						var users = $filter('filter')($scope.bar.accounts, q, false);
 						if (users.length == 1) {
 							$scope.query.type = 'donner';
 							$scope.query.user = users[0];

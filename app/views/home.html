@@ -11,16 +11,14 @@
     </tr>
 </table>
 
-<table class="table table-striped table-hover" ng-show="(bar.users | filter:bar.search).length < 4 && (bar.users | filter:bar.search).length > 0">
+<table class="table table-striped table-hover" ng-show="(bar.accounts | filter:bar.search).length < 4 && (bar.accounts | filter:bar.search).length > 0">
     <tr>
         <th>Nom</th>
         <th>Solde</th>
-        <th>Login</th>
     </tr>
-    <tr ng-repeat="u in bar.users | filter:bar.search">
-        <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.name }}</a></td>
-        <td>{{ u.money | formatn }} €</td>
-        <td>{{ u.login }}</td>
+    <tr ng-repeat="u in bar.accounts | filter:bar.search">
+        <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.user.detail({ bar: bar.id, id:u.id })">{{ u.user.name }}</a></td>
+        <td>{{ u.money | currency }}</td>
     </tr>
 </table>
 

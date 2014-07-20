@@ -22,7 +22,7 @@
 				pour {{ (query.qty*query.food.price) | currency }}.
 			</span>
 			<span ng-show="query.type=='donner'">
-				{{ query.qty | currency }} à {{ query.user.name }}.
+				{{ query.qty | currency }} à {{ query.user.user.name }}.
 			</span>
 		</span><br /><br /><br />
 	</div>
