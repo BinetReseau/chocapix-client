@@ -161,6 +161,7 @@ angular.module('bars.ctrl.main', [
 							}
 						}
 						$scope.bar.search = '';
+						$scope.bar.foods = Food.query({});
 					});
 				}
 			};
