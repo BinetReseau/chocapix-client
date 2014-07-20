@@ -7,7 +7,7 @@
     <tr ng-repeat="f in bar.foods | filter:bar.search">
         <td><a title="Voir les détails de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:f.id })">{{ f.name }}</a></td>
         <td>{{ f.qty | number }}<span ng-hide="f.unit == ''"> {{ f.unit }}</span></td>
-        <td>{{ f.price | currency }}<span ng-hide="f.unit == ''">/{{ f.unit }}</span></td>
+        <td>{{ f.price | currency }}<span ng-hide="f.unit == ''"> / {{ f.unit }}</span></td>
     </tr>
 </table>
 
