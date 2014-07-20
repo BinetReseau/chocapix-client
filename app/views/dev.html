@@ -1,0 +1,24 @@
+<form class="form-horizontal" ng-submit="devURL(url)">
+	<div class="form-group">
+		<label for="q_dev" class="col-sm-2 control-label">api/{{ bar.id }}/</label>
+		<div class="col-sm-8">
+			<input type="search" id="q_dev" class="form-control" ng-model="url" />
+		</div>
+	</div>
+</form>
+
+<div class="row" ng-show="response.state > 0">
+	<div class="col-sm-2 text-right"><strong>État</strong></div>
+	<div class="col-sm-10">
+		<span class="label label-default" ng-show="response.state == 1">Chargement</span>
+		<span ng-show="response.state == 2">
+			<span class="label label-success" ng-show="response.status < 300">{{ response.status }}</span>
+			<span class="label label-warning" ng-show="response.status < 400 && response.status >= 300">{{ response.status }}</span>
+			<span class="label label-danger" ng-show="response.status >= 400">{{ response.status }}</span>
+		</span>
+	</div>
+</div>
+<br /><br />
+<div ng-show="response.state == 2 && response.status < 400" class="row">
+	<pre>{{ response.data|json }}</pre>
+</div>

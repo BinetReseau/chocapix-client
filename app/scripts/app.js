@@ -9,6 +9,7 @@ var barsApp = angular.module('bars.app', [
   'bars.ctrl.food',
   'bars.ctrl.user',
   'bars.ctrl.history',
+  'bars.ctrl.dev',
   'angularMoment'
 ]);
 
@@ -132,6 +133,11 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					}]
 				},
 				controller: 'HistoryCtrl'
+			})
+			.state('bar.dev', {
+				url: "/dev",
+				templateUrl: "views/dev.html",
+				controller: 'DevCtrl'
 			})
 }]);
 
