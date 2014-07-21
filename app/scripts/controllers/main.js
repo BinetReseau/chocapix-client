@@ -85,25 +85,25 @@ angular.module('bars.ctrl.main', [
 				if ($scope.query.type == '' || $scope.query.type == 'acheter') {
 					var q = qo;
 					// Quantity + unit
-					if (/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig.test(q)) {
-						$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$2');
-						$scope.query.unit = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$4');
+					if (/([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2}) /ig.test(q)) {
+						$scope.query.qty = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$2').replace(/,/, '.');
+						$scope.query.unit = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$4');
 						q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig, ' ');
-					} else if (/([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig.test(q)) {
-						$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '$2');
-						$scope.query.unit = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '$4');
-						q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2})$/ig, '');
+					} else if (/([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig.test(q)) {
+						$scope.query.qty = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig, '$2').replace(/,/, '.');
+						$scope.query.unit = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig, '$4');
+						q = q.replace(/([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig, '');
 					} else { // Quantity without unit
 						if (/1664/.test(q)) {
 							$scope.query.name = '1664';
 							q = q.replace(/1664/g, '');
-							$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/, '$2');
+							$scope.query.qty = q.replace(/^(.*[^0-9.,])?([0-9]+(\.|,[0-9]+)?).*$/, '$2').replace(/,/, '.');
 						}
-						$scope.query.qty = q.replace(/^(.*[^0-9.])?([0-9]+(\.[0-9]+)?).*$/g, '$2').trim();
+						$scope.query.qty = q.replace(/^(.*[^0-9.,])?([0-9]+(\.|,[0-9]+)?).*$/g, '$2').trim();
 						if ($scope.query.qty == q.trim()) {
 							$scope.query.qty = 1;
 						}
-						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '')
+						q = q.replace(/([0-9]+(\.|,[0-9]+)?)/g, '')
 					}
 
 					// Aliment
@@ -115,6 +115,9 @@ angular.module('bars.ctrl.main', [
 					}
 
 					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
+					if (foods.length == 0) {
+						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
+					}
 
 					if (foods.length == 1) {
 						$scope.query.type = 'acheter';
@@ -139,7 +142,7 @@ angular.module('bars.ctrl.main', [
 				// Type : donner
 				if ($scope.query.type == '' || $scope.query.type == 'donner') {
 					var q = qo;
-					$scope.query.qty = q.replace(/^(.*[^0-9€.])?([0-9]+(((\.)|€|(euro(s?)))[0-9]+)?).*$/g, '$2').replace(/€/, '.');
+					$scope.query.qty = q.replace(/^(.*[^0-9€.,os])?([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$2').replace(/€/, '.');
 					if ($scope.query.qty != q) {
 						q = q.replace(/(euros?)|€/i, '');
 						q = q.replace(/ à|a /i, '');
@@ -187,6 +190,9 @@ angular.module('bars.ctrl.main', [
 					}
 
 					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
+					if (foods.length == 0) {
+						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
+					}
 
 					if (foods.length == 1) {
 						$scope.query.type = 'jeter';
