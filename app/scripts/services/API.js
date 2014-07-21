@@ -35,7 +35,8 @@ angular.module('bars.API', [
 	return $resource(API.route('transaction/:id'), {}, {
 	  query: {method:'GET', isArray:true},
 	  byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true},
-	  byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true}
+	  byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true},
+	  cancel: {method:'GET', url:API.route('transaction/cancel/:id'), isArray:false}
 	});
   }])
 .factory('API.Bar', ['$resource', 'API',

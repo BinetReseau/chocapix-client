@@ -92,6 +92,9 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				resolve:{
 					foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
 						return Food.get({id:$stateParams.id}).$promise;
+					}],
+					foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
+						return Transaction.byItem({id: $stateParams.id}).$promise;
 					}]
 				},
 				controller: 'FoodDetailCtrl'
