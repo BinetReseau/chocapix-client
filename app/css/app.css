@@ -9,6 +9,10 @@
     color: gray;
 }
 
+.del {
+    text-decoration: line-through;
+}
+
 .glyphicon-refresh-animate {
     -webkit-animation: rotateThis 1s infinite linear;
     -moz-animation: rotateThis 1s infinite linear;

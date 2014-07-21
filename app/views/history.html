@@ -1,6 +1,6 @@
 <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'"><span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser</a><br /><br />
 <ul>
-    <li ng-repeat="h in history">
+    <li ng-repeat="h in history" ng-class="h.canceled && 'del' || ''">
         <!-- Cas de la mise à la poubelle -->
         <span ng-show="h.type == 'throw'" class="bg-warning">
             {{ h.timestamp | amCalendar }} : mise à la poubelle de
