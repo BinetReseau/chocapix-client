@@ -3,9 +3,9 @@
 angular.module('bars.ctrl.food', [])
 	.controller(
 		'FoodDetailCtrl',
-		['$scope', '$stateParams', 'API.Food',
-		function($scope, $stateParams, Food) {
-			$scope.FoodDetails = Food.get({id: $stateParams.id});
+		['$scope', '$stateParams', 'API.Food', 'foodDetails',
+		function($scope, $stateParams, Food, foodDetails) {
+			$scope.FoodDetails = foodDetails;
 			$scope.queryQty = 1;
 			$scope.queryType = 'buy';
 			$scope.query = function(qty, type) {
