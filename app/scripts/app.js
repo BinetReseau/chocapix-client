@@ -99,18 +99,6 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				},
 				controller: 'FoodDetailCtrl'
 			})
-			.state('bar.food.search', {
-				url: "/search/:q",
-				templateUrl: "views/Stock/list.html",
-				resolve:{
-					foods: ['API.Food', '$stateParams', function(Food, $stateParams){
-						return Food.search({q:$stateParams.q}).$promise;
-					}]
-				},
-				controller: function($scope, foods) {
-					$scope.foods = foods;
-				}
-			})
 
 			.state('bar.account', {
 				url: "/account",
