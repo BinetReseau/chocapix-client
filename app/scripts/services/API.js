@@ -56,6 +56,6 @@ angular.module('bars.API', [
 	  query: {method:'GET', isArray:true},
 	  search: {method:'GET', url:API.route('food/search/:q'), isArray:true},
 	  buy: {method:'POST', url:API.route('action/buy')},
-      throwaway: {method: 'POST', url:API.route('action/throw')} // throw is a keyword, thus not alowed
+      throwaway: {method: 'POST', url:API.route('action/throw')} // throw is a keyword, thus not allowed
 	});
   }]);
