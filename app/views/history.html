@@ -1,4 +1,4 @@
-<h1 show-if="bar.active == 'history'" class="text-center">Historique</h1>
+<h1 ng-if="bar.active == 'history'" class="text-center">Historique</h1>
 
 <div ng-show="canUpdate">
     <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'">
