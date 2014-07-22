@@ -7,23 +7,23 @@
 <ul>
     <li ng-repeat="h in history" ng-class="h.canceled && 'del' || ''">
         <!-- Cas de la mise à la poubelle -->
-        <span ng-show="h.type == 'throw'" class="bg-warning">
+        <span ng-if="h.type == 'throw'" class="bg-warning">
             {{ h.timestamp | amCalendar }} : mise à la poubelle de
             <span ng-repeat="o in h.operations | filter:'stockoperation'">
-                <span ng-show="$middle">, </span>
-                <span ng-show="$last && !$first"> et de </span>
-                {{ ((-1)*o.deltaqty)|number }} <span ng-hide="o.item.unit == ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-show="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
+                <span ng-if="$middle">, </span>
+                <span ng-if="$last && !$first"> et de </span>
+                {{ ((-1)*o.deltaqty)|number }} <span ng-if="o.item.unit != ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-if="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
             </span>
             par <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:h.author.accounts[0].id })">{{ h.author.name }}</a>
         </span>
 
         <!-- Une seule opération de compte => un seul acheteur, donc ce n'est pas une bouffe à plusieurs -->
-        <span ng-show="h.type == 'buy' && (h.operations | filter:'accountoperation').length <= 1">
+        <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length <= 1">
             {{ h.timestamp | amCalendar }} : achat de
             <span ng-repeat="o in h.operations | filter:'stockoperation'">
-                <span ng-show="$middle">, </span>
-                <span ng-show="$last && !$first"> et de </span>
-                {{ ((-1)*o.deltaqty)|number }} <span ng-hide="o.item.unit == ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-show="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
+                <span ng-if="$middle">, </span>
+                <span ng-if="$last && !$first"> et de </span>
+                {{ ((-1)*o.deltaqty)|number }} <span ng-if="o.item.unit != ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-if="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
             </span>
             par
             <span ng-repeat="o in h.operations | filter:'accountoperation'">
@@ -33,7 +33,7 @@
         </span><br /><!-- Supprimer ce br dès que les bouffes à plusieurs sont implémentées dans Symfony -->
 
         <!-- Sinon, c'est une bouffe à plusieurs -->
-        <span ng-show="h.type == 'buy' && (h.operations | filter:'accountoperation').length >= 1">
+        <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length >= 1">
             {{ h.timestamp | amCalendar }} :
             <span ng-hide="displayDetail" ng-click="displayDetail = !displayDetail" ng-init="displayDetail = false" class="glyphicon glyphicon-expand"></span>
             <span ng-show="displayDetail" ng-click="displayDetail = !displayDetail"  class="glyphicon glyphicon-collapse-down"></span>
@@ -42,17 +42,17 @@
                 <ul>
                     <li>Participants :
                         <span ng-repeat="o in h.operations | filter:'accountoperation'">
-                            <span ng-show="$middle">, </span>
-                            <span ng-show="$last && !$first"> et </span>
+                            <span ng-if="$middle">, </span>
+                            <span ng-if="$last && !$first"> et </span>
                             <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:o.account.id })">{{ o.account.user.name }}</a>
                         </span>
                     </li>
                     <li ng-repeat="o in h.operations | filter:'stockoperation'">
                         Achat de {{ ((-1)*o.deltaqty)|number }}
-                        <span ng-hide="o.item.unit == ''">
+                        <span ng-if="o.item.unit != ''">
                             {{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a>
                         </span>
-                        <span ng-show="o.item.unit == ''">
+                        <span ng-if="o.item.unit == ''">
                             <a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a>
                         </span>
                         <span class="label label-success">{{ o.deltaqty * o.item.price|currency }}</span>
