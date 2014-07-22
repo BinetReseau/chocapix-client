@@ -25,15 +25,6 @@ angular.module('bars.ctrl.main', [
 	        	password: ''
 	        };
 
-	        $scope.prixTotal = function(h) { // coût total d'une transaction (négatif si on dépense, positif si on est remboursé)
-				var somme = 0;
-				for (var i = 0; i < h.operations.length; i++) {
-					if (h.operations[i].type == 'stockoperation') {
-						somme = somme + (h.operations[i].deltaqty * h.operations[i].item.price);
-					}
-				}
-				return somme;
-			};
 	        $scope.connexion = function (login) {
 	        	$scope.loginError = false;
 	        	$scope.inLogin = true;
