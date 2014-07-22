@@ -16,6 +16,10 @@ angular.module('bars.ctrl.history', [
 				    $scope.updatingHistory = false;
 			    });
 			};
+			$scope.cancelTransaction = function(t) {
+				Transaction.cancel({id: t}, null);
+				$scope.updateHistory();
+			};
 		}
 	])
 ;
