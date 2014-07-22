@@ -4,5 +4,6 @@ node_modules/
 bower_components/
 tmp
 .idea
+.DS_Store
 /.sublime-project
 /.sublime-project.sublime-workspace
