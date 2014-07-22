@@ -6,7 +6,7 @@
         <th>Nom</th>
         <th>Solde</th>
     </tr>
-    <tr ng-repeat="u in bar.accounts | filter:bar.search">
+    <tr ng-repeat="u in bar.accounts | filter:bar.search" ng-class="u.money < 0 && 'danger'">
         <td><a title="En savoir plus sur {{ u.user.name }}" ui-sref="bar.account.detail({ bar: bar.id, id:u.id })">{{ u.user.name }}</a></td>
         <td>{{ u.money | currency }}</td>
     </tr>
