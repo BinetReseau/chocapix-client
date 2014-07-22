@@ -12,25 +12,13 @@
 	<div class="col-sm-8 col-sm-offset-2">
 		<span class="legend" ng-hide="query.food === null && query.user === null">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }}
 			<span ng-if="query.type=='acheter'">
-				{{ query.qty | number }}
-				<span ng-if="query.unit != ''">{{ query.unit }} {{ query.food.name | affd }}</span>
-				<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:query.food.id })">
-					<span ng-if="query.unit != ''">{{ query.food.name }}</span>
-					<span ng-if="query.unit == ''">{{ query.food.name | affs:query.qty }}</span>
-				</a>
-				pour {{ (query.qty*query.food.price) | currency }}.
+				<bars:food food="query.food" qty="query.qty" unit="query.unit"/> pour {{ (query.qty*query.food.price) | currency }}.
 			</span>
 			<span ng-if="query.type=='donner'">
-				{{ query.qty | currency }} à <a title="En savoir plus sur {{ query.user.user.name }}" ui-sref="bar.account.detail({ bar: bar.id, id:query.user.id })">{{ query.user.user.name }}</a>.
+				{{ query.qty | currency }} à <bars:account account="query.user"/>.
 			</span>
 			<span ng-if="query.type=='jeter'">
-				{{ query.qty | number }}
-				<span ng-if="query.unit != ''">{{ query.unit }} {{ query.food.name | affd }}</span>
-				<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:query.food.id })">
-					<span ng-if="query.unit != ''">{{ query.food.name }}</span>
-					<span ng-if="query.unit == ''">{{ query.food.name | affs:query.qty }}</span>
-				</a>
-				à la poubelle.
+				<bars:food food="query.food" qty="query.qty" unit="query.unit"/> à la poubelle.
 			</span>
 		</span><br /><br /><br />
 	</div>
