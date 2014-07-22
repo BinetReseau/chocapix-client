@@ -19,7 +19,7 @@ angular.module('bars.ctrl.main', [
 	        	isAuthenticated: AuthService.isAuthenticated,
 			    logout: AuthService.logout,
 	        	account: account
-	        }
+	        };
 	        $scope.login = {
 	        	login: '',
 	        	password: ''
