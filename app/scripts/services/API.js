@@ -55,7 +55,7 @@ angular.module('bars.API', [
 	return $resource(API.route('food/:id'), {}, {
 	  query: {method:'GET', isArray:true},
 	  search: {method:'GET', url:API.route('food/search/:q'), isArray:true},
-	  buy: {method:'POST', url:API.route('buy')},
-      throwaway: {method: 'POST', url:API.route('throw')} // throw is a keyword, thus not alowed
+	  buy: {method:'POST', url:API.route('action/buy')},
+      throwaway: {method: 'POST', url:API.route('action/throw')} // throw is a keyword, thus not alowed
 	});
   }]);
