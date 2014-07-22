@@ -3,9 +3,9 @@
 angular.module('bars.ctrl.history', [
 	])
 	.controller('HistoryCtrl',
-		['$scope', 
-		'API.Transaction', 
-		'history', 
+		['$scope',
+		'API.Transaction',
+		'history',
 		function($scope, Transaction, history) {
 			$scope.bar.active = 'history';
 			$scope.history = history;
@@ -17,8 +17,9 @@ angular.module('bars.ctrl.history', [
 			    });
 			};
 			$scope.cancelTransaction = function(t) {
-				Transaction.cancel({id: t}, null);
-				$scope.updateHistory();
+				Transaction.cancel({id: t}, null).$promise.then(function(){
+					$scope.updateHistory();
+				});
 			};
 		}
 	])
