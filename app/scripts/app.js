@@ -7,7 +7,7 @@ var barsApp = angular.module('bars.app', [
   'bars.API',
   'bars.ctrl.main',
   'bars.ctrl.food',
-  'bars.ctrl.user',
+  'bars.ctrl.account',
   'bars.ctrl.history',
   'bars.ctrl.dev',
   'angularMoment'
@@ -111,30 +111,32 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 					$scope.foods = foods;
 				}
 			})
-			.state('bar.user', {
-				url: "/user",
+
+			.state('bar.account', {
+				url: "/account",
 				abstract: true,
 				template:'<ui-view/>',
-				controller: 'UserCtrl'
+				controller: 'AccountCtrl'
 			})
-			.state('bar.user.list', {
+			.state('bar.account.list', {
 				url: "/list",
-				templateUrl: "views/User/list.html",
-				controller: 'UserListCtrl'
+				templateUrl: "views/Account/list.html",
+				controller: 'AccountsListCtrl'
 			})
-			.state('bar.user.detail', {
+			.state('bar.account.detail', {
 				url: "/:id",
-				templateUrl: "views/User/detail.html",
+				templateUrl: "views/Account/detail.html",
 				resolve:{
-					user: ['API.Account', '$stateParams', function(Account, $stateParams) {
+					account: ['API.Account', '$stateParams', function(Account, $stateParams) {
 						return Account.get({id: $stateParams.id}).$promise;
 					}],
 					history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
 						return Transaction.byAccount({id: $stateParams.id}).$promise;
 					}]
 				},
-				controller: 'UserDetailCtrl'
+				controller: 'AccountDetailCtrl'
 			})
+			
 			.state('bar.history', {
 				url: "/history",
 				templateUrl: "views/history.html",

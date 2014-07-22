@@ -8,19 +8,50 @@
             </div>
         </form>
         <div ng-show="user.isAuthenticated()" class="text-center">
-        <h1 ng-class="user.account.money <= 0 && 'animated wobble' || ''"><span ng-class="user.account.money <= 0 && 'label label-danger' || ''">{{ user.account.money | currency }}</span></h1>
+            <h1 ng-class="user.account.money <= 0 && 'animated wobble' || ''">
+                <span ng-class="user.account.money <= 0 && 'label label-danger' || ''">
+                    {{ user.account.money | currency }}
+                </span>
+            </h1>
         <h4><small>{{ user.infos.name }}</small></h4>
         </div>
+
 		<br /><br />
+
 		<ul class="nav nav-pills nav-stacked">
-            <li ng-class="bar.active == 'index' && 'active'"><a title="Accueil du bar" ui-sref="bar({ bar: bar.id })"><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
-            <li ng-class="bar.active == 'history' && 'active'"><a title="Historique" ui-sref="bar.history({ bar: bar.id })"><span class="glyphicon glyphicon-list"></span> Historique</a></li>
-            <li ng-class="bar.active == 'user' && 'active'"><a title="Utilisateurs du bar" ui-sref="bar.user.list({ bar: bar.id })"><span class="glyphicon glyphicon-user"></span> Utilisateurs</a></li>
-            <li><a title="Administration"><span class="glyphicon glyphicon-dashboard"></span> Administration</a></li>
-            <li><a title="Réglages"><span class="glyphicon glyphicon-wrench"></span> Préférences</a></li>
-            <li><a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="user.logout()"><span class="glyphicon glyphicon-off"></span> Déconnexion</a></li>
+            <li ng-class="bar.active == 'index' && 'active'">
+                <a title="Accueil du bar" ui-sref="bar({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-home"></span> Accueil
+                </a>
+            </li>
+            <li ng-class="bar.active == 'history' && 'active'">
+                <a title="Historique" ui-sref="bar.history({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-list"></span> Historique
+                </a>
+            </li>
+            <li ng-class="bar.active == 'account' && 'active'">
+                <a title="Utilisateurs du bar" ui-sref="bar.account.list({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-user"></span> Utilisateurs
+                </a>
+            </li>
+            <li>
+                <a title="Administration">
+                    <span class="glyphicon glyphicon-dashboard"></span> Administration
+                </a>
+            </li>
+            <li>
+                <a title="Réglages">
+                    <span class="glyphicon glyphicon-wrench"></span> Préférences
+                </a>
+            </li>
+            <li>
+                <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="user.logout()">
+                    <span class="glyphicon glyphicon-off"></span> Déconnexion
+                </a>
+            </li>
         </ul>
 	</div>
+
 	<div class="col-md-10">
 		<div class="row" ui-view="header">
 		</div>

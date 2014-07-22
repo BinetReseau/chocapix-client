@@ -1,6 +1,9 @@
 <div ng-show="canUpdate">
-    <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'"><span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser</a><br /><br />
+    <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'">
+        <span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser
+    </a><br /><br />
 </div>
+
 <ul>
     <li ng-repeat="h in history" ng-class="h.canceled && 'del' || ''">
         <!-- Cas de la mise à la poubelle -->
@@ -11,7 +14,7 @@
                 <span ng-show="$last && !$first"> et de </span>
                 {{ ((-1)*o.deltaqty)|number }} <span ng-hide="o.item.unit == ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-show="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
             </span>
-            par <a title="Voir la fiche de cet utilisateur" ui-sref="bar.user.detail({ bar: bar.id, id:h.author.accounts[0].id })">{{ h.author.name }}</a>
+            par <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:h.author.accounts[0].id })">{{ h.author.name }}</a>
         </span>
 
         <!-- Une seule opération de compte => un seul acheteur, donc ce n'est pas une bouffe à plusieurs -->
@@ -24,7 +27,7 @@
             </span>
             par
             <span ng-repeat="o in h.operations | filter:'accountoperation'">
-                <a title="Voir la fiche de cet utilisateur" ui-sref="bar.user.detail({ bar: bar.id, id:o.account.id })">{{ o.account.user.name }}</a>
+                <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:o.account.id })">{{ o.account.user.name }}</a>
                 <span class="label label-success">{{ o.deltamoney|currency }}</span>
             </span>
         </span><br /><!-- Supprimer ce br dès que les bouffes à plusieurs sont implémentées dans Symfony -->
@@ -41,7 +44,7 @@
                         <span ng-repeat="o in h.operations | filter:'accountoperation'">
                             <span ng-show="$middle">, </span>
                             <span ng-show="$last && !$first"> et </span>
-                            <a title="Voir la fiche de cet utilisateur" ui-sref="bar.user.detail({ bar: bar.id, id:o.account.user.id })">{{ o.account.user.name }}</a>
+                            <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:o.account.id })">{{ o.account.user.name }}</a>
                         </span>
                     </li>
                     <li ng-repeat="o in h.operations | filter:'stockoperation'">
