@@ -1,13 +1,21 @@
 <h1 ng-if="bar.active == 'history'" class="text-center">Historique</h1>
 
-<div ng-show="canUpdate">
-    <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'">
-        <span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser
-    </a><br /><br />
+<div class="container-fluid">
+<div class="row">
+    <div ng-show="canUpdate" class="col-sm-2">
+        <a title="Mettre à jour l'historique" ng-click="updateHistory()" class="btn btn-primary" ng-class="updatingHistory && 'disabled'">
+            <span ng-class="updatingHistory && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser
+        </a>
+    </div>
+    <div class="col-sm-offset-5 col-sm-5">
+        <input type="search" class="form-control" ng-model="queryh" placeholder="Rechercher dans l'historique" id="queryh" />
+    </div>
 </div>
+</div><br /><br />
+
 
 <ul>
-    <li ng-repeat="h in history" ng-class="h.canceled && 'del' || ''">
+    <li ng-repeat="h in history | filter:queryh" ng-class="h.canceled && 'del' || ''">
         <!-- Cas de la mise à la poubelle -->
         <span ng-if="h.type == 'throw'" class="bg-warning">
             {{ h.timestamp | amCalendar }} : mise à la poubelle de
