@@ -24,7 +24,7 @@
                 <span ng-if="$last && !$first"> et de </span>
                 <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
             </span>
-            par <bars:account account="h.author.accounts[0]"></bars:account>
+            par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
             <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h.id)" class="label label-warning">Annuler</a>
         </span>
 

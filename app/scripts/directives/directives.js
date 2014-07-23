@@ -33,10 +33,14 @@ angular.module('bars.directives', [
     return {
         restrict: 'E',
         scope: {
-            account: '=account'
+            account: '=account',
+            user: "=?user"
         },
-        template: '<a title="En savoir plus sur {{ account.user.name }}" ui-sref="bar.account.detail({ bar: account.bar, id:account.id })">' +
-                    '{{ account.user.name }}' +
-                '</a>'
+        template: '<a title="En savoir plus sur {{ user.name }}" ui-sref="bar.account.detail({ bar: account.bar, id:account.id })">' +
+                    '{{ user.name }}' +
+                '</a>',
+        controller: function($scope){
+            $scope.user = $scope.user || $scope.account.user;
+        }
     };
 });
