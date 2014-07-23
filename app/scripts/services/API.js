@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('bars.API', [
-	'ngResource'
+	'ngResource',
+	'APIObject'
 ])
 
 .factory('API', [
@@ -50,18 +51,43 @@ angular.module('bars.API', [
 			all: {method:'GET', url:API.route('../nobar/auth/me')}
 		});
 	}])
-.factory('API.Transaction', ['$resource', 'API',
-	function($resource, API) {
-		return $resource(API.route('transaction/:id'), {}, {
-			cancel: {method:'DELETE'},
-			query: {method:'GET', isArray:true},
-			byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true},
-			byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true}
-		});
-	}])
-.factory('API.User', ['$resource', 'API',
-	function($resource, API) {
-		return $resource(API.route('user/:id'), {}, {
+// .factory('API.Transaction', ['$resource', 'API',
+// 	function($resource, API) {
+// 		return $resource(API.route('transaction/:id'), {}, {
+// 			cancel: {method:'DELETE'},
+// 			query: {method:'GET', isArray:true},
+// 			byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true},
+// 			byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true}
+// 		});
+// 	}])
+// .factory('API.User', ['$resource', 'API',
+// 	function($resource, API) {
+// 		return $resource(API.route('user/:id'), {}, {
+// 			query: {method:'GET', isArray:true}
+// 		});
+// 	}])
+
+.factory('API.User', ['APIObject', 'API',
+	function(APIObject, API) {
+		return APIObject(API.route('user/:id'), {
 			query: {method:'GET', isArray:true}
-		});
+		}, {});
+	}])
+.factory('API.Transaction', ['APIObject', 'API',
+	function(APIObject, API) {
+		return APIObject(
+			API.route('transaction/:id'),
+			{
+				cancel: {method:'DELETE'},
+				query: {method:'GET', isArray:true},
+				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true},
+				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true}
+			},
+			{
+				author: {object: 'API.User'},
+				// operations: {object: 'API.Operation', isArray: true}
+			}
+		);
 	}]);
+
+
