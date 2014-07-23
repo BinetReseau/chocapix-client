@@ -25,9 +25,13 @@ angular.module('bars.directives', [
         },
         templateUrl: 'scripts/directives/views/bars-account.html',
         controller: ['$scope', function($scope) {
-            $scope.user = function() {
-                return $scope.useri || ($scope.account && $scope.account.user) || null;
+            var setUser = function(newValue, oldValue) {
+                $scope.user = $scope.useri || ($scope.account && $scope.account.user) || null;
             };
+            setUser();
+
+            $scope.$watch('user', setUser);
+            $scope.$watch('account', setUser);
         }]
     };
 })
