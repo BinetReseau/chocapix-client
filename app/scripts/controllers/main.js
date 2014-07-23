@@ -43,8 +43,8 @@ angular.module('bars.ctrl.main', [
 	        };
 		}])
 	.controller('MainFormCtrl',
-		['$scope', '$filter', 'API.Food',
-		function($scope, $filter, Food) {
+		['$scope', '$filter', 'API.Food', 'API.Action',
+		function($scope, $filter, Food, APIAction) {
 			$scope.query = {
 				type: 'acheter',
 				qty: 1,
@@ -213,7 +213,7 @@ angular.module('bars.ctrl.main', [
 				}
 				var id = $scope.query.food.id;
 				if ($scope.query.type == 'acheter') {
-					var Transaction = Food.buy({item: id, qty: $scope.query.qty}, function () {
+					var Transaction = APIAction.buy({item: id, qty: $scope.query.qty}, function () {
 						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
 							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
 								$scope.FoodDetails = Transaction.operations[i].item;
@@ -226,7 +226,7 @@ angular.module('bars.ctrl.main', [
 					});
 				}
 				if ($scope.query.type == 'jeter') {
-					var Transaction = Food.throwaway({item: id, qty: $scope.query.qty}, function () {
+					var Transaction = APIAction.throwaway({item: id, qty: $scope.query.qty}, function () {
 						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
 							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
 								$scope.FoodDetails = Transaction.operations[i].item;
