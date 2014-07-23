@@ -52,6 +52,7 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 							return $injector.get(structure[key].object).$parse(x);
 						};
 						obj[key] = structure[key].isArray ? value.map(parse) : parse(value);
+						obj[key].$parent = obj;
 					}
 				})
 				return new APIObject(obj);
@@ -74,6 +75,12 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 			});
 			APIObject.prototype.$reload = function(){
 				shallowClearAndCopy(APIObject.get({id: this.id}), this);
+			};
+			APIObject.prototype.$reloadAll = function(){
+				if(this.$parent)
+					this.$parent.$reload();
+				else
+					this.$reload();
 			};
 			return APIObject;
 		};
