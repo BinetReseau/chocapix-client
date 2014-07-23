@@ -184,13 +184,15 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 		};
 
 		return function(url, defaults, methods, structure) {
+			structure = structure || {};
 			methods = angular.extend(DEFAULT_METHODS, methods);
-			var resource = $resource(url, defaults,
-				shallowCopyFilter(methods, function(x){
-					x = angular.copy(x);
-					delete x['object'];
-					delete x['static'];
-				}));
+			// var resource = $resource(url, defaults,
+			// 	shallowCopyFilter(methods, function(x){
+			// 		x = angular.copy(x);
+			// 		delete x['object'];
+			// 		delete x['static'];
+			// 	}));
+			var resource = $resource(url, defaults, methods);
 
 			function APIObject(value){
 				shallowCopy(value || {}, this);
@@ -211,35 +213,47 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				return new APIObject(obj);
 			};
 			angular.forEach(methods, function(method, key){
-				var parse = method.object ? $injector.get(method.object).$parse : APIObject.$parse;
-				var parse2 = !method.isArray ? parse : function(data){
-					var arr = data.map(parse);
+				var parseOne = method.object ? $injector.get(method.object).$parse : APIObject.$parse;
+				var parse = !method.isArray ? parseOne : function(data){
+					var arr = data.map(parseOne);
 					var o = new APIObject(arr);
 					for (var i = 0; i < arr.length; i++) {
 						arr[i].$parent = o;
 					};
 					return o;
 				};
+				function f(is_static){
+					return function(params, data) {
+						console.log(key + '(' + url + ')');
+						var value = {};
+						value.$resolved = false;
+						value.$promise = resource[key](params, is_static ? data : (data || this)).$promise
+								.then(parse)
+								.then(function(o){
+									o.$reload = function(){
+										var o = APIObject[key](params, data);
+										o.$promise.then(function(o){
+											unsafeShallowClearAndCopy(o, value);
+											return value;
+										})
+										return o;
+									};
+									return o;
+								})
+								.then(function(o){
+									console.log('returned ' + key + '(' + url + ')');
+									console.log(o);
+									unsafeShallowClearAndCopy(o, value);
+									value.$resolved = true;
+									return o;
+								});
+						return value;
+					}
+				}
 				if(method.static){
-					APIObject[key] = function(params, data) {
-						console.log(key);
-						return resource[key](params, data).$promise.then(parse2).then(function(o){
-							o.$reload = function(){
-								return APIObject[key](params, data);
-							};
-							return o;
-						});
-					};
+					APIObject[key] = f(true);
 				} else {
-					APIObject.prototype[key] = function(params, data) {
-						console.log(key);
-						return resource[key](params, data || this).$promise.then(parse2).then(function(o){
-							o.$reload = function(){
-								return o[key](params, data);
-							};
-							return o;
-					});
-					};
+					APIObject.prototype[key] = f(false);
 				}
 			});
 			APIObject.prototype.$reload = function(){
