@@ -152,3 +152,6 @@ barsApp.run(function(amMoment) {
 	amMoment.changeLanguage('fr');
 });
 
+barsApp.run(['APIObject',function(APIObject){
+	APIObject("", {}, {});
+}])
