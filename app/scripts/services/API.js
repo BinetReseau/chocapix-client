@@ -27,7 +27,7 @@ angular.module('bars.API', [
 	}])
 .factory('API.Action', ['$resource', 'API',
 	function($resource, API) {
-		return $resource(API.route('action'), {}, {
+		return $resource('', {}, {
 			buy: {method:'POST', url:API.route('action/buy')},
 			give: {method: 'POST', url:API.route('action/give')},
 			throwaway: {method: 'POST', url:API.route('action/throw')}
@@ -53,10 +53,10 @@ angular.module('bars.API', [
 .factory('API.Transaction', ['$resource', 'API',
 	function($resource, API) {
 		return $resource(API.route('transaction/:id'), {}, {
+			cancel: {method:'DELETE'},
 			query: {method:'GET', isArray:true},
 			byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true},
-			byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true},
-			cancel: {method:'POST', url:API.route('transaction/cancel/:id')}
+			byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true}
 		});
 	}])
 .factory('API.User', ['$resource', 'API',
