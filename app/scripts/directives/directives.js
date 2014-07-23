@@ -21,11 +21,13 @@ angular.module('bars.directives', [
         restrict: 'E',
         scope: {
             account: '=account',
-            user: "=?user"
+            useri: "=?user"
         },
         templateUrl: 'scripts/directives/views/bars-account.html',
         controller: ['$scope', function($scope) {
-            $scope.user = $scope.user || ($scope.account && $scope.account.user) || null;
+            $scope.user = function() {
+                return $scope.useri || ($scope.account && $scope.account.user) || null;
+            };
         }]
     };
 })
