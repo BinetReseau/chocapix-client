@@ -11,9 +11,9 @@ angular.module('bars.directives', [
             qty: '=?qty'
         },
         templateUrl: 'scripts/directives/views/bars-food.html',
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
             $scope.unit = $scope.unit || ($scope.food && $scope.food.unit) || '';
-        }
+        }]
     };
 })
 .directive('barsAccount', function() {
@@ -24,8 +24,22 @@ angular.module('bars.directives', [
             user: "=?user"
         },
         templateUrl: 'scripts/directives/views/bars-account.html',
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
             $scope.user = $scope.user || ($scope.account && $scope.account.user) || null;
-        }
+        }]
+    };
+})
+.directive('barsHistory', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            history: '=history',
+            canUpdate: "=?canupdate",
+            update: "&?update"
+        },
+        templateUrl: 'scripts/directives/views/bars-history.html',
+        controller: ['$scope', function($scope) {
+
+        }]
     };
 });
