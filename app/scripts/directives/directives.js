@@ -33,23 +33,21 @@ angular.module('bars.directives', [
     return {
         restrict: 'E',
         scope: {
-            history: '=history',
-            updateCallback: "=?update"
+            history: '=history'
         },
         templateUrl: 'scripts/directives/views/bars-history.html',
-        controller: ['$scope', 'API.Transaction',
-            function($scope, Transaction) {
-                $scope.canUpdate = !!$scope.updateCallback;
+        controller: ['$scope',
+            function($scope) {
+                $scope.canUpdate = true;
                 $scope.update = function() {
-                    if($scope.canUpdate){
-                        $scope.updating = true;
-                        return $scope.updateCallback().then(function(){
-                            $scope.updating = false;
-                        });
-                    }
+                    $scope.updating = true;
+                    $scope.history.$reload().then(function(o){
+                        $scope.history = o;
+                        $scope.updating = false;
+                    });
                 };
                 $scope.cancelTransaction = function(t) {
-                    return Transaction.cancel({id: t.id}, null).$promise.then(function(){
+                    t.cancel().then(function(){
                         $scope.update();
                     });
                 };
