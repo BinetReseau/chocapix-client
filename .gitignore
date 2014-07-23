@@ -7,3 +7,5 @@ tmp
 .DS_Store
 /.sublime-project
 /.sublime-project.sublime-workspace
+/.DS_Store
+/exempleTransaction.json

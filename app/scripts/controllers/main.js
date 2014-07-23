@@ -208,11 +208,11 @@ angular.module('bars.ctrl.main', [
 				return $scope.query;
 			};
 			$scope.executeQuery = function() {
-				if ($scope.query.food === null) {
+				if ($scope.query.food === null && $scope.query.user === null) {
 					return null;
 				}
-				var id = $scope.query.food.id;
 				if ($scope.query.type == 'acheter') {
+					var id = $scope.query.food.id;
 					var Transaction = APIAction.buy({item: id, qty: $scope.query.qty}, function () {
 						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
 							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
@@ -226,6 +226,7 @@ angular.module('bars.ctrl.main', [
 					});
 				}
 				if ($scope.query.type == 'jeter') {
+					var id = $scope.query.food.id;
 					var Transaction = APIAction.throwaway({item: id, qty: $scope.query.qty}, function () {
 						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
 							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
@@ -234,6 +235,17 @@ angular.module('bars.ctrl.main', [
 						}
 						$scope.bar.search = '';
 						$scope.bar.foods = Food.query({});
+					});
+				}
+				if ($scope.query.type == 'donner') {
+					var id = $scope.query.user.id;
+					var Transaction = APIAction.give({ recipient: id, qty: $scope.query.qty }, function () {
+						for (var i = 0; i < Transaction.operations.length; i++) {
+							if (Transaction.operations[i].type == 'accountoperation' && Transaction.operations[i].account.id == $scope.user.account.id) {
+								$scope.user.account.money = Transaction.operations[i].account.money;
+							}
+						}
+						$scope.bar.search = '';
 					});
 				}
 			};
