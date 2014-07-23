@@ -47,13 +47,13 @@ angular.module('bars.directives', [
                 $scope.canUpdate = true;
                 $scope.update = function() {
                     $scope.updating = true;
-                    $scope.history.$reload().then(function(o){
+                    $scope.history.$reload().$promise.then(function(o){
                         $scope.history = o;
                         $scope.updating = false;
                     });
                 };
                 $scope.cancelTransaction = function(t) {
-                    t.cancel().then(function(){
+                    t.cancel().$promise.then(function(){
                         $scope.update();
                     });
                 };
