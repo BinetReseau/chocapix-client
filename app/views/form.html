@@ -15,7 +15,7 @@
 				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> pour {{ (query.qty*query.food.price) | currency }}.
 			</span>
 			<span ng-if="query.type=='donner'">
-				{{ query.qty | currency }} à {{ query.user.user.name }}.
+				{{ query.qty | currency }} à <bars:account account="query.user"></bars:account>.
 			</span>
 			<span ng-if="query.type=='jeter'">
 				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.
