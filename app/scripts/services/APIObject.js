@@ -6,7 +6,8 @@ var module = angular.module('APIObject', [
 function shallowClearAndCopy(src, dst) {
 	dst = dst || {};
 	angular.forEach(dst, function(value, key) {
-		delete dst[key];
+		if(dst.hasOwnProperty(key))
+			delete dst[key];
 	});
 	for (var key in src) {
 		if (src.hasOwnProperty(key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
@@ -16,11 +17,34 @@ function shallowClearAndCopy(src, dst) {
 	return dst;
 }
 
-function shallowCopyExclude(obj, exclude) {
+function unsafeShallowClearAndCopy(src, dst) {
+	dst = dst || {};
+	angular.forEach(dst, function(value, key) {
+		delete dst[key];
+	});
+	for (var key in src) {
+		if (!(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+			dst[key] = src[key];
+		}
+	}
+	return dst;
+}
+
+function shallowCopy(src, dst) {
+	dst = dst || {};
+	for (var key in src) {
+		if (src.hasOwnProperty(key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+			dst[key] = src[key];
+		}
+	}
+	return dst;
+}
+
+function shallowCopyFilter(obj, filter) {
 	var obj2 = {};
-	obj.forEach(function(value, key){
-		if(exclude.indexOf(key) == -1)
-			obj2[key] = value;
+	angular.forEach(obj, function(value, key){
+		if(filter(value))
+			obj2[key] = filter(value);
 	})
 	return obj2;
 }
@@ -28,19 +52,24 @@ function shallowCopyExclude(obj, exclude) {
 module.factory('APIObject', ['$injector', '$resource', 'API',
 	function ($injector, $resource, API) {
 		var DEFAULT_METHODS = {
-			'get': {method: 'GET'},
+			'get': {method: 'GET', static:true},
 			'save': {method: 'POST'},
-			'query': {method: 'GET', isArray: true},
+			'query': {method: 'GET', isArray: true, static:true},
 			'remove': {method: 'DELETE'},
 			'delete': {method: 'DELETE'}
 		};
 
-		return function(url, methods, structure) {
+		return function(url, defaults, methods, structure) {
 			methods = angular.extend(DEFAULT_METHODS, methods);
-			var resource = $resource(url, {}, methods);
+			var resource = $resource(url, defaults,
+				shallowCopyFilter(methods, function(x){
+					x = angular.copy(x);
+					delete x['object'];
+					delete x['static'];
+				}));
 
 			function APIObject(value){
-				shallowClearAndCopy(value || {}, this);
+				shallowCopy(value || {}, this);
 			}
 			APIObject.$parse = function(data){
 				var obj = {};
@@ -57,30 +86,46 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				})
 				return new APIObject(obj);
 			};
-			angular.forEach(methods, function(value, key){
-				APIObject[key] = function(a1, a2, a3, a4) {
-					var parse = value.object ? $injector.get(value.object).$parse : this.$parse;
-					var retval = {};
-					retval.$resolved = false;
-					var promise = resource[key](a1, a2, a3, a4).$promise.then(function(data){
-						shallowClearAndCopy(value.isArray ? data.map(parse) : parse(data), retval);
-						retval.$resolved = true;
-						retval.$promise = promise;
-						// retval.$reload = function()
-						return retval;
+			angular.forEach(methods, function(method, key){
+				var parse = method.object ? $injector.get(method.object).$parse : APIObject.$parse;
+				var parse2 = !method.isArray ? parse : function(data){
+					var arr = data.map(parse);
+					var o = new APIObject(arr);
+					for (var i = 0; i < arr.length; i++) {
+						arr[i].$parent = o;
+					};
+					return o;
+				};
+				if(method.static){
+					APIObject[key] = function(params, data) {
+						console.log(key);
+						return resource[key](params, data).$promise.then(parse2).then(function(o){
+							o.$reload = function(){
+								return APIObject[key](params, data);
+							};
+							return o;
+						});
+					};
+				} else {
+					APIObject.prototype[key] = function(params, data) {
+						console.log(key);
+						return resource[key](params, data || this).$promise.then(parse2).then(function(o){
+							o.$reload = function(){
+								return o[key](params, data);
+							};
+							return o;
 					});
-					retval.$promise = promise;
-					return retval;
+					};
 				}
 			});
 			APIObject.prototype.$reload = function(){
-				shallowClearAndCopy(APIObject.get({id: this.id}), this);
+				return APIObject.get({id: this.id}).then(function(obj){
+					unsafeShallowClearAndCopy(obj, this);
+					return this;
+				})
 			};
 			APIObject.prototype.$reloadAll = function(){
-				if(this.$parent)
-					this.$parent.$reload();
-				else
-					this.$reload();
+				return this.$parent ? this.$parent.$reload(): this.$reload();
 			};
 			return APIObject;
 		};
