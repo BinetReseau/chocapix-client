@@ -5,7 +5,7 @@
         <th>Prix</th>
     </tr>
     <tr ng-repeat="f in bar.foods | filter:bar.search">
-        <td><a title="Voir les détails de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:f.id })">{{ f.name }}</a></td>
+        <td><bars:food food="f"></bars:food></td>
         <td>{{ f.qty | number }}<span ng-hide="f.unit == ''"> {{ f.unit }}</span></td>
         <td>{{ f.price | currency }}<span ng-hide="f.unit == ''"> / {{ f.unit }}</span></td>
     </tr>
@@ -16,9 +16,9 @@
         <th>Nom</th>
         <th>Solde</th>
     </tr>
-    <tr ng-repeat="u in bar.accounts | filter:bar.search">
-        <td><a title="En savoir plus sur {{ u.name }}" ui-sref="bar.account.detail({ bar: bar.id, id:u.id })">{{ u.user.name }}</a></td>
-        <td>{{ u.money | currency }}</td>
+    <tr ng-repeat="a in bar.accounts | filter:bar.search">
+        <td><bars:account account="a"></bars:account></td>
+        <td>{{ a.money | currency }}</td>
     </tr>
 </table>
 
