@@ -11,6 +11,7 @@ angular.module('bars.directives', [
             qty: '=?qty'
         },
         template: function(elt, attrs) {
+            if(!attrs.food) return '';
             if(!attrs.qty) {
                 return '<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: food.bar, id:food.id })">' +
                         '{{ food.name }}' +
@@ -25,7 +26,7 @@ angular.module('bars.directives', [
             }
         },
         controller: function($scope){
-            $scope.unit = $scope.unit || $scope.food.unit;
+            $scope.unit = $scope.unit || ($scope.food && $scope.food.unit) || '';
         }
     };
 })
@@ -40,7 +41,7 @@ angular.module('bars.directives', [
                     '{{ user.name }}' +
                 '</a>',
         controller: function($scope){
-            $scope.user = $scope.user || $scope.account.user;
+            $scope.user = $scope.user || ($scope.account && $scope.account.user) || null;
         }
     };
 });
