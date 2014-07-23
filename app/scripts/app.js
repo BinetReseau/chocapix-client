@@ -85,11 +85,11 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			})
 			.state('bar.food.list', {
 				url: "/list",
-				templateUrl: "views/Stock/list.html"
+				templateUrl: "views/Food/list.html"
 			})
 			.state('bar.food.detail', {
 				url: "/:id",
-				templateUrl: "views/Stock/details.html",
+				templateUrl: "views/Food/details.html",
 				resolve:{
 					foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
 						return Food.get({id:$stateParams.id}).$promise;
