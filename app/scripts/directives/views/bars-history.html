@@ -28,6 +28,16 @@
                 <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
             </span>
 
+            <!-- Cas d'un don -->
+            <span ng-switch-when="give">
+                {{ h.timestamp | amCalendar }} : don de {{ h.moneyflow | currency }} à 
+                <span ng-repeat="o in h.operations | filter:'accountoperation'"><span ng-if="o.deltamoney > 0">
+                    <bar:account account="o.account"></bar:account>
+                </span></span> 
+                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
+                <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
+            </span>
+
             <span ng-switch-when="buy">
                 <!-- Une seule opération de compte => un seul acheteur, donc ce n'est pas une bouffe à plusieurs -->
                 <span ng-if="(h.operations | filter:'accountoperation').length <= 1">
