@@ -1,37 +1,6 @@
 'use strict';
 
 angular.module('bars.filters', [])
-.filter('formatn', function() { // format a number to be human readable
-    return function(n) {
-      var negatif = n < 0;
-      if (negatif) {
-        n *= -1;
-      }
-      n = Math.round(n*100)/100;
-      var nombre = '' + Math.floor(n);
-      var retour = '';
-      var count = 0;
-      for (var i = nombre.length-1 ; i >= 0 ; i--)
-      {
-        if (count != 0 && count % 3 == 0) {
-          retour = nombre[i] + ' ' + retour;
-        }
-        else {
-          retour = nombre[i] + retour;
-        }
-        count++;
-      }
-      var decimal = Math.round((n-Math.floor(n))*100)/100;
-      if (decimal > 0) {
-        decimal = '' + decimal;
-        retour = retour + decimal.substring(1);
-      }
-      if (negatif) {
-        retour = "-" + retour;
-      }
-      return retour;
-      };
-  })
   .filter('affd', function() { // displays d' or de
     return function(text) {
       if (/^[aeiouy]/i.test(text)) {
@@ -49,9 +18,4 @@ angular.module('bars.filters', [])
         return text;
       }
     };
-  })
-  .filter('formateuro', function() {
-    return function(n) {
-      return numeral(n).format('0,0.00 $');
-    }
   });
