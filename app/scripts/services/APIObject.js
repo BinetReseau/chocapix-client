@@ -2,6 +2,130 @@ var module = angular.module('APIObject', [
 	'ngResource'
 ]);
 
+function maxIntKey(obj) {
+	if(obj instanceof Array) return obj.length-1;
+    var max = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key) && !!parseInt(key)) {
+        	max = key>max ? key : max;
+        }
+    }
+    return max;
+};
+
+module.filter('filter', function() {
+    return function(array, expression, comparator) {
+        // if (!angular.isArray(array)) return array;
+        if(!array || typeof array != "object") return array;
+        var comparatorType = typeof(comparator),
+            predicates = [];
+        predicates.check = function(value) {
+            for (var j = 0; j < predicates.length; j++) {
+                if (!predicates[j](value)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        if (comparatorType !== 'function') {
+            if (comparatorType === 'boolean' && comparator) {
+                comparator = function(obj, text) {
+                    return angular.equals(obj, text);
+                };
+            } else {
+                comparator = function(obj, text) {
+                    if (obj && text && typeof obj === 'object' && typeof text === 'object') {
+                        for (var objKey in obj) {
+                            if (objKey.charAt(0) !== '$' && hasOwnProperty.call(obj, objKey) && comparator(obj[objKey], text[objKey])) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    text = ('' + text).toLowerCase();
+                    return ('' + obj).toLowerCase().indexOf(text) > -1;
+                };
+            }
+        }
+        var search = function(obj, text) {
+            if (typeof text == 'string' && text.charAt(0) === '!') {
+                return !search(obj, text.substr(1));
+            }
+            switch (typeof obj) {
+                case "boolean":
+                case "number":
+                case "string":
+                    return comparator(obj, text);
+                case "object":
+                    switch (typeof text) {
+                        case "object":
+                            return comparator(obj, text);
+                        default:
+                            for (var objKey in obj) {
+                                if (objKey.charAt(0) !== '$' && search(obj[objKey], text)) {
+                                    return true;
+                                }
+                            }
+                            break;
+                    }
+                    return false;
+                case "array":
+                    for (var i = 0; i < obj.length; i++) {
+                        if (search(obj[i], text)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                default:
+                    return false;
+            }
+        };
+        switch (typeof expression) {
+            case "boolean":
+            case "number":
+            case "string":
+                // Set up expression object and fall through
+                expression = {
+                    $: expression
+                };
+                // jshint -W086
+            case "object":
+                // jshint +W086
+                for (var key in expression) {
+                    (function(path) {
+                        if (typeof expression[path] === 'undefined') return;
+                        predicates.push(function(value) {
+                            return search(path == '$' ? value : (value && value[path]), expression[path]);
+                        });
+                    })(key);
+                }
+                break;
+            case 'function':
+                predicates.push(expression);
+                break;
+            default:
+                return array;
+        }
+        var filtered = [];
+        if(array instanceof Array) {
+	        for (var j = 0; j < array.length; j++) {
+	            var value = array[j];
+	            if (predicates.check(value)) {
+	                filtered.push(value);
+	            }
+	        }
+	    } else {
+	        for (var j = 0; j <= maxIntKey(array); j++) {
+	            var value = array[j];
+	            if (predicates.check(value)) {
+	                filtered.push(value);
+	            }
+	        }
+	    }
+        return filtered;
+    };
+});
+
 (function(module){
 function shallowClearAndCopy(src, dst) {
 	dst = dst || {};
