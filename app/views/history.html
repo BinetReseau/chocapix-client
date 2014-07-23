@@ -22,9 +22,9 @@
             <span ng-repeat="o in h.operations | filter:'stockoperation'">
                 <span ng-if="$middle">, </span>
                 <span ng-if="$last && !$first"> et de </span>
-                {{ ((-1)*o.deltaqty)|number }} <span ng-if="o.item.unit != ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-if="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
+                <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
             </span>
-            par <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:h.author.accounts[0].id })">{{ h.author.name }}</a>
+            par <bars:account account="h.author.accounts[0]"></bars:account>
             <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h.id)" class="label label-warning">Annuler</a>
         </span>
 
@@ -34,11 +34,11 @@
             <span ng-repeat="o in h.operations | filter:'stockoperation'">
                 <span ng-if="$middle">, </span>
                 <span ng-if="$last && !$first"> et de </span>
-                {{ ((-1)*o.deltaqty)|number }} <span ng-if="o.item.unit != ''">{{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a></span><span ng-if="o.item.unit == ''"><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a></span>
+                <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
             </span>
             par
             <span ng-repeat="o in h.operations | filter:'accountoperation'">
-                <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:o.account.id })">{{ o.account.user.name }}</a>
+                <bars:account account="o.account"></bars:account>
                 <span class="label label-success">{{ o.deltamoney|currency }}</span>
             </span>
             <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h.id)" class="label label-warning">Annuler</a>
@@ -57,17 +57,11 @@
                         <span ng-repeat="o in h.operations | filter:'accountoperation'">
                             <span ng-if="$middle">, </span>
                             <span ng-if="$last && !$first"> et </span>
-                            <a title="Voir la fiche de cet utilisateur" ui-sref="bar.account.detail({ bar: bar.id, id:o.account.id })">{{ o.account.user.name }}</a>
+                            <bars:account account="o.account"></bars:account>
                         </span>
                     </li>
                     <li ng-repeat="o in h.operations | filter:'stockoperation'">
-                        Achat de {{ ((-1)*o.deltaqty)|number }}
-                        <span ng-if="o.item.unit != ''">
-                            {{ o.item.unit }} {{ o.item.name | affd }}<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name }}</a>
-                        </span>
-                        <span ng-if="o.item.unit == ''">
-                            <a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: bar.id, id:o.item.id })">{{ o.item.name | affs:((-1)*o.deltaqty) }}</a>
-                        </span>
+                        Achat de <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
                         <span class="label label-success">{{ o.deltaqty * o.item.price|currency }}</span>
                     </li>
                 </ul>
