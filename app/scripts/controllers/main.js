@@ -213,16 +213,22 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'acheter') {
 					var id = $scope.query.food.id;
-					var Transaction = APIAction.buy({item: id, qty: $scope.query.qty}, function () {
-						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
-							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
-								$scope.FoodDetails = Transaction.operations[i].item;
-							} else if (Transaction.operations[i].type == 'accountoperation') {
-								$scope.user.account.money = Transaction.operations[i].account.money;
-							}
+					APIAction.buy({item: id, qty: $scope.query.qty}).$promise.then(function(){
+						if($scope.foodDetails) {
+							$scope.foodDetails.$reload().$promise.then(function(o){
+								$scope.foodDetails = o;
+							});
 						}
+						if($scope.history) {
+							$scope.history.$reload().$promise.then(function(o){
+								$scope.history = o;
+							});
+						}
+						$scope.user.account.$reload().$promise.then(function(o){
+							$scope.user.account = o;
+						});
 						$scope.bar.search = '';
-						$scope.bar.foods = Food.query({});
+						$scope.bar.foods = Food.query();
 					});
 				}
 				if ($scope.query.type == 'jeter') {
@@ -230,7 +236,7 @@ angular.module('bars.ctrl.main', [
 					var Transaction = APIAction.throwaway({item: id, qty: $scope.query.qty}, function () {
 						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
 							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
-								$scope.FoodDetails = Transaction.operations[i].item;
+								$scope.foodDetails = Transaction.operations[i].item;
 							}
 						}
 						$scope.bar.search = '';

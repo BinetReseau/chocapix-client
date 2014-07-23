@@ -1,15 +1,15 @@
 <hr />
 <div class="text-center">
-	<h1>{{ FoodDetails.name }}</h1>
+	<h1>{{ foodDetails.name }}</h1>
 </div>
 <br />
 <div class="row h4">
 	<div class="col-sm-2 text-right"><strong>Prix</strong></div>
-	<div class="col-sm-10"><span class="label label-info">{{ FoodDetails.price|currency }}<span ng-hide="FoodDetails.unit == ''"> / {{ FoodDetails.unit }}</span></span></div>
+	<div class="col-sm-10"><span class="label label-info">{{ foodDetails.price|currency }}<span ng-hide="foodDetails.unit == ''"> / {{ foodDetails.unit }}</span></span></div>
 </div>
 <div class="row h4">
 	<div class="col-sm-2 text-right"><strong>Stock</strong></div>
-	<div class="col-sm-10"><span class="label label-primary">{{ FoodDetails.qty | number }} {{ FoodDetails.unit == '' && (FoodDetails.name|affs:FoodDetails.qty) || FoodDetails.unit }}</span></div>
+	<div class="col-sm-10"><span class="label label-primary">{{ foodDetails.qty | number }} {{ foodDetails.unit == '' && (foodDetails.name|affs:foodDetails.qty) || foodDetails.unit }}</span></div>
 </div>
 <div class="row">
 	<div class="col-sm-2">
@@ -23,8 +23,8 @@
 	<div class="col-sm-10">
 		<form class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
 			<input type="number" class="form-control" step="any" ng-model="queryQty" size="4" style="width: 80px" />
-			<label>{{ FoodDetails.unit == '' && (FoodDetails.name|affs:queryQty) || FoodDetails.unit }}</label>
-			<input type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*FoodDetails.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
+			<label>{{ foodDetails.unit == '' && (foodDetails.name|affs:queryQty) || foodDetails.unit }}</label>
+			<input type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*foodDetails.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
 		</form>
 	</div>
 </div>
