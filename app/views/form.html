@@ -10,12 +10,12 @@
 <span ng-hide="1">{{ analyse(bar.search) }}</span>
 <div class="row">
 	<div class="col-sm-8 col-sm-offset-2">
-		<span class="legend" ng-hide="query.food === null && query.user === null">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }}
+		<span class="legend" ng-hide="query.food === null && query.account === null">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }}
 			<span ng-if="query.type=='acheter'">
 				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> pour {{ (query.qty*query.food.price) | currency }}.
 			</span>
 			<span ng-if="query.type=='donner'">
-				{{ query.qty | currency }} à <bars:account account="query.user"></bars:account>.
+				{{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.<br />
 			</span>
 			<span ng-if="query.type=='jeter'">
 				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.

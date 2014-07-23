@@ -21,11 +21,17 @@ angular.module('bars.directives', [
         restrict: 'E',
         scope: {
             account: '=account',
-            user: "=?user"
+            useri: "=?user"
         },
         templateUrl: 'scripts/directives/views/bars-account.html',
         controller: ['$scope', function($scope) {
-            $scope.user = $scope.user || ($scope.account && $scope.account.user) || null;
+            var setUser = function(newValue, oldValue) {
+                $scope.user = $scope.useri || ($scope.account && $scope.account.user) || null;
+            };
+            setUser();
+
+            $scope.$watch('user', setUser);
+            $scope.$watch('account', setUser);
         }]
     };
 })

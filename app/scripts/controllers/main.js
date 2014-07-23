@@ -58,7 +58,7 @@ angular.module('bars.ctrl.main', [
 					unit: '',
 					name: '',
 					food: null,
-					user: null
+					account: null
 				};
 				// Type: acheter|jeter|ajouter|appro|donner
 				if (/acheter/i.test(qo)) {
@@ -139,10 +139,10 @@ angular.module('bars.ctrl.main', [
 						q = q.replace(/ à|a /i, '');
 						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '').trim();
 
-						var users = $filter('filter')($scope.bar.accounts, q, false);
-						if (users.length == 1) {
+						var accounts = $filter('filter')($scope.bar.accounts, q, false);
+						if (accounts.length == 1) {
 							$scope.query.type = 'donner';
-							$scope.query.user = users[0];
+							$scope.query.account = accounts[0];
 						}
 					}
 				}
@@ -208,7 +208,7 @@ angular.module('bars.ctrl.main', [
 				return $scope.query;
 			};
 			$scope.executeQuery = function() {
-				if ($scope.query.food === null && $scope.query.user === null) {
+				if ($scope.query.food === null && $scope.query.account === null) {
 					return null;
 				}
 				if ($scope.query.type == 'acheter') {
@@ -238,7 +238,7 @@ angular.module('bars.ctrl.main', [
 					});
 				}
 				if ($scope.query.type == 'donner') {
-					var id = $scope.query.user.id;
+					var id = $scope.query.account.id;
 					var Transaction = APIAction.give({ recipient: id, qty: $scope.query.qty }, function () {
 						for (var i = 0; i < Transaction.operations.length; i++) {
 							if (Transaction.operations[i].type == 'accountoperation' && Transaction.operations[i].account.id == $scope.user.account.id) {
