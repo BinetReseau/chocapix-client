@@ -122,10 +122,12 @@ module.filter('array', function() {
 	return function(obj) {
 		var length = 0;
 		for (var key in obj) {
-			if (obj.hasOwnProperty(key) && !!parseInt(key)) {
+			if (obj.hasOwnProperty(key) && !isNaN(parseInt(key))) {
+				key = parseInt(key);
 				length = key>length ? key : length;
 			}
 		}
+		length++;
 
 		var filtered = [];
 		for (var j = 0; j < length; j++) {
