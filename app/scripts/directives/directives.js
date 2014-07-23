@@ -7,11 +7,11 @@ angular.module('bars.directives', [
         restrict: 'E',
         scope: {
             food: '=food',
-            unit: '=unit',
-            qty: '=qty'
+            unit: '=?unit',
+            qty: '=?qty'
         },
         template: function(elt, attrs) {
-            if(attrs.unit === undefined || attrs.qty === undefined) {
+            if(!attrs.qty) {
                 return '<a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: food.bar, id:food.id })">' +
                         '{{ food.name }}' +
                     '</a>';
@@ -23,6 +23,9 @@ angular.module('bars.directives', [
                             '<span ng-if="unit == \'\'">{{ food.name | affs:qty }}</span>' +
                         '</a>';
             }
+        },
+        controller: function($scope){
+            $scope.unit = $scope.unit || $scope.food.unit;
         }
     };
 })
