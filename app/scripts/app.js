@@ -36,24 +36,24 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return null;
 					}],
 					bar: ['API.Bar' , '$stateParams', function(Bar, $stateParams) {
-						return Bar.get().$promise;
+						return Bar.get();
 					}],
 					foods: ['API.Food', function(Food) {
-						return Food.query().$promise;
+						return Food.query();
 					}],
 					accounts: ['API.Account', function(Account) {
-						return Account.query().$promise;
+						return Account.query();
 					}],
 					user: ['API.Me', 'AuthService', function(Me, AuthService) {
 						if (AuthService.isAuthenticated()) {
-							return Me.all().$promise;
+							return Me.all();
 						} else {
 							return null;
 						}
 					}],
 					account: ['API.Me', 'AuthService', function(Me, AuthService) {
 						if (AuthService.isAuthenticated()) {
-							return Me.get().$promise;
+							return Me.get();
 						} else {
 							return null;
 						}
@@ -92,10 +92,10 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Food/details.html",
 				resolve:{
 					foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
-						return Food.get({id:$stateParams.id}).$promise;
+						return Food.get({id:$stateParams.id});
 					}],
 					foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-						return Transaction.byItem({id: $stateParams.id}).$promise;
+						return Transaction.byItem({id: $stateParams.id});
 					}]
 				},
 				controller: 'FoodDetailCtrl'
@@ -117,10 +117,10 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Account/detail.html",
 				resolve:{
 					account: ['API.Account', '$stateParams', function(Account, $stateParams) {
-						return Account.get({id: $stateParams.id}).$promise;
+						return Account.get({id: $stateParams.id});
 					}],
 					history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-						return Transaction.byAccount({id: $stateParams.id}).$promise;
+						return Transaction.byAccount({id: $stateParams.id});
 					}]
 				},
 				controller: 'AccountDetailCtrl'
@@ -131,7 +131,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/history.html",
 				resolve: {
 					history: ['API.Transaction', '$stateParams', function(Transaction) {
-						return Transaction.query().$promise;
+						return Transaction.query();
 					}]
 				},
 				controller: 'HistoryCtrl'
