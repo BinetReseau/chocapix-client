@@ -25,7 +25,7 @@
                     <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
                 </span>
                 par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
-                <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h.id)" class="label label-warning">Annuler</a>
+                <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
             </span>
 
             <span ng-switch-when="buy">
@@ -42,7 +42,7 @@
                         <bars:account account="o.account"></bars:account>
                         <span class="label label-success">{{ o.deltamoney|currency }}</span>
                     </span>
-                    <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h.id)" class="label label-warning">Annuler</a>
+                    <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
                 </span><br /><!-- Supprimer ce br dès que les bouffes à plusieurs sont implémentées dans Symfony -->
 
                 <!-- Sinon, c'est une bouffe à plusieurs -->
@@ -51,7 +51,7 @@
                     <span ng-hide="displayDetail" ng-click="displayDetail = !displayDetail" ng-init="displayDetail = false" class="glyphicon glyphicon-expand"></span>
                     <span ng-show="displayDetail" ng-click="displayDetail = !displayDetail"  class="glyphicon glyphicon-collapse-down"></span>
                     bouffe à plusieurs entre {{ (h.operations | filter:'accountoperation').length }} participants <span class="label label-success">{{ (-1)*h.moneyflow|currency }}</span>
-                    <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h.id)" class="label label-warning">Annuler</a>
+                    <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
                     <span ng-show="displayDetail">
                         <ul>
                             <li>Participants :

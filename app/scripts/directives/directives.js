@@ -41,13 +41,15 @@ angular.module('bars.directives', [
             function($scope, Transaction) {
                 $scope.canUpdate = !!$scope.updateCallback;
                 $scope.update = function() {
-                    $scope.updating = true;
-                    return $scope.updateCallback().then(function(){
-                        $scope.updating = false;
-                    });
+                    if($scope.canUpdate){
+                        $scope.updating = true;
+                        return $scope.updateCallback().then(function(){
+                            $scope.updating = false;
+                        });
+                    }
                 };
                 $scope.cancelTransaction = function(t) {
-                    return Transaction.cancel({id: t}, null).$promise.then(function(){
+                    return Transaction.cancel({id: t.id}, null).$promise.then(function(){
                         $scope.update();
                     });
                 };
