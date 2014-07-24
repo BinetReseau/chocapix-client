@@ -176,6 +176,11 @@ angular.module('bars.ctrl.main', [
 								$scope.query.hasError = true;
 								$scope.query.errorMessage = 'Réfléchis mon grand ! On ne peut pas se faire de don à soi-même !';
 							}
+							if ($scope.query.qty <= 0) {
+								$scope.query.hideAnalysis = true;
+								$scope.query.hasError = true;
+								$scope.query.errorMessage = 'On ne peut donner que des montants strictement positifs.';
+							}
 						}
 						if (accounts.length == 0 && $scope.query.type == 'donner') {
 							$scope.query.hasError = true;
@@ -270,7 +275,7 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'donner') {
 					var id = $scope.query.account.id;
-					if (id != $scope.user.account.id) {
+					if (!$scope.query.hasError) {
 						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction){
 							$scope.$emit('bars.account.update', $scope.user.account.id);
 							$scope.$emit('bars.account.update', $scope.query.account.id);
