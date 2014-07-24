@@ -7,45 +7,59 @@ angular.module('bars.ctrl.main', [
 		['$scope', '$stateParams', 'AuthService', 'API.Me', 'foods', 'bar', 'accounts', 'user', 'account',
 		function($scope, $stateParams, AuthService, Me, foods, bar, accounts, user, account) {
 			$scope.bar = {
-			    id: $stateParams.bar,
-			    name: bar.name,
-			    accounts: accounts,
-			    search: '',
-			    foods: foods,
-			    active: 'index',
-	        };
-	        $scope.user = {
-	        	infos: user,
-	        	isAuthenticated: AuthService.isAuthenticated,
-			    logout: AuthService.logout,
-	        	account: account
-	        };
-	        $scope.login = {
-	        	login: '',
-	        	password: ''
-	        };
+				id: $stateParams.bar,
+				name: bar.name,
+				accounts: accounts,
+				search: '',
+				foods: foods,
+				active: 'index',
+			};
+			$scope.user = {
+				infos: user,
+				isAuthenticated: AuthService.isAuthenticated,
+				logout: AuthService.logout,
+				account: account
+			};
+			$scope.login = {
+				login: '',
+				password: ''
+			};
 
-	        $scope.connexion = function (login) {
-	        	$scope.loginError = false;
-	        	$scope.inLogin = true;
-	            AuthService.login(login).then(
-	            	function(user) {
-	            		$scope.user.infos = user;
-	            		$scope.user.account = Me.get();
-	            		$scope.login = {login: '', password: ''};
-	                    $scope.inLogin = false;
-	            	}, function() {
-	            		$scope.loginError = true;
-	            		$scope.login.password = '';
-	            		$scope.inLogin = false;
-	            	}
-	            );
-	        };
+			$scope.connexion = function (login) {
+				$scope.loginError = false;
+				$scope.inLogin = true;
+				AuthService.login(login).then(
+					function(user) {
+						$scope.user.infos = user;
+						$scope.user.account = Me.get();
+						$scope.login = {login: '', password: ''};
+						$scope.inLogin = false;
+					}, function() {
+						$scope.loginError = true;
+						$scope.login.password = '';
+						$scope.inLogin = false;
+					}
+				);
+			};
 
-	        $scope.$on('bars_update', function(evt, o){
-	        	evt.stopPropagation();
-	        	$scope.$broadcast('bars_update', o);
-	        });
+			$scope.$on('bars_update_account', function(evt, o){
+				if(o === $scope.user.account) {
+					Me.get().$promise.then(function(o){
+						$scope.user.account = o;
+					});
+				}
+			});
+
+			// bounce events to child scopes
+			['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
+				$scope.$on(evt_name, function(evt, o){
+					if(evt.targetScope !== $scope) {
+						console.log(evt);
+						evt.stopPropagation();
+						$scope.$broadcast(evt_name, o);
+					}
+				});
+			});
 		}])
 	.controller('MainFormCtrl',
 		['$scope', '$filter', 'API.Food', 'API.Action',
@@ -214,44 +228,28 @@ angular.module('bars.ctrl.main', [
 			};
 			$scope.executeQuery = function() {
 				if ($scope.query.food === null && $scope.query.account === null) {
-					return null;
+					return;
 				}
 				if ($scope.query.type == 'acheter') {
-					var id = $scope.query.food.id;
-					var Transaction = APIAction.buy({item: id, qty: $scope.query.qty}, function () {
-						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
-							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
-								$scope.FoodDetails = Transaction.operations[i].item;
-							} else if (Transaction.operations[i].type == 'accountoperation') {
-								$scope.user.account.money = Transaction.operations[i].account.money;
-							}
-						}
+					APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
+						$scope.$emit('bars_update_food', $scope.query.food);
+						$scope.$emit('bars_update_account', $scope.user.account);
+						$scope.$emit('bars_update_history', transaction);
 						$scope.bar.search = '';
-						$scope.bar.foods = Food.query({}).$promise.then(function(){
-							$scope.$emit('bars_update');
-						});
 					});
 				}
 				if ($scope.query.type == 'jeter') {
-					var id = $scope.query.food.id;
-					var Transaction = APIAction.throwaway({item: id, qty: $scope.query.qty}, function () {
-						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
-							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == id) {
-								$scope.FoodDetails = Transaction.operations[i].item;
-							}
-						}
+					APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
+						$scope.$emit('bars_update_food', $scope.query.food);
+						$scope.$emit('bars_update_history', transaction);
 						$scope.bar.search = '';
-						$scope.bar.foods = Food.query({});
 					});
 				}
 				if ($scope.query.type == 'donner') {
-					var id = $scope.query.account.id;
-					var Transaction = APIAction.give({ recipient: id, qty: $scope.query.qty }, function () {
-						for (var i = 0; i < Transaction.operations.length; i++) {
-							if (Transaction.operations[i].type == 'accountoperation' && Transaction.operations[i].account.id == $scope.user.account.id) {
-								$scope.user.account.money = Transaction.operations[i].account.money;
-							}
-						}
+					APIAction.give({recipient: $scope.query.account.id, qty: $scope.query.qty}).then(function(transaction){
+						$scope.$emit('bars_update_account', $scope.user.account);
+						$scope.$emit('bars_update_account', $scope.query.account);
+						$scope.$emit('bars_update_history', transaction);
 						$scope.bar.search = '';
 					});
 				}

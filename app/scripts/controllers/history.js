@@ -8,10 +8,11 @@ angular.module('bars.ctrl.history', [
 				$scope.bar.active = 'history';
 				$scope.history = history;
 				$scope.updateHistory = function() {
-					$scope.history = Transaction.query();
-					return $scope.history.$promise;
+					return Transaction.query().$promise.then(function(o){
+						$scope.history = o;
+					});
 				};
-		        $scope.$on('bars_update', function(evt, o){
+		        $scope.$on('bars_update_history', function(evt){
 		        	$scope.updateHistory();
 		        });
 		}
