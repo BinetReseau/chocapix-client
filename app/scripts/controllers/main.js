@@ -134,6 +134,10 @@ angular.module('bars.ctrl.main', [
 					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
 					if (foods.length == 0) {
 						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
+						if ($scope.query.type=='acheter') {
+							$scope.query.hasError = true;
+							$scope.query.errorMessage = 'Cet aliment n\'existe pas dans ce bar.';
+						}
 					}
 
 					if (foods.length == 1) {
@@ -175,9 +179,9 @@ angular.module('bars.ctrl.main', [
 								$scope.query.errorMessage = 'Réfléchis mon grand ! On ne peut pas se faire de don à soi-même !';
 							}
 						}
-						if (accounts.length == 0) {
+						if (accounts.length == 0 && $scope.query.type == 'donner') {
 							$scope.query.hasError = true;
-							$scope.query.errorMessage = 'Aucun utilisateur à ce nom...';
+							$scope.query.errorMessage = 'Aucun utilisateur à ce nom dans ce bar.';
 						}
 					}
 				}
@@ -218,6 +222,10 @@ angular.module('bars.ctrl.main', [
 					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
 					if (foods.length == 0) {
 						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
+						if ($scope.query.type=='jeter') {
+							$scope.query.hasError = true;
+							$scope.query.errorMessage = 'Cet aliment n\'existe pas dans ce bar.';
+						}
 					}
 
 					if (foods.length == 1) {
