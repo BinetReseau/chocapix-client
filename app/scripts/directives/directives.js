@@ -39,24 +39,24 @@ angular.module('bars.directives', [
     return {
         restrict: 'E',
         scope: {
-            history: '=history',
-            updateCallback: "=?update"
+            history: '=history'
         },
         templateUrl: 'scripts/directives/views/bars-history.html',
-        controller: ['$scope', 'API.Transaction',
-            function($scope, Transaction) {
-                $scope.canUpdate = !!$scope.updateCallback;
+        controller: ['$scope',
+            function($scope) {
+                $scope.canUpdate = true;
                 $scope.update = function() {
-                    if($scope.canUpdate){
-                        $scope.updating = true;
-                        return $scope.updateCallback().then(function(){
-                            $scope.updating = false;
-                        });
-                    }
+                    $scope.updating = true;
+                    $scope.history.$reload().$promise.then(function(o){
+                        $scope.updating = false;
+                    });
                 };
+                $scope.$on('bars_update_history', function(evt){
+                    $scope.update();
+                });
                 $scope.cancelTransaction = function(t) {
-                    return Transaction.cancel({id: t.id}, null).$promise.then(function(){
-                        $scope.update();
+                    t.cancel().$promise.then(function(){
+                        $scope.$emit('bars_update_history');
                     });
                 };
         }]
