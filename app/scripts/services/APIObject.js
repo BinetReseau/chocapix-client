@@ -92,7 +92,7 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 			angular.forEach(methods, function(method, key){
 				function f(is_static){
 					return function(a1, a2, a3, a4) {
-						console.log(key + '(' + (method.url || url) + ')');
+						// console.log(key + '(' + (method.url || url) + ')');
 						var args = arguments;
 						var obj = method.isArray ? [] : new APIEntity();
 						obj.$resolved = false;
@@ -114,8 +114,8 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 									return obj;
 								})
 								.then(function(obj){
-									console.log('returned ' + key + '(' + (method.url || url) + ')');
-									console.log(obj);
+									// console.log('returned ' + key + '(' + (method.url || url) + ')');
+									// console.log(obj);
 									return obj;
 								});
 						return obj;
