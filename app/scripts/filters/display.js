@@ -12,6 +12,7 @@ angular.module('bars.filters', [])
   })
   .filter('affs', function() { // displays plurial or singular
     return function(text, n) {
+      n = n >= 0 ? n : -n;
       if (n >= 2) {
         return text + "s";
       } else {
