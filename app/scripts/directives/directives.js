@@ -53,12 +53,10 @@ angular.module('bars.directives', [
                         $scope.updating = false;
                     });
                 };
-                $scope.$on('bars_update_history', $scope.update);
+                $scope.$on('bars.transaction.add', $scope.update);
                 $scope.cancelTransaction = function(t) {
-                    t.cancel().$promise.then(function(){
-                        $events.$broadcast('bars_update_history', t.id);
-                        $events.$broadcast('bars_update_account');
-                        $events.$broadcast('bars_update_food');
+                    t.cancel().$promise.then(function(t){
+                        $events.$broadcast('bars.transaction.update', t);
                     });
                 };
         }]

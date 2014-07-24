@@ -7,7 +7,7 @@ angular.module('bars.ctrl.account', [
             $scope.accountDetail = account;
             $scope.history = history;
 
-            $scope.$on('bars_update_account', function(evt, id){
+            $scope.$on('bars.account.update', function(evt, id){
                 if(!id || id == $scope.accountDetail.id) {
                     $scope.accountDetail.$reload();
                 }
@@ -21,7 +21,7 @@ angular.module('bars.ctrl.account', [
                     $scope.updatingAccountsList = false;
                 });
             };
-            $scope.$on('bars_update_account', $scope.updateAccountsList);
+            $scope.$on('bars.account.update', $scope.updateAccountsList);
             $scope.orderList = 'user.name';
             $scope.reverse = false;
         }])
