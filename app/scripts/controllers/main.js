@@ -49,7 +49,8 @@ angular.module('bars.ctrl.main', [
 				type: 'acheter',
 				qty: 1,
 				unit: null,
-				name: ''
+				name: '',
+				hideAnalysis: false
 			};
 			$scope.analyse = function(qo) {
 				$scope.query = {
@@ -143,6 +144,11 @@ angular.module('bars.ctrl.main', [
 						if (accounts.length == 1) {
 							$scope.query.type = 'donner';
 							$scope.query.account = accounts[0];
+							if ($scope.user.account.id == $scope.query.account.id) {
+								$scope.query.hideAnalysis = true;
+							} else {
+								$scope.query.hideAnalysis = false;
+							}
 						}
 					}
 				}
@@ -239,14 +245,16 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'donner') {
 					var id = $scope.query.account.id;
-					var Transaction = APIAction.give({ recipient: id, qty: $scope.query.qty }, function () {
-						for (var i = 0; i < Transaction.operations.length; i++) {
-							if (Transaction.operations[i].type == 'accountoperation' && Transaction.operations[i].account.id == $scope.user.account.id) {
-								$scope.user.account.money = Transaction.operations[i].account.money;
+					if (id != $scope.user.account.id) {
+						var Transaction = APIAction.give({ recipient: id, qty: $scope.query.qty }, function () {
+							for (var i = 0; i < Transaction.operations.length; i++) {
+								if (Transaction.operations[i].type == 'accountoperation' && Transaction.operations[i].account.id == $scope.user.account.id) {
+									$scope.user.account.money = Transaction.operations[i].account.money;
+								}
 							}
-						}
-						$scope.bar.search = '';
-					});
+							$scope.bar.search = '';
+						});
+					}
 				}
 			};
 		}])

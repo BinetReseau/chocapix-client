@@ -1,5 +1,5 @@
 <form class="form-horizontal" ng-submit="executeQuery()">
-	<div class="form-group">
+	<div class="form-group" ng-class="query.type == 'donner' && query.account.id == user.account.id && 'has-error'">
 		<label for="q_alim" class="col-sm-2 control-label">Je veux</label>
 		<div class="col-sm-8">
 			<input type="search" class="form-control" ng-model="bar.search" placeholder="(acheter) 2l de lait • 120g pates • (donner) 2€ à Thomas • ajouter (à la bouffe à plusieurs) 6 steaks • jeter 3 pommes" id="queryf" id="q_alim" />
@@ -10,7 +10,7 @@
 <span ng-hide="1">{{ analyse(bar.search) }}</span>
 <div class="row">
 	<div class="col-sm-8 col-sm-offset-2">
-		<span class="legend" ng-hide="query.food === null && query.account === null">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }}
+		<span class="legend" ng-hide="query.food === null && query.account === null || query.hideAnalysis">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }}
 			<span ng-if="query.type=='acheter'">
 				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> pour {{ (query.qty*query.food.price) | currency }}.
 			</span>
@@ -20,6 +20,9 @@
 			<span ng-if="query.type=='jeter'">
 				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.
 			</span>
-		</span><br /><br /><br />
+		</span><br />
+		<div ng-if="query.account.id == user.account.id" class="alert alert-danger" role="alert">
+			Réfléchis mon grand : on ne peut pas se faire de don à soi-même !
+		</div><br /><br />
 	</div>
 </div>
