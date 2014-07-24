@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('bars.directives', [
+    'bars.events'
     ])
 .directive('barsFood', function() {
     return {
@@ -43,8 +44,8 @@ angular.module('bars.directives', [
             history: '=history'
         },
         templateUrl: 'scripts/directives/views/bars-history.html',
-        controller: ['$scope',
-            function($scope) {
+        controller: ['$scope', '$events',
+            function($scope, $events) {
                 $scope.canUpdate = true;
                 $scope.update = function() {
                     $scope.updating = true;
@@ -55,7 +56,9 @@ angular.module('bars.directives', [
                 $scope.$on('bars_update_history', $scope.update);
                 $scope.cancelTransaction = function(t) {
                     t.cancel().$promise.then(function(){
-                        $scope.$emit('bars_update_history', t.id);
+                        $events.$broadcast('bars_update_history', t.id);
+                        $events.$broadcast('bars_update_account');
+                        $events.$broadcast('bars_update_food');
                     });
                 };
         }]

@@ -5,6 +5,7 @@ angular.module('bars.auth', [
 	'bars.API'
 ])
 
+// cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
 .factory('AuthService', ['$injector', '$sessionStorage', '$q', 'API',
 	function ($injector, $sessionStorage, $q, API) {
 		if ($sessionStorage.auth === undefined) {
