@@ -30,11 +30,12 @@ angular.module('bars.directives', [
             };
             setUser();
 
-            $scope.$watch('user', setUser);
+            $scope.$watch('useri', setUser);
             $scope.$watch('account', setUser);
         }]
     };
 })
+
 .directive('barsHistory', function() {
     return {
         restrict: 'E',
@@ -51,12 +52,10 @@ angular.module('bars.directives', [
                         $scope.updating = false;
                     });
                 };
-                $scope.$on('bars_update_history', function(evt){
-                    $scope.update();
-                });
+                $scope.$on('bars_update_history', $scope.update);
                 $scope.cancelTransaction = function(t) {
                     t.cancel().$promise.then(function(){
-                        $scope.$emit('bars_update_history');
+                        $scope.$emit('bars_update_history', t.id);
                     });
                 };
         }]

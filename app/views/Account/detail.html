@@ -1,10 +1,10 @@
-<h1 class="text-center">{{ AccountDetail.user.name }}</h1>
+<h1 class="text-center">{{ accountDetail.user.name }}</h1>
 
 <div class="row h4">
     <div class="col-sm-2 text-right"><strong>Solde</strong></div>
     <div class="col-sm-10">
-        <span class="label" ng-class="AccountDetail.money > 0 && 'label-success' || 'label-danger'">
-            {{ AccountDetail.money | currency }}
+        <span class="label" ng-class="accountDetail.money > 0 && 'label-success' || 'label-danger'">
+            {{ accountDetail.money | currency }}
         </span>
     </div>
 </div>

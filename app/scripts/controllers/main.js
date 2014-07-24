@@ -42,13 +42,15 @@ angular.module('bars.ctrl.main', [
 				);
 			};
 
-			$scope.$on('bars_update_account', function(evt, o){
-				if(o === $scope.user.account) {
-					Me.get().$promise.then(function(o){
-						$scope.user.account = o;
-					});
+			$scope.$on('bars_update_account', function(evt, id){
+				if(id === $scope.user.account.id) {
+					$scope.user.account.$reload();
+					// Me.get().$promise.then(function(o){
+					// 	$scope.user.account = o;
+					// });
 				}
 			});
+			$scope.$on('bars_update_food', $scope.bar.foods.$reload);
 
 			// bounce events to child scopes
 			['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
@@ -246,16 +248,16 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'acheter') {
 					APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$scope.$emit('bars_update_food', $scope.query.food);
-						$scope.$emit('bars_update_account', $scope.user.account);
-						$scope.$emit('bars_update_history', transaction);
+						$scope.$emit('bars_update_food', $scope.query.food.id);
+						$scope.$emit('bars_update_account', $scope.user.account.id);
+						$scope.$emit('bars_update_history', transaction.id);
 						$scope.bar.search = '';
 					});
 				}
 				if ($scope.query.type == 'jeter') {
 					APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$scope.$emit('bars_update_food', $scope.query.food);
-						$scope.$emit('bars_update_history', transaction);
+						$scope.$emit('bars_update_food', $scope.query.food.id);
+						$scope.$emit('bars_update_history', transaction.id);
 						$scope.bar.search = '';
 					});
 				}
@@ -263,9 +265,9 @@ angular.module('bars.ctrl.main', [
 					var id = $scope.query.account.id;
 					if (id != $scope.user.account.id) {
 						APIAction.give({recipient: id, qty: $scope.query.qty}).then(function(transaction){
-							$scope.$emit('bars_update_account', $scope.user.account);
-							$scope.$emit('bars_update_account', $scope.query.account);
-							$scope.$emit('bars_update_history', transaction);
+							$scope.$emit('bars_update_account', $scope.user.account.id);
+							$scope.$emit('bars_update_account', $scope.query.account.id);
+							$scope.$emit('bars_update_history', transaction.id);
 							$scope.bar.search = '';
 						});
 					}
