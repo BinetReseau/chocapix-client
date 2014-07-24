@@ -271,7 +271,7 @@ angular.module('bars.ctrl.main', [
 				if ($scope.query.type == 'donner') {
 					var id = $scope.query.account.id;
 					if (id != $scope.user.account.id) {
-						APIAction.give({recipient: id, qty: $scope.query.qty}).then(function(transaction){
+						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction){
 							$scope.$emit('bars.account.update', $scope.user.account.id);
 							$scope.$emit('bars.account.update', $scope.query.account.id);
 							$scope.$emit('bars.transaction.add', transaction.id);
