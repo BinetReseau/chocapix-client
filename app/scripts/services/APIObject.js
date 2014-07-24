@@ -93,15 +93,16 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				function f(is_static){
 					return function(a1, a2, a3, a4) {
 						console.log(key + '(' + (method.url || url) + ')');
+						var args = arguments;
 						var obj = method.isArray ? [] : new APIEntity();
 						obj.$resolved = false;
-						obj.$promise = resource[key].apply(resource, is_static ? arguments : [a1, this, a2, a3]).$promise
+						obj.$promise = resource[key].apply(resource, is_static ? args : [a1, this, a2, a3]).$promise
 								.then(method.object ? $injector.get(method.object).$parse : APIEntity.$parse)
 								.then(function(new_obj){
 									shallowClearAndCopy(new_obj, obj);
 									obj.$reload = function reload() {
 										var call_obj =  (is_static ? APIEntity : obj);
-										var o = call_obj[key].apply(call_obj, arguments);
+										var o = call_obj[key].apply(call_obj, args);
 										o.$promise = o.$promise.then(function(oo){
 											shallowClearAndCopy(oo, obj);
 											obj.$reload = reload; // oo.$reload is linked to oo
