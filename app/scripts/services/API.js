@@ -26,14 +26,14 @@ angular.module('bars.API', [
 // 			byUser: {method: 'GET', url:API.route('account/by-user/:id'), isArray:true}
 // 		});
 // 	}])
-.factory('API.Action', ['$resource', 'API',
-	function($resource, API) {
-		return $resource('', {}, {
-			buy: {method:'POST', url:API.route('action/buy')},
-			give: {method: 'POST', url:API.route('action/give')},
-			throwaway: {method: 'POST', url:API.route('action/throw')}
-		});
-	}])
+// .factory('API.Action', ['$resource', 'API',
+// 	function($resource, API) {
+// 		return $resource('', {}, {
+// 			buy: {method:'POST', url:API.route('action/buy')},
+// 			give: {method: 'POST', url:API.route('action/give')},
+// 			throwaway: {method: 'POST', url:API.route('action/throw')}
+// 		});
+// 	}])
 // .factory('API.Bar', ['$resource', 'API',
 // 	function($resource, API) {
 // 		return $resource(API.route(''));
@@ -67,6 +67,14 @@ angular.module('bars.API', [
 // 		});
 // 	}])
 
+.factory('API.Action', ['APIObject', 'API',
+	function(APIObject, API) {
+		return APIObject('', {}, {
+			buy: {method:'POST', url:API.route('action/buy'), static: true, object: 'API.Transaction'},
+			give: {method: 'POST', url:API.route('action/give'), static: true, object: 'API.Transaction'},
+			throwaway: {method: 'POST', url:API.route('action/throw'), static: true, object: 'API.Transaction'}
+		});
+	}])
 .factory('API.Account', ['APIObject', 'API',
 	function(APIObject, API) {
 		return APIObject(API.route('account/:id'), {}, {
