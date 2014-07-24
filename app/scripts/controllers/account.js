@@ -3,21 +3,21 @@
 angular.module('bars.ctrl.account', [
     ])
     .controller('AccountDetailCtrl',
-        ['$scope', 'account', 'history', 'API.Action', function($scope, account, history, APIAction) {
+        ['$scope', 'account', 'history', 'API.Action', '$events',
+        function($scope, account, history, APIAction, $events) {
             $scope.accountDetail = account;
             $scope.history = history;
             $scope.queryType = 'give';
             $scope.query = function(qty, type) {
                 if (type == 'give') {
                     APIAction.give({recipient: account.id, qty: qty}).$promise.then(function(transaction) {
-                        $scope.$emit('bars_update_account', $scope.user.account.id);
-                        $scope.$emit('bars_update_history', transaction.id);
+                        $events.$broadcast('bars.action.give', [$scope.user.account, account, transaction]);
                     });
                 }
             }
 
-            $scope.$on('bars.account.update', function(evt, id){
-                if(!id || id == $scope.accountDetail.id) {
+            $scope.$on('bars.account.update', function(evt, account){
+                if(account.id == $scope.accountDetail.id) {
                     $scope.accountDetail.$reload();
                 }
             });

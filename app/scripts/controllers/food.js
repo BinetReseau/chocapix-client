@@ -3,8 +3,8 @@
 angular.module('bars.ctrl.food', [])
 	.controller(
 		'FoodDetailCtrl',
-		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory',
-		function($scope, $stateParams, APIAction, foodDetails, foodHistory) {
+		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory', '$events',
+		function($scope, $stateParams, APIAction, foodDetails, foodHistory, $events) {
 			$scope.foodDetails = foodDetails;
 			$scope.history = foodHistory;
 			$scope.queryQty = 1;
@@ -12,20 +12,17 @@ angular.module('bars.ctrl.food', [])
 			$scope.query = function(qty, type) {
 				if (type == 'buy') {
 					APIAction.buy({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
-						$scope.$emit('bars.food.update', $scope.foodDetails.id);
-						$scope.$emit('bars.account.update', $scope.user.account.id);
-						$scope.$emit('bars.transaction.add', transaction.id);
+						$events.$broadcast('bars.action.buy', [$scope.foodDetails, $scope.user.account, transaction]);
 					});
 				} else if (type == 'throw') {
 					APIAction.throwaway({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
-						$scope.$emit('bars.food.update', $scope.foodDetails.id);
-						$scope.$emit('bars.transaction.add', transaction.id);
+						$events.$broadcast('bars.action.throw', [$scope.foodDetails, transaction]);
 					});
 				}
 			};
 
-			$scope.$on('bars.food.update', function(evt, id){
-				if(!id || id === $scope.foodDetails.id) {
+			$scope.$on('bars.food.update', function(evt, food){
+				if(food.id === $scope.foodDetails.id) {
 					$scope.foodDetails.$reload();
 				}
 			});

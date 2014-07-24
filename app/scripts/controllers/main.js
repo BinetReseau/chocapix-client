@@ -42,8 +42,8 @@ angular.module('bars.ctrl.main', [
 				);
 			};
 
-			$scope.$on('bars.account.update', function(evt, id){
-				if(!id || id === $scope.user.account.id) {
+			$scope.$on('bars.account.update', function(evt, account){
+				if(account.id === $scope.user.account.id) {
 					$scope.user.account.$reload();
 				}
 			});
@@ -254,17 +254,13 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'acheter') {
 					APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.action.buy', transaction);
-						// $scope.$emit('bars.food.update', $scope.query.food.id);
-						// $scope.$emit('bars.account.update', $scope.user.account.id);
-						// $scope.$emit('bars.transaction.add', transaction.id);
+						$events.$broadcast('bars.action.buy', [$scope.query.food, $scope.user.account, transaction]);
 						$scope.bar.search = '';
 					});
 				}
 				if ($scope.query.type == 'jeter') {
 					APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$scope.$emit('bars.food.update', $scope.query.food.id);
-						$scope.$emit('bars.transaction.add', transaction.id);
+						$events.$broadcast('bars.action.throw', [$scope.query.food, transaction]);
 						$scope.bar.search = '';
 					});
 				}
@@ -272,9 +268,7 @@ angular.module('bars.ctrl.main', [
 					var id = $scope.query.account.id;
 					if (id != $scope.user.account.id) {
 						APIAction.give({recipient: id, qty: $scope.query.qty}).then(function(transaction){
-							$scope.$emit('bars.account.update', $scope.user.account.id);
-							$scope.$emit('bars.account.update', $scope.query.account.id);
-							$scope.$emit('bars.transaction.add', transaction.id);
+							$events.$broadcast('bars.action.give', [$scope.query.account, $scope.user.account, transaction]);
 							$scope.bar.search = '';
 						});
 					}

@@ -60,9 +60,25 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						}
 					}],
 					$events: ['$events', function($events){
-						$events.addEventTransformer('bars.action.buy', function(transaction){
-							return [{evt: 'bars.food.update'}, {evt: 'bars.account.update'}, {evt: 'bars.transaction.add'}];
+						$events.addEventTransformer('bars.action.buy', function(arr){
+							return [{evt: 'bars.food.update', arg : arr[0]},
+								{evt: 'bars.account.update', arg : arr[1]},
+								{evt: 'bars.transaction.add', arg: arr[2]}];
 						});
+						$events.addEventTransformer('bars.action.throw', function(arr){
+							return [{evt: 'bars.food.update', arg : arr[0]},
+								{evt: 'bars.transaction.add', arg: arr[1]}];
+						});
+						$events.addEventTransformer('bars.action.give', function(arr){
+							return [{evt: 'bars.account.update', arg : arr[0]},
+								{evt: 'bars.account.update', arg : arr[1]},
+								{evt: 'bars.transaction.add', arg: arr[2]}];
+						});
+						// $events.addEventTransformer('bars.transaction.cancel', function(transaction){
+						// 	return [{evt: 'bars.account.update', arg : arr[0]},
+						// 		{evt: 'bars.account.update', arg : arr[1]},
+						// 		{evt: 'bars.transaction.update', arg: transaction}];
+						// });
 						return $events;
 					}]
 				},

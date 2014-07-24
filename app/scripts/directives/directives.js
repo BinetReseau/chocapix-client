@@ -54,6 +54,7 @@ angular.module('bars.directives', [
                     });
                 };
                 $scope.$on('bars.transaction.add', $scope.update);
+                $scope.$on('bars.transaction.update', $scope.update);
                 $scope.cancelTransaction = function(t) {
                     t.cancel().$promise.then(function(t){
                         $events.$broadcast('bars.transaction.update', t);
