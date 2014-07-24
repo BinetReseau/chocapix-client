@@ -50,7 +50,9 @@ angular.module('bars.ctrl.main', [
 				qty: 1,
 				unit: null,
 				name: '',
-				hideAnalysis: false
+				hideAnalysis: false,
+				hasError: false,
+				errorMessage: ''
 			};
 			$scope.analyse = function(qo) {
 				$scope.query = {
@@ -59,7 +61,9 @@ angular.module('bars.ctrl.main', [
 					unit: '',
 					name: '',
 					food: null,
-					account: null
+					account: null,
+					hasError: false,
+					errorMessage: ''
 				};
 				// Type: acheter|jeter|ajouter|appro|donner
 				if (/acheter/i.test(qo)) {
@@ -146,9 +150,13 @@ angular.module('bars.ctrl.main', [
 							$scope.query.account = accounts[0];
 							if ($scope.user.account.id == $scope.query.account.id) {
 								$scope.query.hideAnalysis = true;
-							} else {
-								$scope.query.hideAnalysis = false;
+								$scope.query.hasError = true;
+								$scope.query.errorMessage = 'Réfléchis mon grand ! On ne peut pas se faire de don à soi-même !';
 							}
+						}
+						if (accounts.length == 0) {
+							$scope.query.hasError = true;
+							$scope.query.errorMessage = 'Aucun utilisateur à ce nom...';
 						}
 					}
 				}
