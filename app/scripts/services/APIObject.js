@@ -44,9 +44,9 @@ function shallowCopyFilter(obj, filter) {
 module.factory('APIObject', ['$injector', '$resource', 'API',
 	function ($injector, $resource, API) {
 		var DEFAULT_METHODS = {
-			'get': {method: 'GET', static:true},
+			'get': {method: 'GET', static: true},
 			'save': {method: 'POST'},
-			'query': {method: 'GET', isArray: true, static:true},
+			'query': {method: 'GET', isArray: true, static: true},
 			'remove': {method: 'DELETE'},
 			'delete': {method: 'DELETE'}
 		};
@@ -91,16 +91,17 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 			};
 			angular.forEach(methods, function(method, key){
 				function f(is_static){
-					return function(params, data) {
+					return function(a1, a2, a3, a4) {
 						console.log(key + '(' + (method.url || url) + ')');
 						var obj = method.isArray ? [] : new APIEntity();
 						obj.$resolved = false;
-						obj.$promise = resource[key](params, is_static ? data : (data || this)).$promise
+						obj.$promise = resource[key].apply(resource, is_static ? arguments : [a1, this, a2, a3]).$promise
 								.then(method.object ? $injector.get(method.object).$parse : APIEntity.$parse)
 								.then(function(new_obj){
 									shallowClearAndCopy(new_obj, obj);
 									obj.$reload = function reload() {
-										var o = (is_static ? APIEntity : new_obj)[key](params, data);
+										var call_obj =  (is_static ? APIEntity : obj);
+										var o = call_obj[key].apply(call_obj, arguments);
 										o.$promise = o.$promise.then(function(oo){
 											shallowClearAndCopy(oo, obj);
 											obj.$reload = reload; // oo.$reload is linked to oo
