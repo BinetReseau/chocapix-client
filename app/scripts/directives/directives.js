@@ -48,13 +48,15 @@ angular.module('bars.directives', [
                 $scope.update = function() {
                     $scope.updating = true;
                     $scope.history.$reload().$promise.then(function(o){
-                        // $scope.history = o;
                         $scope.updating = false;
                     });
                 };
+                $scope.$on('bars_update_history', function(evt){
+                    $scope.update();
+                });
                 $scope.cancelTransaction = function(t) {
                     t.cancel().$promise.then(function(){
-                        $scope.update();
+                        $scope.$emit('bars_update_history');
                     });
                 };
         }]
