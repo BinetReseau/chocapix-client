@@ -66,69 +66,59 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				shallowCopy(value || {}, this);
 			}
 			APIObject.$parse = function(data){
-				var obj = {};
-				angular.forEach(data, function(value, key){
-					if(!structure[key])
-						obj[key] = value;
-					else {
-						var parse = function(x){
-							return $injector.get(structure[key].object).$parse(x);
-						};
-						obj[key] = structure[key].isArray ? value.map(parse) : parse(value);
-						obj[key].$parent = obj;
-					}
-				})
-				return new APIObject(obj);
+				if(angular.isArray(data)) {
+					var arr = data.map(function(x){
+						var o = APIObject.$parse(x);
+						o.$parent = arr;
+						return o;
+					});
+					arr.$reload = APIObject.prototype.$reload;
+					return arr;
+				} else {
+					var obj = new APIObject();
+					angular.forEach(data, function(value, key){
+						if(!structure[key])
+							obj[key] = value;
+						else {
+							obj[key] = $injector.get(structure[key].object).$parse(value);
+							obj[key].$parent = obj;
+						}
+					});
+					return obj;
+				}
 			};
 			angular.forEach(methods, function(method, key){
-				var parseOne = method.object ? $injector.get(method.object).$parse : APIObject.$parse;
-				var parse = !method.isArray ? parseOne : function(data){
-					var arr = data.map(parseOne);
-					var o = new APIObject(arr);
-					// var o = arr;
-					for (var i = 0; i < arr.length; i++) {
-						arr[i].$parent = o;
-					};
-					// o.__proto__ = APIObject.prototype;
-					return o;
-				};
 				function f(is_static){
 					return function(params, data) {
 						console.log(key + '(' + (method.url || url) + ')');
-						var value = method.isArray ? [] : {};
-						value.$resolved = false;
-						value.$promise = resource[key](params, is_static ? data : (data || this)).$promise
-								.then(parse)
-								.then(function(o){
-									o.$reload = function(){
-										var o = (is_static ? APIObject : o)[key](params, data);
-										o.$promise.then(function(oo){
-											shallowClearAndCopy(oo, value);
+						var obj = method.isArray ? [] : new APIObject();
+						obj.$resolved = false;
+						obj.$promise = resource[key](params, is_static ? data : (data || this)).$promise
+								.then(method.object ? $injector.get(method.object).$parse : APIObject.$parse)
+								.then(function(new_obj){
+									new_obj.$reload = function(){
+										var o = (is_static ? APIObject : new_obj)[key](params, data);
+										o.$promise = o.$promise.then(function(oo){
+											shallowClearAndCopy(oo, obj);
 											return oo;
-										})
+										});
 										return o;
 									};
-									return o;
+									return new_obj;
 								})
-								.then(function(o){
+								.then(function(new_obj){
 									console.log('returned ' + key + '(' + (method.url || url) + ')');
-									console.log(o);
-									shallowClearAndCopy(o, value);
-									value.$resolved = true;
-									return value;
+									console.log(new_obj);
+									shallowClearAndCopy(new_obj, obj);
+									obj.$resolved = true;
+									return obj;
 								});
-						return value;
+						return obj;
 					}
 				}
 				if(method.static){
 					APIObject[key] = f(true);
 				} else {
-					// Object.defineProperty(APIObject.prototype, key, {
-					// 	enumerable: false,
-					// 	configurable: true,
-					// 	writable: true,
-					// 	value: f(false)
-					// })
 					APIObject.prototype[key] = f(false);
 				}
 			});
