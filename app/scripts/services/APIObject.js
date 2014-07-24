@@ -4,40 +4,39 @@ var module = angular.module('APIObject', [
 
 module.filter('array', function() {
 	return function(obj) {
-		// var length = 0;
-		// for (var key in obj) {
-		// 	if (obj.hasOwnProperty(key) && !isNaN(parseInt(key))) {
-		// 		key = parseInt(key);
-		// 		length = key>length ? key : length;
-		// 	}
-		// }
-		// length++;
+		var length = 0;
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key) && !isNaN(parseInt(key))) {
+				key = parseInt(key);
+				length = key>length ? key : length;
+			}
+		}
+		length++;
 
-		// var filtered = [];
-		// for (var j = 0; j < length; j++) {
-		// 	filtered.push(obj[j]);
-		// }
-		// return filtered;
-		return obj.resource || obj;
+		var filtered = [];
+		for (var j = 0; j < length; j++) {
+			filtered.push(obj[j]);
+		}
+		return filtered;
 	};
 });
 
 
 (function(module){
-// function shallowClearAndCopy(src, dst) {
-// 	dst = dst || {};
-// 	for (var key in dst) {
-// 		if (dst.hasOwnProperty(key)) {
-// 			delete dst[key];
-// 		}
-// 	}
-// 	for (var key in src) {
-// 		if (src.hasOwnProperty(key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
-// 			dst[key] = src[key];
-// 		}
-// 	}
-// 	return dst;
-// }
+function shallowClearAndCopy(src, dst) {
+	dst = dst || {};
+	for (var key in dst) {
+		if (dst.hasOwnProperty(key)) {
+			delete dst[key];
+		}
+	}
+	for (var key in src) {
+		if (src.hasOwnProperty(key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+			dst[key] = src[key];
+		}
+	}
+	return dst;
+}
 
 function shallowCopy(src, dst) {
 	dst = dst || {};
@@ -101,71 +100,66 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				return new APIObject(obj);
 			};
 			angular.forEach(methods, function(method, key){
-				var parse = method.object ? $injector.get(method.object).$parse : APIObject.$parse;
+				var parseOne = method.object ? $injector.get(method.object).$parse : APIObject.$parse;
+				var parse = !method.isArray ? parseOne : function(data){
+					var arr = data.map(parseOne);
+					var o = new APIObject(arr);
+					for (var i = 0; i < arr.length; i++) {
+						arr[i].$parent = o;
+					};
+					return o;
+				};
 				function f(is_static){
 					return function(params, data) {
 						console.log(key + '(' + (method.url || url) + ')');
-						var obj = new APIObject();
-						obj.$resolved = false;
-						obj.$promise = resource[key](params, is_static ? data : (data || this)).$promise
-								.then(function(data){
-									if(method.isArray) {
-										var arr = data.map(parse);
-										for (var i = 0; i < arr.length; i++) {
-											arr[i].$parent = obj;
-										};
-										obj.resource = arr;
-									} else {
-										obj.resource = parse(data);
-										obj.resource.$parent = obj;
-									}
-									return obj;
-								})
-								.then(function(obj){
-									obj.$reload = function(){
+						var value = {};
+						value.$resolved = false;
+						value.$promise = resource[key](params, is_static ? data : (data || this)).$promise
+								.then(parse)
+								.then(function(o){
+									o.$reload = function(){
 										var o = (is_static ? APIObject : o)[key](params, data);
-										o.$promise.then(function(new_obj){
-											obj.resource = new_obj.resource;
-											return new_obj;
+										o.$promise.then(function(oo){
+											shallowClearAndCopy(oo, value);
+											return oo;
 										})
 										return o;
 									};
-									obj.$resolved = true;
-									return obj;
+									return o;
 								})
-								.then(function(obj){
+								.then(function(o){
 									console.log('returned ' + key + '(' + (method.url || url) + ')');
-									console.log(obj);
-									return obj;
+									console.log(o);
+									shallowClearAndCopy(o, value);
+									value.$resolved = true;
+									return value;
 								});
-						return obj;
+						return value;
 					}
 				}
 				if(method.static){
 					APIObject[key] = f(true);
 				} else {
-					// Object.defineProperty(APIObject.prototype, key, {
-					// 	enumerable: false,
-					// 	configurable: true,
-					// 	writable: true,
-					// 	value: f(false)
-					// })
-					APIObject.prototype[key] = f(false);
+					Object.defineProperty(APIObject.prototype, key, {
+						enumerable: false,
+						configurable: true,
+						writable: true,
+						value: f(false)
+					})
+					// APIObject.prototype[key] = f(false);
 				}
 			});
 			APIObject.prototype.$reload = function(){
-				// var o = APIObject.get({id: this.id});
-				// o.$promise.then(function(obj){
-				// 	shallowClearAndCopy(obj, this);
-				// 	return obj;
-				// });
-				// return o;
-				if(this.$parent)
-					return this.$parent.$reload();
+				var o = APIObject.get({id: this.id});
+				o.$promise.then(function(obj){
+					shallowClearAndCopy(obj, this);
+					return obj;
+				});
+				return o;
 			};
-			// APIObject.prototype.$reloadAll = function(){
-			// 	return this.$parent ? this.$parent.$reload(): this.$reload();
-			// };
+			APIObject.prototype.$reloadAll = function(){
+				return this.$parent ? this.$parent.$reload(): this.$reload();
+			};
 			return APIObject;
 		};
 	}])
