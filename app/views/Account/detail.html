@@ -8,7 +8,7 @@
         </span>
     </div>
 </div>
-<div class="row">
+<div class="row" ng-if="accountDetail.id != user.account.id">
     <div class="col-sm-3">
         <select class="form-control" ng-model="queryType">
             <option value="give">Faire un don</option>
@@ -17,7 +17,7 @@
     </div>
     <div class="col-sm-9">
         <form ng-switch on="queryType" class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
-            <input type="text" class="form-control" ng-model="queryQty" size="4" style="width: 80px" />
+            <input type="text" class="form-control" ng-model="queryQty"  size="4" style="width: 80px" />
             <input ng-switch-when="give" type="submit" class="btn btn-success" value="Donner {{ queryQty > 0 && ' ' + (queryQty | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
             <input ng-switch-default type="submit" class="btn btn-success" value="Valider" ng-class="queryQty <= 0 && 'disabled' || ''" />
         </form>
