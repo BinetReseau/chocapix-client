@@ -25,7 +25,7 @@ angular.module('bars.ctrl.food', [])
 			};
 
 			$scope.$on('bars_update_food', function(evt, id){
-				if(id === $scope.foodDetails.id) {
+				if(!id || id === $scope.foodDetails.id) {
 					$scope.foodDetails.$reload();
 				}
 			});

@@ -8,7 +8,7 @@ angular.module('bars.ctrl.account', [
             $scope.history = history;
 
             $scope.$on('bars_update_account', function(evt, id){
-                if(id == $scope.accountDetail.id) {
+                if(!id || id == $scope.accountDetail.id) {
                     $scope.accountDetail.$reload();
                 }
             });

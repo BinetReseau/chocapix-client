@@ -43,25 +43,22 @@ angular.module('bars.ctrl.main', [
 			};
 
 			$scope.$on('bars_update_account', function(evt, id){
-				if(id === $scope.user.account.id) {
+				if(!id || id === $scope.user.account.id) {
 					$scope.user.account.$reload();
-					// Me.get().$promise.then(function(o){
-					// 	$scope.user.account = o;
-					// });
 				}
 			});
 			$scope.$on('bars_update_food', $scope.bar.foods.$reload);
 
 			// bounce events to child scopes
-			['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
-				$scope.$on(evt_name, function(evt, o){
-					if(evt.targetScope !== $scope) {
-						console.log({name: evt.name, arg: o});
-						evt.stopPropagation();
-						$scope.$broadcast(evt_name, o);
-					}
-				});
-			});
+			// ['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
+			// 	$scope.$on(evt_name, function(evt, o){
+			// 		if(evt.targetScope !== $scope) {
+			// 			console.log({name: evt.name, arg: o});
+			// 			evt.stopPropagation();
+			// 			$scope.$broadcast(evt_name, o);
+			// 		}
+			// 	});
+			// });
 		}])
 	.controller('MainFormCtrl',
 		['$scope', '$filter', 'API.Food', 'API.Action',
