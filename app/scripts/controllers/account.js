@@ -21,7 +21,6 @@ angular.module('bars.ctrl.account', [
                     $scope.updatingAccountsList = false;
                 });
             };
-            $scope.$on('bars.account.update', $scope.updateAccountsList);
             $scope.orderList = 'user.name';
             $scope.reverse = false;
         }])

@@ -47,6 +47,7 @@ angular.module('bars.ctrl.main', [
 					$scope.user.account.$reload();
 				}
 			});
+            $scope.$on('bars.account.update', $scope.bar.accounts.$reload);
 			$scope.$on('bars.food.update', $scope.bar.foods.$reload);
 
 			// bounce events to child scopes
