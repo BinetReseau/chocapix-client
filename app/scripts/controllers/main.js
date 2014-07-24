@@ -41,6 +41,11 @@ angular.module('bars.ctrl.main', [
 	            	}
 	            );
 	        };
+
+	        $scope.$on('bars_update', function(evt, o){
+	        	evt.stopPropagation();
+	        	$scope.$broadcast('bars_update', o);
+	        });
 		}])
 	.controller('MainFormCtrl',
 		['$scope', '$filter', 'API.Food', 'API.Action',
@@ -222,7 +227,9 @@ angular.module('bars.ctrl.main', [
 							}
 						}
 						$scope.bar.search = '';
-						$scope.bar.foods = Food.query({});
+						$scope.bar.foods = Food.query({}).$promise.then(function(){
+							$scope.$emit('bars_update');
+						});
 					});
 				}
 				if ($scope.query.type == 'jeter') {

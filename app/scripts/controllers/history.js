@@ -11,6 +11,9 @@ angular.module('bars.ctrl.history', [
 					$scope.history = Transaction.query();
 					return $scope.history.$promise;
 				};
+		        $scope.$on('bars_update', function(evt, o){
+		        	$scope.updateHistory();
+		        });
 		}
 	])
 ;
