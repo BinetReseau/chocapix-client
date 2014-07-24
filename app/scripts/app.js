@@ -81,11 +81,13 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			.state('bar.food', {
 				url: "/food",
 				abstract: true,
-				template:'<ui-view/>'
+				template:'<ui-view/>',
+				controller: 'FoodCtrl'
 			})
 			.state('bar.food.list', {
 				url: "/list",
-				templateUrl: "views/Food/list.html"
+				templateUrl: "views/Food/list.html",
+				controller: 'FoodListCtrl'
 			})
 			.state('bar.food.detail', {
 				url: "/:id",

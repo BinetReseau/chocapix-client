@@ -1,12 +1,19 @@
-<table class="table table-striped table-hover">
-    <tr>
-        <th>Nom</th>
-        <th>Quantité</th>
-        <th>Prix</th>
-    </tr>
-    <tr ng-repeat="f in bar.foods | filter:bar.search">
-        <td><bars:food food="f"></bars:food></td>
-        <td>{{ f.qty | number }}<span ng-if="f.unit != ''"> {{ f.unit }}</span></td>
-        <td>{{ f.price | currency }}<span ng-if="f.unit != ''"> / {{ f.unit }}</span></td>
-    </tr>
-</table>
+
+<div class="container-fluid"><div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th>Nom &ensp;<a href="" ng-click="reverse = !reverse"><span class="glyphicon glyphicon-sort"></span></a></th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                </tr>
+                <tr ng-repeat="f in bar.foods | filter:bar.search | orderBy:'name':reverse">
+                    <td><bars:food food="f"></bars:food></td>
+                    <td>{{ f.qty | number }}<span ng-if="f.unit != ''"> {{ f.unit }}</span></td>
+                    <td>{{ f.price | currency }}<span ng-if="f.unit != ''"> / {{ f.unit }}</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div></div>

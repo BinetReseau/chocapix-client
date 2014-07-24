@@ -31,4 +31,12 @@ angular.module('bars.ctrl.food', [])
 				}
 			};
 		}])
+	.controller('FoodListCtrl',
+		['$scope', function($scope) {
+			$scope.reverse = false;
+		}])
+	.controller('FoodCtrl',
+		['$scope', function($scope) {
+			$scope.bar.active = 'food';
+		}])
 ;

@@ -34,6 +34,11 @@
                     <span class="glyphicon glyphicon-user"></span> Utilisateurs
                 </a>
             </li>
+            <li ng-class="bar.active == 'food' && 'active'">
+                <a title="Aliments du bar" ui-sref="bar.food.list({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-cutlery"></span> Aliments
+                </a>
+            </li>
             <li>
                 <a title="Administration">
                     <span class="glyphicon glyphicon-dashboard"></span> Administration
