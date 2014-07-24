@@ -3,32 +3,38 @@
 angular.module('bars.ctrl.food', [])
 	.controller(
 		'FoodDetailCtrl',
-		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory',
-		function($scope, $stateParams, APIAction, foodDetails, foodHistory) {
+		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory', 'API.Food', 'API.Transaction',
+		function($scope, $stateParams, APIAction, foodDetails, foodHistory, Food, Transaction) {
 			$scope.FoodDetails = foodDetails;
 			$scope.history = foodHistory;
 			$scope.queryQty = 1;
 			$scope.queryType = 'buy';
 			$scope.query = function(qty, type) {
 				if (type == 'buy') {
-					var Transaction = APIAction.buy({item: $stateParams.id, qty: qty}, function () {
-						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
-							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == $stateParams.id) {
-								$scope.FoodDetails = Transaction.operations[i].item;
-							} else if (Transaction.operations[i].type == 'accountoperation') {
-								$scope.user.account.money = Transaction.operations[i].account.money;
-							}
-						}
+					APIAction.buy({item: $scope.FoodDetails.id, qty: qty}).$promise.then(function(transaction){
+						$scope.$emit('bars_update_food', $scope.FoodDetails);
+						$scope.$emit('bars_update_account', $scope.user.account);
+						$scope.$emit('bars_update_history', transaction);
 					});
 				} else if (type == 'throw') {
-					var Transaction = APIAction.throwaway({item: $stateParams.id, qty: qty}, function () {
-						for (var  i = 0 ; i < Transaction.operations.length ; i++) {
-							if (Transaction.operations[i].type == 'stockoperation' && Transaction.operations[i].item.id == $stateParams.id) {
-								$scope.FoodDetails = Transaction.operations[i].item;
-							}
-						}
+					APIAction.throwaway({item: $scope.FoodDetails.id, qty: qty}).$promise.then(function(transaction){
+						$scope.$emit('bars_update_food', $scope.FoodDetails);
+						$scope.$emit('bars_update_history', transaction);
 					});
 				}
 			};
+
+			$scope.$on('bars_update_food', function(evt, o){
+				if(o.id === $scope.FoodDetails.id) {
+					Food.get({id: $stateParams.id}).$promise.then(function(o){
+						$scope.FoodDetails = o;
+					});
+				}
+			});
+			$scope.$on('bars_update_history', function(evt, o){
+				Transaction.byItem({id: $stateParams.id}).$promise.then(function(o){
+					$scope.history = o;
+				});
+			});
 		}])
 ;
