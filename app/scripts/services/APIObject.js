@@ -51,7 +51,8 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 			'delete': {method: 'DELETE'}
 		};
 
-		return function(url, defaults, methods, structure) {
+		return function APIObject(url, defaults, methods, structure) {
+			if(!url && !methods) return;
 			structure = structure || {};
 			methods = angular.extend(DEFAULT_METHODS, methods);
 			var resource = $resource(url, defaults,
@@ -62,20 +63,21 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 					return x;
 				}));
 
-			function APIObject(value){
+			function APIEntity(value){
 				shallowCopy(value || {}, this);
 			}
-			APIObject.$parse = function(data){
+			APIEntity.prototype = new APIObject();
+			APIEntity.$parse = function(data){
 				if(angular.isArray(data)) {
 					var arr = data.map(function(x){
-						var o = APIObject.$parse(x);
+						var o = APIEntity.$parse(x);
 						o.$parent = arr;
 						return o;
 					});
-					arr.$reload = APIObject.prototype.$reload;
+					arr.$reload = APIEntity.prototype.$reload;
 					return arr;
 				} else {
-					var obj = new APIObject();
+					var obj = new APIEntity();
 					angular.forEach(data, function(value, key){
 						if(!structure[key])
 							obj[key] = value;
@@ -91,14 +93,14 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				function f(is_static){
 					return function(params, data) {
 						console.log(key + '(' + (method.url || url) + ')');
-						var obj = method.isArray ? [] : new APIObject();
+						var obj = method.isArray ? [] : new APIEntity();
 						obj.$resolved = false;
 						obj.$promise = resource[key](params, is_static ? data : (data || this)).$promise
-								.then(method.object ? $injector.get(method.object).$parse : APIObject.$parse)
+								.then(method.object ? $injector.get(method.object).$parse : APIEntity.$parse)
 								.then(function(new_obj){
 									shallowClearAndCopy(new_obj, obj);
 									obj.$reload = function reload() {
-										var o = (is_static ? APIObject : new_obj)[key](params, data);
+										var o = (is_static ? APIEntity : new_obj)[key](params, data);
 										o.$promise = o.$promise.then(function(oo){
 											shallowClearAndCopy(oo, obj);
 											obj.$reload = reload; // oo.$reload is linked to oo
@@ -118,16 +120,16 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 					}
 				}
 				if(method.static){
-					APIObject[key] = f(true);
+					APIEntity[key] = f(true);
 				} else {
-					APIObject.prototype[key] = f(false);
+					APIEntity.prototype[key] = f(false);
 				}
 			});
-			APIObject.prototype.$reload = function(){
+			APIEntity.prototype.$reload = function(){
 				if(this.$parent)
 					this.$parent.$reload();
 			};
-			return APIObject;
+			return APIEntity;
 		};
 	}])
 
