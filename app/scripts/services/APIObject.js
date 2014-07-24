@@ -3,22 +3,23 @@ var module = angular.module('APIObject', [
 ]);
 
 module.filter('array', function() {
-	return function(obj) {
-		var length = 0;
-		for (var key in obj) {
-			if (obj.hasOwnProperty(key) && !isNaN(parseInt(key))) {
-				key = parseInt(key);
-				length = key>length ? key : length;
-			}
-		}
-		length++;
+	return angular.identity;
+	// return function(obj) {
+	// 	var length = 0;
+	// 	for (var key in obj) {
+	// 		if (obj.hasOwnProperty(key) && !isNaN(parseInt(key))) {
+	// 			key = parseInt(key);
+	// 			length = key>length ? key : length;
+	// 		}
+	// 	}
+	// 	length++;
 
-		var filtered = [];
-		for (var j = 0; j < length; j++) {
-			filtered.push(obj[j]);
-		}
-		return filtered;
-	};
+	// 	var filtered = [];
+	// 	for (var j = 0; j < length; j++) {
+	// 		filtered.push(obj[j]);
+	// 	}
+	// 	return filtered;
+	// };
 });
 
 
@@ -104,15 +105,17 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				var parse = !method.isArray ? parseOne : function(data){
 					var arr = data.map(parseOne);
 					var o = new APIObject(arr);
+					// var o = arr;
 					for (var i = 0; i < arr.length; i++) {
 						arr[i].$parent = o;
 					};
+					// o.__proto__ = APIObject.prototype;
 					return o;
 				};
 				function f(is_static){
 					return function(params, data) {
 						console.log(key + '(' + (method.url || url) + ')');
-						var value = {};
+						var value = method.isArray ? [] : {};
 						value.$resolved = false;
 						value.$promise = resource[key](params, is_static ? data : (data || this)).$promise
 								.then(parse)
@@ -140,25 +143,18 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				if(method.static){
 					APIObject[key] = f(true);
 				} else {
-					Object.defineProperty(APIObject.prototype, key, {
-						enumerable: false,
-						configurable: true,
-						writable: true,
-						value: f(false)
-					})
-					// APIObject.prototype[key] = f(false);
+					// Object.defineProperty(APIObject.prototype, key, {
+					// 	enumerable: false,
+					// 	configurable: true,
+					// 	writable: true,
+					// 	value: f(false)
+					// })
+					APIObject.prototype[key] = f(false);
 				}
 			});
 			APIObject.prototype.$reload = function(){
-				var o = APIObject.get({id: this.id});
-				o.$promise.then(function(obj){
-					shallowClearAndCopy(obj, this);
-					return obj;
-				});
-				return o;
-			};
-			APIObject.prototype.$reloadAll = function(){
-				return this.$parent ? this.$parent.$reload(): this.$reload();
+				if(this.$parent)
+					this.$parent.$reload();
 			};
 			return APIObject;
 		};
