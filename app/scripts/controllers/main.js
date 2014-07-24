@@ -105,9 +105,9 @@ angular.module('bars.ctrl.main', [
 						$scope.query.name = q;
 					}
 
-					var foods = $filter('filter')($filter('array')($scope.bar.foods), $scope.query.name, false);
+					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
 					if (foods.length == 0) {
-						var foods = $filter('filter')($filter('array')($scope.bar.foods), $scope.query.name.replace(/s$/, ''), false);
+						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
 					}
 
 					if (foods.length == 1) {
@@ -139,7 +139,7 @@ angular.module('bars.ctrl.main', [
 						q = q.replace(/ à|a /i, '');
 						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '').trim();
 
-						var accounts = $filter('filter')($filter('array')($scope.bar.accounts), q, false);
+						var accounts = $filter('filter')($scope.bar.accounts, q, false);
 						if (accounts.length == 1) {
 							$scope.query.type = 'donner';
 							$scope.query.account = accounts[0];
@@ -180,9 +180,9 @@ angular.module('bars.ctrl.main', [
 						$scope.query.name = q;
 					}
 
-					var foods = $filter('filter')($filter('array')($scope.bar.foods), $scope.query.name, false);
+					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
 					if (foods.length == 0) {
-						var foods = $filter('filter')($filter('array')($scope.bar.foods), $scope.query.name.replace(/s$/, ''), false);
+						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
 					}
 
 					if (foods.length == 1) {

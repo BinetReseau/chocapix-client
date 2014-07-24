@@ -14,7 +14,7 @@
 <br /><br />
 
 <ul>
-    <li ng-repeat="h in history | array | filter:queryh" ng-class="h.canceled && 'del' || ''">
+    <li ng-repeat="h in history | filter:queryh" ng-class="h.canceled && 'del' || ''">
         <ng:switch on="h.type">
             <!-- Cas de la mise à la poubelle -->
             <span ng-switch-when="throw" class="bg-warning">

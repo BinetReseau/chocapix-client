@@ -2,26 +2,6 @@ var module = angular.module('APIObject', [
 	'ngResource'
 ]);
 
-module.filter('array', function() {
-	return angular.identity;
-	// return function(obj) {
-	// 	var length = 0;
-	// 	for (var key in obj) {
-	// 		if (obj.hasOwnProperty(key) && !isNaN(parseInt(key))) {
-	// 			key = parseInt(key);
-	// 			length = key>length ? key : length;
-	// 		}
-	// 	}
-	// 	length++;
-
-	// 	var filtered = [];
-	// 	for (var j = 0; j < length; j++) {
-	// 		filtered.push(obj[j]);
-	// 	}
-	// 	return filtered;
-	// };
-});
-
 
 (function(module){
 function shallowClearAndCopy(src, dst) {

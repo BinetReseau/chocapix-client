@@ -4,7 +4,7 @@
         <th>Nom</th>
         <th>Solde</th>
     </tr>
-    <tr ng-repeat="a in bar.accounts | array | filter:bar.search">
+    <tr ng-repeat="a in bar.accounts | filter:bar.search">
         <td><bars:account account="a"></bars:account></td>
         <td>{{ a.money | currency }}</td>
     </tr>
