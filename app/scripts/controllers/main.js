@@ -54,7 +54,7 @@ angular.module('bars.ctrl.main', [
 			['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
 				$scope.$on(evt_name, function(evt, o){
 					if(evt.targetScope !== $scope) {
-						console.log(evt);
+						console.log({name: evt.name, arg: o});
 						evt.stopPropagation();
 						$scope.$broadcast(evt_name, o);
 					}
