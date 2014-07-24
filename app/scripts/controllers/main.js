@@ -61,8 +61,8 @@ angular.module('bars.ctrl.main', [
 			// });
 		}])
 	.controller('MainFormCtrl',
-		['$scope', '$filter', 'API.Food', 'API.Action',
-		function($scope, $filter, Food, APIAction) {
+		['$scope', '$filter', 'API.Food', 'API.Action', '$events',
+		function($scope, $filter, Food, APIAction, $events) {
 			$scope.query = {
 				type: 'acheter',
 				qty: 1,
@@ -245,9 +245,10 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'acheter') {
 					APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$scope.$emit('bars.food.update', $scope.query.food.id);
-						$scope.$emit('bars.account.update', $scope.user.account.id);
-						$scope.$emit('bars.transaction.add', transaction.id);
+						$events.$broadcast('bars.action.buy', transaction);
+						// $scope.$emit('bars.food.update', $scope.query.food.id);
+						// $scope.$emit('bars.account.update', $scope.user.account.id);
+						// $scope.$emit('bars.transaction.add', transaction.id);
 						$scope.bar.search = '';
 					});
 				}

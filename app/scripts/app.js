@@ -5,6 +5,7 @@ var barsApp = angular.module('bars.app', [
   'ui.router',
   'bars.auth',
   'bars.API',
+  'bars.events',
   'bars.ctrl.main',
   'bars.ctrl.food',
   'bars.ctrl.account',
@@ -57,6 +58,12 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						} else {
 							return null;
 						}
+					}],
+					$events: ['$events', function($events){
+						$events.addEventTransformer('bars.action.buy', function(transaction){
+							return [{evt: 'bars.food.update'}, {evt: 'bars.account.update'}, {evt: 'bars.transaction.add'}];
+						});
+						return $events;
 					}]
 				},
 				views: {
