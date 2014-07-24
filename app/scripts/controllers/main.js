@@ -259,13 +259,13 @@ angular.module('bars.ctrl.main', [
 				}
 				if ($scope.query.type == 'acheter') {
 					APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.action.buy', [$scope.query.food, $scope.user.account, transaction]);
+						$events.$broadcast('bars.transaction.new', transaction);
 						$scope.bar.search = '';
 					});
 				}
 				if ($scope.query.type == 'jeter') {
 					APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.action.throw', [$scope.query.food, transaction]);
+						$events.$broadcast('bars.transaction.new', transaction);
 						$scope.bar.search = '';
 					});
 				}
@@ -273,7 +273,7 @@ angular.module('bars.ctrl.main', [
 					var id = $scope.query.account.id;
 					if (!$scope.query.hasError) {
 						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction){
-							$events.$broadcast('bars.action.give', [$scope.query.account, $scope.user.account, transaction]);
+							$events.$broadcast('bars.transaction.new', transaction);
 							$scope.bar.search = '';
 						});
 					}

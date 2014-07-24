@@ -16,22 +16,28 @@ angular.module('bars.events', [
 		// and arguments as {evt: ,arg:}
 		var transformers = {};
 		function addEventTransformer(evt, trfn) {
-			console.log('Added transformEvent', evt);
-			transformers[evt] = trfn;
+			console.log('Added transformEvent', evt, trfn);
+			transformers[evt] = transformers[evt] || [];
+			transformers[evt].push(trfn);
 			return function() {
-				if(transformers[evt] === trfn)
-					delete transformers[evt];
+				removeFromArray(transformers[evt], trfn);
 			};
 		}
 		function transformEvent(evt, arg) {
-			var stack = [], ret = [], e;
+			var stack = [], ret = [];
 			stack.push({evt:evt, arg:arg});
+			var e, tr, new_evts;
 			while(e = stack.pop()){
 				if(transformers[e.evt]) {
-					Array.prototype.push.apply(stack, transformers[e.evt](e.arg))
-				} else {
-					ret.push(e);
+					transformers[e.evt].forEach(function(trfn) {
+						if(angular.isString(trfn))
+							new_evts = [{evt: trfn, arg: e.arg}];
+						else if(angular.isFunction(trfn))
+							new_evts = trfn(e.arg);
+						new_evts.forEach(function(x){stack.push(x);});
+					})
 				}
+				ret.push(e);
 			}
 			return ret;
 		}

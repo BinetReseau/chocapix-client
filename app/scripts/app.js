@@ -60,25 +60,21 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						}
 					}],
 					$events: ['$events', function($events){
-						$events.addEventTransformer('bars.action.buy', function(arr){
-							return [{evt: 'bars.food.update', arg : arr[0]},
-								{evt: 'bars.account.update', arg : arr[1]},
-								{evt: 'bars.transaction.add', arg: arr[2]}];
+						$events.addEventTransformer('bars.transaction.new', 'bars.transaction.add');
+						$events.addEventTransformer('bars.transaction.add', 'bars.transaction.operations.update');
+						$events.addEventTransformer('bars.transaction.update', 'bars.transaction.operations.update');
+						$events.addEventTransformer('bars.transaction.operations.update', function(transaction){
+							var evts = [], o;
+							for (var i = 0; i < transaction.operations.length; i++) {
+								o = transaction.operations[i];
+								if(o.type == 'stockoperation') {
+									evts.push({evt: 'bars.food.update', arg: o.item});
+								} else if(o.type == 'accountoperation') {
+									evts.push({evt: 'bars.account.update', arg: o.account});
+								}
+							};
+							return evts;
 						});
-						$events.addEventTransformer('bars.action.throw', function(arr){
-							return [{evt: 'bars.food.update', arg : arr[0]},
-								{evt: 'bars.transaction.add', arg: arr[1]}];
-						});
-						$events.addEventTransformer('bars.action.give', function(arr){
-							return [{evt: 'bars.account.update', arg : arr[0]},
-								{evt: 'bars.account.update', arg : arr[1]},
-								{evt: 'bars.transaction.add', arg: arr[2]}];
-						});
-						// $events.addEventTransformer('bars.transaction.cancel', function(transaction){
-						// 	return [{evt: 'bars.account.update', arg : arr[0]},
-						// 		{evt: 'bars.account.update', arg : arr[1]},
-						// 		{evt: 'bars.transaction.update', arg: transaction}];
-						// });
 						return $events;
 					}]
 				},

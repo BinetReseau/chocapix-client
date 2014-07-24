@@ -11,7 +11,7 @@ angular.module('bars.ctrl.account', [
             $scope.query = function(qty, type) {
                 if (type == 'give') {
                     APIAction.give({recipient: account.id, qty: qty}).$promise.then(function(transaction) {
-                        $events.$broadcast('bars.action.give', [$scope.user.account, account, transaction]);
+                        $events.$broadcast('bars.transaction.new', transaction);
                     });
                 }
             }
