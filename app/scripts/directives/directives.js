@@ -46,6 +46,23 @@ angular.module('bars.directives', [
         templateUrl: 'scripts/directives/views/bars-history.html',
         controller: ['$scope', '$events',
             function($scope, $events) {
+                var prepareDisplay = function(newValue, oldValue) {
+                    $scope.historyDisplay = {};
+                    var dayCurrent = new Date("2013-01-01");
+                    angular.forEach($scope.history, function(h) {
+                        h.timestamp = new Date(h.timestamp);
+                        if (h.timestamp.toDateString() == dayCurrent.toDateString()) {
+                            $scope.historyDisplay[dayCurrent.toString()].push(h);
+                        } else {
+                            dayCurrent = new Date(h.timestamp.toDateString());
+                            $scope.historyDisplay[dayCurrent.toString()] = [h];
+                        }
+                    });
+                    console.log($scope.historyDisplay);
+                }
+                
+                $scope.$watch('history', prepareDisplay);
+
                 $scope.canUpdate = true;
                 $scope.update = function() {
                     $scope.updating = true;
@@ -56,7 +73,7 @@ angular.module('bars.directives', [
                 $scope.$on('bars.transaction.add', $scope.update);
                 $scope.$on('bars.transaction.update', $scope.update);
                 $scope.cancelTransaction = function(t) {
-                    t.cancel().$promise.then(function(t){
+                    t.cancel().$promise.then(function(t) {
                         $events.$broadcast('bars.transaction.update', t);
                     });
                 };
