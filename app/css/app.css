@@ -10,7 +10,10 @@
 }
 
 .del {
-    text-decoration: line-through;
+    color: gray;
+    font-weight: 100;
+    font-style: italic;
+    font-size: 0.8em;
 }
 
 .glyphicon-refresh-animate {
