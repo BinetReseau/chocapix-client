@@ -29,7 +29,6 @@ angular.module('bars.directives', [
             var setUser = function(newValue, oldValue) {
                 $scope.user = $scope.useri || ($scope.account && $scope.account.user) || null;
             };
-            setUser();
 
             $scope.$watch('useri', setUser);
             $scope.$watch('account', setUser);
@@ -48,26 +47,30 @@ angular.module('bars.directives', [
             function($scope, $events) {
                 var prepareDisplay = function(newValue, oldValue) {
                     $scope.historyDisplay = {};
+                    var i = 0;
                     var dayCurrent = new Date("2013-01-01");
                     angular.forEach($scope.history, function(h) {
                         h.timestamp = new Date(h.timestamp);
                         if (h.timestamp.toDateString() == dayCurrent.toDateString()) {
-                            $scope.historyDisplay[dayCurrent.toString()].push(h);
+                            $scope.historyDisplay[i].history.push(h);
                         } else {
                             dayCurrent = new Date(h.timestamp.toDateString());
-                            $scope.historyDisplay[dayCurrent.toString()] = [h];
+                            i++;
+                            $scope.historyDisplay[i] = {
+                                date: dayCurrent,
+                                history: [h]
+                            };
                         }
                     });
-                    console.log($scope.historyDisplay);
                 }
-                
-                $scope.$watch('history', prepareDisplay);
+                prepareDisplay();
 
                 $scope.canUpdate = true;
                 $scope.update = function() {
                     $scope.updating = true;
                     $scope.history.$reload().$promise.then(function(o){
                         $scope.updating = false;
+                        prepareDisplay();
                     });
                 };
                 $scope.$on('bars.transaction.add', $scope.update);
