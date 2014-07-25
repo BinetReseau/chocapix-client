@@ -170,6 +170,16 @@ barsApp.config(['$httpProvider',
 }]);
 
 barsApp.run(function(amMoment) {
+	moment.lang('fr', {
+	    calendar : {
+	        lastDay : '[Hier]',
+	        sameDay : "[Aujourd'hui]",
+	        nextDay : '[Demain]',
+	        lastWeek : 'dddd [dernier]',
+	        nextWeek : 'dddd [prochain]',
+	        sameElse : 'L'
+	    }
+	});
 	amMoment.changeLanguage('fr');
 });
 

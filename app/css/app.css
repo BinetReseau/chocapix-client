@@ -16,6 +16,10 @@
     font-size: 0.8em;
 }
 
+.text-capitalizefirst:first-letter {
+    text-transform:uppercase;
+}
+
 .glyphicon-refresh-animate {
     -webkit-animation: rotateThis 1s infinite linear;
     -moz-animation: rotateThis 1s infinite linear;
