@@ -2,7 +2,7 @@
     <div class="row">
         <div ng-show="canUpdate" class="col-sm-2">
             <a title="Mettre à jour l'historique" ng-click="update()" class="btn btn-primary" ng-class="updating && 'disabled'">
-                <span ng-class="updating && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser
+                <span ng-class="(updating || history.$loading) && 'glyphicon-refresh-animate'" class="glyphicon glyphicon-refresh"></span> Actualiser
             </a>
         </div>
         <div class="col-sm-offset-5 col-sm-5">
@@ -59,7 +59,7 @@
                         </ng:switch>
                     </td>
                     <td>
-                        par 
+                        par
                         <ng:switch on="h.type">
                             <span ng-switch-when="throw">
                                 <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
