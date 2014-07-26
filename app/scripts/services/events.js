@@ -16,7 +16,7 @@ angular.module('bars.events', [
 		// and arguments as {evt: ,arg:}
 		var transformers = {};
 		function addEventTransformer(evt, trfn) {
-			console.log('Added transformEvent', evt, trfn);
+			// console.log('Added transformEvent', evt, trfn);
 			transformers[evt] = transformers[evt] || [];
 			transformers[evt].push(trfn);
 			return function() {
@@ -45,9 +45,9 @@ angular.module('bars.events', [
 			addEventTransformer: addEventTransformer,
 			$broadcast: function(evt, arg) {
 				var events = transformEvent(evt, arg);
-				console.log('event asked: ' + evt, arg);
+				// console.log('event asked: ' + evt, arg);
 				angular.forEach(events, function(o){
-					console.log('event fired: ' + o.evt, o.arg);
+					// console.log('event fired: ' + o.evt, o.arg);
 					$rootScope.$broadcast(o.evt, o.arg);
 				});
 			}
