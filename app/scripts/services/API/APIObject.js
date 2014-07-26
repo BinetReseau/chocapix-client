@@ -79,7 +79,7 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 				} else {
 					var obj = new APIEntity();
 					angular.forEach(data, function(value, key){
-						if(!structure[key])
+						if(!structure || !structure[key])
 							obj[key] = value;
 						else {
 							obj[key] = $injector.get(structure[key].object).$parse(value);
@@ -95,22 +95,27 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 						// console.log(key + '(' + (method.url || url) + ')');
 						var args = arguments;
 						var obj = method.isArray ? [] : new APIEntity();
-						obj.$resolved = false;
+						var nbr_reloads = 0;
+						obj.$loading = true;
 						obj.$promise = resource[key].apply(resource, is_static ? args : [a1, this, a2, a3]).$promise
 								.then(method.object ? $injector.get(method.object).$parse : APIEntity.$parse)
 								.then(function(new_obj){
 									shallowClearAndCopy(new_obj, obj);
 									obj.$reload = function reload() {
+										obj.$loading = true;
+										var cur_nbr_reloads = nbr_reloads++;
 										var call_obj =  (is_static ? APIEntity : obj);
 										var o = call_obj[key].apply(call_obj, args);
 										o.$promise = o.$promise.then(function(oo){
 											shallowClearAndCopy(oo, obj);
 											obj.$reload = reload; // oo.$reload is linked to oo
+											if(cur_nbr_reloads === nbr_reloads)
+												obj.$loading = false;
 											return oo;
 										});
 										return o;
 									};
-									obj.$resolved = true;
+									obj.$loading = false;
 									return obj;
 								})
 								.then(function(obj){
