@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('bars.API', [
-	'ngResource',
 	'APIObject'
 ])
 
@@ -19,66 +18,18 @@ angular.module('bars.API', [
 		};
 }])
 
-// .factory('API.Account', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource(API.route('account/:id'), {}, {
-// 			query: {method:'GET', isArray:true},
-// 			byUser: {method: 'GET', url:API.route('account/by-user/:id'), isArray:true}
-// 		});
-// 	}])
-// .factory('API.Action', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource('', {}, {
-// 			buy: {method:'POST', url:API.route('action/buy')},
-// 			give: {method: 'POST', url:API.route('action/give')},
-// 			throwaway: {method: 'POST', url:API.route('action/throw')}
-// 		});
-// 	}])
-// .factory('API.Bar', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource(API.route(''));
-// 	}])
-// .factory('API.Food', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource(API.route('food/:id'), {}, {
-// 			query: {method:'GET', isArray:true},
-// 			search: {method:'GET', url:API.route('food/search/:q'), isArray:true}
-// 		});
-// 	}])
-// .factory('API.Me', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource(API.route('account/me'), {}, {
-// 			all: {method:'GET', url:API.route('../nobar/auth/me')}
-// 		});
-// 	}])
-// .factory('API.Transaction', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource(API.route('transaction/:id'), {}, {
-// 			cancel: {method:'DELETE'},
-// 			query: {method:'GET', isArray:true},
-// 			byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true},
-// 			byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true}
-// 		});
-// 	}])
-// .factory('API.User', ['$resource', 'API',
-// 	function($resource, API) {
-// 		return $resource(API.route('user/:id'), {}, {
-// 			query: {method:'GET', isArray:true}
-// 		});
-// 	}])
-
+.factory('API.Account', ['APIObject', 'API',
+	function(APIObject, API) {
+		return APIObject(API.route('account/:id'), {}, {
+			byUser: {method: 'GET', url:API.route('account/by-user/:id'), isArray:true, static:true}
+		});
+	}])
 .factory('API.Action', ['APIObject', 'API',
 	function(APIObject, API) {
 		return APIObject('', {}, {
 			buy: {method:'POST', url:API.route('action/buy'), static: true, object: 'API.Transaction'},
 			give: {method: 'POST', url:API.route('action/give'), static: true, object: 'API.Transaction'},
 			throwaway: {method: 'POST', url:API.route('action/throw'), static: true, object: 'API.Transaction'}
-		});
-	}])
-.factory('API.Account', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(API.route('account/:id'), {}, {
-			byUser: {method: 'GET', url:API.route('account/by-user/:id'), isArray:true, static:true}
 		});
 	}])
 .factory('API.Bar', ['APIObject', 'API',
@@ -93,7 +44,7 @@ angular.module('bars.API', [
 .factory('API.Me', ['APIObject', 'API',
 	function(APIObject, API) {
 		return APIObject(API.route('account/me'), {}, {
-			all: {method:'GET', url:API.route('../nobar/auth/me'), static:true}
+			all: {method:'GET', url:API.route('../nobar/auth/me'), static: true}
 		});
 	}])
 .factory('API.User', ['APIObject', 'API',
@@ -107,8 +58,8 @@ angular.module('bars.API', [
 			API.route('transaction/:id'), {id:'@id'},
 			{
 				cancel: {method:'DELETE'},
-				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray:true, static:true},
-				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray:true, static:true}
+				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray: true, static: true},
+				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray: true, static: true}
 			},
 			{
 				author: {object: 'API.User'},
@@ -116,5 +67,3 @@ angular.module('bars.API', [
 			}
 		);
 	}]);
-
-
