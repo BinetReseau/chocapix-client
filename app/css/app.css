@@ -14,6 +14,12 @@
     font-weight: 100;
     font-size: 0.8em;
 }
+.del a {
+    color: gray;
+}
+.del a.label {
+    color: white;
+}
 
 .text-capitalizefirst:first-letter {
     text-transform:uppercase;
