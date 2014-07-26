@@ -63,17 +63,21 @@ angular.module('bars.directives', [
                         }
                     });
                 }
-                if($scope.history.$promise)
-                    $scope.history.$promise.then(function(){
+                $scope.$watch('history.$loading', function(loading){
+                    if(!loading)
                         prepareDisplay();
-                    });
-                else
-                    prepareDisplay();
+                });
+                // if($scope.history.$promise)
+                //     $scope.history.$promise.then(function(){
+                //         prepareDisplay();
+                //     });
+                // else
+                //     prepareDisplay();
 
                 $scope.canUpdate = true;
                 $scope.update = function() {
                     $scope.history.$reload().$promise.then(function(o){
-                        prepareDisplay();
+                        // prepareDisplay();
                     });
                 };
                 $scope.$on('bars.transaction.add', $scope.update);
