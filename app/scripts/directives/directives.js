@@ -63,9 +63,12 @@ angular.module('bars.directives', [
                         }
                     });
                 }
-                $scope.history.$promise.then(function(){
+                if($scope.history.$promise)
+                    $scope.history.$promise.then(function(){
+                        prepareDisplay();
+                    });
+                else
                     prepareDisplay();
-                })
 
                 $scope.canUpdate = true;
                 $scope.update = function() {
