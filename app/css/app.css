@@ -22,7 +22,7 @@
 }
 
 .text-capitalizefirst:first-letter {
-    text-transform:uppercase;
+    text-transform: uppercase;
 }
 
 .glyphicon-refresh-animate {
@@ -32,20 +32,21 @@
     animation: rotateThis 1s infinite linear;
 }
 
-@-webkit-keyframes "rotateThis" {
+@-webkit-keyframes rotateThis {
  from { 
-        -webkit-transform: rotate( 0deg );  
+        -webkit-transform: rotate(0deg);
     }
  to  { 
-        -webkit-transform: rotate( 360deg ); 
+        -webkit-transform: rotate(360deg);
     }
 }
-@keyframes "rotateThis" {
+
+@keyframes rotateThis {
  from { 
-        -webkit-transform: rotate( 0deg );  
+        transform: rotate(0deg);
     }
  to  { 
-        -webkit-transform: rotate( 360deg ); 
+        transform: rotate(360deg);
     }
 }
 
