@@ -69,9 +69,7 @@ angular.module('bars.directives', [
 
                 $scope.canUpdate = true;
                 $scope.update = function() {
-                    $scope.updating = true;
                     $scope.history.$reload().$promise.then(function(o){
-                        $scope.updating = false;
                         prepareDisplay();
                     });
                 };
