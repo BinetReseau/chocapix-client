@@ -77,10 +77,11 @@
                         </ng:switch>
                     </td>
                     <td>
-                        <span class="label label-success">{{ (-1)*h.moneyflow|currency }}</span>
+                        <span class="label" ng-class="h.canceled && 'label-default' || 'label-success'">{{ (-1)*h.moneyflow|currency }}</span>
                     </td>
                     <td>
                         <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
+                        <span class="label label-default" ng-if="h.canceled">Annulée</span>
                     </td>
                 </tr>
             </table>
