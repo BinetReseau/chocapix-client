@@ -61,10 +61,10 @@ angular.module('bars.API', [
 				uncancel: {method:'POST', url:API.route('transaction/uncancel/:id')},
 				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray: true, static: true},
 				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray: true, static: true}
-			},
-			{
-				author: {object: 'API.User'},
-				// operations: {object: 'API.Operation', isArray: true}
+			// },
+			// {
+			// 	author: {object: 'API.User'},
+			// 	// operations: {object: 'API.Operation', isArray: true}
 			}
 		);
 	}]);
