@@ -132,10 +132,11 @@ angular.module('bars.ctrl.main', [
 					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
 					if (foods.length == 0) {
 						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
-						if ($scope.query.type=='acheter') {
-							$scope.query.hasError = true;
-							$scope.query.errorMessage = 'Cet aliment n\'existe pas dans ce bar.';
-						}
+					}
+
+					if ($scope.query.type == 'acheter' && foods.length == 0) {
+						$scope.query.hasError = true;
+						$scope.query.errorMessage = 'Cet aliment n\'existe pas dans ce bar.';
 					}
 
 					if (foods.length == 1) {
@@ -225,11 +226,12 @@ angular.module('bars.ctrl.main', [
 					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
 					if (foods.length == 0) {
 						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
-						if ($scope.query.type=='jeter') {
+					}
+
+					if ($scope.query.type == 'jeter' && foods.length == 0) {
 							$scope.query.hasError = true;
 							$scope.query.errorMessage = 'Cet aliment n\'existe pas dans ce bar.';
 						}
-					}
 
 					if (foods.length == 1) {
 						$scope.query.type = 'jeter';
