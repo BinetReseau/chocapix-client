@@ -49,7 +49,7 @@ angular.module('bars.directives', [
                     $scope.historyDisplay = {};
                     var i = 0;
                     var dayCurrent = new Date("2013-01-01");
-                    angular.forEach($scope.history, function(h) {
+                    $scope.history.forEach(function(h) {
                         h.timestamp = new Date(h.timestamp);
                         if (h.timestamp.toDateString() == dayCurrent.toDateString()) {
                             $scope.historyDisplay[i].history.push(h);
@@ -62,7 +62,7 @@ angular.module('bars.directives', [
                             };
                         }
                     });
-                }
+                };
                 $scope.$watch('history.$loading', function(loading){
                     if(!loading)
                         prepareDisplay();
