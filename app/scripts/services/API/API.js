@@ -58,6 +58,7 @@ angular.module('bars.API', [
 			API.route('transaction/:id'), {id:'@id'},
 			{
 				cancel: {method:'DELETE'},
+				uncancel: {method:'POST', url:API.route('transaction/uncancel/:id')},
 				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray: true, static: true},
 				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray: true, static: true}
 			},

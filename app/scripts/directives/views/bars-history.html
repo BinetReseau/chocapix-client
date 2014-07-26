@@ -82,6 +82,7 @@
                     <td>
                         <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
                         <span class="label label-default" ng-if="h.canceled">Annulée</span>
+                        <a title="Rétablir cette transaction" ng-if="h.canceled" ng-click="uncancelTransaction(h)" class="label label-warning">Rétablir</a>
                     </td>
                 </tr>
             </table>

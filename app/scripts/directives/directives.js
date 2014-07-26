@@ -80,6 +80,12 @@ angular.module('bars.directives', [
                         $events.$broadcast('bars.transaction.update', t);
                     });
                 };
-        }]
+                $scope.uncancelTransaction = function(t) {
+                    t.uncancel().$promise.then(function(t) {
+                        $events.$broadcast('bars.transaction.update', t);
+                    });
+                };
+            }
+        ]
     };
 });
