@@ -83,7 +83,10 @@
                             <span ng-switch-when="buy">
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
                                     <span ng-if="(h.operations | filter:'stockoperation').length == 1">
-                                        et <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
+                                        et
+                                        <span ng-repeat="o in h.operations | filter:'stockoperation'">
+                                            <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
+                                        </span>
                                     </span>
                                     <span ng-if="(h.operations | filter:'stockoperation').length > 1">
                                         <span ng-hide="details.show">
