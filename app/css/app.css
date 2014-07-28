@@ -25,6 +25,12 @@
     text-transform: uppercase;
 }
 
+table.max {
+    width: 100%;
+}
+a.link {
+    cursor: pointer;
+}
 /* Styles for history table */
 .history td.time {
     width: 30px;

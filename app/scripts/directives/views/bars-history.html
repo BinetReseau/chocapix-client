@@ -21,7 +21,7 @@
                 <h2 class="panel-title text-center text-capitalizefirst">{{ hh.date | amCalendar }}</h2>
             </div>
             <table class="table table-striped table-hover table-condensed history">
-                <tr ng-repeat="h in hh.history | filter:queryh" ng-class="h.canceled && 'del' || ''">
+                <tr ng-repeat="h in hh.history | filter:queryh" ng-class="h.canceled && 'del' || ''" ng-init="details = {show:false}">
                     <td class="time">{{ h.timestamp | date:'shortTime' }}</td>
 
                     <!-- type -->
@@ -47,7 +47,13 @@
                             </span>
                             <span ng-switch-default>
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
-                                    <a title="Popover" popover="Test" popover-title="Détails de la bouffe à plusieurs">{{ (h.operations | filter:'accountoperation').length }} participants</a>
+                                    <a title="Voir les détails" ng-click="details.show = true" ng-hide="details.show" class="link">{{ (h.operations | filter:'accountoperation').length }} participants</a>
+                                    <table class="max" ng-if="details.show">
+                                        <tr ng-repeat="o in h.operations | filter:'accountoperation'">
+                                            <td><bars:account account="o.account"></bars:account></td>
+                                            <td><span class="label label-success">{{ o.deltamoney|currency }}</span></td>
+                                        </tr>
+                                    </table>
                                 </span>
                                 <span ng-if="h.type != 'buy' || (h.operations | filter:'accountoperation').length <= 1">
                                     <span ng-repeat="o in h.operations | filter:'stockoperation'">
@@ -69,7 +75,20 @@
                             </span>
                             <span ng-switch-when="buy">
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
-                                    et {{ (h.operations | filter:'stockoperation').length }} aliments
+                                    <span ng-if="(h.operations | filter:'stockoperation').length == 1">
+                                        et <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
+                                    </span>
+                                    <span ng-if="(h.operations | filter:'stockoperation').length > 1">
+                                        <span ng-hide="details.show">
+                                            et <a title="Voir les détails" ng-click="details.show = true" class="link">{{ (h.operations | filter:'stockoperation').length }} aliments</a>
+                                        </span>
+                                        <table class="max" ng-if="details.show">
+                                            <tr ng-repeat="o in h.operations | filter:'stockoperation'">
+                                                <td><bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food></td>
+                                                <td><span class="label label-success">{{ o.deltaqty*o.item.price|currency }}</span></td>
+                                            </tr>
+                                        </table>
+                                    </span>
                                 </span>
                                 <span ng-if="(h.operations | filter:'accountoperation').length <= 1">
                                     par <span ng-repeat="o in h.operations | filter:'accountoperation'">
