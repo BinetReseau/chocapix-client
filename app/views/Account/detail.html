@@ -8,7 +8,7 @@
         </span>
     </div>
 </div>
-<div class="row" ng-if="accountDetail.id != user.account.id">
+<div class="row" ng-show="accountDetail.id != user.account.id">
     <div class="col-sm-3">
         <select class="form-control" ng-model="queryType">
             <option value="give">Faire un don</option>

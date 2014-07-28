@@ -9,15 +9,19 @@ angular.module('bars.ctrl.account', [
             $scope.history = history;
             $scope.queryType = 'give';
             $scope.queryMotive = '';
+            $scope.queryQty = '';
             $scope.query = function(qty, type, motive) {
                 if (type == 'give') {
                     APIAction.give({recipient: account.id, qty: qty}).$promise.then(function(transaction) {
                         $events.$broadcast('bars.transaction.new', transaction);
+                        $scope.queryQty = '';
                     });
                 }
                 if (type == 'punish') {
                     APIAction.punish({accused: account.id, qty: qty, motive: motive}).$promise.then(function(transaction) {
                         $events.$broadcast('bars.transaction.new', transaction);
+                        $scope.queryQty = '';
+                        $scope.queryMotive = '';
                     });
                 }
             }
