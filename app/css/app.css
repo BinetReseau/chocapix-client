@@ -25,6 +25,23 @@
     text-transform: uppercase;
 }
 
+/* Styles for history table */
+.history td.time {
+    width: 30px;
+}
+.history td.type {
+    width: 25%;
+}
+.history td.stock {
+    width: 25%;
+}
+.history td.price {
+    width: 40px;
+}
+.history td.buttons {
+    width: 110px;
+}
+
 .glyphicon-refresh-animate {
     -webkit-animation: rotateThis 1s infinite linear;
     -moz-animation: rotateThis 1s infinite linear;

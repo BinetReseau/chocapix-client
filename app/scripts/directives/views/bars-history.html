@@ -20,12 +20,12 @@
             <div class="panel-heading">
                 <h2 class="panel-title text-center text-capitalizefirst">{{ hh.date | amCalendar }}</h2>
             </div>
-            <table class="table table-striped table-hover table-condensed">
+            <table class="table table-striped table-hover table-condensed history">
                 <tr ng-repeat="h in hh.history | filter:queryh" ng-class="h.canceled && 'del' || ''">
-                    <td>{{ h.timestamp | date:'shortTime' }}</td>
+                    <td class="time">{{ h.timestamp | date:'shortTime' }}</td>
 
                     <!-- type -->
-                    <td>
+                    <td class="type">
                         <ng:switch on="h.type">
                             <span ng-switch-when="throw">mise à la poubelle de</span>
                             <span ng-switch-when="give">don à</span>
@@ -36,7 +36,7 @@
                             </span>
                         </ng:switch>
                     </td>
-                    <td>
+                    <td class="stock">
                         <ng:switch on="h.type">
                             <span ng-switch-when="give">
                                 <span ng-repeat="o in h.operations | filter:'accountoperation'">
@@ -47,7 +47,7 @@
                             </span>
                             <span ng-switch-default>
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
-                                    <a title="Popover" popover="Test" popover-title="Bien bein">{{ (h.operations | filter:'accountoperation').length }} participants</a>
+                                    <a title="Popover" popover="Test" popover-title="Détails de la bouffe à plusieurs">{{ (h.operations | filter:'accountoperation').length }} participants</a>
                                 </span>
                                 <span ng-if="h.type != 'buy' || (h.operations | filter:'accountoperation').length <= 1">
                                     <span ng-repeat="o in h.operations | filter:'stockoperation'">
@@ -59,7 +59,7 @@
                             </span>
                         </ng:switch>
                     </td>
-                    <td>
+                    <td class="user">
                         <ng:switch on="h.type">
                             <span ng-switch-when="throw">
                                 par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
@@ -79,10 +79,10 @@
                             </span>
                         </ng:switch>
                     </td>
-                    <td>
+                    <td class="price">
                         <span class="label" ng-class="h.canceled && 'label-default' || 'label-success'">{{ (-1)*h.moneyflow|currency }}</span>
                     </td>
-                    <td>
+                    <td class="buttons">
                         <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
                         <span class="label label-default" ng-if="h.canceled">Annulée</span>
                         <a title="Rétablir cette transaction" ng-if="h.canceled" ng-click="uncancelTransaction(h)" class="label label-warning">Rétablir</a>
