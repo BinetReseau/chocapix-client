@@ -31,7 +31,7 @@
                             <span ng-switch-when="give">don à</span>
                             <span ng-switch-when="buy">
                                 <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length == 1">achat de</span>
-                                <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length > 1">achat d'un panier</span>
+                                <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length > 1">achat d'un panier de</span>
                                 <span ng-if="(h.operations | filter:'accountoperation').length > 1">bouffe à plusieurs entre</span>
                             </span>
                         </ng:switch>
@@ -55,10 +55,17 @@
                                         </tr>
                                     </table>
                                 </span>
-                                <span ng-if="h.type != 'buy' || (h.operations | filter:'accountoperation').length <= 1">
-                                    <span ng-repeat="o in h.operations | filter:'stockoperation'">
-                                        <span ng-if="$middle">, </span>
-                                        <span ng-if="$last && !$first"> et de </span>
+                                <span ng-if="h.type != 'buy' || (h.operations | filter:'accountoperation').length == 1">
+                                    <span ng-if="(h.operations | filter:'stockoperation').length > 1">
+                                        <a title="Voir les détails" ng-click="details.show = true" ng-hide="details.show" class="link">{{ (h.operations | filter:'stockoperation').length }} aliments</a>
+                                        <table class="max" ng-if="details.show">
+                                            <tr ng-repeat="o in h.operations | filter:'stockoperation'">
+                                                <td><bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food></td>
+                                                <td><span class="label label-success">{{ o.deltaqty*o.item.price|currency }}</span></td>
+                                            </tr>
+                                        </table>
+                                    </span>
+                                    <span ng-if="(h.operations | filter:'stockoperation').length == 1" ng-repeat="o in h.operations | filter:'stockoperation'">
                                         <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
                                     </span>
                                 </span>
