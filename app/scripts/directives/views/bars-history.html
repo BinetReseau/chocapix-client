@@ -34,7 +34,7 @@
                                 <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length > 1">achat d'un panier de</span>
                                 <span ng-if="(h.operations | filter:'accountoperation').length > 1">bouffe à plusieurs entre</span>
                             </span>
-                            <span ng-switch-when="punish">amende mise à</span>
+                            <span ng-switch-when="punish" tooltip="{{ h.motive }}">amende mise à</span>
                         </ng:switch>
                     </td>
                     <td class="stock">
