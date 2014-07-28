@@ -3,6 +3,7 @@
 
 var barsApp = angular.module('bars.app', [
   'ui.router',
+  'ui.bootstrap',
   'bars.auth',
   'bars.API',
   'bars.events',

@@ -45,8 +45,10 @@ angular.module('bars.auth', [
 				// if (AuthService.isAuthenticated()) {
 				// 	config.headers.Authorization = 'Bearer ' + AuthService.getToken();
 				// }
+
 				config.params = config.params || {};
-				if (AuthService.isAuthenticated()) {
+				// to improve: necessary for ui.bootstrap ; and the token is useless for static files
+				if (AuthService.isAuthenticated() && /^((http)|[^a-z])/.test(config.url)) {
 					config.params["bearer"] = AuthService.getToken();
 				}
 				return config || $q.when(config);

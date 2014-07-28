@@ -30,7 +30,8 @@
                             <span ng-switch-when="throw">mise à la poubelle de</span>
                             <span ng-switch-when="give">don à</span>
                             <span ng-switch-when="buy">
-                                <span ng-if="(h.operations | filter:'accountoperation').length <= 1">achat de</span>
+                                <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length == 1">achat de</span>
+                                <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length > 1">achat d'un panier</span>
                                 <span ng-if="(h.operations | filter:'accountoperation').length > 1">bouffe à plusieurs entre</span>
                             </span>
                         </ng:switch>
@@ -46,7 +47,7 @@
                             </span>
                             <span ng-switch-default>
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
-                                    {{ (h.operations | filter:'accountoperation').length }} participants
+                                    <a title="Popover" popover="Test" popover-title="Bien bein">{{ (h.operations | filter:'accountoperation').length }} participants</a>
                                 </span>
                                 <span ng-if="h.type != 'buy' || (h.operations | filter:'accountoperation').length <= 1">
                                     <span ng-repeat="o in h.operations | filter:'stockoperation'">
@@ -59,17 +60,19 @@
                         </ng:switch>
                     </td>
                     <td>
-                        par
                         <ng:switch on="h.type">
                             <span ng-switch-when="throw">
-                                <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
+                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
                             </span>
                             <span ng-switch-when="give">
-                                <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
+                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
                             </span>
                             <span ng-switch-when="buy">
+                                <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
+                                    et {{ (h.operations | filter:'stockoperation').length }} aliments
+                                </span>
                                 <span ng-if="(h.operations | filter:'accountoperation').length <= 1">
-                                    <span ng-repeat="o in h.operations | filter:'accountoperation'">
+                                    par <span ng-repeat="o in h.operations | filter:'accountoperation'">
                                         <bars:account account="o.account"></bars:account>
                                     </span>
                                 </span>
