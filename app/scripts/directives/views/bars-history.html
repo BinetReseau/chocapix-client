@@ -34,6 +34,7 @@
                                 <span ng-if="(h.operations | filter:'accountoperation').length == 1 && (h.operations | filter:'stockoperation').length > 1">achat d'un panier de</span>
                                 <span ng-if="(h.operations | filter:'accountoperation').length > 1">bouffe à plusieurs entre</span>
                             </span>
+                            <span ng-switch-when="punish">amende mise à</span>
                         </ng:switch>
                     </td>
                     <td class="stock">
@@ -43,6 +44,11 @@
                                     <span ng-if="o.deltamoney > 0">
                                         <bars:account account="o.account"></bars:account>
                                     </span>
+                                </span>
+                            </span>
+                            <span ng-switch-when="punish">
+                                <span ng-repeat="o in h.operations | filter:'accountoperation'">
+                                    <bars:account account="o.account"></bars:account>
                                 </span>
                             </span>
                             <span ng-switch-default>
@@ -80,6 +86,9 @@
                             <span ng-switch-when="give">
                                 par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
                             </span>
+                            <span ng-switch-when="punish">
+                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
+                            </span>
                             <span ng-switch-when="buy">
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
                                     <span ng-if="(h.operations | filter:'stockoperation').length == 1">
@@ -108,8 +117,9 @@
                             </span>
                         </ng:switch>
                     </td>
-                    <td class="price">
-                        <span class="label" ng-class="h.canceled && 'label-default' || 'label-success'">{{ (-1)*h.moneyflow|currency }}</span>
+                    <td class="price" ng-switch on="h.type">
+                        <span ng-switch-when="punish" class="label" ng-class="h.canceled && 'label-default' || 'label-danger'">{{ (-1)*h.moneyflow|currency }}</span>
+                        <span ng-switch-default class="label" ng-class="h.canceled && 'label-default' || 'label-success'">{{ (-1)*h.moneyflow|currency }}</span>
                     </td>
                     <td class="buttons">
                         <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>

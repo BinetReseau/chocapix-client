@@ -94,6 +94,9 @@ angular.module('bars.ctrl.main', [
 				} else if (/donner/i.test(qo)) {
 					$scope.query.type = 'donner';
 					qo = qo.replace(/donner/gi, '');
+				} else if (/amende/i.test(qo)) {
+					$scope.query.type = 'mettre une amende';
+					qo = qo.replace(/amende/gi, '');
 				}
 
 				// Type : acheter
@@ -253,6 +256,32 @@ angular.module('bars.ctrl.main', [
 					}
 				}
 
+				// Type : mettre une amende
+				if ($scope.query.type == '' || $scope.query.type == 'mettre une amende') {
+					var q = qo;
+					$scope.query.qty = q.replace(/^(.*[^0-9€.,os])?([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$2').replace(/€/, '.');
+					if ($scope.query.qty != q) {
+						q = q.replace(/(euros?)|€/i, '');
+						q = q.replace(/ à|a /i, '');
+						q = q.replace(/([0-9]+(\.[0-9]+)?)/g, '').trim();
+
+						var accounts = $filter('filter')($scope.bar.accounts, q, false);
+						if (accounts.length == 1) {
+							$scope.query.type = 'mettre une amende';
+							$scope.query.account = accounts[0];
+							if ($scope.query.qty <= 0) {
+								$scope.query.hideAnalysis = true;
+								$scope.query.hasError = true;
+								$scope.query.errorMessage = 'On ne peut pas mettre d\'amende négative.';
+							}
+						}
+						if (accounts.length == 0 && $scope.query.type == 'mettre une amende') {
+							$scope.query.hasError = true;
+							$scope.query.errorMessage = 'Aucun utilisateur à ce nom dans ce bar.';
+						}
+					}
+				}
+
 				return $scope.query;
 			};
 			$scope.executeQuery = function() {
@@ -275,6 +304,15 @@ angular.module('bars.ctrl.main', [
 					var id = $scope.query.account.id;
 					if (!$scope.query.hasError) {
 						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction){
+							$events.$broadcast('bars.transaction.new', transaction);
+							$scope.bar.search = '';
+						});
+					}
+				}
+				if ($scope.query.type == 'mettre une amende') {
+					var id = $scope.query.account.id;
+					if (!$scope.query.hasError) {
+						APIAction.punish({accused: id, qty: $scope.query.qty, motive: 'A renseigner...'}).$promise.then(function(transaction) {
 							$events.$broadcast('bars.transaction.new', transaction);
 							$scope.bar.search = '';
 						});
