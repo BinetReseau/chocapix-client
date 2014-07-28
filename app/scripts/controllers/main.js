@@ -84,7 +84,7 @@ angular.module('bars.ctrl.main', [
 					hasError: false,
 					errorMessage: ''
 				};
-				// Type: acheter|jeter|ajouter|appro|donner
+				// Type: acheter|jeter|ajouter|appro|donner|amende
 				if (/acheter/i.test(qo)) {
 					$scope.query.type = 'acheter';
 					qo = qo.replace(/acheter/gi, '');
@@ -95,7 +95,7 @@ angular.module('bars.ctrl.main', [
 					$scope.query.type = 'donner';
 					qo = qo.replace(/donner/gi, '');
 				} else if (/amende/i.test(qo)) {
-					$scope.query.type = 'mettre une amende';
+					$scope.query.type = 'amende';
 					qo = qo.replace(/amende/gi, '');
 				}
 
@@ -256,8 +256,8 @@ angular.module('bars.ctrl.main', [
 					}
 				}
 
-				// Type : mettre une amende
-				if ($scope.query.type == '' || $scope.query.type == 'mettre une amende') {
+				// Type : amende
+				if ($scope.query.type == '' || $scope.query.type == 'amende') {
 					var q = qo;
 					$scope.query.qty = q.replace(/^(.*[^0-9€.,os])?([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$2').replace(/€/, '.');
 					if ($scope.query.qty != q) {
@@ -267,7 +267,7 @@ angular.module('bars.ctrl.main', [
 
 						var accounts = $filter('filter')($scope.bar.accounts, q, false);
 						if (accounts.length == 1) {
-							$scope.query.type = 'mettre une amende';
+							$scope.query.type = 'amende';
 							$scope.query.account = accounts[0];
 							if ($scope.query.qty <= 0) {
 								$scope.query.hideAnalysis = true;
@@ -275,7 +275,7 @@ angular.module('bars.ctrl.main', [
 								$scope.query.errorMessage = 'On ne peut pas mettre d\'amende négative.';
 							}
 						}
-						if (accounts.length == 0 && $scope.query.type == 'mettre une amende') {
+						if (accounts.length == 0 && $scope.query.type == 'amende') {
 							$scope.query.hasError = true;
 							$scope.query.errorMessage = 'Aucun utilisateur à ce nom dans ce bar.';
 						}
@@ -309,7 +309,7 @@ angular.module('bars.ctrl.main', [
 						});
 					}
 				}
-				if ($scope.query.type == 'mettre une amende') {
+				if ($scope.query.type == 'amende') {
 					var id = $scope.query.account.id;
 					if (!$scope.query.hasError) {
 						APIAction.punish({accused: id, qty: $scope.query.qty, motive: 'A renseigner...'}).$promise.then(function(transaction) {

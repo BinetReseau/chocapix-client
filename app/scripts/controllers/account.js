@@ -16,6 +16,7 @@ angular.module('bars.ctrl.account', [
                     });
                 }
                 if (type == 'punish') {
+                    console.log(motive);
                     APIAction.punish({accused: account.id, qty: qty, motive: motive}).$promise.then(function(transaction) {
                         $events.$broadcast('bars.transaction.new', transaction);
                     });

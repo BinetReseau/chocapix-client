@@ -10,20 +10,22 @@
 <span ng-hide="1">{{ analyse(bar.search) }}</span>
 <div class="row">
 	<div class="col-sm-8 col-sm-offset-2">
-		<span class="legend" ng-hide="query.food === null && query.account === null || query.hideAnalysis">Appuyez sur <kbd>Enter</kbd> pour {{ query.type }}
-		<span ng-switch on="query.type">
-			<span ng-switch-when="acheter">
-				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> pour {{ (query.qty*query.food.price) | currency }}.
+		<span class="legend" ng-hide="query.food === null && query.account === null || query.hideAnalysis">Appuyez sur <kbd>Enter</kbd> pour
+			<span ng-if="query.type == 'amende'">mettre une amende</span>
+			<span ng-if="query.type != 'amende'">{{ query.type }}</span>
+			<span ng-switch on="query.type">
+				<span ng-switch-when="acheter">
+					<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> pour {{ (query.qty*query.food.price) | currency }}.
+				</span>
+				<span ng-switch-when="donner">
+					{{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
+				</span>
+				<span ng-switch-when="jeter">
+					<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.
+				</span>
+				<span ng-switch-when="amende">
+					de {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
 			</span>
-			<span ng-switch-when="donner">
-				{{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
-			</span>
-			<span ng-switch-when="jeter">
-				<bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.
-			</span>
-			<span ng-switch-when="mettre une amende">
-				de {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
-		</span>
 		</span><br />
 		<div ng-if="query.hasError" class="alert alert-danger" role="alert">
 			{{ query.errorMessage }}
