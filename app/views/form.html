@@ -25,6 +25,7 @@
 				</span>
 				<span ng-switch-when="amende">
 					de {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
+				</span>
 			</span>
 		</span><br />
 		<div ng-if="query.hasError" class="alert alert-danger" role="alert">
