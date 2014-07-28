@@ -31,6 +31,9 @@ table.max {
 a.link {
     cursor: pointer;
 }
+.atooltip:hover {
+    text-decoration: none;
+}
 /* Styles for history table */
 .history td.time {
     width: 30px;
