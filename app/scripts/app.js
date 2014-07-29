@@ -166,8 +166,21 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 			})
 			.state('bar.admin', {
 				url: "/admin",
-				templateUrl: "views/admin/home.html",
-				controller: 'AdminHomeCtrl'
+				views: {
+					'@bar': {
+						templateUrl: "views/admin/layout.html",
+						controller: 'AdminBaseCtrl'
+					},
+					'@bar.admin': {
+    					templateUrl: "views/admin/dashboard.html",
+        				controller: 'AdminHomeCtrl'
+					}
+				}
+			})
+			.state('bar.admin.food', {
+				url: "/food",
+				templateUrl: "views/admin/Food/home.html",
+				controller: 'AdminFoodCtrl'
 			})
 }]);
 
