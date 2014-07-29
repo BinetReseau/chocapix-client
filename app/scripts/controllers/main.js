@@ -97,6 +97,9 @@ angular.module('bars.ctrl.main', [
 				} else if (/amende/i.test(qo)) {
 					$scope.query.type = 'amende';
 					qo = qo.replace(/amende/gi, '');
+				} else if (/appro/i.test(qo)) {
+					$scope.query.type = 'appro';
+					qo = qo.replace(/appro/gi, '');
 				}
 
 				// Type : acheter
@@ -190,6 +193,69 @@ angular.module('bars.ctrl.main', [
 							$scope.query.hasError = true;
 							$scope.query.errorMessage = 'Aucun utilisateur à ce nom dans ce bar.';
 						}
+					}
+				}
+
+				// Type : appro
+				if ($scope.query.type == '' || $scope.query.type == 'appro') {
+					var q = qo;
+					// Quantity + unit
+					if (/([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2}) /ig.test(q)) {
+						$scope.query.qty = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$2').replace(/,/, '.');
+						$scope.query.unit = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2}) .*$/ig, '$4');
+						q = q.replace(/([0-9]+(\.[0-9]+)?) *([a-z]{1,2}) /ig, ' ');
+					} else if (/([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig.test(q)) {
+						$scope.query.qty = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig, '$2').replace(/,/, '.');
+						$scope.query.unit = q.replace(/^(.*[^0-9,.])?([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig, '$4');
+						q = q.replace(/([0-9]+(\.|,[0-9]+)?) *([a-z]{1,2})$/ig, '');
+					} else { // Quantity without unit
+						if (/1664/.test(q)) {
+							$scope.query.name = '1664';
+							q = q.replace(/1664/g, '');
+							$scope.query.qty = q.replace(/^(.*[^0-9.,])?([0-9]+(\.|,[0-9]+)?).*$/, '$2').replace(/,/, '.');
+						}
+						$scope.query.qty = q.replace(/^(.*[^0-9.,])?([0-9]+(\.|,[0-9]+)?).*$/g, '$2').trim();
+						if ($scope.query.qty == q.trim()) {
+							$scope.query.qty = 1;
+						}
+						q = q.replace(/([0-9]+(\.|,[0-9]+)?)/g, '')
+					}
+
+					// Aliment
+					q = q.replace(/( de )|( d')/gi, '');
+					q = q.replace(/ +/g, '');
+					q = q.trim();
+					if ($scope.query.name == '') {
+						$scope.query.name = q;
+					}
+
+					var foods = $filter('filter')($scope.bar.foods, $scope.query.name, false);
+					if (foods.length == 0) {
+						var foods = $filter('filter')($scope.bar.foods, $scope.query.name.replace(/s$/, ''), false);
+					}
+
+					if ($scope.query.type == 'appro' && foods.length == 0) {
+						$scope.query.hasError = true;
+						$scope.query.errorMessage = 'Cet aliment n\'existe pas dans ce bar.';
+					}
+
+					if (foods.length == 1) {
+						$scope.query.type = 'appro';
+						$scope.query.food = foods[0];
+
+						if ($scope.query.unit != '' && $scope.query.food.unit != '') {
+							if ((/^k/i.test($scope.query.food.unit) && !/^k/i.test($scope.query.unit)) || (!/^m/i.test($scope.query.food.unit) && /^m/i.test($scope.query.unit))) {
+								$scope.query.qty *= 0.001;
+							} else if ((!/^k/i.test($scope.query.food.unit) && /^k/i.test($scope.query.unit)) || (/^m/i.test($scope.query.food.unit) && !/^m/i.test($scope.query.unit))) {
+								$scope.query.qty *= 1000;
+							} else if (/^c/i.test($scope.query.food.unit) && !/^c/i.test($scope.query.unit)) {
+								$scope.query.qty *= 100;
+							} else if (!/^c/i.test($scope.query.food.unit) && /^c/i.test($scope.query.unit)) {
+								$scope.query.qty *= 0.01;
+							}
+						}
+
+						$scope.query.unit = $scope.query.food.unit;
 					}
 				}
 
@@ -289,21 +355,25 @@ angular.module('bars.ctrl.main', [
 					return;
 				}
 				if ($scope.query.type == 'acheter') {
-					APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.transaction.new', transaction);
-						$scope.bar.search = '';
-					});
+					if (!$scope.query.hasError) {
+						APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
+							$events.$broadcast('bars.transaction.new', transaction);
+							$scope.bar.search = '';
+						});
+					}
 				}
 				if ($scope.query.type == 'jeter') {
-					APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.transaction.new', transaction);
-						$scope.bar.search = '';
-					});
+					if (!$scope.query.hasError) {
+						APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
+							$events.$broadcast('bars.transaction.new', transaction);
+							$scope.bar.search = '';
+						});
+					}
 				}
 				if ($scope.query.type == 'donner') {
 					var id = $scope.query.account.id;
 					if (!$scope.query.hasError) {
-						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction){
+						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction) {
 							$events.$broadcast('bars.transaction.new', transaction);
 							$scope.bar.search = '';
 						});
@@ -313,6 +383,14 @@ angular.module('bars.ctrl.main', [
 					var id = $scope.query.account.id;
 					if (!$scope.query.hasError) {
 						APIAction.punish({accused: id, qty: $scope.query.qty, motive: 'A renseigner...'}).$promise.then(function(transaction) {
+							$events.$broadcast('bars.transaction.new', transaction);
+							$scope.bar.search = '';
+						});
+					}
+				}
+				if ($scope.query.type == 'appro') {
+					if (!$scope.query.hasError) {
+						APIAction.appro({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
 							$events.$broadcast('bars.transaction.new', transaction);
 							$scope.bar.search = '';
 						});

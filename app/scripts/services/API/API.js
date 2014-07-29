@@ -30,7 +30,8 @@ angular.module('bars.API', [
 			buy: {method:'POST', url:API.route('action/buy'), static: true, object: 'API.Transaction'},
 			give: {method: 'POST', url:API.route('action/give'), static: true, object: 'API.Transaction'},
 			throwaway: {method: 'POST', url:API.route('action/throw'), static: true, object: 'API.Transaction'},
-			punish: {method: 'POST', url:API.route('action/punish'), static: true, object: 'API.Transaction'}
+			punish: {method: 'POST', url:API.route('action/punish'), static: true, object: 'API.Transaction'},
+			appro: {method:'POST', url:API.route('action/appro'), static: true, object: 'API.Transaction'},
 		});
 	}])
 .factory('API.Bar', ['APIObject', 'API',
