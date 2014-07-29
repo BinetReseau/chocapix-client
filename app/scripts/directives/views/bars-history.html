@@ -35,6 +35,7 @@
                                 <span ng-if="(h.operations | filter:'accountoperation').length > 1">bouffe à plusieurs entre</span>
                             </span>
                             <a ng-switch-when="punish" tooltip="{{ h.motive }}" class="atooltip">amende mise à</a>
+                            <span ng-switch-when="appro">appro de</span>
                         </ng:switch>
                     </td>
                     <td class="stock">
@@ -66,13 +67,13 @@
                                         <a title="Voir les détails" ng-click="details.show = true" ng-hide="details.show" class="link">{{ (h.operations | filter:'stockoperation').length }} aliments</a>
                                         <table class="max" ng-if="details.show">
                                             <tr ng-repeat="o in h.operations | filter:'stockoperation'">
-                                                <td><bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food></td>
+                                                <td><bars:food food="o.item" qty="((h.type == 'appro')*2 - 1)*o.deltaqty"></bars:food></td>
                                                 <td><span class="label label-success">{{ o.deltaqty*o.item.price|currency }}</span></td>
                                             </tr>
                                         </table>
                                     </span>
                                     <span ng-if="(h.operations | filter:'stockoperation').length == 1" ng-repeat="o in h.operations | filter:'stockoperation'">
-                                        <bars:food food="o.item" qty="(-1)*o.deltaqty"></bars:food>
+                                        <bars:food food="o.item" qty="((h.type == 'appro')*2 - 1)*o.deltaqty"></bars:food>
                                     </span>
                                 </span>
                             </span>
@@ -80,15 +81,6 @@
                     </td>
                     <td class="user">
                         <ng:switch on="h.type">
-                            <span ng-switch-when="throw">
-                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
-                            </span>
-                            <span ng-switch-when="give">
-                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
-                            </span>
-                            <span ng-switch-when="punish">
-                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
-                            </span>
                             <span ng-switch-when="buy">
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
                                     <span ng-if="(h.operations | filter:'stockoperation').length == 1">
@@ -114,6 +106,9 @@
                                         <bars:account account="o.account"></bars:account>
                                     </span>
                                 </span>
+                            </span>
+                            <span ng-switch-default>
+                                par <bars:account account="h.author.accounts[0]" user="h.author"></bars:account>
                             </span>
                         </ng:switch>
                     </td>
