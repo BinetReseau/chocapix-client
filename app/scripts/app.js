@@ -12,6 +12,7 @@ var barsApp = angular.module('bars.app', [
   'bars.ctrl.account',
   'bars.ctrl.history',
   'bars.ctrl.dev',
+  'bars.ctrl.admin',
   'bars.directives',
   'angularMoment'
 ]);
@@ -162,6 +163,11 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				url: "/dev",
 				templateUrl: "views/dev.html",
 				controller: 'DevCtrl'
+			})
+			.state('bar.admin', {
+				url: "/admin",
+				templateUrl: "views/admin/home.html",
+				controller: 'AdminHomeCtrl'
 			})
 }]);
 

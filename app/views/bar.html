@@ -39,8 +39,8 @@
                     <span class="glyphicon glyphicon-cutlery"></span> Aliments
                 </a>
             </li>
-            <li>
-                <a title="Administration">
+            <li ng-class="bar.active == 'admin' && 'active'">
+                <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
                     <span class="glyphicon glyphicon-dashboard"></span> Administration
                 </a>
             </li>
