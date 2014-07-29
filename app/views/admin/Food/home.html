@@ -11,17 +11,17 @@
 	<fieldset>
 		<legend><a title="Ajouter un nouvel aliment" class="link" ng-click="formAdd = !formAdd">Ajouter un aliment</a></legend>
 		<div ng-show="formAdd" class="animated fadeIn">
-			<form class="form-horizontal">
+			<form class="form-horizontal" ng-submit="addFood(food)">
 				<div class="form-group">
 				    <label for="fname" class="col-sm-3 control-label">Nom</label>
 				    <div class="col-sm-9">
-				      <input type="text" class="form-control" id="fname" placeholder="Pates">
+				      <input type="text" class="form-control" id="fname" placeholder="Pates" ng-model="food.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
 				    </div>
 				</div>
 				<div class="form-group">
 				    <label for="fprice" class="col-sm-3 control-label">Prix</label>
 				    <div class="col-sm-5">
-				      <input type="text" class="form-control" id="fprice" placeholder="2.34">
+				      <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="food.price">
 				    </div>
 				    <div class="col-sm-2">
 				    	<div class="checkbox">
@@ -29,13 +29,13 @@
 					    </div>
 				    </div>
 				    <div class="col-sm-2">
-				    	<input type="text" class="form-control" placeholder="Kg" tooltip="Laisser vide si sans unité (exemple : pizza)" tooltip-trigger="focus" tooltip-placement="bottom">
+				    	<input type="text" class="form-control" placeholder="Kg" tooltip="Laisser vide si sans unité (exemple : pizza)" tooltip-trigger="focus" tooltip-placement="bottom" ng-model="food.unit">
 				    </div>
 				</div>
 				<div class="form-group">
 				    <label for="ftaxe" class="col-sm-3 control-label">Taxe</label>
 				    <div class="col-sm-8">
-				      <input type="text" class="form-control" id="ftaxe" placeholder="10">
+				      <input type="text" class="form-control" id="ftaxe" placeholder="10" ng-model="food.tax">
 				    </div>
 				    <div class="col-sm-1">
 				    	<div class="checkbox">
@@ -46,18 +46,19 @@
 				<div class="form-group">
 				    <label for="fkeywords" class="col-sm-3 control-label">Mots clés</label>
 				    <div class="col-sm-9">
-				      <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces">
+				      <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-model="food.keywords">
 				    </div>
 				</div>
 				<div class="form-group">
 				    <label for="fqty" class="col-sm-3 control-label">Quantité</label>
 				    <div class="col-sm-9">
-				      <input type="text" class="form-control" id="fqty" placeholder="Quantité initiale" value="0">
+				      <input type="text" class="form-control" id="fqty" placeholder="Quantité initiale" value="0" ng-model="food.qty">
 				    </div>
 				</div>
 				<div class="form-group">
 				    <div class="col-sm-offset-3 col-sm-9">
-				    	<input type="submit" class="btn btn-primary" value="Ajouter" />
+				    	<input type="submit" class="btn btn-primary" value="Ajouter" ng-if="!food.qty" />
+				    	<input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ food.qty*food.price|currency }}" ng-if="food.qty" />
 				    </div>
 				  </div>
 			</form>

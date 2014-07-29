@@ -5,6 +5,7 @@ angular.module('bars.ctrl.admin', [
 	.controller('AdminBaseCtrl',
 		['$scope',
 		function($scope) {
+			$scope.bar.active = 'admin';
 			$scope.admin = {
 				active: ''
 			};
@@ -18,8 +19,27 @@ angular.module('bars.ctrl.admin', [
 	])
 	.controller('AdminFoodCtrl',
 		['$scope',
-		function($scope) {
+		'API.Food',
+		function($scope, Food) {
 			$scope.admin.active = 'food';
+			$scope.food = {
+				name: '',
+				price: '',
+				unit: '',
+				keywords: '',
+				qty: 0
+			};
+			$scope.addFood = function(food) {
+				Food.add(food).$promise.then(function(newFood) {
+					$scope.food = {
+						name: '',
+						price: '',
+						unit: '',
+						keywords: '',
+						qty: 0
+					};
+				});
+			};
 		}
 	])
 ;

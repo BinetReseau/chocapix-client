@@ -41,7 +41,7 @@ angular.module('bars.API', [
 .factory('API.Food', ['APIObject', 'API',
 	function(APIObject, API) {
 		return APIObject(API.route('food/:id'), {}, {
-			add: {method: 'POST', url:API.route('food/add'), static: true, object: 'API.Transaction'},
+			add: {method: 'POST', url:API.route('food/add'), static: true},
 			remove: {method: 'DELETE', url:API.route('food/:id')},
 			unremove: {method: 'POST', url:API.route('food/undelete/:id')}
 		});
