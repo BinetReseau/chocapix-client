@@ -13,10 +13,17 @@ angular.module('bars.ctrl.food', [])
 				if (type == 'buy') {
 					APIAction.buy({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
 						$events.$broadcast('bars.transaction.new', transaction);
+						$scope.queryQty = 1;
 					});
 				} else if (type == 'throw') {
 					APIAction.throwaway({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
 						$events.$broadcast('bars.transaction.new', transaction);
+						$scope.queryQty = 1;
+					});
+				} else if (type == 'appro') {
+					APIAction.appro({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
+						$events.$broadcast('bars.transaction.new', transaction);
+						$scope.queryQty = 1;
 					});
 				}
 			};

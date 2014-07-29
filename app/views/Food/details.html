@@ -17,15 +17,14 @@
 			<option value="buy">Acheter</option>
 			<option>Ajouter au panier</option>
 			<option value="throw">Jeter</option>
-			<option>Approvisionner</option>
+			<option value="appro">Approvisionner</option>
 		</select>
 	</div>
 	<div class="col-sm-9">
-		<form ng-switch on="queryType" class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
+		<form class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
 			<input type="number" class="form-control" step="any" ng-model="queryQty" size="4" style="width: 80px" />
 			<input type="text" class="form-control" disabled="true" placeholder="{{ foodDetails.unit == '' && (foodDetails.name|affs:queryQty) || foodDetails.unit }}" />
-			<input ng-switch-when="buy" type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*foodDetails.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
-			<input ng-switch-default type="submit" class="btn btn-success" value="Valider" ng-class="queryQty <= 0 && 'disabled' || ''" />
+			<input type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*foodDetails.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
 		</form>
 	</div>
 </div>
