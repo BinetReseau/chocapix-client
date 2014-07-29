@@ -34,6 +34,17 @@ a.link {
 .atooltip:hover {
     text-decoration: none;
 }
+
+.graphiquet {
+    color: gray;
+    height: 200px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+    text-align: center;
+    padding-top: 80px;
+}
+
 /* Styles for history table */
 .history td.time {
     width: 30px;
