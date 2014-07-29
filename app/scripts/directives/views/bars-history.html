@@ -113,8 +113,8 @@
                         </ng:switch>
                     </td>
                     <td class="price" ng-switch on="h.type">
-                        <span ng-switch-when="punish" class="label" ng-class="h.canceled && 'label-default' || 'label-danger'">{{ (-1)*h.moneyflow|currency }}</span>
-                        <span ng-switch-default class="label" ng-class="h.canceled && 'label-default' || 'label-success'">{{ (-1)*h.moneyflow|currency }}</span>
+                        <span ng-switch-when="punish" class="label" ng-class="h.canceled && 'label-default' || 'label-danger'">{{ -h.moneyflow|currency }}</span>
+                        <span ng-switch-default class="label" ng-class="h.canceled && 'label-default' || 'label-success'">{{ ((h.type == 'appro')*2 - 1)*h.moneyflow|currency }}</span>
                     </td>
                     <td class="buttons">
                         <a title="Annuler cette transaction" ng-if="!h.canceled" ng-click="cancelTransaction(h)" class="label label-warning">Annuler</a>
