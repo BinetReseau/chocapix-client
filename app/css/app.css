@@ -35,6 +35,13 @@ a.link {
     text-decoration: none;
 }
 
+.form-control.number {
+    width: 80px;
+}
+.checkbox.unit {
+    margin-right: 20px;
+}
+
 .graphiquet {
     color: gray;
     height: 200px;

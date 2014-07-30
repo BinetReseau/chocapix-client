@@ -22,8 +22,10 @@
 	</div>
 	<div class="col-sm-9">
 		<form class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
-			<input type="number" class="form-control" step="any" ng-model="queryQty" size="4" style="width: 80px" />
-			<input type="text" class="form-control" disabled="true" placeholder="{{ foodDetails.unit == '' && (foodDetails.name|affs:queryQty) || foodDetails.unit }}" />
+			<input type="number" class="form-control number" step="any" ng-model="queryQty" />
+			<div class="checkbox unit">
+				{{ foodDetails.unit == '' && (foodDetails.name|affs:queryQty) || foodDetails.unit }}
+			</div>
 			<input type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*foodDetails.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
 		</form>
 	</div>
