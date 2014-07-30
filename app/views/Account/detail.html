@@ -17,9 +17,9 @@
     </div>
     <div class="col-sm-9">
         <form class="form-inline" role="form" ng-submit="query(queryQty, queryType, queryMotive)">
-            <input type="text" class="form-control" ng-model="queryQty"  size="4" style="width: 80px" />
+            <input type="number" class="form-control number" ng-model="queryQty" />
             <span ng-show="queryType == 'punish'">
-                <input type="text" class="form-control" ng-model="queryMotive" placeholder="Motif de l'amende" style="width: 300px" />
+                <input type="text" class="form-control large" ng-model="queryMotive" placeholder="Motif de l'amende" />
                 <input type="submit" class="btn btn-warning" value="Mettre une amende{{ queryQty > 0 && ' de ' + (queryQty | currency) || '' }}" ng-class="(queryQty <= 0) && 'disabled' || ''" />
             </span>
             <input ng-show="queryType == 'give'" type="submit" class="btn btn-success" value="Donner {{ queryQty > 0 && ' ' + (queryQty | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />

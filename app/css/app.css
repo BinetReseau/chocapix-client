@@ -38,6 +38,9 @@ a.link {
 .form-control.number {
     width: 80px;
 }
+.form-control.large {
+    width: 300px;
+}
 .checkbox.unit {
     margin-right: 20px;
 }
