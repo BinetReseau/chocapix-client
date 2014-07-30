@@ -65,7 +65,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						$events.addEventTransformer('bars.transaction.new', 'bars.transaction.add');
 						$events.addEventTransformer('bars.transaction.add', 'bars.transaction.operations.update');
 						$events.addEventTransformer('bars.transaction.update', 'bars.transaction.operations.update');
-						$events.addEventTransformer('bars.transaction.operations.update', function(transaction){
+						$events.addEventTransformer('bars.transaction.operations.update', function(transaction) {
 							var evts = [], o;
 							for (var i = 0; i < transaction.operations.length; i++) {
 								o = transaction.operations[i];
@@ -77,7 +77,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							};
 							return evts;
 						});
-						$events.addEventTransformer('bars.food.add', 'bars.food.update');
+						//$events.addEventTransformer('bars.food.add', 'bars.food.update');
 						return $events;
 					}]
 				},
