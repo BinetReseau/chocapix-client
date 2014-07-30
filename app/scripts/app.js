@@ -77,6 +77,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							};
 							return evts;
 						});
+						$events.addEventTransformer('bars.food.add', 'bars.food.update');
 						return $events;
 					}]
 				},

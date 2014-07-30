@@ -39,7 +39,7 @@ angular.module('bars.ctrl.admin', [
 						keywords: '',
 						qty: 0
 					};
-					$events.$broadcast('bars.food.update', newFood);
+					$events.$broadcast('bars.food.add', newFood);
 				});
 			};
 		}
