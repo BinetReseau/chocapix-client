@@ -19,8 +19,9 @@ angular.module('bars.ctrl.admin', [
 	])
 	.controller('AdminFoodCtrl',
 		['$scope',
+		'$events',
 		'API.Food',
-		function($scope, Food) {
+		function($scope, $events, Food) {
 			$scope.admin.active = 'food';
 			$scope.food = {
 				name: '',
@@ -38,6 +39,7 @@ angular.module('bars.ctrl.admin', [
 						keywords: '',
 						qty: 0
 					};
+					$events.$broadcast('bars.food.update', newFood);
 				});
 			};
 		}
