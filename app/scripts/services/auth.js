@@ -6,10 +6,10 @@ angular.module('bars.auth', [
 ])
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
-.factory('AuthService', ['$injector', '$sessionStorage', '$q', 'API',
-	function ($injector, $sessionStorage, $q, API) {
-		if ($sessionStorage.auth === undefined) {
-			$sessionStorage.auth = {
+.factory('AuthService', ['$injector', '$localStorage', '$q', 'API',
+	function ($injector, $localStorage, $q, API) {
+		if ($localStorage.auth === undefined) {
+			$localStorage.auth = {
 				token: null
 			};
 		}
@@ -17,22 +17,22 @@ angular.module('bars.auth', [
 			login: function(credentials, resultLogin) {
 				return $injector.get('$http').post(API.route('../nobar/auth/login'), credentials).then(
 					function(response) {
-						$sessionStorage.auth.token = response.data.token;
+						$localStorage.auth.token = response.data.token;
 						return response.data.user;
 					},
 					function(response) {
-						$sessionStorage.auth.token = null;
+						$localStorage.auth.token = null;
 						return $q.reject();
 					});
 			},
 			logout: function() {
-				$sessionStorage.auth.token = null;
+				$localStorage.auth.token = null;
 			},
 			isAuthenticated: function() {
-				return $sessionStorage.auth.token != null;
+				return $localStorage.auth.token != null;
 			},
 			getToken: function() {
-				return $sessionStorage.auth.token;
+				return $localStorage.auth.token;
 			}
 		};
 }])
