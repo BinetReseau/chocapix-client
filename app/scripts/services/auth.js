@@ -59,6 +59,13 @@ angular.module('bars.auth', [
 					// TODO: Redirect user to login page.
 				}
 				return response || $q.when(response);
-			}
+			},
+			responseError: function(response) {
+	            if (response.status === 401) {
+					AuthService.logout();
+					// TODO: Redirect user to login page.
+				}
+	            return $q.reject(response);
+	        }
 		};
 }]);
