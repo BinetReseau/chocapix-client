@@ -14,7 +14,7 @@
                     <th>Quantité</th>
                     <th>Prix</th>
                 </tr>
-                <tr ng-repeat="f in bar.foods | filter:filterDeleted() | filter:bar.search | orderBy:'name':reverse">
+                <tr ng-repeat="f in bar.foods | filter:filterDeleted() | filter:bar.search | orderBy:'name':reverse" ng-class="deleted && 'del'">
                     <td><bars:food food="f"></bars:food></td>
                     <td>{{ f.qty | number }}<span ng-if="f.unit != ''"> {{ f.unit }}</span></td>
                     <td>{{ f.price | currency }}<span ng-if="f.unit != ''"> / {{ f.unit }}</span></td>
