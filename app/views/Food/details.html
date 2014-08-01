@@ -30,6 +30,25 @@
 		</form>
 	</div>
 </div>
+<div class="row h4">
+	<div class="col-sm-3 text-right"><strong>Gestion</strong></div>
+	<div class="col-sm-9">
+		<div class="btn-toolbar" role="toolbar">
+			<div class="btn-group">
+				<a title="Modifier cet aliment" class="btn btn-default">
+					<span class="glyphicon glyphicon-edit"></span>
+					Modifier
+				</a>
+			</div>
+			<div class="btn-group">
+				<a title="{{ foodDetails.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger" ng-class="foodDetails.deleted && 'active'">
+					<span class="glyphicon glyphicon-trash"></span>
+					{{ foodDetails.deleted && 'Restaurer' || 'Supprimer' }}
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
 
 <br /><br />
 
