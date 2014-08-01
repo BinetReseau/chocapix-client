@@ -27,6 +27,17 @@ angular.module('bars.ctrl.food', [])
 					});
 				}
 			};
+			$scope.trashIt = function() {
+				if ($scope.foodDetails.deleted) {
+					$scope.foodDetails.unremove({id: $scope.foodDetails.id}).$promise.then(function(newFood) {
+						$events.$broadcast('bars.food.update', newFood);
+					});
+				} else {
+					$scope.foodDetails.remove({id: $scope.foodDetails.id}).$promise.then(function(newFood) {
+						$events.$broadcast('bars.food.update', newFood);
+					});
+				}
+			};
 
 			$scope.$on('bars.food.update', function(evt, food){
 				if(food.id === $scope.foodDetails.id) {

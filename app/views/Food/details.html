@@ -41,7 +41,7 @@
 				</a>
 			</div>
 			<div class="btn-group">
-				<a title="{{ foodDetails.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger" ng-class="foodDetails.deleted && 'active'">
+				<a title="{{ foodDetails.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger" ng-class="foodDetails.deleted && 'active'" ng-click="trashIt()">
 					<span class="glyphicon glyphicon-trash"></span>
 					{{ foodDetails.deleted && 'Restaurer' || 'Supprimer' }}
 				</a>
