@@ -37,6 +37,15 @@ angular.module('bars.ctrl.food', [])
 	.controller('FoodListCtrl',
 		['$scope', function($scope) {
 			$scope.reverse = false;
+			$scope.filterDeleted = function() {
+				if ($scope.showDeleted) {
+					return '';
+				} else {
+					return {
+						deleted: false
+					};
+				}
+			};
 		}])
 	.controller('FoodCtrl',
 		['$scope', function($scope) {

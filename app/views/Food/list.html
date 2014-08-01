@@ -1,6 +1,12 @@
-
 <div class="container-fluid"><div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
+    <div class="col-sm-2">
+        <div class="btn-group-vertical">
+            <a title="Afficher les aliments supprimés" ng-click="showDeleted = !showDeleted" class="btn btn-primary" ng-class="showDeleted && 'active'">
+                <span class="glyphicon glyphicon-trash"></span> Aliments supprimés
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-8">
         <div class="panel panel-default">
             <table class="table table-striped table-hover" ng-if="(bar.foods | filter:bar.search).length > 0">
                 <tr>
@@ -8,7 +14,7 @@
                     <th>Quantité</th>
                     <th>Prix</th>
                 </tr>
-                <tr ng-repeat="f in bar.foods | filter:{deleted:false} | filter:bar.search | orderBy:'name':reverse">
+                <tr ng-repeat="f in bar.foods | filter:filterDeleted() | filter:bar.search | orderBy:'name':reverse">
                     <td><bars:food food="f"></bars:food></td>
                     <td>{{ f.qty | number }}<span ng-if="f.unit != ''"> {{ f.unit }}</span></td>
                     <td>{{ f.price | currency }}<span ng-if="f.unit != ''"> / {{ f.unit }}</span></td>
