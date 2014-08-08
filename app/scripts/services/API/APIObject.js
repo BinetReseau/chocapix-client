@@ -92,14 +92,21 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 			angular.forEach(methods, function(method, key){
 				function f(is_static){
 					return function(a1, a2, a3, a4) {
-						// console.log(key + '(' + (method.url || url) + ')');
+						console.log(key + '(' + (method.url || url) + ')');
 						var args = arguments;
 						var obj = method.isArray ? [] : new APIEntity();
 						var nbr_reloads = 0;
 						obj.$loading = true;
+						console.log(key, method.url || url);
+						var start = performance.now();
 						obj.$promise = resource[key].apply(resource, is_static ? args : [a1, this, a2, a3]).$promise
+								.then(function(o){
+									console.log("Received object from "+key+" ("+(performance.now()-start)+"ms)");
+									return o;
+								})
 								.then(method.object ? $injector.get(method.object).$parse : APIEntity.$parse)
 								.then(function(new_obj){
+									console.log("Parsed object from "+key+" ("+(performance.now()-start)+"ms)");
 									shallowClearAndCopy(new_obj, obj);
 									obj.$reload = function reload() {
 										obj.$loading = true;
@@ -116,6 +123,7 @@ module.factory('APIObject', ['$injector', '$resource', 'API',
 										return o;
 									};
 									obj.$loading = false;
+									console.log("Returned object from "+key+" ("+(performance.now()-start)+"ms)");
 									return obj;
 								})
 								.then(function(obj){
