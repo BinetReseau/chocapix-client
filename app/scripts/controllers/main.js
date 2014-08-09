@@ -87,6 +87,75 @@ angular.module('bars.ctrl.main', [
 					hasError: false,
 					errorMessage: ''
 				};
+
+				// On découpe la requête en termes
+				var terms = qo.split(' ');
+
+				var types = [
+					'acheter',
+					'jeter',
+					'donner',
+					'amende',
+					'appro',
+				];
+
+				var units = [
+					'g',
+					'kg',
+					'l',
+					'ml',
+					'cl',
+				];
+
+				var aQty = [];
+				var aFoods = [];
+				var aUnits = [];
+				var aAccounts = [];
+
+				for (var i = 0; i < terms.length; i++) {
+					// Type
+					if (types.indexOf(terms[i]) > -1) {
+						$scope.query.type = terms[i];
+						continue;
+					}
+
+					// Quantité
+					if (/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/.test(terms[i])) {
+						var qty = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$1').replace('/,/', '.').replace(/€/, '.').replace(/euros?/, '.');
+						aQty.push(qty);
+					}
+
+					// Unité
+					if (units.indexOf(terms[i]) > -1) {
+						aUnits.push(terms[i]);
+					} else {
+						var unit = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
+						if (unit != terms[i]) {
+							aUnits.push(unit);
+						}
+					}
+
+					// Food
+					var foods = $filter('filter')($scope.bar.foods, terms[i], false);
+					if (foods.length == 0) {
+						var foods = $filter('filter')($scope.bar.foods, terms[i].replace(/s$/, ''), false);
+					}
+					if (foods.length == 1) {
+						aFoods.push(foods[0]);
+					}
+
+					// Account
+					var accounts = $filter('filter')($scope.bar.accounts, terms[i], false);
+					if (accounts.length == 1) {
+						aAccounts.push(accounts[0]);
+					}
+				}
+				console.log("Barre magique :");
+				console.log(aQty);
+				console.log(aFoods);
+				console.log(aUnits);
+				console.log(aAccounts);
+
 				// Type: acheter|jeter|ajouter|appro|donner|amende
 				if (/acheter/i.test(qo)) {
 					$scope.query.type = 'acheter';
