@@ -101,6 +101,7 @@ angular.module('bars.ctrl.main', [
 
 				var units = [
 					'g',
+					'cg',
 					'kg',
 					'l',
 					'ml',
@@ -161,12 +162,20 @@ angular.module('bars.ctrl.main', [
 						item.isUnit = true;
 						item.unit = terms[i];
 						aUnits.push(item);
+						console.log(item);
 					} else {
 						var unit = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
-						if (unit != terms[i]) {
-							item.isUnit = true;
-							item.unit = terms[i];
-							aUnits.push(item);
+						if (unit != terms[i] && units.indexOf(unit) > -1) {
+							var itemu = {
+								isQty: false,
+								isFood: false,
+								isUnit: false,
+								used: false
+							};
+							itemu.isUnit = true;
+							itemu.unit = unit;
+							aUnits.push(itemu);
+							console.log(itemu);
 						}
 					}
 
@@ -223,6 +232,18 @@ angular.module('bars.ctrl.main', [
 					$scope.query.qty = aQty[0].qty;
 					aQty[0].used = true;
 					cleana();
+					if (aUnits.length == 1 && $scope.query.food !== null) {
+						$scope.query.unit = aUnits[0].unit;
+						if ((/^k/i.test($scope.query.food.unit) && !/^k/i.test($scope.query.unit)) || (!/^m/i.test($scope.query.food.unit) && /^m/i.test($scope.query.unit))) {
+							$scope.query.qty *= 0.001;
+						} else if ((!/^k/i.test($scope.query.food.unit) && /^k/i.test($scope.query.unit)) || (/^m/i.test($scope.query.food.unit) && !/^m/i.test($scope.query.unit))) {
+							$scope.query.qty *= 1000;
+						} else if (/^c/i.test($scope.query.food.unit) && !/^c/i.test($scope.query.unit)) {
+							$scope.query.qty *= 100;
+						} else if (!/^c/i.test($scope.query.food.unit) && /^c/i.test($scope.query.unit)) {
+							$scope.query.qty *= 0.01;
+						}
+					}
 				}
 
 				console.log($scope.query);
