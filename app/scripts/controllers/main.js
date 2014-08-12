@@ -112,6 +112,29 @@ angular.module('bars.ctrl.main', [
 				var aUnits = [];
 				var aAccounts = [];
 
+				function cleana() {
+					for (var i = (aQty.length - 1); i >= 0; i--) {
+						if (aQty[i].used) {
+							aQty.splice(i, 1);
+						}
+					}
+					for (var i = (aFoods.length - 1); i >= 0; i--) {
+						if (aFoods[i].used) {
+							aFoods.splice(i, 1);
+						}
+					}
+					for (var i = (aUnits.length - 1); i >= 0; i--) {
+						if (aUnits[i].used) {
+							aUnits.splice(i, 1);
+						}
+					}
+					for (var i = (aAccounts.length - 1); i >= 0; i--) {
+						if (aAccounts[i].used) {
+							aAccounts.splice(i, 1);
+						}
+					}
+				}
+
 				for (var i = 0; i < terms.length; i++) {
 					// Type
 					if (types.indexOf(terms[i]) > -1) {
@@ -119,10 +142,17 @@ angular.module('bars.ctrl.main', [
 						continue;
 					}
 
+					var item = {
+						isQty: false,
+						isFood: false,
+						used: false
+					};
+
 					// Quantité
 					if (/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/.test(terms[i])) {
-						var qty = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$1').replace('/,/', '.').replace(/€/, '.').replace(/euros?/, '.');
-						aQty.push(qty);
+						item.qty = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$1').replace('/,/', '.').replace(/€/, '.').replace(/euros?/, '.');
+						item.isQty = true;
+						//aQty.push(qty);
 					}
 
 					// Unité
@@ -141,7 +171,17 @@ angular.module('bars.ctrl.main', [
 						var foods = $filter('filter')($scope.bar.foods, terms[i].replace(/s$/, ''), false);
 					}
 					if (foods.length == 1) {
-						aFoods.push(foods[0]);
+						item.isFood = true;
+						item.food = foods[0];
+						//aFoods.push(foods[0]);
+					}
+
+					// Push food et quantité
+					if (item.isQty) {
+						aQty.push(item);
+					}
+					if (item.isFood) {
+						aFoods.push(item);
 					}
 
 					// Account
@@ -150,11 +190,33 @@ angular.module('bars.ctrl.main', [
 						aAccounts.push(accounts[0]);
 					}
 				}
+
 				console.log("Barre magique :");
 				console.log(aQty);
 				console.log(aFoods);
 				console.log(aUnits);
 				console.log(aAccounts);
+
+				// Réflexion et exécution
+				if (aFoods.length == 1) {
+					aFoods[0].used = true;
+					$scope.query.food = aFoods[0].food;
+					if ($scope.query.type == '') {
+						$scope.query.type = 'acheter';
+					}
+					cleana();
+					if (aQty.length == 1) {
+						$scope.query.qty = aQty[0].qty;
+					}
+				}
+				if (aAccounts.length == 1) {
+					$scope.query.account = aAccounts[0];
+					if ($scope.query.type == '') {
+						$scope.query.type = 'donner';
+					}
+				}
+
+				console.log($scope.query);
 
 				// Type: acheter|jeter|ajouter|appro|donner|amende
 				if (/acheter/i.test(qo)) {
