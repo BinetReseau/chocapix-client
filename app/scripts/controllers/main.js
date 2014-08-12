@@ -145,6 +145,7 @@ angular.module('bars.ctrl.main', [
 					var item = {
 						isQty: false,
 						isFood: false,
+						isUnit: false,
 						used: false
 					};
 
@@ -157,11 +158,15 @@ angular.module('bars.ctrl.main', [
 
 					// Unité
 					if (units.indexOf(terms[i]) > -1) {
-						aUnits.push(terms[i]);
+						item.isUnit = true;
+						item.unit = terms[i];
+						aUnits.push(item);
 					} else {
 						var unit = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
 						if (unit != terms[i]) {
-							aUnits.push(unit);
+							item.isUnit = true;
+							item.unit = terms[i];
+							aUnits.push(item);
 						}
 					}
 
@@ -205,15 +210,19 @@ angular.module('bars.ctrl.main', [
 						$scope.query.type = 'acheter';
 					}
 					cleana();
-					if (aQty.length == 1) {
-						$scope.query.qty = aQty[0].qty;
-					}
 				}
 				if (aAccounts.length == 1) {
 					$scope.query.account = aAccounts[0];
 					if ($scope.query.type == '') {
 						$scope.query.type = 'donner';
 					}
+					aAccounts[0].used = true;
+					cleana();
+				}
+				if (aQty.length == 1) {
+					$scope.query.qty = aQty[0].qty;
+					aQty[0].used = true;
+					cleana();
 				}
 
 				console.log($scope.query);
