@@ -180,9 +180,15 @@ angular.module('bars.ctrl.main', [
 					}
 
 					// Food
-					var foods = $filter('filter')($scope.bar.foods, terms[i], false);
+					var foods = $filter('filter')($scope.bar.foods, function (o) {
+						return (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1 ||
+							o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
+					}, false);
 					if (foods.length == 0) {
-						var foods = $filter('filter')($scope.bar.foods, terms[i].replace(/s$/, ''), false);
+						var foods = $filter('filter')($scope.bar.foods, function (o) {
+							return (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1 ||
+								o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1);
+						}, false);
 					}
 					if (foods.length == 1) {
 						item.isFood = true;
@@ -199,7 +205,9 @@ angular.module('bars.ctrl.main', [
 					}
 
 					// Account
-					var accounts = $filter('filter')($scope.bar.accounts, terms[i], false);
+					var accounts = $filter('filter')($scope.bar.accounts, function (o) {
+						return (o.user.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
+					}, false);
 					if (accounts.length == 1) {
 						aAccounts.push(accounts[0]);
 					}
