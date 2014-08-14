@@ -181,13 +181,13 @@ angular.module('bars.ctrl.main', [
 
 					// Food
 					var foods = $filter('filter')($scope.bar.foods, function (o) {
-						return (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1 ||
-							o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
+						return (!o.deleted && (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1 ||
+							o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1));
 					}, false);
 					if (foods.length == 0) {
 						var foods = $filter('filter')($scope.bar.foods, function (o) {
-							return (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1 ||
-								o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1);
+							return (!o.deleted && (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1 ||
+								o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1));
 						}, false);
 					}
 					if (foods.length == 1) {
@@ -263,6 +263,32 @@ angular.module('bars.ctrl.main', [
 				analyseTerms();
 				analyseTerms();
 				analyseTerms();
+
+				// Erreurs
+				if ($scope.query.type == 'acheter' || $scope.query.type == 'jeter' || $scope.query.type == 'appro') {
+					if ($scope.query.food == null) {
+						$scope.query.hasError = true;
+						$scope.query.errorMessage = "Cet aliment n'existe pas dans ce bar.";
+					}
+				}
+				if ($scope.query.type == 'donner' || $scope.query.type == 'amende') {
+					if ($scope.query.account == null) {
+						$scope.query.hasError = true;
+						$scope.query.errorMessage = "Aucun utilisateur à ce nom dans ce bar.";
+					}
+				}
+				if ($scope.query.type == 'donner') {
+					if ($scope.query.account != null && $scope.user.account.id == $scope.query.account.id) {
+						$scope.query.hideAnalysis = true;
+						$scope.query.hasError = true;
+						$scope.query.errorMessage = "Réfléchis mon grand ! On ne peut pas se faire de don à soi-même !";
+					}
+					if ($scope.query.qty <= 0) {
+						$scope.query.hideAnalysis = true;
+						$scope.query.hasError = true;
+						$scope.query.errorMessage = "On ne peut donner que des montants strictement positifs.";
+					}
+				}
 
 				console.log($scope.query);
 
