@@ -1,6 +1,9 @@
 {
   "globalstrict": true,
+  "devel": true,
   "globals": {
-    "angular": false
+  	"performance": false,
+    "angular": false,
+    "_": false
   }
 }
