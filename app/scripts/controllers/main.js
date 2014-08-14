@@ -76,7 +76,7 @@ angular.module('bars.ctrl.main', [
 				hasError: false,
 				errorMessage: ''
 			};
-			$scope.analyse = function(qo) {
+			var analyse = function(qo) {
 				$scope.query = {
 					type: '',
 					qty: 1,
@@ -284,6 +284,9 @@ angular.module('bars.ctrl.main', [
 
 				return $scope.query;
 			};
+
+			$scope.$watch('bar.search', analyse);
+
 			$scope.executeQuery = function() {
 				if ($scope.query.food === null && $scope.query.account === null) {
 					return;
