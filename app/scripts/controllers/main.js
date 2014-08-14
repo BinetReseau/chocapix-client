@@ -211,42 +211,54 @@ angular.module('bars.ctrl.main', [
 				console.log(aUnits);
 				console.log(aAccounts);
 
-				// Réflexion et exécution
-				if (aFoods.length == 1) {
-					aFoods[0].used = true;
-					$scope.query.food = aFoods[0].food;
-					if ($scope.query.type == '') {
-						$scope.query.type = 'acheter';
+				function analyseTerms() {
+					// Réflexion et exécution
+					if (aFoods.length == 1) {
+						aFoods[0].used = true;
+						$scope.query.food = aFoods[0].food;
+						if ($scope.query.type == '') {
+							$scope.query.type = 'acheter';
+						}
+						cleana();
 					}
-					cleana();
-				}
-				if (aAccounts.length == 1) {
-					$scope.query.account = aAccounts[0];
-					if ($scope.query.type == '') {
-						$scope.query.type = 'donner';
+					if (aAccounts.length == 1) {
+						$scope.query.account = aAccounts[0];
+						if ($scope.query.type == '') {
+							$scope.query.type = 'donner';
+						}
+						aAccounts[0].used = true;
+						cleana();
 					}
-					aAccounts[0].used = true;
-					cleana();
-				}
-				if (aQty.length == 1) {
-					$scope.query.qty = aQty[0].qty;
-					aQty[0].used = true;
-					cleana();
-					if (aUnits.length == 1 && $scope.query.food !== null) {
-						$scope.query.unit = aUnits[0].unit;
-						if ((/^k/i.test($scope.query.food.unit) && !/^k/i.test($scope.query.unit)) || (!/^m/i.test($scope.query.food.unit) && /^m/i.test($scope.query.unit))) {
-							$scope.query.qty *= 0.001;
-						} else if ((!/^k/i.test($scope.query.food.unit) && /^k/i.test($scope.query.unit)) || (/^m/i.test($scope.query.food.unit) && !/^m/i.test($scope.query.unit))) {
-							$scope.query.qty *= 1000;
-						} else if (/^c/i.test($scope.query.food.unit) && !/^c/i.test($scope.query.unit)) {
-							$scope.query.qty *= 100;
-						} else if (!/^c/i.test($scope.query.food.unit) && /^c/i.test($scope.query.unit)) {
-							$scope.query.qty *= 0.01;
+					if (aQty.length == 1) {
+						$scope.query.qty = aQty[0].qty;
+						aQty[0].used = true;
+						cleana();
+						if (aUnits.length == 1 && $scope.query.food !== null) {
+							$scope.query.unit = aUnits[0].unit;
+							aUnits[0].used = true;
+							cleana();
+							if ((/^k/i.test($scope.query.food.unit) && !/^k/i.test($scope.query.unit)) || (!/^m/i.test($scope.query.food.unit) && /^m/i.test($scope.query.unit))) {
+								$scope.query.qty *= 0.001;
+							} else if ((!/^k/i.test($scope.query.food.unit) && /^k/i.test($scope.query.unit)) || (/^m/i.test($scope.query.food.unit) && !/^m/i.test($scope.query.unit))) {
+								$scope.query.qty *= 1000;
+							} else if (/^c/i.test($scope.query.food.unit) && !/^c/i.test($scope.query.unit)) {
+								$scope.query.qty *= 100;
+							} else if (!/^c/i.test($scope.query.food.unit) && /^c/i.test($scope.query.unit)) {
+								$scope.query.qty *= 0.01;
+							}
 						}
 					}
+					if ($scope.query.food !== null) {
+						$scope.query.unit = $scope.query.food.unit;
+					}
 				}
+				analyseTerms();
+				analyseTerms();
+				analyseTerms();
 
 				console.log($scope.query);
+
+				return $scope.query;
 
 				// Type: acheter|jeter|ajouter|appro|donner|amende
 				if (/acheter/i.test(qo)) {
