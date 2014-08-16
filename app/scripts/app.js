@@ -14,7 +14,8 @@ var barsApp = angular.module('bars.app', [
   'bars.ctrl.dev',
   'bars.ctrl.admin',
   'bars.directives',
-  'angularMoment'
+  'angularMoment',
+  // 'APIModel'
 ]);
 
 barsApp.config(['$stateProvider', '$urlRouterProvider',
@@ -39,7 +40,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return null;
 					}],
 					bar: ['API.Bar' , '$stateParams', function(Bar, $stateParams) {
-						return Bar.get().$promise;
+						return Bar.get($stateParams.bar);
 					}],
 					foods: ['API.Food', function(Food) {
 						return Food.all();
@@ -204,6 +205,6 @@ barsApp.run(function(amMoment) {
 	amMoment.changeLanguage('fr');
 });
 
-// barsApp.run(['APIObject',function(APIObject){
-// 	APIObject("", {}, {});
-// }])
+// barsApp.run(['API.Bar', function(Bar){
+// 	Bar.get("avironjone");
+// }]);

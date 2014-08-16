@@ -7,10 +7,10 @@ angular.module('bars.API', [
 
 .factory('API', [
 	function () {
-		var barId="bar";
+		var barId = "bar";
 		return {
 			setBarId: function(barid){
-				barId=barid;
+				barId = barid;
 			},
 			route: function(path){
 				// return '/'+barId+'/'+path;
@@ -35,9 +35,18 @@ angular.module('bars.API', [
 			appro: {method:'POST', url:API.route('action/appro'), static: true, object: 'API.Transaction'},
 		});
 	}])
-.factory('API.Bar', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(API.route(''));
+// .factory('API.Bar', ['APIObject', 'API',
+// 	function(APIObject, API) {
+// 		return APIObject(API.route(''));
+// 	}])
+.factory('API.Bar', ['APIModelRepository', 'API',
+	function(APIModelRepository, API) {
+		return APIModelRepository.create({
+				url: API.route('bar'),
+				type: "Bar\\Bar",
+				structure: {},
+				methods: {}
+			});
 	}])
 // .factory('API.Food', ['APIObject', 'API',
 // 	function(APIObject, API) {
@@ -47,13 +56,18 @@ angular.module('bars.API', [
 // 			unremove: {method: 'POST', url:API.route('food/undelete/:id')}
 // 		});
 // 	}])
-.factory('API.Food', ['APIModelFactory', 'API',
-	function(APIModelFactory, API) {
-		return APIModelFactory.create(API.route('food'),
-					{},
-					{},
-					{},
-					"Stock\\StockItem");
+.factory('API.Food', ['APIModelRepository', 'API',
+	function(APIModelRepository, API) {
+		return APIModelRepository.create({
+				url: API.route('food'),
+				type: "Stock\\StockItem",
+				structure: {
+					'bar': 'Bar\\Bar'
+				},
+				methods: {
+
+				}
+			});
 	}])
 .factory('API.Me', ['APIObject', 'API',
 	function(APIObject, API) {
