@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('bars.API', [
-	'APIObject'
+	'APIObject',
+	'APIModel'
 ])
 
 .factory('API', [
@@ -9,11 +10,11 @@ angular.module('bars.API', [
 		var barId="bar";
 		return {
 			setBarId: function(barid){
-				barId=barid
+				barId=barid;
 			},
 			route: function(path){
 				// return '/'+barId+'/'+path;
-				return '/../../bars-symfony/web/' + barId + (path=='' ? '' : '/'+path);
+				return '/../../bars-symfony/web/' + barId + (path==='' ? '' : '/'+path);
 			}
 		};
 }])
@@ -38,13 +39,21 @@ angular.module('bars.API', [
 	function(APIObject, API) {
 		return APIObject(API.route(''));
 	}])
-.factory('API.Food', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(API.route('food/:id'), {}, {
-			add: {method: 'POST', url:API.route('food/add'), static: true, object: 'API.Food'},
-			remove: {method: 'DELETE', url:API.route('food/:id')},
-			unremove: {method: 'POST', url:API.route('food/undelete/:id')}
-		});
+// .factory('API.Food', ['APIObject', 'API',
+// 	function(APIObject, API) {
+// 		return APIObject(API.route('food/:id'), {}, {
+// 			add: {method: 'POST', url:API.route('food/add'), static: true, object: 'API.Food'},
+// 			remove: {method: 'DELETE', url:API.route('food/:id')},
+// 			unremove: {method: 'POST', url:API.route('food/undelete/:id')}
+// 		});
+// 	}])
+.factory('API.Food', ['APIModelFactory', 'API',
+	function(APIModelFactory, API) {
+		return APIModelFactory.create(API.route('food'),
+					{},
+					{},
+					{},
+					"Stock\\StockItem");
 	}])
 .factory('API.Me', ['APIObject', 'API',
 	function(APIObject, API) {

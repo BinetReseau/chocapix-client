@@ -1,6 +1,7 @@
 {
   "globalstrict": true,
   "devel": true,
+  "newcap": false,
   "globals": {
   	"performance": false,
     "angular": false,

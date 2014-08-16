@@ -42,7 +42,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Bar.get().$promise;
 					}],
 					foods: ['API.Food', function(Food) {
-						return Food.query().$promise;
+						return Food.all();
 					}],
 					accounts: ['API.Account', function(Account) {
 						return Account.query().$promise;
@@ -74,7 +74,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 								} else if(o.type == 'accountoperation') {
 									evts.push({evt: 'bars.account.update', arg: o.account});
 								}
-							};
+							}
 							return evts;
 						});
 						//$events.addEventTransformer('bars.food.add', 'bars.food.update');
@@ -116,7 +116,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Food/details.html",
 				resolve:{
 					foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
-						return Food.get({id:$stateParams.id}).$promise;
+						return Food.get($stateParams.id);
 					}],
 					foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
 						return Transaction.byItem({id: $stateParams.id});
@@ -182,7 +182,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				url: "/food",
 				templateUrl: "views/admin/Food/home.html",
 				controller: 'AdminFoodCtrl'
-			})
+			});
 }]);
 
 barsApp.config(['$httpProvider',
