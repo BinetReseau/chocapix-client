@@ -5,7 +5,7 @@ var module = angular.module('APIModel', [
 
 
 (function(module){
-module.factory('MemoryEntityStore', [
+module.factory('MemoryEntityStore', [ // TODO: Use promises all entity stores
 	function() {
 		function MemoryEntityStore() {
 			// Maps entity id with entity object
@@ -60,80 +60,119 @@ module.factory('MemoryEntityStore', [
 module.factory('RemoteCRUDEntityStore', ['$http',
 	function ($http) {
 		var getData = _.property("data");
-		function RemoteCRUDEntityStore(url, factory) {
+		function RemoteCRUDEntityStore(url) {
 			this.url = url;
-			factory = factory || {};
-			factory.parse = factory.parse ||  _.identity;
-			factory.unparse = factory.unparse ||  _.identity;
-			this.factory = factory;
 		}
 		RemoteCRUDEntityStore.prototype.get = function(id) {
-			return $http.get(this.url + "/" + id).then(getData)
-					.then(this.factory.parse);
+			return $http.get(this.url + "/" + id).then(getData);
 		};
 		RemoteCRUDEntityStore.prototype.all = function() {
-			return $http.get(this.url).then(getData)
-					.then(this.factory.parse);
+			return $http.get(this.url).then(getData);
 		};
 		RemoteCRUDEntityStore.prototype.create = function(obj) {
-			obj = this.factory.unparse(obj);
-			console.log(angular.toJson(obj));
-			return $http.post(this.url, obj).then(getData)
-					.then(this.factory.parse);
+			return $http.post(this.url, obj).then(getData);
 		};
 		RemoteCRUDEntityStore.prototype.update = function(id, obj) {
-			obj = this.factory.unparse(obj);
-			// return $http.put(this.url + "/" + id, obj).then(getData)
-			// 		.then(this.factory.parse);
-			return $http.post(this.url + "/" + id, obj).then(getData)
-					.then(this.factory.parse);
+			return $http.put(this.url + "/" + id, obj).then(getData);
 		};
 		RemoteCRUDEntityStore.prototype.delete = function(id) {
-			return $http.delete(this.url + "/" + id).then(getData)
-					.then(this.factory.parse);
+			return $http.delete(this.url + "/" + id).then(getData);
 		};
 		return RemoteCRUDEntityStore;
 	}
 ]);
 
-module.factory('CachedRemoteEntityStore', ['$q', 'MemoryEntityStore', 'RemoteCRUDEntityStore',
-	function ($q, MemoryEntityStore, RemoteCRUDEntityStore) {
-		function CachedRemoteEntityStore(url, factory) {
-			this.url = url;
-			this.local_store = new MemoryEntityStore();
-			this.remote_store = new RemoteCRUDEntityStore(url, factory);
-			this.factory = factory || {};
-			this.factory.create = this.factory.create ||  function(){return {};};
-		}
-		CachedRemoteEntityStore.prototype.get = function(id) {
-			if(this.local_store.get(id)) {
-				return $q.when(this.local_store.get(id));
+module.factory('TransformerEntityStoreDecorator', [
+	function() {
+		function applyInPromise(f, o) {
+			if(angular.isFunction(o.then)) {
+				return o.then(f);
 			} else {
-				var self = this;
-				return this.remote_store.get(id)
-					.then(function(obj) {
-						return self.local_store.create(obj);
-				});
+				return f(o);
 			}
+		}
+
+		function TransformerEntityStoreDecorator (transformer, store) {
+		    this.transformer = transformer;
+		    this.store = store;
+		}
+		TransformerEntityStoreDecorator.prototype.get = function(id) {
+			var ret = this.store.get(id);
+			return applyInPromise(this.transformer.transform, ret);
 		};
-		CachedRemoteEntityStore.prototype.all = function() {
+		TransformerEntityStoreDecorator.prototype.all = function() {
+			var ret = this.store.all();
+			return applyInPromise(this.transformer.transform, ret);
+		};
+		TransformerEntityStoreDecorator.prototype.create = function(obj) {
+			obj = this.transformer.reverseTransform(obj);
+			var ret = this.store.create(obj);
+			return applyInPromise(this.transformer.transform, ret);
+		};
+		TransformerEntityStoreDecorator.prototype.update = function(id, obj) {
+			obj = this.transformer.reverseTransform(obj);
+			var ret = this.store.update(id, obj);
+			return applyInPromise(this.transformer.transform, ret);
+		};
+		TransformerEntityStoreDecorator.prototype.delete = function(id) {
+			var ret = this.store.delete(id);
+			return applyInPromise(this.transformer.transform, ret);
+		};
+		return TransformerEntityStoreDecorator;
+	}
+]);
+
+module.factory('CachedRemoteEntityStoreDecorator', ['$q',
+	function ($q) {
+		function CachedRemoteEntityStoreDecorator(factory, local_store, remote_store) {
+			this.factory = factory;
+			this.local_store = local_store;
+			this.remote_store = remote_store;
+		}
+		CachedRemoteEntityStoreDecorator.prototype.get = function(id) {
+			if(!this.local_store.get(id)) {
+				var o = this.factory.create();
+				o.id = id;
+				o = this.local_store.create(o);
+				var self = this;
+				var hadPromise = !!o.$promise;
+				o.$promise = this.remote_store.get(id)
+					.then(function(obj) {
+						if(!hadPromise) {
+							delete o.$promise;
+						}
+						return self.local_store.update(obj.id, obj);
+					}, function(error) {
+						self.local_store.delete(id);
+						return error;
+					});
+			}
+			return this.local_store.get(id);
+		};
+		CachedRemoteEntityStoreDecorator.prototype.all = function() {
 			var self = this;
-			return this.remote_store.all()
+			var arr = self.local_store.all();
+			var hadPromise = !!arr.$promise;
+			arr.$promise = this.remote_store.all()
 				.then(function(array) {
 					_.each(array, function(o) {
 						self.local_store.update(o.id, o);
 					});
-					return self.local_store.all();
+					if(!hadPromise) {
+						delete arr.$promise;
+					}
+					return arr;
 			});
+			return arr;
 		};
-		CachedRemoteEntityStore.prototype.create = function(obj) {
+		CachedRemoteEntityStoreDecorator.prototype.create = function(obj) {
 			var self = this;
 			return this.remote_store.create(obj)
 				.then(function(obj) {
 					return self.local_store.create(obj);
 			});
 		};
-		CachedRemoteEntityStore.prototype.update = function(id, obj) {
+		CachedRemoteEntityStoreDecorator.prototype.update = function(id, obj) {
 			var self = this;
 			this.local_store.update(id, obj);
 			return this.remote_store.update(id, obj)
@@ -141,21 +180,20 @@ module.factory('CachedRemoteEntityStore', ['$q', 'MemoryEntityStore', 'RemoteCRU
 					return self.local_store.update(id, obj);
 			});
 		};
-		CachedRemoteEntityStore.prototype.delete = function(id) {
+		CachedRemoteEntityStoreDecorator.prototype.delete = function(id) {
 			var self = this;
 			return this.remote_store.delete(id)
 				.then(function() {
 					self.local_store.delete(id);
 			});
 		};
-		return CachedRemoteEntityStore;
+		return CachedRemoteEntityStoreDecorator;
 	}
 ]);
 
 module.factory('APIEntity', [
 	function() {
-		function APIEntity(model){
-			// this.$update(obj);
+		function APIEntity(){
 		}
 		APIEntity.prototype.$update = function(obj) {
 			var self = this;
@@ -178,18 +216,33 @@ module.factory('APIEntity', [
 
 module.factory('APIModel', ['APIEntity',
 	function(APIEntity) {
-		function APIModel(entity_store, structure, model_type) {
-			this.entity_store = entity_store;
-			this.structure = structure;
+		function APIModel(model_type, structure, entity_store, repository) {
 			this.model_type = model_type;
+			this.structure = structure;
+			this.entity_store = entity_store;
+			this.repository = repository;
 		}
 		APIModel.prototype.create = function(obj) {
-			var entity = new APIEntity(this);
+			var self = this;
+			var entity = new APIEntity();
 			entity.model = this;
+
+			//_.forOwn(this.structure, function(type, key) {
+			//	Object.defineProperty(entity, key, {
+			//		configurable: true,
+			//		enumerable: false,
+			//		get: function() {
+			//			return self.repository.get(type).get(this[key+"_id"]);
+			//		},
+			//		set: function(v) {
+			//			this[key+"_id"] = v.id;
+			//		}
+			//	});
+			//});
+			entity._type = this.model_type;
 			if(obj) {
 				entity.$update(obj);
 			}
-			entity._type = this.model_type;
 			return entity;
 		};
 		APIModel.prototype.store = function(obj) {
@@ -211,51 +264,48 @@ module.factory('APIModel', ['APIEntity',
 	}
 ]);
 
-module.factory('APIModelFactory', ['APIModel', 'APIEntity', 'CachedRemoteEntityStore',
-	function (APIModel, APIEntity, EntityStore) {
-		var APIModelFactory = {};
+module.factory('APIModelRepository', ['APIModel', 'APIEntity', 'MemoryEntityStore', 'RemoteCRUDEntityStore', 'TransformerEntityStoreDecorator', 'CachedRemoteEntityStoreDecorator',
+	function (APIModel, APIEntity, MemoryEntityStore, RemoteCRUDEntityStore, TransformerEntityStoreDecorator, CachedRemoteEntityStoreDecorator) {
+		var APIModelRepository = {};
 
-		// Maps model name with model object
-		APIModelFactory.model_map = {};
+		APIModelRepository.model_map = {};
 
-		APIModelFactory.create = function (url, defaults, methods, structure, model_type) {
-			var entity_factory = {
-				parse: _.bind(this.parse, this),
-				unparse: function(data) {
-					return _.omit(data, ['model']);
-				}};
-			var store = new EntityStore(url, entity_factory);
-			var model = new APIModel(store, structure, model_type);
-			if(model_type) {
-				this.model_map[model_type] = model;
+		APIModelRepository.create = function(config) {
+			var local_store = new MemoryEntityStore();
+			var remote_store = new RemoteCRUDEntityStore(config.url);
+			remote_store = new TransformerEntityStoreDecorator({
+					transform: _.bind(this.parse, this),
+					reverseTransform: function(data) {
+						return _.omit(data, ['model']);
+					}
+				},
+				remote_store);
+			var entity_factory = {};
+			var store = new CachedRemoteEntityStoreDecorator(entity_factory, local_store, remote_store);
+
+			var model = new APIModel(config.type, config.structure, store, this);
+			entity_factory.create = _.bind(model.create, model); // TODO: ugly
+			if(config.type) {
+				this.model_map[config.type] = model;
 			}
 			return model;
 		};
 
-		APIModelFactory.parse = function(obj) {
+		APIModelRepository.get = function(type) {
+			return this.model_map[type];
+		};
+
+		APIModelRepository.parse = function(obj) {
 			if(_.isArray(obj)) {
 				obj = _.map(obj, _.bind(this.parse, this));
-			} else if(!(obj instanceof APIEntity) && obj._type && this.model_map[obj._type]) {
-				var model = this.model_map[obj._type];
+			} else if(!(obj instanceof APIEntity) && obj._type && this.get(obj._type)) {
+				var model = this.get(obj._type);
 				obj = model.create(obj);
 			}
 			return obj;
 		};
 
-		// APIModelFactory.store = function(obj) {
-		// 	if(_.isArray(obj)) {
-		// 		obj = _.map(obj, _.bind(this.store, this));
-		// 	} else if(!obj instanceof APIEntity && obj._type && this.model_map[obj._type]) {
-		// 		var Model = this.model_map[obj._type];
-		// 		obj = new Model(obj);
-		// 	}
-		// 	if(obj instanceof APIEntity && obj.model) {
-		// 		obj.model.store(obj);
-		// 	}
-		// 	return obj;
-		// };
-
-		return APIModelFactory;
+		return APIModelRepository;
 	}
 ]);
 })(module);
