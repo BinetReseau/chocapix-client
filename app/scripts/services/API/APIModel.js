@@ -227,18 +227,18 @@ module.factory('APIModel', ['APIEntity',
 			var entity = new APIEntity();
 			entity.model = this;
 
-			//_.forOwn(this.structure, function(type, key) {
-			//	Object.defineProperty(entity, key, {
-			//		configurable: true,
-			//		enumerable: false,
-			//		get: function() {
-			//			return self.repository.get(type).get(this[key+"_id"]);
-			//		},
-			//		set: function(v) {
-			//			this[key+"_id"] = v.id;
-			//		}
-			//	});
-			//});
+			_.forOwn(this.structure, function(type, key) {
+				Object.defineProperty(entity, key, {
+					configurable: true,
+					enumerable: false,
+					get: function() {
+						return self.repository.get(type).get(this[key+"_id"]);
+					},
+					set: function(v) {
+						this[key+"_id"] = v.id;
+					}
+				});
+			});
 			entity._type = this.model_type;
 			if(obj) {
 				entity.$update(obj);
