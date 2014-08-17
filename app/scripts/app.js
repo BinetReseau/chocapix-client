@@ -43,14 +43,15 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Bar.get($stateParams.bar);
 					}],
 					foods: ['API.Food', function(Food) {
+						Food.init();
 						return Food.all();
 					}],
 					accounts: ['API.Account', function(Account) {
 						return Account.query().$promise;
 					}],
-					user: ['API.Me', 'AuthService', function(Me, AuthService) {
+					user: ['API.User', 'AuthService', function(User, AuthService) {
 						if (AuthService.isAuthenticated()) {
-							return Me.all().$promise;
+							return User.me();
 						} else {
 							return null;
 						}
@@ -206,5 +207,5 @@ barsApp.run(function(amMoment) {
 });
 
 // barsApp.run(['API.Bar', function(Bar){
-// 	Bar.get("avironjone");
+// 	console.log(Bar.get("avironjone"));
 // }]);

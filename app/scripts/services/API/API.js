@@ -2,7 +2,7 @@
 
 angular.module('bars.API', [
 	'APIObject',
-	'APIModel'
+	'APIInterface'
 ])
 
 .factory('API', [
@@ -39,10 +39,10 @@ angular.module('bars.API', [
 // 	function(APIObject, API) {
 // 		return APIObject(API.route(''));
 // 	}])
-.factory('API.Bar', ['APIModelRepository', 'API',
-	function(APIModelRepository, API) {
-		return APIModelRepository.create({
-				url: API.route('bar'),
+.factory('API.Bar', ['APIModel', 'API',
+	function(APIModel, API) {
+		return new APIModel({
+				url: 'bar',
 				type: "Bar\\Bar",
 				structure: {},
 				methods: {}
@@ -56,10 +56,10 @@ angular.module('bars.API', [
 // 			unremove: {method: 'POST', url:API.route('food/undelete/:id')}
 // 		});
 // 	}])
-.factory('API.Food', ['APIModelRepository', 'API',
-	function(APIModelRepository, API) {
-		return APIModelRepository.create({
-				url: API.route('food'),
+.factory('API.Food', ['APIModel', 'API',
+	function(APIModel, API) {
+		return new APIModel({
+				url: 'food',
 				type: "Stock\\StockItem",
 				structure: {
 					'bar': 'Bar\\Bar'
@@ -75,10 +75,20 @@ angular.module('bars.API', [
 			all: {method:'GET', url:API.route('../nobar/auth/me'), static: true}
 		});
 	}])
-.factory('API.User', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(API.route('user/:id'), {id:'@id'}, {
-		});
+// .factory('API.User', ['APIObject', 'API',
+// 	function(APIObject, API) {
+// 		return APIObject(API.route('user/:id'), {id:'@id'}, {
+// 		});
+// 	}])
+.factory('API.User', ['APIModel', 'API',
+	function(APIModel, API) {
+		return new APIModel({
+				url: 'user',
+				type: "Auth\\User",
+				methods: {
+					'me': {method: 'GET', url: '../nobar/auth/me', static: true}
+				}
+			});
 	}])
 .factory('API.Transaction', ['APIObject', 'API',
 	function(APIObject, API) {
