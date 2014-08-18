@@ -139,6 +139,46 @@ module.factory('RemoteEntityStore', ['APIInterface',
     }
 ]);
 
+/**
+ * Usage:
+ *
+ * model = new APIModel({
+ *          url: 'account',
+ *          type: "Account\\Account",
+ *          structure: {
+ *              'bar': 'Bar\\Bar'
+ *          },
+ *          methods: {
+ *              'markDeleted': {method:'PUT', url: 'markDeleted', storeResult: true},
+ *              'me': {url: '/../nobar/auth/me', static: true}
+ *          }
+ *      });
+ *  }])
+ *
+ * @param {string} config.url Main url of the model, used for CRUD operations (namely GET url,
+ *                            GET url/:id, POST url, PUT url/:id and DELETE url/:id)
+ * @param {string} config.type Name of the model. Response objects whose _type property matches
+ *                             the model's name will be transformed into corresponding entities
+ * @param {object} config.structure Defines the model's relations with other models.
+ *                                  Each ($key: $name) pair will add to the model's entities a
+ *                                  getter/setter this[$key] that returns the entity with id
+ *                                  this[$key + "_id"] from model with name $name;
+ * @param {object} config.methods Defines the model's methods. Each ($key: $parameters) pair will
+ *                                create a method with name $key according to the given $parameters.
+ *
+ *         Methods with static:true will be added to the APIModel object, methods without will be
+ *         added to the model's entities
+ *
+ *         Calling a method will make a http request to the given url.
+ *         Urls not starting with a "/" will use model.url/url if static, or model.url/:id/url if not.
+ *         All urls are relative to the API url.
+ *
+ *         An entity passed as data will be correctly serialized. An entity returned in the
+ *         response will be seserialized.
+ *         If storeResult:true, the received entities will be stored to the correct model's cache
+ *         If a not static method has no data parameter, the entity will be passed as data.
+ */
+
 
 module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore', 'RemoteEntityStore',
     function(BaseAPIEntity, APIInterface, MemoryEntityStore, RemoteEntityStore) {
