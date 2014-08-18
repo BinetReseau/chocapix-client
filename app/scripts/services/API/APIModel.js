@@ -22,6 +22,9 @@ module.factory('BaseAPIEntity', [
         BaseAPIEntity.prototype.$save = function() {
             this.model.update(this.id, this);
         };
+        BaseAPIEntity.prototype.$reload = function() {
+            this.model.reload(this.id);
+        };
         return BaseAPIEntity;
     }
 ]);
@@ -122,6 +125,14 @@ module.factory('MemoryEntityStore', [
             }
             return null;
         };
+        MemoryEntityStore.prototype.clear = function() {
+            // var self = this;
+            // _.forOwn(this.entity_map, function(v, k) {
+            //     delete self.entity_map[k];
+            // });
+            this.entity_map = {};
+            this.entity_array.splice(0, this.entity_array.length);
+        };
         return MemoryEntityStore;
     }
 ]);
@@ -201,6 +212,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
 
             this.memory_store = new MemoryEntityStore();
             this.remote_store = new RemoteEntityStore(this.url);
+            this.memory_store.all().$reload = _.bind(this.reload, this); // TODO: temporary
 
             APIInterface.registerModel(config.type, this);
 
@@ -259,7 +271,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                 });
             });
 
-            this.init(); // TODO: handle caching correctly
+            this.reload(); // TODO: handle caching correctly
         }
 
         APIModel.prototype.create = function(obj) {
@@ -285,6 +297,22 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     });
             }
             return this.memory_store.get(id);
+        };
+        APIModel.prototype.reload = function(id) {
+            var self = this;
+            if(id) {
+                return this.remote_store.get(id).then(function(obj) {
+                    return self.memory_store.update(id, obj);
+                });
+            } else {
+                return this.remote_store.all().then(function(array) {
+                    self.memory_store.clear();
+                    _.each(array, function(o) {
+                        self.memory_store.update(o.id, o);
+                    });
+                    return self.memory_store.all();
+                });
+            }
         };
         APIModel.prototype.all = function() {
             return this.memory_store.all();
@@ -312,16 +340,6 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             return this.remote_store.delete(id)
                 .then(function() {
                     self.memory_store.delete(id);
-            });
-        };
-
-        APIModel.prototype.init = function() {
-            var self = this;
-            this.remote_store.all()
-                .then(function(array) {
-                    _.each(array, function(o) {
-                        self.memory_store.update(o.id, o);
-                    });
             });
         };
 
