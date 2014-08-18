@@ -19,11 +19,25 @@ angular.module('bars.API', [
 		};
 }])
 
-.factory('API.Account', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(API.route('account/:id'), {}, {
-			byUser: {method: 'GET', url:API.route('account/by-user/:id'), isArray:true, static:true}
-		});
+// .factory('API.Account', ['APIObject', 'API',
+// 	function(APIObject, API) {
+// 		return APIObject(API.route('account/:id'), {}, {
+// 			byUser: {method: 'GET', url:API.route('account/by-user/:id'), isArray:true, static:true}
+// 		});
+// 	}])
+.factory('API.Account', ['APIModel', 'API',
+	function(APIModel, API) {
+		return new APIModel({
+				url: 'account',
+				type: "Account\\Account",
+				structure: {
+					'bar': 'Bar\\Bar',
+					'user': 'Auth\\User'
+				},
+				methods: {
+					'me': {url: 'me', static: true},
+				}
+			});
 	}])
 .factory('API.Action', ['APIObject', 'API',
 	function(APIObject, API) {

@@ -36,7 +36,7 @@ angular.module('bars.ctrl.account', [
         ['$scope', 'API.Account', function($scope, Account) {
             $scope.updateAccountsList = function() {
                 $scope.updatingAccountsList = true;
-                $scope.bar.accounts.$reload().$promise.then(function() {
+                $scope.bar.accounts.$reload().then(function() {
                     $scope.updatingAccountsList = false;
                 });
             };

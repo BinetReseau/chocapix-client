@@ -46,7 +46,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Food.all();
 					}],
 					accounts: ['API.Account', function(Account) {
-						return Account.query().$promise;
+						return Account.all();
 					}],
 					user: ['API.User', 'AuthService', function(User, AuthService) {
 						if (AuthService.isAuthenticated()) {
@@ -55,9 +55,9 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 							return null;
 						}
 					}],
-					account: ['API.Me', 'AuthService', function(Me, AuthService) {
+					account: ['API.Account', 'AuthService', function(Account, AuthService) {
 						if (AuthService.isAuthenticated()) {
-							return Me.get().$promise;
+							return Account.me();
 						} else {
 							return null;
 						}
