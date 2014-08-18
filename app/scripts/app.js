@@ -117,7 +117,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Food/details.html",
 				resolve:{
 					foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
-						return Food.get($stateParams.id).$promise;
+						return Food.getSync($stateParams.id);
 					}],
 					foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
 						return Transaction.byItem({id: $stateParams.id});
@@ -142,7 +142,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Account/detail.html",
 				resolve:{
 					account: ['API.Account', '$stateParams', function(Account, $stateParams) {
-						return Account.get($stateParams.id).$promise;
+						return Account.getSync($stateParams.id);
 					}],
 					history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
 						return Transaction.byAccount({id: $stateParams.id});

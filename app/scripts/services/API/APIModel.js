@@ -278,17 +278,11 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             return new this.APIEntity(obj);
         };
         APIModel.prototype.get = function(id) {
-            var obj = this.memory_store.get(id);
-            if(!obj) {
+            if(!this.memory_store.get(id)) {
                 var self = this;
-                obj = this.create({id: id});
-                obj = this.memory_store.create(obj);
-                var hadPromise = !!obj.$promise;
-                obj.$promise = this.remote_store.get(id)
+                this.link(this.create({id: id}));
+                this.remote_store.get(id)
                     .then(function(obj) {
-                        if(!hadPromise) {
-                            obj.$promise = $q.when(obj);
-                        }
                         return self.memory_store.update(id, obj);
                     })
                     .catch(function(error) {
@@ -296,10 +290,20 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                         self.memory_store.delete(id);
                         return error;
                     });
-            } else if(!obj.$promise) {
-                obj.$promise = $q.when(obj);
             }
             return this.memory_store.get(id);
+
+        };
+        APIModel.prototype.getSync = function(id) {
+            if(this.memory_store.get(id)) {
+                return $q.when(this.memory_store.get(id));
+            } else {
+                var self = this;
+                return this.remote_store.get(id)
+                    .then(function(obj) {
+                        return self.memory_store.update(id, obj);
+                    });
+            }
         };
         APIModel.prototype.reload = function(id) {
             var self = this;
