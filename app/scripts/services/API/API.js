@@ -84,12 +84,6 @@ angular.module('bars.API', [
 				}
 			});
 	}])
-.factory('API.Me', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(API.route('account/me'), {}, {
-			all: {method:'GET', url:API.route('../nobar/auth/me'), static: true}
-		});
-	}])
 // .factory('API.User', ['APIObject', 'API',
 // 	function(APIObject, API) {
 // 		return APIObject(API.route('user/:id'), {id:'@id'}, {
