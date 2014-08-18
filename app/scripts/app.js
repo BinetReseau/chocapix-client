@@ -43,7 +43,6 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Bar.get($stateParams.bar);
 					}],
 					foods: ['API.Food', function(Food) {
-						Food.init();
 						return Food.all();
 					}],
 					accounts: ['API.Account', function(Account) {

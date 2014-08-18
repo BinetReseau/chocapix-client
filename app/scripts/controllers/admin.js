@@ -23,9 +23,10 @@ angular.module('bars.ctrl.admin', [
 			$scope.admin.active = 'food';
 			$scope.food = Food.create();
 			$scope.addFood = function(food) {
-				Food.store(food).then(function(newFood) {
+				Food.save(food).then(function(newFood) {
 					$scope.food = Food.create();
-					// $events.$broadcast('bars.food.add', newFood);
+				}, function(errors) {
+					// TODO: display form errors
 				});
 			};
 		}

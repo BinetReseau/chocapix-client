@@ -20,7 +20,7 @@ module.factory('BaseAPIEntity', [
             _.assign(this, obj);
         };
         BaseAPIEntity.prototype.$save = function() {
-            this.model.save(this.id);
+            this.model.update(this.id, this);
         };
         return BaseAPIEntity;
     }
@@ -48,7 +48,7 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
             }
             return obj;
         };
-        APIInterface.prototype.unParse = function(obj) {
+        APIInterface.prototype.unparse = function(obj) {
             return _.omit(obj, ['model']);
         };
 
@@ -149,7 +149,7 @@ module.factory('RemoteEntityStore', ['APIInterface',
  *              'bar': 'Bar\\Bar'
  *          },
  *          methods: {
- *              'markDeleted': {method:'PUT', url: 'markDeleted', storeResult: true},
+ *              'markDeleted': {method:'PUT', url: 'markDeleted', linkResult: true},
  *              'me': {url: '/../nobar/auth/me', static: true}
  *          }
  *      });
@@ -175,8 +175,8 @@ module.factory('RemoteEntityStore', ['APIInterface',
  *
  *         An entity passed as data will be correctly serialized. An entity returned in the
  *         response will be seserialized.
- *         If storeResult:true, the received entities will be stored to the correct model's cache
- *         If a not static method has no data parameter, the entity will be passed as data.
+ *         If linkResult:true, the received entities will be linked with the correct model's cache
+ *         If a non-static method has no data parameter, the entity will be passed as data.
  */
 
 
@@ -224,15 +224,25 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     enumerable: false,
                     writable: true,
                     value: function() {
-                        function request() {
-                            var req = _.omit(method, ["static", "type"]);
+                        var self_entity = this;
+                        function request(data) {
+                            var req = _.omit(method, ["static", "linkResult"]);
                             if(req.url && req.url.charAt(0) != "/") {
-                                req.url = self.url + "/" + req.url; // TODO
+                                req.url = self.url + (method.static ? "" : "/" + self_entity.id) + "/" + req.url;
                             }
-                            req.data = req.data || this;
+                            req.data = data || req.data || self_entity;
                             return APIInterface.request(req);
                         }
-                        return request(); // TODO: wrapper function
+                        var promise = request(); // TODO: wrapper function?
+                        if(method.linkResult) {
+                            promise = promise.then(function(entity) {
+                                if(entity instanceof BaseAPIEntity) {
+                                    return self.store(entity);
+                                }
+                                return entity;
+                            });
+                        }
+                        return promise;
                     }
                 });
             });
@@ -267,12 +277,15 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         APIModel.prototype.all = function() {
             return this.memory_store.all();
         };
-        APIModel.prototype.store = function(obj) {
+        APIModel.prototype.save = function(obj) {
             var self = this;
             return this.remote_store.create(obj)
                 .then(function(obj) {
                     return self.memory_store.create(obj);
             });
+        };
+        APIModel.prototype.store = function(obj) {
+            return this.memory_store.update(obj.id, obj);
         };
         APIModel.prototype.update = function(id, obj) {
             var self = this;

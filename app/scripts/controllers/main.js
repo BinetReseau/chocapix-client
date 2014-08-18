@@ -51,7 +51,7 @@ angular.module('bars.ctrl.main', [
             $scope.$on('bars.food.add', function(evt, food) {
             	$scope.bar.foods.push(food);
             });
-			$scope.$on('bars.food.update', $scope.bar.foods.$reload);
+			// $scope.$on('bars.food.update', $scope.bar.foods.$reload);
 
 			// bounce events to child scopes
 			// ['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
