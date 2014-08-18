@@ -2,7 +2,7 @@
 
 angular.module('bars.API', [
 	'APIObject',
-	'APIInterface'
+	'APIModel'
 ])
 
 .factory('API', [
