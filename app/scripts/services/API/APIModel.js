@@ -51,6 +51,17 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
         APIInterface.prototype.unparse = function(obj) {
             return _.omit(obj, ['model']);
         };
+        APIInterface.prototype.link = function(obj) {
+            if(_.isArray(obj)) {
+                return _.map(obj, _.bind(this.link, this));
+            }
+            if(!(obj instanceof BaseAPIEntity)) {
+                obj = this.parse(obj);
+            }
+            if(obj.id && obj instanceof BaseAPIEntity) {
+                return obj.model.link(obj);
+            }
+        };
 
         APIInterface.prototype.request = function(req) {
             var self = this;
@@ -175,7 +186,7 @@ module.factory('RemoteEntityStore', ['APIInterface',
  *
  *         An entity passed as data will be correctly serialized. An entity returned in the
  *         response will be seserialized.
- *         If linkResult:true, the received entities will be linked with the correct model's cache
+ *         If linkResult:true (default), the received entities will be linked with the correct model's cache
  *         If a non-static method has no data parameter, the entity will be passed as data.
  */
 
@@ -219,6 +230,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
 
             _.forOwn(config.methods, function(method, key) {
                 var obj = method.static ? self : self.APIEntity.prototype;
+                method.linkResult = method.linkResult === undefined ? true : method.linkResult; // Default to true
                 Object.defineProperty(obj, key, {
                     configurable: true,
                     enumerable: false,
@@ -237,7 +249,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                         if(method.linkResult) {
                             promise = promise.then(function(entity) {
                                 if(entity instanceof BaseAPIEntity) {
-                                    return self.store(entity);
+                                    return APIInterface.link(entity);
                                 }
                                 return entity;
                             });
@@ -284,7 +296,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     return self.memory_store.create(obj);
             });
         };
-        APIModel.prototype.store = function(obj) {
+        APIModel.prototype.link = function(obj) {
             return this.memory_store.update(obj.id, obj);
         };
         APIModel.prototype.update = function(id, obj) {
