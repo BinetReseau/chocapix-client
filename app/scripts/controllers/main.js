@@ -88,6 +88,9 @@ angular.module('bars.ctrl.main', [
 					errorMessage: ''
 				};
 
+				if(qo === "") {
+					return $scope.query;
+				}
 				// On découpe la requête en termes
 				var terms = qo.split(' ');
 
