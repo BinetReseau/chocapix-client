@@ -41,11 +41,11 @@ angular.module('bars.ctrl.food', [])
 				}
 			};
 
-			// $scope.$on('bars.food.update', function(evt, food){
-			// 	if(food.id === $scope.foodDetails.id) {
-			// 		$scope.foodDetails.$reload();
-			// 	}
-			// });
+			$scope.$on('bars.food.update', function(evt, food){
+				if(food.id === $scope.foodDetails.id) {
+					$scope.foodDetails.$reload();
+				}
+			});
 		}])
 	.controller('FoodListCtrl',
 		['$scope', function($scope) {

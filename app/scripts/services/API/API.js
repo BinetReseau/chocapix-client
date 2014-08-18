@@ -79,8 +79,8 @@ angular.module('bars.API', [
 					'bar': 'Bar\\Bar'
 				},
 				methods: {
-					'markDeleted': {method:'PUT', url: 'markDeleted', linkResult: true},
-					'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted', linkResult: true}
+					'markDeleted': {method:'PUT', url: 'markDeleted'},
+					'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted'}
 				}
 			});
 	}])
@@ -101,7 +101,7 @@ angular.module('bars.API', [
 				url: 'user',
 				type: "Auth\\User",
 				methods: {
-					'me': {url: '/../nobar/auth/me',/* linkResult: true,*/ static: true}
+					'me': {url: '/../nobar/auth/me', static: true},
 				}
 			});
 	}])
