@@ -208,24 +208,31 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         function APIModel(config) {
             this.url = config.url;
             this.model_type = config.type;
-            config.structure = config.structure || {};
-            config.methods = config.methods || {};
+            this.structure = config.structure || {};
+            this.methods = config.methods || {};
 
             this.memory_store = new MemoryEntityStore();
             this.remote_store = new RemoteEntityStore(this.url);
             this.memory_store.all().$reload = _.bind(this.reload, this); // TODO: temporary
 
-            APIInterface.registerModel(config.type, this);
+            APIInterface.registerModel(this.model_type, this);
 
+            APIModel.createEntityClass.call(this, this.structure);
+            APIModel.addMethods.call(this, this.methods);
+
+            this.reload(); // TODO: handle caching correctly
+        }
+
+        APIModel.createEntityClass = function(structure) {
             var self = this;
-            this.APIEntity = function(obj){
+            this.APIEntity = function APIEntity(obj){
                 BaseAPIEntity.call(this, obj);
             };
             this.APIEntity.prototype = new BaseAPIEntity();
             this.APIEntity.prototype.model = this;
-            this.APIEntity.prototype._type = config.type;
+            this.APIEntity.prototype._type = this.model_type;
 
-            _.forOwn(config.structure, function(type, key) {
+            _.forOwn(structure, function(type, key) {
                 Object.defineProperty(self.APIEntity.prototype, key, {
                     configurable: true,
                     enumerable: false,
@@ -240,10 +247,13 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     }
                 });
             });
+        };
 
-            _.forOwn(config.methods, function(method, key) {
+        APIModel.addMethods = function(methods) {
+            var self = this;
+            _.forOwn(methods, function(method, key) {
+                _.defaults(method, {linkResult: true});
                 var obj = method.static ? self : self.APIEntity.prototype;
-                method.linkResult = method.linkResult === undefined ? true : method.linkResult; // Default to true
                 Object.defineProperty(obj, key, {
                     configurable: true,
                     enumerable: false,
@@ -271,9 +281,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     }
                 });
             });
-
-            this.reload(); // TODO: handle caching correctly
-        }
+        };
 
         APIModel.prototype.create = function(obj) {
             return new this.APIEntity(obj);
