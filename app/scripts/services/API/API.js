@@ -14,7 +14,8 @@ angular.module('bars.API', [
 			},
 			route: function(path){
 				// return '/'+barId+'/'+path;
-				return '/../../bars-symfony/web/' + barId + (path==='' ? '' : '/'+path);
+				// return '/../../bars-symfony/web/' + barId + (path==='' ? '' : '/'+path);
+				return '/../..' + (path==='' ? '' : '/'+path);
 			}
 		};
 }])
@@ -29,10 +30,10 @@ angular.module('bars.API', [
 	function(APIModel, API) {
 		return new APIModel({
 				url: 'account',
-				type: "Account\\Account",
+				type: "Account",
 				structure: {
-					'bar': 'Bar\\Bar',
-					'user': 'Auth\\User'
+					'bar': 'Bar',
+					'user': 'User'
 				},
 				methods: {
 					'me': {url: 'me', static: true},
@@ -57,7 +58,7 @@ angular.module('bars.API', [
 	function(APIModel, API) {
 		return new APIModel({
 				url: 'bar',
-				type: "Bar\\Bar",
+				type: "Bar",
 				structure: {},
 				methods: {}
 			});
@@ -74,9 +75,9 @@ angular.module('bars.API', [
 	function(APIModel, API) {
 		return new APIModel({
 				url: 'food',
-				type: "Stock\\StockItem",
+				type: "Item",
 				structure: {
-					'bar': 'Bar\\Bar'
+					'bar': 'Bar'
 				},
 				methods: {
 					'markDeleted': {method:'PUT', url: 'markDeleted'},
@@ -93,7 +94,7 @@ angular.module('bars.API', [
 	function(APIModel, API) {
 		return new APIModel({
 				url: 'user',
-				type: "Auth\\User",
+				type: "User",
 				methods: {
 					'me': {url: '/../nobar/auth/me', static: true},
 				}

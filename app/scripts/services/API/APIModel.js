@@ -71,7 +71,8 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
             if(req.data instanceof BaseAPIEntity) {
                 req.data = this.unparse(req.data);
             }
-            req.url = "/../../bars-symfony/web/avironjone" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
+            // req.url = "/../../bars-symfony/web/avironjone" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
+            req.url = "/../.." + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
             return $http(req).then(function(data) {
                 return self.parse(data.data);
             });
