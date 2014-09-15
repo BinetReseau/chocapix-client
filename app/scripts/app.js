@@ -156,7 +156,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/history.html",
 				resolve: {
 					history: ['API.Transaction', '$stateParams', function(Transaction) {
-						return Transaction.query();
+						return Transaction.all();
 					}]
 				},
 				controller: 'HistoryCtrl'

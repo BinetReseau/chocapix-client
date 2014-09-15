@@ -41,16 +41,16 @@
                     <td class="stock">
                         <ng:switch on="h.type">
                             <span ng-switch-when="give">
-                                <span ng-repeat="o in h.operations | filter:'accountoperation'">
-                                    <span ng-if="o.deltamoney > 0">
-                                        <bars:account account="o.account"></bars:account>
-                                    </span>
-                                </span>
+                                <bars:account account="h.account"></bars:account>
                             </span>
                             <span ng-switch-when="punish">
-                                <span ng-repeat="o in h.operations | filter:'accountoperation'">
-                                    <bars:account account="o.account"></bars:account>
-                                </span>
+                                <bars:account account="h.account"></bars:account>
+                            </span>
+                            <span ng-switch-when="buy">
+                                <bars:food food="h.item" qty="-h.qty"></bars:food>
+                            </span>
+                            <span ng-switch-when="appro">
+                                <bars:food food="h.item" qty="h.qty"></bars:food>
                             </span>
                             <span ng-switch-default>
                                 <span ng-if="h.type == 'buy' && (h.operations | filter:'accountoperation').length > 1">
@@ -73,7 +73,6 @@
                                         </table>
                                     </span>
                                     <span ng-if="(h.operations | filter:'stockoperation').length == 1" ng-repeat="o in h.operations | filter:'stockoperation'">
-                                        <bars:food food="o.item" qty="((h.type == 'appro')*2 - 1)*o.deltaqty"></bars:food>
                                     </span>
                                 </span>
                             </span>

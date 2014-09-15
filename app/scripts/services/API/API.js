@@ -100,28 +100,34 @@ angular.module('bars.API', [
 				}
 			});
 	}])
-.factory('API.Transaction', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject(
-			API.route('transaction/:id'), {id:'@id'},
-			{
-				cancel: {method:'DELETE'},
-				uncancel: {method:'POST', url:API.route('transaction/uncancel/:id')},
-				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray: true, static: true},
-				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray: true, static: true}
-			// },
-			// {
-			// 	author: {object: 'API.User'},
-			// 	// operations: {object: 'API.Operation', isArray: true}
-			}
-		);
-	}]);
-// .factory('API.Transaction', ['APIModel', 'API',
-// 	function(APIModel, API) {
-// 		return new APIModel({
-// 				url: 'transaction',
-// 				type: "Transaction",
-// 				methods: {
-// 				}
-// 			});
+// .factory('API.Transaction', ['APIObject', 'API',
+// 	function(APIObject, API) {
+// 		return APIObject(
+// 			API.route('transaction/:id'), {id:'@id'},
+// 			{
+// 				cancel: {method:'DELETE'},
+// 				uncancel: {method:'POST', url:API.route('transaction/uncancel/:id')},
+// 				byAccount: {method:'GET', url:API.route('transaction/by-account/:id'), isArray: true, static: true},
+// 				byItem: {method:'GET', url:API.route('transaction/by-item/:id'), isArray: true, static: true}
+// 			// },
+// 			// {
+// 			// 	author: {object: 'API.User'},
+// 			// 	// operations: {object: 'API.Operation', isArray: true}
+// 			}
+// 		);
 // 	}]);
+.factory('API.Transaction', ['APIModel', 'API',
+	function(APIModel, API) {
+		return new APIModel({
+				url: 'transaction',
+				type: "Transaction",
+				structure: {
+					'bar': 'Bar',
+					'author': 'User',
+					'account': 'Account',
+					'item': 'Item'
+				},
+				methods: {
+				}
+			});
+	}]);
