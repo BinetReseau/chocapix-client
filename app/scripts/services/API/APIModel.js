@@ -240,10 +240,15 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                         return APIInterface.getModel(type).get(this[key+"_id"]);
                     },
                     set: function(v) {
-                        if(!v.id) {
-                            console.log("Warning: affecting an object without id to navigation property", key, "of entity", this,".\nRelationship won't be saved");
+                        if(typeof(v) !== 'object') {
+                            this[key+"_id"] = v;
+                            console.log(this, key, v);
+                        } else {
+                            if(!v || !v.id) {
+                                console.log("Warning: affecting an object without id to navigation property", key, "of entity", this,".\nRelationship won't be saved");
+                            }
+                            this[key+"_id"] = v.id;
                         }
-                        this[key+"_id"] = v.id;
                     }
                 });
             });

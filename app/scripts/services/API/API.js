@@ -33,7 +33,7 @@ angular.module('bars.API', [
 				type: "Account",
 				structure: {
 					'bar': 'Bar',
-					'user': 'User'
+					'owner': 'User'
 				},
 				methods: {
 					'me': {url: 'me', static: true},
@@ -116,3 +116,12 @@ angular.module('bars.API', [
 			}
 		);
 	}]);
+// .factory('API.Transaction', ['APIModel', 'API',
+// 	function(APIModel, API) {
+// 		return new APIModel({
+// 				url: 'transaction',
+// 				type: "Transaction",
+// 				methods: {
+// 				}
+// 			});
+// 	}]);

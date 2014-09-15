@@ -27,7 +27,7 @@ angular.module('bars.directives', [
         templateUrl: 'scripts/directives/views/bars-account.html',
         controller: ['$scope', function($scope) {
             var setUser = function(newValue, oldValue) {
-                $scope.user = $scope.useri || ($scope.account && $scope.account.user) || null;
+                $scope.owner = $scope.useri || ($scope.account && $scope.account.owner) || null;
             };
 
             $scope.$watch('useri', setUser);
