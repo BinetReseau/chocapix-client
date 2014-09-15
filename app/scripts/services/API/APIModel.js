@@ -84,11 +84,12 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
 
 module.factory('MemoryEntityStore', [
     function() {
-        function MemoryEntityStore() {
+        function MemoryEntityStore(broadcast) {
             // Maps entity id with entity object
             this.entity_map = {};
             // Stores entity objects; live array
             this.entity_array = [];
+            this._broadcast = broadcast;
         }
         MemoryEntityStore.prototype.get = function(id) {
             return this.entity_map[id];
@@ -103,21 +104,27 @@ module.factory('MemoryEntityStore', [
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
                 this.entity_array.splice(index, 0, obj);
             }
-            return this.get(id);
+            obj = this.get(id);
+            this._broadcast("add", obj);
+            return obj;
         };
+        MemoryEntityStore.prototype.add = MemoryEntityStore.prototype.create;
         MemoryEntityStore.prototype.update = function(id, obj) {
             if(this.get(id)) {
                 var orig = this.get(id);
                 if(orig !== obj) {
                     orig.$update(obj);
                 }
+                this._broadcast("update", orig);
                 return orig;
             } else {
                 return this.create(obj);
             }
         };
-        MemoryEntityStore.prototype.delete = function(id) {
+        MemoryEntityStore.prototype.delete = function(id, error) {
             if(this.get(id)) {
+                this.update(id, {id:id, _error:error || 'deleted'});
+                this._broadcast("delete", this.get(id));
                 delete this.entity_map[id];
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
                 if(this.entity_array[index].id == id) {
@@ -133,6 +140,7 @@ module.factory('MemoryEntityStore', [
             // });
             this.entity_map = {};
             this.entity_array.splice(0, this.entity_array.length);
+            this._broadcast("clear");
         };
         return MemoryEntityStore;
     }
@@ -203,15 +211,18 @@ module.factory('RemoteEntityStore', ['APIInterface',
  */
 
 
-module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore', 'RemoteEntityStore', '$q',
-    function(BaseAPIEntity, APIInterface, MemoryEntityStore, RemoteEntityStore, $q) {
+module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore', 'RemoteEntityStore', '$q', '$rootScope',
+    function(BaseAPIEntity, APIInterface, MemoryEntityStore, RemoteEntityStore, $q, $rootScope) {
         function APIModel(config) {
+            var self = this;
             this.url = config.url;
             this.model_type = config.type;
             this.structure = config.structure || {};
             this.methods = config.methods || {};
 
-            this.memory_store = new MemoryEntityStore();
+            this.memory_store = new MemoryEntityStore(function(name, obj) {
+                $rootScope.$broadcast("APIModel."+self.model_type+"."+name, obj);
+            });
             this.remote_store = new RemoteEntityStore(this.url);
             this.memory_store.all().$reload = _.bind(this.reload, this); // TODO: temporary
 
@@ -288,6 +299,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             });
         };
 
+
         APIModel.prototype.create = function(obj) {
             return new this.APIEntity(obj);
         };
@@ -300,8 +312,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                         return self.memory_store.update(id, obj);
                     })
                     .catch(function(error) {
-                        self.memory_store.update(id, {});
-                        self.memory_store.delete(id);
+                        self.memory_store.delete(id, error); // TODO: always delete on error ?
                         return error;
                     });
             }
@@ -319,6 +330,9 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     });
             }
         };
+        APIModel.prototype.all = function() {
+            return this.memory_store.all();
+        };
         APIModel.prototype.reload = function(id) {
             var self = this;
             if(id) {
@@ -334,9 +348,6 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     return self.memory_store.all();
                 });
             }
-        };
-        APIModel.prototype.all = function() {
-            return this.memory_store.all();
         };
         APIModel.prototype.save = function(obj) {
             var self = this;
