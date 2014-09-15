@@ -120,7 +120,8 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Food.getSync($stateParams.id);
 					}],
 					foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-						return Transaction.byItem({id: $stateParams.id});
+						// return Transaction.byItem({id: $stateParams.id});
+						return Transaction.all();
 					}]
 				},
 				controller: 'FoodDetailCtrl'
@@ -145,7 +146,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return Account.getSync($stateParams.id);
 					}],
 					history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-						return Transaction.byAccount({id: $stateParams.id});
+						return Transaction.all();
 					}]
 				},
 				controller: 'AccountDetailCtrl'
