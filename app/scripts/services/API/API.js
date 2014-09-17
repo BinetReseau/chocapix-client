@@ -74,7 +74,7 @@ angular.module('bars.API', [
 .factory('API.Food', ['APIModel', 'API',
 	function(APIModel, API) {
 		return new APIModel({
-				url: 'food',
+				url: 'item',
 				type: "Item",
 				structure: {
 					'bar': 'Bar'

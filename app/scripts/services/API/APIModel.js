@@ -40,6 +40,9 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
             this.model_map[key] = model;
         };
         APIInterface.prototype.getModel = function(key) {
+            if(!this.model_map[key]) {
+                throw 'Unknown model: ' + key;
+            }
             return this.model_map[key];
         };
 
@@ -123,8 +126,8 @@ module.factory('MemoryEntityStore', [
         };
         MemoryEntityStore.prototype.delete = function(id, error) {
             if(this.get(id)) {
-                this.update(id, {id:id, _error:error || 'deleted'});
-                this._broadcast("delete", this.get(id));
+                this.update(id, {id:id, _error:error || 'object removed'});
+                this._broadcast("remove", this.get(id));
                 delete this.entity_map[id];
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
                 if(this.entity_array[index].id == id) {
