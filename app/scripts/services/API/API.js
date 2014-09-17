@@ -96,7 +96,7 @@ angular.module('bars.API', [
 				url: 'user',
 				type: "User",
 				methods: {
-					'me': {url: '/../nobar/auth/me', static: true},
+					'me': {url: 'me', static: true},
 				}
 			});
 	}])

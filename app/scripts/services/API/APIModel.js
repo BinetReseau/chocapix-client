@@ -72,7 +72,7 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
                 req.data = this.unparse(req.data);
             }
             // req.url = "/../../bars-symfony/web/avironjone" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
-            req.url = "/../.." + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
+            req.url = "/../.." + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url + (req.url.charAt(-1) ? "" : "/"); // TODO: use correct bar
             return $http(req).then(function(data) {
                 return self.parse(data.data);
             });
@@ -253,7 +253,6 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     set: function(v) {
                         if(typeof(v) !== 'object') {
                             this[key+"_id"] = v;
-                            console.log(this, key, v);
                         } else {
                             if(!v || !v.id) {
                                 console.log("Warning: affecting an object without id to navigation property", key, "of entity", this,".\nRelationship won't be saved");
