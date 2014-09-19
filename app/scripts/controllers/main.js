@@ -99,22 +99,23 @@ angular.module('bars.ctrl.main', [
                 var aAccounts = [];
 
                 function cleana() {
-                    for (var i = (aQty.length - 1); i >= 0; i--) {
+                    var i;
+                    for (i = (aQty.length - 1); i >= 0; i--) {
                         if (aQty[i].used) {
                             aQty.splice(i, 1);
                         }
                     }
-                    for (var i = (aFoods.length - 1); i >= 0; i--) {
+                    for (i = (aFoods.length - 1); i >= 0; i--) {
                         if (aFoods[i].used) {
                             aFoods.splice(i, 1);
                         }
                     }
-                    for (var i = (aUnits.length - 1); i >= 0; i--) {
+                    for (i = (aUnits.length - 1); i >= 0; i--) {
                         if (aUnits[i].used) {
                             aUnits.splice(i, 1);
                         }
                     }
-                    for (var i = (aAccounts.length - 1); i >= 0; i--) {
+                    for (i = (aAccounts.length - 1); i >= 0; i--) {
                         if (aAccounts[i].used) {
                             aAccounts.splice(i, 1);
                         }
@@ -166,8 +167,8 @@ angular.module('bars.ctrl.main', [
                         return (!o.deleted && (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1 ||
                             o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1));
                     }, false);
-                    if (foods.length == 0) {
-                        var foods = $filter('filter')($scope.bar.foods, function (o) {
+                    if (foods.length === 0) {
+                        foods = $filter('filter')($scope.bar.foods, function (o) {
                             return (!o.deleted && (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1 ||
                                 o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1));
                         }, false);
@@ -199,7 +200,7 @@ angular.module('bars.ctrl.main', [
                     if (aFoods.length == 1) {
                         aFoods[0].used = true;
                         $scope.query.food = aFoods[0].food;
-                        if ($scope.query.type == '') {
+                        if ($scope.query.type === '') {
                             $scope.query.type = 'acheter';
                         }
                         cleana();
@@ -207,7 +208,7 @@ angular.module('bars.ctrl.main', [
                     if (aAccounts.length == 1) {
                         $scope.query.account = aAccounts[0];
                         aAccounts[0].used = true;
-                        if ($scope.query.type == '') {
+                        if ($scope.query.type === '') {
                             $scope.query.type = 'donner';
                         }
                         cleana();
@@ -243,19 +244,19 @@ angular.module('bars.ctrl.main', [
 
                 // Erreurs
                 if ($scope.query.type == 'acheter' || $scope.query.type == 'jeter' || $scope.query.type == 'appro') {
-                    if ($scope.query.food == null) {
+                    if ($scope.query.food === null) {
                         $scope.query.hasError = true;
                         $scope.query.errorMessage = "Cet aliment n'existe pas dans ce bar.";
                     }
                 }
                 if ($scope.query.type == 'donner' || $scope.query.type == 'amende') {
-                    if ($scope.query.account == null) {
+                    if ($scope.query.account === null) {
                         $scope.query.hasError = true;
                         $scope.query.errorMessage = "Aucun utilisateur à ce nom dans ce bar.";
                     }
                 }
                 if ($scope.query.type == 'donner') {
-                    if ($scope.query.account != null && $scope.user.account.id == $scope.query.account.id) {
+                    if ($scope.query.account !== null && $scope.user.account.id == $scope.query.account.id) {
                         $scope.query.hideAnalysis = true;
                         $scope.query.hasError = true;
                         $scope.query.errorMessage = "Réfléchis mon grand ! On ne peut pas se faire de don à soi-même !";
