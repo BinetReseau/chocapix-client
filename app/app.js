@@ -10,7 +10,6 @@ var barsApp = angular.module('bars.app', [
   'bars.ctrl.food',
   'bars.ctrl.account',
   'bars.ctrl.history',
-  'bars.ctrl.dev',
   'bars.ctrl.admin',
   'bars.directives',
   'angularMoment',
@@ -64,18 +63,18 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                 },
                 views: {
                     '@': {
-                        templateUrl: "views/bar.html",
+                        templateUrl: "common/bar.html",
                         controller: 'MainBaseCtrl'
                     },
                     'form@bar': {
-                        templateUrl: "views/form.html",
+                        templateUrl: "common/form.html",
                         controller: 'MainFormCtrl'
                     },
                     'header@bar': {
-                        templateUrl: "views/header.html",
+                        templateUrl: "common/header.html",
                     },
                     '@bar': {
-                        templateUrl: "views/home.html",
+                        templateUrl: "common/home.html",
                         controller: 'MainBarCtrl'
                     }
                 }
@@ -89,12 +88,12 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
             })
             .state('bar.food.list', {
                 url: "/list",
-                templateUrl: "views/Food/list.html",
+                templateUrl: "components/API/food/list.html",
                 controller: 'FoodListCtrl'
             })
             .state('bar.food.detail', {
                 url: "/:id",
-                templateUrl: "views/Food/details.html",
+                templateUrl: "components/API/food/details.html",
                 resolve:{
                     foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
                         return Food.getSync($stateParams.id);
@@ -115,12 +114,12 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
             })
             .state('bar.account.list', {
                 url: "/list",
-                templateUrl: "views/Account/list.html",
+                templateUrl: "components/API/account/list.html",
                 controller: 'AccountsListCtrl'
             })
             .state('bar.account.detail', {
                 url: "/:id",
-                templateUrl: "views/Account/detail.html",
+                templateUrl: "components/API/account/detail.html",
                 resolve:{
                     account: ['API.Account', '$stateParams', function(Account, $stateParams) {
                         return Account.getSync($stateParams.id);
@@ -134,7 +133,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 
             .state('bar.history', {
                 url: "/history",
-                templateUrl: "views/history.html",
+                templateUrl: "components/API/history/history.html",
                 resolve: {
                     history: ['API.Transaction', '$stateParams', function(Transaction) {
                         return Transaction.all();
@@ -142,27 +141,22 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                 },
                 controller: 'HistoryCtrl'
             })
-            .state('bar.dev', {
-                url: "/dev",
-                templateUrl: "views/dev.html",
-                controller: 'DevCtrl'
-            })
             .state('bar.admin', {
                 url: "/admin",
                 views: {
                     '@bar': {
-                        templateUrl: "views/admin/layout.html",
+                        templateUrl: "components/admin/layout.html",
                         controller: 'AdminBaseCtrl'
                     },
                     '@bar.admin': {
-                        templateUrl: "views/admin/dashboard.html",
+                        templateUrl: "components/admin/dashboard.html",
                         controller: 'AdminHomeCtrl'
                     }
                 }
             })
             .state('bar.admin.food', {
                 url: "/food",
-                templateUrl: "views/admin/Food/home.html",
+                templateUrl: "components/admin/Food/home.html",
                 controller: 'AdminFoodCtrl'
             });
 }]);

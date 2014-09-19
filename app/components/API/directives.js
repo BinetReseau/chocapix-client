@@ -10,7 +10,7 @@ angular.module('bars.directives', [
             unit: '=?unit',
             qty: '=?qty'
         },
-        templateUrl: 'scripts/directives/views/bars-food.html',
+        templateUrl: 'components/API/food/bars-food.html',
         controller: ['$scope', function($scope) {
             $scope.unit = $scope.unit || ($scope.food && $scope.food.unit) || '';
         }]
@@ -23,7 +23,7 @@ angular.module('bars.directives', [
             account: '=account',
             useri: "=?user"
         },
-        templateUrl: 'scripts/directives/views/bars-account.html',
+        templateUrl: 'components/API/account/bars-account.html',
         controller: ['$scope', function($scope) {
             var setUser = function(newValue, oldValue) {
                 $scope.owner = $scope.useri || ($scope.account && $scope.account.owner) || null;
@@ -41,7 +41,7 @@ angular.module('bars.directives', [
         scope: {
             history: '=history'
         },
-        templateUrl: 'scripts/directives/views/bars-history.html',
+        templateUrl: 'components/API/history/bars-history.html',
         controller: ['$scope',
             function($scope) {
                 var prepareDisplay = function(newValue, oldValue) {

@@ -123,9 +123,10 @@ module.factory('MemoryEntityStore', [
                 this.entity_map[id] = obj;
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
                 this.entity_array.splice(index, 0, obj);
+                this._broadcast("add", obj);
+                console.log(obj._type+'('+obj.id+')', obj);
             }
             obj = this.get(id);
-            this._broadcast("add", obj);
             return obj;
         };
         MemoryEntityStore.prototype.add = MemoryEntityStore.prototype.create;
@@ -261,12 +262,10 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             };
             this.APIEntity.prototype = new BaseAPIEntity();
             this.APIEntity.prototype._type = this.model_type;
-            // this.APIEntity.prototype.model = this;
+            // Prevents infinite recursion in searches
             Object.defineProperty(this.APIEntity.prototype, 'model', {
-                configurable: true,
-                enumerable: false,
-                writable: true,
-                value: self
+                configurable: true, enumerable: false,
+                writable: true, value: self
             });
 
             _.forOwn(structure, function(type, key) {

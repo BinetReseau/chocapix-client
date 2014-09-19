@@ -1,5 +1,5 @@
 !.gitkeep
-/app/bower_components/
+/app/assets/bower_components/
 /node_modules/
 logs/
 tmp
