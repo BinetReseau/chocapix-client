@@ -41,32 +41,10 @@ angular.module('bars.ctrl.main', [
 					}
 				);
 			};
-
-			$scope.$on('bars.account.update', function(evt, account){
-				if(account.id === $scope.user.account.id) {
-					$scope.user.account.$reload();
-				}
-			});
-            $scope.$on('bars.account.update', $scope.bar.accounts.$reload);
-            $scope.$on('bars.food.add', function(evt, food) {
-            	$scope.bar.foods.push(food);
-            });
-			// $scope.$on('bars.food.update', $scope.bar.foods.$reload);
-
-			// bounce events to child scopes
-			// ['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
-			// 	$scope.$on(evt_name, function(evt, o){
-			// 		if(evt.targetScope !== $scope) {
-			// 			console.log({name: evt.name, arg: o});
-			// 			evt.stopPropagation();
-			// 			$scope.$broadcast(evt_name, o);
-			// 		}
-			// 	});
-			// });
 		}])
 	.controller('MainFormCtrl',
-		['$scope', '$filter', 'API.Food', 'API.Action', '$events',
-		function($scope, $filter, Food, APIAction, $events) {
+		['$scope', '$filter', 'API.Food', 'API.Action',
+		function($scope, $filter, Food, APIAction) {
 			$scope.query = {
 				type: 'acheter',
 				qty: 1,

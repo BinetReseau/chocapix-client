@@ -3,8 +3,8 @@
 angular.module('bars.ctrl.account', [
     ])
     .controller('AccountDetailCtrl',
-        ['$scope', 'account', 'history', 'API.Action', '$events',
-        function($scope, account, history, APIAction, $events) {
+        ['$scope', 'account', 'history', 'API.Action',
+        function($scope, account, history, APIAction) {
             $scope.accountDetail = account;
             $scope.history = history;
             $scope.queryType = 'give';
@@ -23,12 +23,6 @@ angular.module('bars.ctrl.account', [
                     });
                 }
             };
-
-            $scope.$on('bars.account.update', function(evt, account){
-                if(account.id == $scope.accountDetail.id) {
-                    $scope.accountDetail.$reload();
-                }
-            });
         }])
     .controller('AccountsListCtrl',
         ['$scope', 'API.Account', function($scope, Account) {

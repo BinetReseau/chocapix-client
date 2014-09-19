@@ -18,8 +18,8 @@ angular.module('bars.ctrl.admin', [
 		}
 	])
 	.controller('AdminFoodCtrl',
-		['$scope', '$events', 'API.Food',
-		function($scope, $events, Food) {
+		['$scope', 'API.Food',
+		function($scope, Food) {
 			$scope.admin.active = 'food';
 			$scope.food = Food.create();
 			$scope.addFood = function(food) {

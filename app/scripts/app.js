@@ -6,7 +6,6 @@ var barsApp = angular.module('bars.app', [
   'ui.bootstrap',
   'bars.auth',
   'bars.API',
-  'bars.events',
   'bars.ctrl.main',
   'bars.ctrl.food',
   'bars.ctrl.account',
@@ -61,25 +60,6 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						} else {
 							return null;
 						}
-					}],
-					$events: ['$events', function($events){
-						$events.addEventTransformer('bars.transaction.new', 'bars.transaction.add');
-						$events.addEventTransformer('bars.transaction.add', 'bars.transaction.operations.update');
-						$events.addEventTransformer('bars.transaction.update', 'bars.transaction.operations.update');
-						$events.addEventTransformer('bars.transaction.operations.update', function(transaction) {
-							var evts = [], o;
-							for (var i = 0; i < transaction.operations.length; i++) {
-								o = transaction.operations[i];
-								if(o.type == 'stockoperation') {
-									evts.push({evt: 'bars.food.update', arg: o.item});
-								} else if(o.type == 'accountoperation') {
-									evts.push({evt: 'bars.account.update', arg: o.account});
-								}
-							}
-							return evts;
-						});
-						//$events.addEventTransformer('bars.food.add', 'bars.food.update');
-						return $events;
 					}]
 				},
 				views: {

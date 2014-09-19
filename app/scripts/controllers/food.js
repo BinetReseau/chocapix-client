@@ -3,8 +3,8 @@
 angular.module('bars.ctrl.food', [])
 	.controller(
 		'FoodDetailCtrl',
-		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory', '$events',
-		function($scope, $stateParams, APIAction, foodDetails, foodHistory, $events) {
+		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory',
+		function($scope, $stateParams, APIAction, foodDetails, foodHistory) {
 			$scope.foodDetails = foodDetails;
 			$scope.history = foodHistory;
 			$scope.queryQty = 1;
@@ -18,23 +18,11 @@ angular.module('bars.ctrl.food', [])
 			};
 			$scope.trashIt = function() {
 				if ($scope.foodDetails.deleted) {
-					$scope.foodDetails.unMarkDeleted();
-					// $scope.foodDetails.unremove({id: $scope.foodDetails.id}).$promise.then(function(newFood) {
-					// 	$events.$broadcast('bars.food.update', newFood);
-					// });
+					$scope.foodDetails.unMarkDeleted(); // Todo: adapt to new API
 				} else {
-					$scope.foodDetails.markDeleted();
-					// $scope.foodDetails.remove({id: $scope.foodDetails.id}).$promise.then(function(newFood) {
-					// 	$events.$broadcast('bars.food.update', newFood);
-					// });
+					$scope.foodDetails.markDeleted(); // Todo: adapt to new API
 				}
 			};
-
-			$scope.$on('bars.food.update', function(evt, food){
-				if(food.id === $scope.foodDetails.id) {
-					$scope.foodDetails.$reload();
-				}
-			});
 		}])
 	.controller('FoodListCtrl',
 		['$scope', function($scope) {
