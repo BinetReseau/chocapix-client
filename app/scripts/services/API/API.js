@@ -40,15 +40,29 @@ angular.module('bars.API', [
 				}
 			});
 	}])
-.factory('API.Action', ['APIObject', 'API',
-	function(APIObject, API) {
-		return APIObject('', {}, {
-			buy: {method:'POST', url:API.route('action/buy'), static: true, object: 'API.Transaction'},
-			give: {method: 'POST', url:API.route('action/give'), static: true, object: 'API.Transaction'},
-			throwaway: {method: 'POST', url:API.route('action/throw'), static: true, object: 'API.Transaction'},
-			punish: {method: 'POST', url:API.route('action/punish'), static: true, object: 'API.Transaction'},
-			appro: {method:'POST', url:API.route('action/appro'), static: true, object: 'API.Transaction'},
+// .factory('API.Action', ['APIObject', 'API',
+// 	function(APIObject, API) {
+// 		return APIObject('', {}, {
+// 			buy: {method:'POST', url:API.route('action/buy'), static: true, object: 'API.Transaction'},
+// 			give: {method: 'POST', url:API.route('action/give'), static: true, object: 'API.Transaction'},
+// 			throwaway: {method: 'POST', url:API.route('action/throw'), static: true, object: 'API.Transaction'},
+// 			punish: {method: 'POST', url:API.route('action/punish'), static: true, object: 'API.Transaction'},
+// 			appro: {method:'POST', url:API.route('action/appro'), static: true, object: 'API.Transaction'},
+// 		});
+// 	}])
+.factory('API.Action', ['API.Transaction',
+	function(Transaction) {
+		var actions = ["buy", "give", "throw", "punish", "appro"];
+		var Action = {};
+		actions.forEach(function(action) {
+			Action[action] = function(params) {
+				var transaction = Transaction.create();
+				transaction.type = action;
+				_.extend(transaction, params);
+				return transaction.$save();
+			};
 		});
+		return Action;
 	}])
 // .factory('API.Bar', ['APIObject', 'API',
 // 	function(APIObject, API) {

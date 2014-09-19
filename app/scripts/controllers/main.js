@@ -294,44 +294,18 @@ angular.module('bars.ctrl.main', [
 				if ($scope.query.food === null && $scope.query.account === null) {
 					return;
 				}
-				if ($scope.query.type == 'acheter') {
+				var type = $scope.query.type;
+				type = {'acheter': 'buy', 'jeter': 'throw', 'donner': 'give', 'amende': 'punish', 'appro': 'appro'}[type]; // Use correct names
+
+				if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
 					if (!$scope.query.hasError) {
-						APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'jeter') {
-					if (!$scope.query.hasError) {
-						APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'donner') {
-					var id = $scope.query.account.id;
-					if (!$scope.query.hasError) {
-						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'amende') {
-					var id = $scope.query.account.id;
-					if (!$scope.query.hasError) {
-						APIAction.punish({accused: id, qty: $scope.query.qty, motive: 'A renseigner...'}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'appro') {
-					if (!$scope.query.hasError) {
-						APIAction.appro({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
+						var req;
+						if(_.contains(['buy', 'throw', 'appro'], type)) {
+							req = {item: $scope.query.food.id, qty: $scope.query.qty};
+						} else {
+							req = {account: $scope.query.account.id, amount: $scope.query.qty};
+						}
+						APIAction[type](req).then(function() {
 							$scope.bar.search = '';
 						});
 					}
