@@ -11,7 +11,6 @@ var barsApp = angular.module('bars.app', [
   'bars.ctrl.account',
   'bars.ctrl.history',
   'bars.ctrl.admin',
-  'bars.directives',
   'angularMoment',
   // 'APIModel'
 ]);
