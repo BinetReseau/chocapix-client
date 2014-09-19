@@ -4,8 +4,8 @@ angular.module('bars.ctrl.main', [
 	'bars.filters'
 	])
 	.controller('MainBaseCtrl',
-		['$scope', '$stateParams', 'AuthService', 'API.Me', 'foods', 'bar', 'accounts', 'user', 'account',
-		function($scope, $stateParams, AuthService, Me, foods, bar, accounts, user, account) {
+		['$scope', '$stateParams', 'AuthService', 'API.Account', 'API.User', 'foods', 'bar', 'accounts', 'user', 'account',
+		function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
 			$scope.bar = {
 				id: $stateParams.bar,
 				name: bar.name,
@@ -21,7 +21,7 @@ angular.module('bars.ctrl.main', [
 				account: account
 			};
 			$scope.login = {
-				login: '',
+				username: '',
 				password: ''
 			};
 
@@ -30,9 +30,13 @@ angular.module('bars.ctrl.main', [
 				$scope.inLogin = true;
 				AuthService.login(login).then(
 					function(user) {
-						$scope.user.infos = user;
-						$scope.user.account = Me.get();
-						$scope.login = {login: '', password: ''};
+						$scope.user.infos = User.me().then(function(user) {
+							$scope.user.infos = user;
+						});
+						$scope.user.account = Account.me().then(function(account) {
+							$scope.user.account = account;
+						});
+						$scope.login = {username: '', password: ''};
 						$scope.inLogin = false;
 					}, function() {
 						$scope.loginError = true;
@@ -41,32 +45,10 @@ angular.module('bars.ctrl.main', [
 					}
 				);
 			};
-
-			$scope.$on('bars.account.update', function(evt, account){
-				if(account.id === $scope.user.account.id) {
-					$scope.user.account.$reload();
-				}
-			});
-            $scope.$on('bars.account.update', $scope.bar.accounts.$reload);
-            $scope.$on('bars.food.add', function(evt, food) {
-            	$scope.bar.foods.push(food);
-            });
-			$scope.$on('bars.food.update', $scope.bar.foods.$reload);
-
-			// bounce events to child scopes
-			// ['bars_update_food', 'bars_update_account', 'bars_update_history'].forEach(function(evt_name) {
-			// 	$scope.$on(evt_name, function(evt, o){
-			// 		if(evt.targetScope !== $scope) {
-			// 			console.log({name: evt.name, arg: o});
-			// 			evt.stopPropagation();
-			// 			$scope.$broadcast(evt_name, o);
-			// 		}
-			// 	});
-			// });
 		}])
 	.controller('MainFormCtrl',
-		['$scope', '$filter', 'API.Food', 'API.Action', '$events',
-		function($scope, $filter, Food, APIAction, $events) {
+		['$scope', '$filter', 'API.Food', 'API.Action',
+		function($scope, $filter, Food, APIAction) {
 			$scope.query = {
 				type: 'acheter',
 				qty: 1,
@@ -88,6 +70,9 @@ angular.module('bars.ctrl.main', [
 					errorMessage: ''
 				};
 
+				if(qo === "") {
+					return $scope.query;
+				}
 				// On découpe la requête en termes
 				var terms = qo.split(' ');
 
@@ -202,7 +187,7 @@ angular.module('bars.ctrl.main', [
 
 					// Account
 					var accounts = $filter('filter')($scope.bar.accounts, function (o) {
-						return (o.user.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
+						return (o.owner.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
 					}, false);
 					if (accounts.length == 1) {
 						aAccounts.push(accounts[0]);
@@ -291,44 +276,18 @@ angular.module('bars.ctrl.main', [
 				if ($scope.query.food === null && $scope.query.account === null) {
 					return;
 				}
-				if ($scope.query.type == 'acheter') {
+				var type = $scope.query.type;
+				type = {'acheter': 'buy', 'jeter': 'throw', 'donner': 'give', 'amende': 'punish', 'appro': 'appro'}[type]; // Use correct names
+
+				if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
 					if (!$scope.query.hasError) {
-						APIAction.buy({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'jeter') {
-					if (!$scope.query.hasError) {
-						APIAction.throwaway({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'donner') {
-					var id = $scope.query.account.id;
-					if (!$scope.query.hasError) {
-						APIAction.give({recipient: id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'amende') {
-					var id = $scope.query.account.id;
-					if (!$scope.query.hasError) {
-						APIAction.punish({accused: id, qty: $scope.query.qty, motive: 'A renseigner...'}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
-							$scope.bar.search = '';
-						});
-					}
-				}
-				if ($scope.query.type == 'appro') {
-					if (!$scope.query.hasError) {
-						APIAction.appro({item: $scope.query.food.id, qty: $scope.query.qty}).$promise.then(function(transaction) {
-							$events.$broadcast('bars.transaction.new', transaction);
+						var req;
+						if(_.contains(['buy', 'throw', 'appro'], type)) {
+							req = {item: $scope.query.food.id, qty: $scope.query.qty};
+						} else {
+							req = {account: $scope.query.account.id, amount: $scope.query.qty};
+						}
+						APIAction[type](req).then(function() {
 							$scope.bar.search = '';
 						});
 					}

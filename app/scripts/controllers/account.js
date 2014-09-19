@@ -3,8 +3,8 @@
 angular.module('bars.ctrl.account', [
     ])
     .controller('AccountDetailCtrl',
-        ['$scope', 'account', 'history', 'API.Action', '$events',
-        function($scope, account, history, APIAction, $events) {
+        ['$scope', 'account', 'history', 'API.Action',
+        function($scope, account, history, APIAction) {
             $scope.accountDetail = account;
             $scope.history = history;
             $scope.queryType = 'give';
@@ -12,31 +12,23 @@ angular.module('bars.ctrl.account', [
             $scope.queryQty = '';
             $scope.query = function(qty, type, motive) {
                 if (type == 'give') {
-                    APIAction.give({recipient: account.id, qty: qty}).$promise.then(function(transaction) {
-                        $events.$broadcast('bars.transaction.new', transaction);
+                    APIAction.give({account: account.id, amount: qty}).then(function() {
                         $scope.queryQty = '';
                     });
                 }
                 if (type == 'punish') {
-                    APIAction.punish({accused: account.id, qty: qty, motive: motive}).$promise.then(function(transaction) {
-                        $events.$broadcast('bars.transaction.new', transaction);
+                    APIAction.punish({account: account.id, amount: qty, motive: motive}).then(function() {
                         $scope.queryQty = '';
                         $scope.queryMotive = '';
                     });
                 }
-            }
-
-            $scope.$on('bars.account.update', function(evt, account){
-                if(account.id == $scope.accountDetail.id) {
-                    $scope.accountDetail.$reload();
-                }
-            });
+            };
         }])
     .controller('AccountsListCtrl',
         ['$scope', 'API.Account', function($scope, Account) {
             $scope.updateAccountsList = function() {
                 $scope.updatingAccountsList = true;
-                $scope.bar.accounts.$reload().$promise.then(function() {
+                $scope.bar.accounts.$reload().then(function() {
                     $scope.updatingAccountsList = false;
                 });
             };

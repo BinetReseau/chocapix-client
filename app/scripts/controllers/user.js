@@ -11,7 +11,7 @@ angular.module('bars.ctrl.user', [
 		['$scope', 'API.Account', function($scope, Account) {
 			$scope.updateUserList = function() {
 			    $scope.updatingUserList = true;
-			    $scope.bar.accounts =  Account.query({}, function () {
+			    $scope.bar.accounts.$reload().then(function () {
 				    $scope.updatingUserList = false;
 			    });
 			};

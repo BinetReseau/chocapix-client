@@ -6,7 +6,6 @@ var barsApp = angular.module('bars.app', [
   'ui.bootstrap',
   'bars.auth',
   'bars.API',
-  'bars.events',
   'bars.ctrl.main',
   'bars.ctrl.food',
   'bars.ctrl.account',
@@ -14,7 +13,8 @@ var barsApp = angular.module('bars.app', [
   'bars.ctrl.dev',
   'bars.ctrl.admin',
   'bars.directives',
-  'angularMoment'
+  'angularMoment',
+  // 'APIModel'
 ]);
 
 barsApp.config(['$stateProvider', '$urlRouterProvider',
@@ -39,46 +39,27 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 						return null;
 					}],
 					bar: ['API.Bar' , '$stateParams', function(Bar, $stateParams) {
-						return Bar.get().$promise;
+						return Bar.get($stateParams.bar);
 					}],
 					foods: ['API.Food', function(Food) {
-						return Food.query().$promise;
+						return Food.all();
 					}],
 					accounts: ['API.Account', function(Account) {
-						return Account.query().$promise;
+						return Account.all();
 					}],
-					user: ['API.Me', 'AuthService', function(Me, AuthService) {
+					user: ['API.User', 'AuthService', function(User, AuthService) {
 						if (AuthService.isAuthenticated()) {
-							return Me.all().$promise;
+							return User.me();
 						} else {
 							return null;
 						}
 					}],
-					account: ['API.Me', 'AuthService', function(Me, AuthService) {
+					account: ['API.Account', 'AuthService', function(Account, AuthService) {
 						if (AuthService.isAuthenticated()) {
-							return Me.get().$promise;
+							return Account.me();
 						} else {
 							return null;
 						}
-					}],
-					$events: ['$events', function($events){
-						$events.addEventTransformer('bars.transaction.new', 'bars.transaction.add');
-						$events.addEventTransformer('bars.transaction.add', 'bars.transaction.operations.update');
-						$events.addEventTransformer('bars.transaction.update', 'bars.transaction.operations.update');
-						$events.addEventTransformer('bars.transaction.operations.update', function(transaction) {
-							var evts = [], o;
-							for (var i = 0; i < transaction.operations.length; i++) {
-								o = transaction.operations[i];
-								if(o.type == 'stockoperation') {
-									evts.push({evt: 'bars.food.update', arg: o.item});
-								} else if(o.type == 'accountoperation') {
-									evts.push({evt: 'bars.account.update', arg: o.account});
-								}
-							};
-							return evts;
-						});
-						//$events.addEventTransformer('bars.food.add', 'bars.food.update');
-						return $events;
 					}]
 				},
 				views: {
@@ -116,10 +97,11 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Food/details.html",
 				resolve:{
 					foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
-						return Food.get({id:$stateParams.id}).$promise;
+						return Food.getSync($stateParams.id);
 					}],
 					foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-						return Transaction.byItem({id: $stateParams.id});
+						// return Transaction.byItem({id: $stateParams.id});
+						return Transaction.all();
 					}]
 				},
 				controller: 'FoodDetailCtrl'
@@ -141,10 +123,10 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/Account/detail.html",
 				resolve:{
 					account: ['API.Account', '$stateParams', function(Account, $stateParams) {
-						return Account.get({id: $stateParams.id}).$promise;
+						return Account.getSync($stateParams.id);
 					}],
 					history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-						return Transaction.byAccount({id: $stateParams.id});
+						return Transaction.all();
 					}]
 				},
 				controller: 'AccountDetailCtrl'
@@ -155,7 +137,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				templateUrl: "views/history.html",
 				resolve: {
 					history: ['API.Transaction', '$stateParams', function(Transaction) {
-						return Transaction.query();
+						return Transaction.all();
 					}]
 				},
 				controller: 'HistoryCtrl'
@@ -182,7 +164,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
 				url: "/food",
 				templateUrl: "views/admin/Food/home.html",
 				controller: 'AdminFoodCtrl'
-			})
+			});
 }]);
 
 barsApp.config(['$httpProvider',
@@ -204,6 +186,6 @@ barsApp.run(function(amMoment) {
 	amMoment.changeLanguage('fr');
 });
 
-// barsApp.run(['APIObject',function(APIObject){
-// 	APIObject("", {}, {});
-// }])
+// barsApp.run(['API.Bar', function(Bar){
+// 	console.log(Bar.get("avironjone"));
+// }]);

@@ -18,28 +18,15 @@ angular.module('bars.ctrl.admin', [
 		}
 	])
 	.controller('AdminFoodCtrl',
-		['$scope',
-		'$events',
-		'API.Food',
-		function($scope, $events, Food) {
+		['$scope', 'API.Food',
+		function($scope, Food) {
 			$scope.admin.active = 'food';
-			$scope.food = {
-				name: '',
-				price: '',
-				unit: '',
-				keywords: '',
-				qty: 0
-			};
+			$scope.food = Food.create();
 			$scope.addFood = function(food) {
-				Food.add(food).$promise.then(function(newFood) {
-					$scope.food = {
-						name: '',
-						price: '',
-						unit: '',
-						keywords: '',
-						qty: 0
-					};
-					$events.$broadcast('bars.food.add', newFood);
+				Food.save(food).then(function(newFood) {
+					$scope.food = Food.create();
+				}, function(errors) {
+					// TODO: display form errors
 				});
 			};
 		}

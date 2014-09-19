@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('bars.directives', [
-    'bars.events'
     ])
 .directive('barsFood', function() {
     return {
@@ -27,7 +26,7 @@ angular.module('bars.directives', [
         templateUrl: 'scripts/directives/views/bars-account.html',
         controller: ['$scope', function($scope) {
             var setUser = function(newValue, oldValue) {
-                $scope.user = $scope.useri || ($scope.account && $scope.account.user) || null;
+                $scope.owner = $scope.useri || ($scope.account && $scope.account.owner) || null;
             };
 
             $scope.$watch('useri', setUser);
@@ -43,8 +42,8 @@ angular.module('bars.directives', [
             history: '=history'
         },
         templateUrl: 'scripts/directives/views/bars-history.html',
-        controller: ['$scope', '$events',
-            function($scope, $events) {
+        controller: ['$scope',
+            function($scope) {
                 var prepareDisplay = function(newValue, oldValue) {
                     $scope.historyDisplay = {};
                     var i = 0;
@@ -80,17 +79,11 @@ angular.module('bars.directives', [
                         // prepareDisplay();
                     });
                 };
-                $scope.$on('bars.transaction.add', $scope.update);
-                $scope.$on('bars.transaction.update', $scope.update);
                 $scope.cancelTransaction = function(t) {
-                    t.cancel().$promise.then(function(t) {
-                        $events.$broadcast('bars.transaction.update', t);
-                    });
+                    t.cancel(); // Todo: adapt to new API
                 };
                 $scope.uncancelTransaction = function(t) {
-                    t.uncancel().$promise.then(function(t) {
-                        $events.$broadcast('bars.transaction.update', t);
-                    });
+                    t.uncancel(); // Todo: adapt to new API
                 };
             }
         ]

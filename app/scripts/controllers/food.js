@@ -3,47 +3,26 @@
 angular.module('bars.ctrl.food', [])
 	.controller(
 		'FoodDetailCtrl',
-		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory', '$events',
-		function($scope, $stateParams, APIAction, foodDetails, foodHistory, $events) {
+		['$scope', '$stateParams', 'API.Action', 'foodDetails', 'foodHistory',
+		function($scope, $stateParams, APIAction, foodDetails, foodHistory) {
 			$scope.foodDetails = foodDetails;
 			$scope.history = foodHistory;
 			$scope.queryQty = 1;
 			$scope.queryType = 'buy';
 			$scope.query = function(qty, type) {
-				if (type == 'buy') {
-					APIAction.buy({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.transaction.new', transaction);
-						$scope.queryQty = 1;
-					});
-				} else if (type == 'throw') {
-					APIAction.throwaway({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.transaction.new', transaction);
-						$scope.queryQty = 1;
-					});
-				} else if (type == 'appro') {
-					APIAction.appro({item: $scope.foodDetails.id, qty: qty}).$promise.then(function(transaction){
-						$events.$broadcast('bars.transaction.new', transaction);
+				if (type == 'buy' || type == 'throw' || type == 'appro') {
+					APIAction[type]({item: $scope.foodDetails.id, qty: qty}).then(function() {
 						$scope.queryQty = 1;
 					});
 				}
 			};
 			$scope.trashIt = function() {
 				if ($scope.foodDetails.deleted) {
-					$scope.foodDetails.unremove({id: $scope.foodDetails.id}).$promise.then(function(newFood) {
-						$events.$broadcast('bars.food.update', newFood);
-					});
+					$scope.foodDetails.unMarkDeleted(); // Todo: adapt to new API
 				} else {
-					$scope.foodDetails.remove({id: $scope.foodDetails.id}).$promise.then(function(newFood) {
-						$events.$broadcast('bars.food.update', newFood);
-					});
+					$scope.foodDetails.markDeleted(); // Todo: adapt to new API
 				}
 			};
-
-			$scope.$on('bars.food.update', function(evt, food){
-				if(food.id === $scope.foodDetails.id) {
-					$scope.foodDetails.$reload();
-				}
-			});
 		}])
 	.controller('FoodListCtrl',
 		['$scope', function($scope) {
