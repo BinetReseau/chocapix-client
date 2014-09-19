@@ -20,10 +20,14 @@ module.factory('BaseAPIEntity', [
             _.assign(this, obj);
         };
         BaseAPIEntity.prototype.$save = function() {
-            this.model.update(this.id, this);
+            if(this.id) {
+                return this.model.update(this.id, this);
+            } else {
+                return this.model.save(this);
+            }
         };
         BaseAPIEntity.prototype.$reload = function() {
-            this.model.reload(this.id);
+            return this.model.reload(this.id);
         };
         return BaseAPIEntity;
     }
@@ -55,7 +59,20 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
             return obj;
         };
         APIInterface.prototype.unparse = function(obj) {
-            return _.omit(obj, ['model']);
+            if(obj instanceof BaseAPIEntity) {
+                var ret = {};
+                _.forEach(obj, function(value, key) {
+                    var k = key.substring(0, key.length-3);
+                    if(key.substring(key.length-3) === '_id' && obj.model.structure[k]) {
+                        ret[k] = obj[key];
+                    } else if(key !== 'model'){
+                        ret[key] = value;
+                    }
+                });
+                return ret;
+            } else {
+                return _.clone(obj);
+            }
         };
         APIInterface.prototype.link = function(obj) {
             if(_.isArray(obj)) {
