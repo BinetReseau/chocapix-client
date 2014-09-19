@@ -65,7 +65,7 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
                     var k = key.substring(0, key.length-3);
                     if(key.substring(key.length-3) === '_id' && obj.model.structure[k]) {
                         ret[k] = obj[key];
-                    } else if(key !== 'model'){
+                    } else {
                         ret[key] = value;
                     }
                 });
@@ -260,8 +260,14 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                 BaseAPIEntity.call(this, obj);
             };
             this.APIEntity.prototype = new BaseAPIEntity();
-            this.APIEntity.prototype.model = this;
             this.APIEntity.prototype._type = this.model_type;
+            // this.APIEntity.prototype.model = this;
+            Object.defineProperty(this.APIEntity.prototype, 'model', {
+                configurable: true,
+                enumerable: false,
+                writable: true,
+                value: self
+            });
 
             _.forOwn(structure, function(type, key) {
                 Object.defineProperty(self.APIEntity.prototype, key, {
