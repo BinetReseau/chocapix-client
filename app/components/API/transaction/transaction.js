@@ -19,7 +19,6 @@ angular.module('bars.api.transaction', [
                 }
             });
     }])
-
 .factory('api.services.action', ['api.models.transaction',
     function(Transaction) {
         var actions = ["buy", "give", "throw", "punish", "appro"];
@@ -28,12 +27,30 @@ angular.module('bars.api.transaction', [
             Action[action] = function(params) {
                 var transaction = Transaction.create(params);
                 transaction.type = action;
-                // _.extend(transaction, params);
                 return transaction.$save();
             };
         });
         return Action;
     }])
+
+.config(['$stateProvider', function($stateProvider) {
+    $stateProvider
+        .state('bar.history', {
+            url: "/history",
+            templateUrl: "components/API/transaction/list.html",
+            resolve: {
+                history: ['api.models.transaction', '$stateParams',
+                    function(Transaction) {
+                        return Transaction.all();
+                }]
+            },
+            controller: ['$scope', 'history',
+                function($scope, history) {
+                    $scope.bar.active = 'history';
+                    $scope.history = history;
+            }]
+        });
+}])
 
 .directive('barsHistory', function() {
     return {

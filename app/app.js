@@ -15,7 +15,6 @@ angular.module('bars.app', [
   'bars.api.user',
   'bars.api.account',
   'bars.api.transaction',
-  'bars.ctrl.history',
 ])
 
 .config(['$stateProvider', '$urlRouterProvider',
@@ -82,16 +81,6 @@ angular.module('bars.app', [
                 }
             })
 
-            .state('bar.history', {
-                url: "/history",
-                templateUrl: "components/API/history/history.html",
-                resolve: {
-                    history: ['api.models.transaction', '$stateParams', function(Transaction) {
-                        return Transaction.all();
-                    }]
-                },
-                controller: 'HistoryCtrl'
-            })
             .state('bar.admin', {
                 url: "/admin",
                 views: {
