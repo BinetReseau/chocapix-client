@@ -16,6 +16,8 @@ angular.module('bars.api.transaction', [
                     'item': 'Item'
                 },
                 methods: {
+                    'cancel': {method:'POST', url: 'cancel'},
+                    'restore': {method:'POST', url: 'restore'}
                 }
             });
     }])
@@ -61,25 +63,27 @@ angular.module('bars.api.transaction', [
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', function($scope) {
             // Todo: calculate date object on creation
-            var initList = function(newValue, oldValue) {
-                $scope.history.forEach(function(transaction) {
-                    transaction.timestamp = new Date(transaction.timestamp);
-                    transaction.timestamp_day = new Date(transaction.timestamp.getFullYear(), transaction.timestamp.getMonth(), transaction.timestamp.getDate());
-                });
+            function parseTimestamp(transaction) {
+                transaction.timestamp = new Date(transaction.timestamp);
+                transaction.timestamp_day = new Date(transaction.timestamp.getFullYear(), transaction.timestamp.getMonth(), transaction.timestamp.getDate());
+            }
+            function initList() {
+                $scope.history.forEach(parseTimestamp);
                 $scope.history_by_date = _.groupBy($scope.history, 'timestamp_day');
-                $scope.history_dates = _.keys($scope.history_by_date).reverse();
-                $scope.history_dates = _.map($scope.history_dates, function(x){return new Date(x);});
-            };
-            $scope.$watchCollection('history', function(){
-                initList(); // Todo: use model events instead
-            });
+                $scope.history_dates = _.keys($scope.history_by_date);
+                $scope.history_dates = _.map($scope.history_dates, function(x){return new Date(x);}).sort();
+            }
+            initList();
 
-            $scope.cancelTransaction = function(t) {
-                t.cancel(); // Todo: adapt to new API
-            };
-            $scope.uncancelTransaction = function(t) {
-                t.uncancel(); // Todo: adapt to new API
-            };
+            $scope.$on('api.model.transaction.add', initList);
+            $scope.$on('api.model.transaction.update', function(evt, transaction) {
+                parseTimestamp(transaction);
+            });
+            $scope.$on('api.model.transaction.remove', initList);
+            $scope.$on('api.model.transaction.clear', initList);
+            // $scope.$watchCollection('history', function(){
+            //     initList(); // Todo: use model events instead
+            // });
         }]
     };
 })

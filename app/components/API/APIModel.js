@@ -142,7 +142,6 @@ module.factory('MemoryEntityStore', [
                 if(orig !== obj) {
                     orig.$update(obj);
                 }
-                this._broadcast("update", orig);
                 return orig;
             } else {
                 return this.create(obj);
