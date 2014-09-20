@@ -47,7 +47,7 @@ angular.module('bars.ctrl.main', [
             };
         }])
     .controller('MainFormCtrl',
-        ['$scope', '$filter', 'API.Food', 'API.Action',
+        ['$scope', '$filter', 'api.models.food', 'API.Action',
         function($scope, $filter, Food, APIAction) {
             $scope.query = {
                 type: 'acheter',

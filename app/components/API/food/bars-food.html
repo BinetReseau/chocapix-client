@@ -1,9 +1,0 @@
-<span ng-if="!qty">
-    <a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: food.bar_id, id:food.id })">
-        {{ food.name }}
-    </a>
-</span>
-<span ng-if="qty">
-    {{ qty | number }}
-    <span ng-if="unit != ''">{{ unit }} {{ food.name | affd }}</span><a title="Voir la fiche de cet aliment" ui-sref="bar.food.detail({ bar: food.bar_id, id:food.id })"><span ng-if="unit != ''">{{ food.name }}</span><span ng-if="unit == ''">{{ food.name | affs:qty }}</span></a>
-</span>

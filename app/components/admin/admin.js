@@ -18,7 +18,7 @@ angular.module('bars.ctrl.admin', [
         }
     ])
     .controller('AdminFoodCtrl',
-        ['$scope', 'API.Food',
+        ['$scope', 'api.models.food',
         function($scope, Food) {
             $scope.admin.active = 'food';
             $scope.food = Food.create();

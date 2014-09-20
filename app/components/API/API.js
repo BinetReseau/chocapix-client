@@ -42,20 +42,6 @@ angular.module('bars.API', [
                 methods: {}
             });
     }])
-.factory('API.Food', ['APIModel', 'API',
-    function(APIModel, API) {
-        return new APIModel({
-                url: 'item',
-                type: "Item",
-                structure: {
-                    'bar': 'Bar'
-                },
-                methods: {
-                    'markDeleted': {method:'PUT', url: 'markDeleted'},
-                    'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted'}
-                }
-            });
-    }])
 .factory('API.User', ['APIModel', 'API',
     function(APIModel, API) {
         return new APIModel({

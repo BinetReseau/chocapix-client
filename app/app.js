@@ -7,7 +7,7 @@ var barsApp = angular.module('bars.app', [
   'bars.auth',
   'bars.API',
   'bars.ctrl.main',
-  'bars.ctrl.food',
+  'bars.api.food',
   'bars.ctrl.account',
   'bars.ctrl.history',
   'bars.ctrl.admin',
@@ -39,7 +39,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                     bar: ['API.Bar' , '$stateParams', function(Bar, $stateParams) {
                         return Bar.get($stateParams.bar);
                     }],
-                    foods: ['API.Food', function(Food) {
+                    foods: ['api.models.food', function(Food) {
                         return Food.all();
                     }],
                     accounts: ['API.Account', function(Account) {
@@ -79,31 +79,6 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                 }
             })
 
-            .state('bar.food', {
-                url: "/food",
-                abstract: true,
-                template:'<ui-view/>',
-                controller: 'FoodCtrl'
-            })
-            .state('bar.food.list', {
-                url: "/list",
-                templateUrl: "components/API/food/list.html",
-                controller: 'FoodListCtrl'
-            })
-            .state('bar.food.detail', {
-                url: "/:id",
-                templateUrl: "components/API/food/details.html",
-                resolve:{
-                    foodDetails: ['API.Food', '$stateParams', function(Food, $stateParams){
-                        return Food.getSync($stateParams.id);
-                    }],
-                    foodHistory: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-                        // return Transaction.byItem({id: $stateParams.id});
-                        return Transaction.all();
-                    }]
-                },
-                controller: 'FoodDetailCtrl'
-            })
 
             .state('bar.account', {
                 url: "/account",
