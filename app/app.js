@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('bars.app', [
   'ui.router',
   'ui.bootstrap',
@@ -9,6 +8,7 @@ angular.module('bars.app', [
   'bars.auth',
   'bars.ctrl.main',
   'bars.ctrl.admin',
+  'bars.magicbar',
 
   'bars.api.bar',
   'bars.api.food',
@@ -36,10 +36,9 @@ angular.module('bars.app', [
                 resolve: {
                     api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
                         APIInterface.setBar($stateParams.bar);
-                        return null;
                     }],
                     bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
-                        return Bar.get($stateParams.bar);
+                        return Bar.getSync($stateParams.bar);
                     }],
                     foods: ['api.models.food', function(Food) {
                         return Food.all();
@@ -68,8 +67,8 @@ angular.module('bars.app', [
                         controller: 'MainBaseCtrl'
                     },
                     'form@bar': {
-                        templateUrl: "common/form.html",
-                        controller: 'MainFormCtrl'
+                        templateUrl: "components/magicbar/form.html",
+                        controller: 'magicbar.ctrl'
                     },
                     'header@bar': {
                         templateUrl: "common/header.html",
@@ -79,25 +78,6 @@ angular.module('bars.app', [
                         controller: 'MainBarCtrl'
                     }
                 }
-            })
-
-            .state('bar.admin', {
-                url: "/admin",
-                views: {
-                    '@bar': {
-                        templateUrl: "components/admin/layout.html",
-                        controller: 'AdminBaseCtrl'
-                    },
-                    '@bar.admin': {
-                        templateUrl: "components/admin/dashboard.html",
-                        controller: 'AdminHomeCtrl'
-                    }
-                }
-            })
-            .state('bar.admin.food', {
-                url: "/food",
-                templateUrl: "components/admin/Food/home.html",
-                controller: 'AdminFoodCtrl'
             });
 }])
 

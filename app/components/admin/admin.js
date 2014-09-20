@@ -2,6 +2,29 @@
 
 angular.module('bars.ctrl.admin', [
     ])
+
+.config(['$stateProvider', function($stateProvider) {
+    $stateProvider
+        .state('bar.admin', {
+            url: "/admin",
+            views: {
+                '@bar': {
+                    templateUrl: "components/admin/layout.html",
+                    controller: 'AdminBaseCtrl'
+                },
+                '@bar.admin': {
+                    templateUrl: "components/admin/dashboard.html",
+                    controller: 'AdminHomeCtrl'
+                }
+            }
+        })
+        .state('bar.admin.food', {
+            url: "/food",
+            templateUrl: "components/admin/Food/home.html",
+            controller: 'AdminFoodCtrl'
+        });
+}])
+
     .controller('AdminBaseCtrl',
         ['$scope',
         function($scope) {
