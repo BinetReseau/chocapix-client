@@ -240,6 +240,13 @@ module.factory('RemoteEntityStore', ['APIInterface',
 
 module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore', 'RemoteEntityStore', '$q', '$rootScope',
     function(BaseAPIEntity, APIInterface, MemoryEntityStore, RemoteEntityStore, $q, $rootScope) {
+        function addNonEnumerableProperty(obj, key, value) {
+            Object.defineProperty(obj, key, {
+                configurable: true, enumerable: false,
+                writable: true, value: value
+            });
+        }
+
         function APIModel(config) {
             var self = this;
             this.url = config.url;
@@ -248,7 +255,8 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             this.methods = config.methods || {};
 
             this.memory_store = new MemoryEntityStore(function(name, obj) {
-                $rootScope.$broadcast("APIModel."+self.model_type+"."+name, obj);
+                $rootScope.$broadcast("api.model."+self.model_type.toLowerCase()+"."+name, obj);
+                $rootScope.$broadcast("api.model."+self.model_type.toLowerCase()+".*", obj);
             });
             this.remote_store = new RemoteEntityStore(this.url);
             this.memory_store.all().$reload = _.bind(this.reload, this); // TODO: temporary
@@ -269,10 +277,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             this.APIEntity.prototype = new BaseAPIEntity();
             this.APIEntity.prototype._type = this.model_type;
             // Prevents infinite recursion in searches
-            Object.defineProperty(this.APIEntity.prototype, 'model', {
-                configurable: true, enumerable: false,
-                writable: true, value: self
-            });
+            addNonEnumerableProperty(this.APIEntity.prototype, 'model', self);
 
             _.forOwn(structure, function(type, key) {
                 Object.defineProperty(self.APIEntity.prototype, key, {
@@ -304,32 +309,28 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             _.forOwn(methods, function(method, key) {
                 _.defaults(method, {linkResult: true});
                 var obj = method.static ? self : self.APIEntity.prototype;
-                Object.defineProperty(obj, key, {
-                    configurable: true,
-                    enumerable: false,
-                    writable: true,
-                    value: function() {
-                        var self_entity = this;
-                        function request(data) {
-                            var req = _.omit(method, ["static", "linkResult"]);
-                            if(req.url && req.url.charAt(0) != "/") {
-                                req.url = self.url + (method.static ? "" : "/" + self_entity.id) + "/" + req.url;
-                            }
-                            req.data = data || req.data || self_entity;
-                            return APIInterface.request(req);
+                addNonEnumerableProperty(obj, key, function() {
+                    var self_entity = this;
+                    function request(data) {
+                        var req = _.omit(method, ["static", "linkResult"]);
+                        if(req.url && req.url.charAt(0) != "/") {
+                            req.url = self.url + (method.static ? "" : "/" + self_entity.id) + "/" + req.url;
                         }
-                        var promise = request(); // TODO: wrapper function?
-                        if(method.linkResult) {
-                            promise = promise.then(function(entity) {
-                                if(entity instanceof BaseAPIEntity) {
-                                    return APIInterface.link(entity);
-                                }
-                                return entity;
-                            });
-                        }
-                        return promise;
+                        req.data = data || req.data || self_entity;
+                        return APIInterface.request(req);
                     }
-                });
+                    var promise = request(); // TODO: wrapper function?
+                    if(method.linkResult) {
+                        promise = promise.then(function(entity) {
+                            if(entity instanceof BaseAPIEntity) {
+                                return APIInterface.link(entity);
+                            }
+                            return entity;
+                        });
+                    }
+                    return promise;
+                }
+                );
             });
         };
 
