@@ -4,8 +4,8 @@ angular.module('bars.api.account', [
     'APIModel'
     ])
 
-.factory('api.models.account', ['APIModel', 'API',
-    function(APIModel, API) {
+.factory('api.models.account', ['APIModel',
+    function(APIModel) {
         return new APIModel({
                 url: 'account',
                 type: "Account",
@@ -45,7 +45,7 @@ angular.module('bars.api.account', [
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
                     return Account.getSync($stateParams.id);
                 }],
-                account_history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
+                account_history: ['api.models.transaction', '$stateParams', function(Transaction, $stateParams) {
                     // TODO: return Transaction.byItem({id: $stateParams.id});
                     return Transaction.all();
                 }]
@@ -64,7 +64,7 @@ angular.module('bars.api.account', [
         $scope.reverse = false;
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'account_history', 'API.Action',
+    ['$scope', 'account', 'account_history', 'api.services.action',
     function($scope, account, account_history, APIAction) {
         $scope.account = account;
         $scope.account_history = account_history;

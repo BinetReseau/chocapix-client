@@ -3,7 +3,7 @@
 angular.module('bars.ctrl.history', [
     ])
 .controller('HistoryCtrl',
-    ['$scope', '$filter', 'API.Transaction', 'history',
+    ['$scope', '$filter', 'api.models.transaction', 'history',
         function($scope, $filter, Transaction, history) {
             $scope.bar.active = 'history';
             $scope.history = history;

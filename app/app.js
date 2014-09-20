@@ -1,21 +1,24 @@
 'use strict';
 
 
-var barsApp = angular.module('bars.app', [
+angular.module('bars.app', [
   'ui.router',
   'ui.bootstrap',
-  'bars.auth',
-  'bars.API',
-  'bars.ctrl.main',
-  'bars.api.food',
-  'bars.api.account',
-  'bars.ctrl.history',
-  'bars.ctrl.admin',
   'angularMoment',
-  // 'APIModel'
-]);
 
-barsApp.config(['$stateProvider', '$urlRouterProvider',
+  'bars.auth',
+  'bars.ctrl.main',
+  'bars.ctrl.admin',
+
+  'bars.api.bar',
+  'bars.api.food',
+  'bars.api.user',
+  'bars.api.account',
+  'bars.api.transaction',
+  'bars.ctrl.history',
+])
+
+.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
 
@@ -32,11 +35,11 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
             .state('bar', {
                 url: "/:bar",
                 resolve: {
-                    api: ['API' , '$stateParams', function(API, $stateParams) {
-                        API.setBarId($stateParams.bar);
+                    api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
+                        APIInterface.setBar($stateParams.bar);
                         return null;
                     }],
-                    bar: ['API.Bar' , '$stateParams', function(Bar, $stateParams) {
+                    bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
                         return Bar.get($stateParams.bar);
                     }],
                     foods: ['api.models.food', function(Food) {
@@ -45,7 +48,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                     accounts: ['api.models.account', function(Account) {
                         return Account.all();
                     }],
-                    user: ['API.User', 'AuthService', function(User, AuthService) {
+                    user: ['api.models.user', 'AuthService', function(User, AuthService) {
                         if (AuthService.isAuthenticated()) {
                             return User.me();
                         } else {
@@ -83,7 +86,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                 url: "/history",
                 templateUrl: "components/API/history/history.html",
                 resolve: {
-                    history: ['API.Transaction', '$stateParams', function(Transaction) {
+                    history: ['api.models.transaction', '$stateParams', function(Transaction) {
                         return Transaction.all();
                     }]
                 },
@@ -107,14 +110,14 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: "components/admin/Food/home.html",
                 controller: 'AdminFoodCtrl'
             });
-}]);
+}])
 
-barsApp.config(['$httpProvider',
+.config(['$httpProvider',
     function ($httpProvider) {
         $httpProvider.interceptors.push('AuthInterceptor');
-}]);
+}])
 
-barsApp.run(function(amMoment) {
+.run(function(amMoment) {
     moment.lang('fr', {
         calendar : {
             lastDay : '[Hier]',
@@ -126,8 +129,5 @@ barsApp.run(function(amMoment) {
         }
     });
     amMoment.changeLanguage('fr');
-});
-
-// barsApp.run(['API.Bar', function(Bar){
-//     console.log(Bar.get("avironjone"));
-// }]);
+})
+;

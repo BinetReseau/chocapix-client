@@ -86,6 +86,12 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
             }
         };
 
+        APIInterface.prototype.setBar = function(bar) {
+            this.bar = bar;
+        };
+        APIInterface.prototype.getBar = function() {
+            return this.bar;
+        };
         APIInterface.prototype.request = function(req) {
             var self = this;
             if(req.data instanceof BaseAPIEntity) {

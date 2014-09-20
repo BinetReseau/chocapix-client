@@ -1,23 +1,17 @@
 'use strict';
 
-angular.module('bars.ctrl.user', [
+angular.module('bars.api.user', [
+    'APIModel'
     ])
-    .controller('UserDetailCtrl',
-        ['$scope', 'user', 'history', function($scope, user, history) {
-            $scope.UserDetail = user;
-            $scope.history = history;
-        }])
-    .controller('UserListCtrl',
-        ['$scope', 'api.models.account', function($scope, Account) {
-            $scope.updateUserList = function() {
-                $scope.updatingUserList = true;
-                $scope.bar.accounts.$reload().then(function () {
-                    $scope.updatingUserList = false;
-                });
-            };
-        }])
-    .controller('UserCtrl',
-        ['$scope', function($scope) {
-            $scope.bar.active = 'user';
-        }])
+
+.factory('api.models.user', ['APIModel',
+    function(APIModel) {
+        return new APIModel({
+                url: 'user',
+                type: "User",
+                methods: {
+                    'me': {url: 'me', static: true},
+                }
+            });
+    }])
 ;

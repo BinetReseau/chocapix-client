@@ -4,7 +4,7 @@ angular.module('bars.ctrl.main', [
     'bars.filters'
     ])
     .controller('MainBaseCtrl',
-        ['$scope', '$stateParams', 'AuthService', 'api.models.account', 'API.User', 'foods', 'bar', 'accounts', 'user', 'account',
+        ['$scope', '$stateParams', 'AuthService', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
         function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
             $scope.bar = {
                 id: $stateParams.bar,
@@ -47,7 +47,7 @@ angular.module('bars.ctrl.main', [
             };
         }])
     .controller('MainFormCtrl',
-        ['$scope', '$filter', 'api.models.food', 'API.Action',
+        ['$scope', '$filter', 'api.models.food', 'api.services.action',
         function($scope, $filter, Food, APIAction) {
             $scope.query = {
                 type: 'acheter',

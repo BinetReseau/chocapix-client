@@ -1,13 +1,12 @@
 'use strict';
 
 angular.module('bars.auth', [
-    'ngStorage',
-    'bars.API'
+    'ngStorage'
 ])
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
-.factory('AuthService', ['$injector', '$localStorage', '$q', 'API',
-    function ($injector, $localStorage, $q, API) {
+.factory('AuthService', ['$injector', '$localStorage', '$q',
+    function ($injector, $localStorage, $q) {
         if ($localStorage.auth === undefined) {
             $localStorage.auth = {
                 token: null
@@ -15,7 +14,8 @@ angular.module('bars.auth', [
         }
         return {
             login: function(credentials, resultLogin) {
-                return $injector.get('$http').post(API.route('api-token-auth/'), credentials, {'headers':{'Content-Type':"application/json"}}).then(
+                // Todo: correct routing
+                return $injector.get('$http').post('/../../api-token-auth/', credentials, {'headers':{'Content-Type':"application/json"}}).then(
                     function(response) {
                         $localStorage.auth.token = response.data.token;
                         return response.data.user;
