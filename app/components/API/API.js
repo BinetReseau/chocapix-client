@@ -19,20 +19,6 @@ angular.module('bars.API', [
         };
 }])
 
-.factory('API.Account', ['APIModel', 'API',
-    function(APIModel, API) {
-        return new APIModel({
-                url: 'account',
-                type: "Account",
-                structure: {
-                    'bar': 'Bar',
-                    'owner': 'User'
-                },
-                methods: {
-                    'me': {url: 'me', static: true},
-                }
-            });
-    }])
 .factory('API.Bar', ['APIModel', 'API',
     function(APIModel, API) {
         return new APIModel({

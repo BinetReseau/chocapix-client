@@ -1,19 +1,19 @@
 <hr />
 <div class="text-center">
-    <h1>{{ item_details.name }}</h1>
+    <h1>{{ food_item.name }}</h1>
 </div>
 <br />
 <div class="row h4">
     <div class="col-sm-3 text-right"><strong>Prix</strong></div>
-    <div class="col-sm-9"><span class="label label-info">{{ item_details.price|currency }}<span ng-hide="item_details.unit == ''"> / {{ item_details.unit }}</span></span></div>
+    <div class="col-sm-9"><span class="label label-info">{{ food_item.price|currency }}<span ng-hide="food_item.unit == ''"> / {{ food_item.unit }}</span></span></div>
 </div>
 <div class="row h4">
     <div class="col-sm-3 text-right"><strong>Stock</strong></div>
-    <div class="col-sm-9"><span class="label" ng-class="item_details.qty > 0 && 'label-primary' || 'label-warning'">{{ item_details.qty | number }} {{ item_details.unit == '' && (item_details.name|affs:item_details.qty) || item_details.unit }}</span></div>
+    <div class="col-sm-9"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">{{ food_item.qty | number }} {{ food_item.unit == '' && (food_item.name|affs:food_item.qty) || food_item.unit }}</span></div>
 </div>
 <div class="row">
     <div class="col-sm-3">
-        <select class="form-control" ng-model="queryType">
+        <select class="form-control" ng-model="query_type">
             <option value="buy">Acheter</option>
             <option>Ajouter au panier</option>
             <option value="throw">Jeter</option>
@@ -21,12 +21,12 @@
         </select>
     </div>
     <div class="col-sm-9">
-        <form class="form-inline" role="form" ng-submit="query(queryQty, queryType)">
-            <input type="number" class="form-control number" step="any" ng-model="queryQty" />
+        <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)">
+            <input type="number" class="form-control number" step="any" ng-model="query_qty" />
             <div class="checkbox unit">
-                {{ item_details.unit == '' && (item_details.name|affs:queryQty) || item_details.unit }}
+                {{ food_item.unit == '' && (food_item.name|affs:query_qty) || food_item.unit }}
             </div>
-            <input type="submit" class="btn btn-success" value="Valider{{ queryQty > 0 && ' pour ' + ((queryQty*item_details.price) | currency) || '' }}" ng-class="queryQty <= 0 && 'disabled' || ''" />
+            <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
         </form>
     </div>
 </div>
@@ -41,9 +41,9 @@
                 </a>
             </div>
             <div class="btn-group">
-                <a title="{{ item_details.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger" ng-class="item_details.deleted && 'active'" ng-click="trashIt()">
+                <a title="{{ food_item.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger" ng-class="food_item.deleted && 'active'" ng-click="trashIt()">
                     <span class="glyphicon glyphicon-trash"></span>
-                    {{ item_details.deleted && 'Restaurer' || 'Supprimer' }}
+                    {{ food_item.deleted && 'Restaurer' || 'Supprimer' }}
                 </a>
             </div>
         </div>
@@ -55,7 +55,7 @@
 <div class="row">
     <div class="col-sm-3 text-right h4"><strong>Historique</strong></div>
     <div class="col-sm-9">
-        <bars:history history="item_history"></bars:history>
+        <bars:history history="food_item_history"></bars:history>
     </div>
 </div>
  -->

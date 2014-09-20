@@ -4,9 +4,8 @@ angular.module('bars.api.food', [
     'APIModel'
     ])
 
-.factory('api.models.food',
-    ['APIModel', 'API',
-    function(APIModel, API) {
+.factory('api.models.food', ['APIModel',
+    function(APIModel) {
         return new APIModel({
                 url: 'item',
                 type: "Item",
@@ -26,28 +25,28 @@ angular.module('bars.api.food', [
             url: "/food",
             abstract: true,
             template: '<ui-view/>',
-            controller: 'api.ctrl.food',
-            resolve: {
-                food_items: ['api.models.food', '$stateParams', function(Food, $stateParams){
-                    return Food.all();
-                }]
-            }
+            controller: 'api.ctrl.food'
         })
         .state('bar.food.list', {
             url: "/list",
             templateUrl: "components/API/food/list.html",
-            controller: 'api.ctrl.food_list'
+            controller: 'api.ctrl.food_list',
+            resolve: {
+                food_list: ['api.models.food', function(Food){
+                    return Food.all();
+                }]
+            }
         })
         .state('bar.food.details', {
             url: "/:id",
             templateUrl: "components/API/food/details.html",
-            controller: 'api.ctrl.food_detail',
+            controller: 'api.ctrl.food_details',
             resolve: {
-                item_details: ['api.models.food', '$stateParams', function(Food, $stateParams){
+                food_item: ['$stateParams', 'api.models.food', function($stateParams, Food){
                     return Food.getSync($stateParams.id);
                 }],
-                item_history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-                    // return Transaction.byItem({id: $stateParams.id});
+                food_item_history: ['$stateParams', 'API.Transaction', function($stateParams, Transaction) {
+                    // TODO: return Transaction.byItem({id: $stateParams.id});
                     return Transaction.all();
                 }]
             }
@@ -59,8 +58,8 @@ angular.module('bars.api.food', [
         $scope.bar.active = 'food';
     }])
 .controller('api.ctrl.food_list',
-    ['$scope', 'food_items', function($scope, food_items) {
-        $scope.food_items = food_items;
+    ['$scope', 'food_list', function($scope, food_list) {
+        $scope.food_list = food_list;
         $scope.reverse = false;
         $scope.filterDeleted = function() {
             if ($scope.showDeleted) {
@@ -72,25 +71,25 @@ angular.module('bars.api.food', [
             }
         };
     }])
-.controller('api.ctrl.food_detail',
-    ['$scope', '$stateParams', 'API.Action', 'item_details', 'item_history',
-    function($scope, $stateParams, APIAction, item_details, item_history) {
-        $scope.item_details = item_details;
-        $scope.item_history = item_history;
-        $scope.queryQty = 1;
-        $scope.queryType = 'buy';
+.controller('api.ctrl.food_details',
+    ['$scope', '$stateParams', 'food_item', 'food_item_history', 'API.Action',
+    function($scope, $stateParams, food_item, food_item_history, APIAction) {
+        $scope.food_item = food_item;
+        $scope.food_item_history = food_item_history;
+        $scope.query_qty = 1;
+        $scope.query_type = 'buy';
         $scope.query = function(qty, type) {
             if (type == 'buy' || type == 'throw' || type == 'appro') {
-                APIAction[type]({item: $scope.item_details.id, qty: qty}).then(function() {
-                    $scope.queryQty = 1;
+                APIAction[type]({item: $scope.food_item.id, qty: qty}).then(function() {
+                    $scope.query_qty = 1;
                 });
             }
         };
         $scope.trashIt = function() {
-            if ($scope.item_details.deleted) {
-                $scope.item_details.unMarkDeleted(); // Todo: adapt to new API
+            if ($scope.food_item.deleted) {
+                $scope.food_item.unMarkDeleted(); // Todo: adapt to new API
             } else {
-                $scope.item_details.markDeleted(); // Todo: adapt to new API
+                $scope.food_item.markDeleted(); // Todo: adapt to new API
             }
         };
     }])

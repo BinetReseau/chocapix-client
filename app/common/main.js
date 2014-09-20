@@ -4,7 +4,7 @@ angular.module('bars.ctrl.main', [
     'bars.filters'
     ])
     .controller('MainBaseCtrl',
-        ['$scope', '$stateParams', 'AuthService', 'API.Account', 'API.User', 'foods', 'bar', 'accounts', 'user', 'account',
+        ['$scope', '$stateParams', 'AuthService', 'api.models.account', 'API.User', 'foods', 'bar', 'accounts', 'user', 'account',
         function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
             $scope.bar = {
                 id: $stateParams.bar,

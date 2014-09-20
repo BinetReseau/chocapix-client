@@ -8,7 +8,7 @@ angular.module('bars.ctrl.user', [
             $scope.history = history;
         }])
     .controller('UserListCtrl',
-        ['$scope', 'API.Account', function($scope, Account) {
+        ['$scope', 'api.models.account', function($scope, Account) {
             $scope.updateUserList = function() {
                 $scope.updatingUserList = true;
                 $scope.bar.accounts.$reload().then(function () {

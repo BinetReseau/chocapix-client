@@ -8,7 +8,7 @@ var barsApp = angular.module('bars.app', [
   'bars.API',
   'bars.ctrl.main',
   'bars.api.food',
-  'bars.ctrl.account',
+  'bars.api.account',
   'bars.ctrl.history',
   'bars.ctrl.admin',
   'angularMoment',
@@ -42,7 +42,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                     foods: ['api.models.food', function(Food) {
                         return Food.all();
                     }],
-                    accounts: ['API.Account', function(Account) {
+                    accounts: ['api.models.account', function(Account) {
                         return Account.all();
                     }],
                     user: ['API.User', 'AuthService', function(User, AuthService) {
@@ -52,7 +52,7 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                             return null;
                         }
                     }],
-                    account: ['API.Account', 'AuthService', function(Account, AuthService) {
+                    account: ['api.models.account', 'AuthService', function(Account, AuthService) {
                         if (AuthService.isAuthenticated()) {
                             return Account.me();
                         } else {
@@ -77,32 +77,6 @@ barsApp.config(['$stateProvider', '$urlRouterProvider',
                         controller: 'MainBarCtrl'
                     }
                 }
-            })
-
-
-            .state('bar.account', {
-                url: "/account",
-                abstract: true,
-                template:'<ui-view/>',
-                controller: 'AccountCtrl'
-            })
-            .state('bar.account.list', {
-                url: "/list",
-                templateUrl: "components/API/account/list.html",
-                controller: 'AccountsListCtrl'
-            })
-            .state('bar.account.detail', {
-                url: "/:id",
-                templateUrl: "components/API/account/detail.html",
-                resolve:{
-                    account: ['API.Account', '$stateParams', function(Account, $stateParams) {
-                        return Account.getSync($stateParams.id);
-                    }],
-                    history: ['API.Transaction', '$stateParams', function(Transaction, $stateParams) {
-                        return Transaction.all();
-                    }]
-                },
-                controller: 'AccountDetailCtrl'
             })
 
             .state('bar.history', {
