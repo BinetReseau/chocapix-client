@@ -98,7 +98,7 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
                 req.data = this.unparse(req.data);
             }
             // req.url = "/../../bars-symfony/web/avironjone" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
-            req.url = "/../.." + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url + (req.url.charAt(-1) ? "" : "/"); // TODO: use correct bar
+            req.url = "/../.." + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url + (req.url.charAt(-1) === '/' ? "" : "/"); // TODO: use correct bar
             return $http(req).then(function(data) {
                 return self.parse(data.data);
             });
@@ -141,6 +141,8 @@ module.factory('MemoryEntityStore', [
                 var orig = this.get(id);
                 if(orig !== obj) {
                     orig.$update(obj);
+                    this._broadcast("update", orig);
+                    console.log(obj._type+'('+id+')', obj);
                 }
                 return orig;
             } else {
@@ -315,7 +317,9 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                         if(req.url && req.url.charAt(0) != "/") {
                             req.url = self.url + (method.static ? "" : "/" + self_entity.id) + "/" + req.url;
                         }
-                        req.data = data || req.data || self_entity;
+                        if(!method.static) {
+                            req.data = data || req.data || self_entity;
+                        }
                         return APIInterface.request(req);
                     }
                     var promise = request(); // TODO: wrapper function?
