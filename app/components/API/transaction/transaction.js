@@ -34,4 +34,36 @@ angular.module('bars.api.transaction', [
         });
         return Action;
     }])
+
+.directive('barsHistory', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            history: '=history'
+        },
+        templateUrl: 'components/API/transaction/directive.html',
+        controller: ['$scope', function($scope) {
+            // Todo: calculate date object on creation
+            var initList = function(newValue, oldValue) {
+                $scope.history.forEach(function(transaction) {
+                    transaction.timestamp = new Date(transaction.timestamp);
+                    transaction.timestamp_day = new Date(transaction.timestamp.getFullYear(), transaction.timestamp.getMonth(), transaction.timestamp.getDate());
+                });
+                $scope.history_by_date = _.groupBy($scope.history, 'timestamp_day');
+                $scope.history_dates = _.keys($scope.history_by_date).reverse();
+                $scope.history_dates = _.map($scope.history_dates, function(x){return new Date(x);});
+            };
+            $scope.$watchCollection('history', function(){
+                initList(); // Todo: use model events instead
+            });
+
+            $scope.cancelTransaction = function(t) {
+                t.cancel(); // Todo: adapt to new API
+            };
+            $scope.uncancelTransaction = function(t) {
+                t.uncancel(); // Todo: adapt to new API
+            };
+        }]
+    };
+})
 ;

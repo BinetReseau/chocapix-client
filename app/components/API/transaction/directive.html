@@ -1,0 +1,69 @@
+<!-- <div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-offset-7 col-sm-5">
+            <input type="search" class="form-control" ng-model="queryh" placeholder="Rechercher dans l'historique" id="queryh" />
+        </div>
+    </div>
+</div>
+
+<br /><br /> -->
+
+<div class="container-fluid"><div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div ng-repeat="date in history_dates" class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center text-capitalizefirst">{{ date | amCalendar }}</h2>
+            </div>
+            <table class="table table-striped table-hover table-condensed history">
+                <tr ng-repeat="transaction in history_by_date[date] | filter:queryh | orderBy:'-timestamp'" ng-class="transaction.canceled && 'del'" ng-init="details = {show:false}">
+                    <td class="time">{{ transaction.timestamp | date:'shortTime' }}</td>
+
+                    <td class="type">
+                        <ng:switch on="transaction.type">
+                            <span ng-switch-when="buy">Achat de</span>
+                            <span ng-switch-when="appro">Appro de</span>
+                            <span ng-switch-when="throw">Mise à la poubelle de</span>
+
+                            <span ng-switch-when="give">Don de</span>
+                            <a ng-switch-when="punish" tooltip="{{ transaction.motive }}" class="atooltip">Amende de</a>
+                        </ng:switch>
+                    </td>
+                    <td class="item">
+                        <ng:switch on="transaction.type">
+                            <span ng-switch-when="buy">
+                                <bars:food food="transaction.item" qty="transaction.qty"></bars:food>
+                            </span>
+                            <span ng-switch-when="appro">
+                                <bars:food food="transaction.item" qty="transaction.qty"></bars:food>
+                            </span>
+                            <span ng-switch-when="throw">
+                                <bars:food food="transaction.item" qty="transaction.qty"></bars:food>
+                            </span>
+
+                            <span ng-switch-when="give">
+                                {{ transaction.amount | currency }} à <bars:account account="transaction.account"></bars:account>
+                            </span>
+                            <span ng-switch-when="punish">
+                                {{ transaction.amount | currency }} mise à <bars:account account="transaction.account"></bars:account>
+                            </span>
+                        </ng:switch>
+                    </td>
+                    <td class="type">par</td>
+                    <td class="user">
+                        <!-- <bars:user user="transaction.author" bar="transaction.bar"></bars:user> -->
+                    </td>
+                    <td class="price">
+                        <span class="label" ng-class="transaction.canceled && 'label-default' || transaction.type === 'punish' && 'label-danger' || 'label-success'">
+                            {{ transaction.moneyflow | currency }}
+                        </span>
+                    </td>
+                    <td class="buttons">
+                        <a title="Annuler cette transaction" ng-if="!transaction.canceled" ng-click="cancelTransaction(transaction)" class="label label-warning">Annuler</a>
+                        <span class="label label-default" ng-if="transaction.canceled">Annulée</span>
+                        <a title="Rétablir cette transaction" ng-if="transaction.canceled" ng-click="uncancelTransaction(transaction)" class="label label-warning">Rétablir</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div></div>
