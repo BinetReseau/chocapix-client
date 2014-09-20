@@ -1,0 +1,73 @@
+<div class="container-fluid">
+    <div ui-view="menu" class="col-md-2">
+        <form class="form-horizontal" role="form" ng-hide="user.isAuthenticated()" ng-submit="connexion(login)">
+            <input type="text" class="form-control" placeholder="Login" ng-model="login.username">
+            <input type="password" class="form-control" placeholder="Mot de passe" ng-model="login.password" ng-class="loginError && 'animated shake'">
+            <div class="text-center">
+                <button type="submit" class="btn btn-default" ng-class="inLogin && 'disabled'">Connexion</button>
+            </div>
+        </form>
+        <div ng-show="user.isAuthenticated()" class="text-center">
+            <h1 ng-class="user.account.money <= 0 && 'animated wobble' || ''">
+                <span ng-class="user.account.money <= 0 && 'label label-danger' || ''">
+                    {{ user.account.money | currency }}
+                </span>
+            </h1>
+        <h4><small>{{ user.infos.name }}</small></h4>
+        </div>
+
+        <br /><br />
+
+        <ul class="nav nav-pills nav-stacked">
+            <li ng-class="bar.active == 'index' && 'active'">
+                <a title="Accueil du bar" ui-sref="bar({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-home"></span> Accueil
+                </a>
+            </li>
+            <li ng-class="bar.active == 'history' && 'active'">
+                <a title="Historique" ui-sref="bar.history({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-list"></span> Historique
+                </a>
+            </li>
+            <li ng-class="bar.active == 'account' && 'active'">
+                <a title="Utilisateurs du bar" ui-sref="bar.account.list({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-user"></span> Utilisateurs
+                </a>
+            </li>
+            <li ng-class="bar.active == 'food' && 'active'">
+                <a title="Aliments du bar" ui-sref="bar.food.list({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-cutlery"></span> Aliments
+                </a>
+            </li>
+            <li ng-class="bar.active == 'admin' && 'active'">
+                <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
+                    <span class="glyphicon glyphicon-dashboard"></span> Administration
+                </a>
+            </li>
+            <li>
+                <a title="Réglages">
+                    <span class="glyphicon glyphicon-wrench"></span> Préférences
+                </a>
+            </li>
+            <li>
+                <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="user.logout()">
+                    <span class="glyphicon glyphicon-off"></span> Déconnexion
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-md-10">
+        <div class="row" ui-view="header">
+        </div>
+        <br /><br /><br />
+        <div class="row">
+            <div class="col-md-12" ui-view="form">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" ui-view="">
+            </div>
+        </div>
+    </div>
+</div>

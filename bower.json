@@ -1,10 +1,9 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
-  "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
-  "license": "MIT",
+  "name": "bars-angular",
   "private": true,
+  "version": "3.1.0",
+  "description": "Front-end of https://github.com/BinetReseau/bars",
+  "homepage": "https://github.com/Nadrieril/bars-angular",
   "dependencies": {
     "angular": "1.2.x",
     "angular-animate": "~1.2.x",

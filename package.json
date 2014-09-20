@@ -1,10 +1,9 @@
 {
-  "name": "angular-seed",
+  "name": "bars-angular",
   "private": true,
-  "version": "0.0.0",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
-  "license": "MIT",
+  "version": "3.1.0",
+  "description": "Front-end of https://github.com/BinetReseau/bars",
+  "repository": "https://github.com/Nadrieril/bars-angular",
   "devDependencies": {
     "karma": "~0.10",
     "protractor": "~0.20.1",

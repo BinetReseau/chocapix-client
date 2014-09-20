@@ -1,11 +1,10 @@
-logs/*
 !.gitkeep
-node_modules/
-bower_components/
+/app/assets/bower_components/
+/node_modules/
+logs/
 tmp
 .idea
 .DS_Store
 /.sublime-project
 /.sublime-project.sublime-workspace
-/.DS_Store
 /exempleTransaction.json

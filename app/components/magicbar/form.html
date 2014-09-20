@@ -1,0 +1,37 @@
+<form class="form-horizontal" ng-submit="executeQuery()">
+    <div class="form-group" ng-class="query.hasError && 'has-error'">
+        <label for="q_alim" class="col-sm-2 control-label">Je veux</label>
+        <div class="col-sm-8">
+            <input type="search" class="form-control" ng-model="bar.search" placeholder="(acheter) 2l de lait • 120g pates • (donner) 2€ à Thomas • ajouter (à la bouffe à plusieurs) 6 steaks • jeter 3 pommes" id="queryf" id="q_alim" />
+        </div>
+    </div>
+</form>
+
+<div class="row" ng-hide="query.food === null && query.account === null || query.hideAnalysis">
+    <div class="col-sm-8 col-sm-offset-2">
+        <span class="legend">Appuyez sur <kbd>Enter</kbd> pour
+            <ng:switch on="query.type">
+                <span ng-switch-when="amende">mettre une amende</span>
+                <span ng-switch-when="appro">approvisionner</span>
+                <span ng-switch-default>{{ query.type }}</span>
+            </ng:switch>
+            <span ng-switch on="query.type">
+                <span ng-switch-when="donner">
+                    {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
+                </span>
+                <span ng-switch-when="jeter">
+                    <bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.
+                </span>
+                <span ng-switch-when="amende">
+                    de {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
+                </span>
+                <span ng-switch-default>
+                    <bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> pour {{ (query.qty*query.food.price) | currency }}.
+                </span>
+            </span>
+        </span><br />
+    </div>
+</div>
+<div ng-if="query.hasError" class="alert alert-danger col-sm-8 col-sm-offset-2" role="alert">
+    {{ query.errorMessage }}
+</div><br /><br />
