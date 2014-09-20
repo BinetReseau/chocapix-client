@@ -279,7 +279,11 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     configurable: true,
                     enumerable: false,
                     get: function() {
-                        return APIInterface.getModel(type).get(this[key+"_id"]);
+                        if(this[key+"_id"]) {
+                            return APIInterface.getModel(type).get(this[key+"_id"]);
+                        } else {
+                            return;
+                        }
                     },
                     set: function(v) {
                         if(typeof(v) !== 'object') {
