@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('bars.ctrl.main', [
+angular.module('bars.main', [
     'bars.filters'
     ])
-    .controller('MainBaseCtrl',
-        ['$scope', '$stateParams', 'AuthService', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
+    .controller('main.ctrl.base',
+        ['$scope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
         function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
             $scope.bar = {
                 id: $stateParams.bar,
@@ -48,7 +48,7 @@ angular.module('bars.ctrl.main', [
         }])
 
     .controller(
-        'MainBarCtrl',
+        'main.ctrl.bar',
         ['$scope', function($scope) {
             $scope.bar.active = 'index';
             document.getElementById("queryf").focus();

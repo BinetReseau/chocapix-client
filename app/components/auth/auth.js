@@ -5,7 +5,7 @@ angular.module('bars.auth', [
 ])
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
-.factory('AuthService', ['$injector', '$localStorage', '$q',
+.factory('auth.service', ['$injector', '$localStorage', '$q',
     function ($injector, $localStorage, $q) {
         if ($localStorage.auth === undefined) {
             $localStorage.auth = {
@@ -37,7 +37,7 @@ angular.module('bars.auth', [
         };
 }])
 
-.factory('AuthInterceptor', ['AuthService', '$q',
+.factory('auth.interceptor', ['auth.service', '$q',
     function (AuthService, $q) {
         return {
             request: function(config) {

@@ -6,8 +6,8 @@ angular.module('bars.app', [
   'angularMoment',
 
   'bars.auth',
-  'bars.ctrl.main',
-  'bars.ctrl.admin',
+  'bars.main',
+  'bars.admin',
   'bars.magicbar',
 
   'bars.api.bar',
@@ -25,11 +25,11 @@ angular.module('bars.app', [
             .state('index', {
                 url: "/",
                 template: "<div ui-view><a title='Déconnexion' ng-click='deconnexion()'>Déconnexion</a></div>",
-                controller : function($scope, AuthService) {
+                controller : ['$scope', 'auth.service', function($scope, AuthService) {
                     $scope.deconnexion = function() {
                         AuthService.logout();
                     };
-                }
+                }]
             })
             .state('bar', {
                 url: "/:bar",
@@ -46,14 +46,14 @@ angular.module('bars.app', [
                     accounts: ['api.models.account', function(Account) {
                         return Account.all();
                     }],
-                    user: ['api.models.user', 'AuthService', function(User, AuthService) {
+                    user: ['api.models.user', 'auth.service', function(User, AuthService) {
                         if (AuthService.isAuthenticated()) {
                             return User.me();
                         } else {
                             return null;
                         }
                     }],
-                    account: ['api.models.account', 'AuthService', function(Account, AuthService) {
+                    account: ['api.models.account', 'auth.service', function(Account, AuthService) {
                         if (AuthService.isAuthenticated()) {
                             return Account.me();
                         } else {
@@ -64,7 +64,7 @@ angular.module('bars.app', [
                 views: {
                     '@': {
                         templateUrl: "common/bar.html",
-                        controller: 'MainBaseCtrl'
+                        controller: 'main.ctrl.base'
                     },
                     'form@bar': {
                         templateUrl: "components/magicbar/form.html",
@@ -75,7 +75,7 @@ angular.module('bars.app', [
                     },
                     '@bar': {
                         templateUrl: "common/home.html",
-                        controller: 'MainBarCtrl'
+                        controller: 'main.ctrl.bar'
                     }
                 }
             });
@@ -83,7 +83,7 @@ angular.module('bars.app', [
 
 .config(['$httpProvider',
     function ($httpProvider) {
-        $httpProvider.interceptors.push('AuthInterceptor');
+        $httpProvider.interceptors.push('auth.interceptor');
 }])
 
 .run(function(amMoment) {
