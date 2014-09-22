@@ -15,7 +15,7 @@ angular.module('bars.auth', [
         return {
             login: function(credentials, resultLogin) {
                 // Todo: correct routing
-                return $injector.get('$http').post('/../../api-token-auth/', credentials, {'headers':{'Content-Type':"application/json"}}).then(
+                return $injector.get('$http').post('api/api-token-auth/', credentials, {'headers':{'Content-Type':"application/json"}}).then(
                     function(response) {
                         $localStorage.auth.token = response.data.token;
                         return response.data.user;
