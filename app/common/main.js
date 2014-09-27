@@ -21,7 +21,6 @@ angular.module('bars.main', [
                 account: account
             };
             $scope.login = {
-                username: '',
                 password: ''
             };
 
@@ -36,7 +35,7 @@ angular.module('bars.main', [
                         $scope.user.account = Account.me().then(function(account) {
                             $scope.user.account = account;
                         });
-                        $scope.login = {username: '', password: ''};
+                        $scope.login = {password: ''};
                         $scope.inLogin = false;
                     }, function() {
                         $scope.loginError = true;

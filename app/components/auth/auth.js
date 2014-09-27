@@ -14,7 +14,6 @@ angular.module('bars.auth', [
         }
         return {
             login: function(credentials, resultLogin) {
-                // Todo: correct routing
                 return $injector.get('$http').post('api/api-token-auth/', credentials, {'headers':{'Content-Type':"application/json"}}).then(
                     function(response) {
                         $localStorage.auth.token = response.data.token;
@@ -61,6 +60,7 @@ angular.module('bars.auth', [
                 return response || $q.when(response);
             },
             responseError: function(response) {
+                console.log(response);
                 if (response.status === 401) {
                     AuthService.logout();
                     // TODO: Redirect user to login page.
