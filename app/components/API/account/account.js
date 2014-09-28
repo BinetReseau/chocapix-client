@@ -60,7 +60,7 @@ angular.module('bars.api.account', [
 .controller('api.ctrl.account_list',
     ['$scope', 'account_list', function($scope, account_list) {
         $scope.account_list = account_list;
-        $scope.list_order = 'owner.name';
+        $scope.list_order = 'owner.full_name';
         $scope.reverse = false;
     }])
 .controller('api.ctrl.account_detail',
