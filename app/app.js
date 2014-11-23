@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bars.app', [
+angular.module('barsApp', [
   'ui.router',
   'ui.bootstrap',
   'angularMoment',
