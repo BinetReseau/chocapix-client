@@ -5,23 +5,32 @@
   "bitwise": true,
   "camelcase": true,
   "curly": true,
-  "devel": true,
   "eqeqeq": true,
-  "globalstrict": true,
   "immed": true,
-  "indent": 4,
+  "indent": 2,
   "latedef": true,
   "newcap": true,
   "noarg": true,
   "quotmark": "single",
+  "regexp": true,
   "undef": true,
   "unused": true,
   "strict": true,
   "trailing": true,
   "smarttabs": true,
   "globals": {
-        "performance": false,
-      "angular": false,
-      "_": false
+    "after": false,
+    "afterEach": false,
+    "angular": false,
+    "before": false,
+    "beforeEach": false,
+    "browser": false,
+    "describe": false,
+    "expect": false,
+    "inject": false,
+    "it": false,
+    "jasmine": false,
+    "spyOn": false
   }
 }
+
