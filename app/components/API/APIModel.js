@@ -98,7 +98,7 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
                 req.data = this.unparse(req.data);
             }
             // req.url = "/../../bars-symfony/web/avironjone" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
-            req.url = "http://nadrieril/bars/api" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url + (req.url.charAt(-1) === '/' ? "" : "/"); // TODO: use correct bar
+            req.url = BACKEND_URL + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url + (req.url.charAt(-1) === '/' ? "" : "/"); // TODO: use correct bar
             return $http(req).then(function(data) {
                 return self.parse(data.data);
             });

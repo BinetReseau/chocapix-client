@@ -1,5 +1,7 @@
 'use strict';
 
+var BACKEND_URL = "http://localhost:8000";
+
 angular.module('barsApp', [
   'ui.router',
   'ui.bootstrap',
