@@ -260,10 +260,14 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             this.model_type = config.type;
             this.structure = config.structure || {};
             this.methods = config.methods || {};
+            this.hooks = config.hooks || {};
 
             this.memory_store = new MemoryEntityStore(function(name, obj) {
                 $rootScope.$broadcast("api.model."+self.model_type.toLowerCase()+"."+name, obj);
                 $rootScope.$broadcast("api.model."+self.model_type.toLowerCase()+".*", obj);
+                if(self.hooks[name]) {
+                    self.hooks[name].call(obj);
+                }
             });
             this.remote_store = new RemoteEntityStore(this.url);
             this.memory_store.all().$reload = _.bind(this.reload, this); // TODO: temporary
