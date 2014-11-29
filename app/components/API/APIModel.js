@@ -103,8 +103,8 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
             if(req.data instanceof BaseAPIEntity) {
                 req.data = this.unparse(req.data);
             }
-            // req.url = "/../../bars-symfony/web/avironjone" + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
-            req.url = BACKEND_URL + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url + (req.url.charAt(-1) === '/' ? "" : "/"); // TODO: use correct bar
+            req.url = BACKEND_URL + ((req.url && req.url.charAt(0) != "/") ? "/" : "") + req.url; // TODO: use correct bar
+            req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");
             return $http(req).then(function(data) {
                 return self.parse(data.data);
             });
