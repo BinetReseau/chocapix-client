@@ -3,53 +3,106 @@
 angular.module('bars.main', [
     'bars.filters'
     ])
-    .controller('main.ctrl.base',
-        ['$scope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
-        function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
-            $scope.bar = {
-                id: $stateParams.bar,
-                name: bar.name,
-                accounts: accounts,
-                search: '',
-                foods: foods,
-                active: 'index',
-            };
-            $scope.user = {
-                infos: user,
-                isAuthenticated: AuthService.isAuthenticated,
-                logout: AuthService.logout,
-                account: account
-            };
-            $scope.login = {
-                password: ''
-            };
 
-            $scope.connexion = function (login) {
-                $scope.loginError = false;
-                $scope.inLogin = true;
-                AuthService.login(login).then(
-                    function(user) {
-                        $scope.user.infos = User.me().then(function(user) {
-                            $scope.user.infos = user;
-                        });
-                        $scope.user.account = Account.me().then(function(account) {
-                            $scope.user.account = account;
-                        });
-                        $scope.login = {password: ''};
-                        $scope.inLogin = false;
-                    }, function() {
-                        $scope.loginError = true;
-                        $scope.login.password = '';
-                        $scope.inLogin = false;
+.config(['$stateProvider', function($stateProvider) {
+    $stateProvider
+        .state('bar', {
+            url: "/:bar",
+            resolve: {
+                api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
+                    APIInterface.setBar($stateParams.bar);
+                }],
+                bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
+                    return Bar.getSync($stateParams.bar);
+                }],
+                foods: ['api.models.food', function(Food) {
+                    return Food.all();
+                }],
+                accounts: ['api.models.account', function(Account) {
+                    return Account.all();
+                }],
+                user: ['api.models.user', 'auth.service', function(User, AuthService) {
+                    if (AuthService.isAuthenticated()) {
+                        return User.me();
+                    } else {
+                        return null;
                     }
-                );
-            };
-        }])
+                }],
+                account: ['api.models.account', 'auth.service', function(Account, AuthService) {
+                    if (AuthService.isAuthenticated()) {
+                        return Account.me();
+                    } else {
+                        return null;
+                    }
+                }]
+            },
+            views: {
+                '@': {
+                    templateUrl: "common/bar.html",
+                    controller: 'main.ctrl.base'
+                },
+                'form@bar': {
+                    templateUrl: "components/magicbar/form.html",
+                    controller: 'magicbar.ctrl'
+                },
+                'header@bar': {
+                    templateUrl: "common/header.html",
+                },
+                '@bar': {
+                    templateUrl: "common/home.html",
+                    controller: 'main.ctrl.bar'
+                }
+            }
+        });
+}])
 
-    .controller(
-        'main.ctrl.bar',
-        ['$scope', function($scope) {
-            $scope.bar.active = 'index';
-            document.getElementById("queryf").focus();
-        }])
+.controller('main.ctrl.base',
+    ['$scope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
+    function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
+        $scope.bar = {
+            id: $stateParams.bar,
+            name: bar.name,
+            accounts: accounts,
+            search: '',
+            foods: foods,
+            active: 'index',
+        };
+        $scope.user = {
+            infos: user,
+            isAuthenticated: AuthService.isAuthenticated,
+            logout: AuthService.logout,
+            account: account
+        };
+        $scope.login = {
+            password: ''
+        };
+
+        $scope.connexion = function (login) {
+            $scope.loginError = false;
+            $scope.inLogin = true;
+            AuthService.login(login).then(
+                function(user) {
+                    $scope.user.infos = User.me().then(function(user) {
+                        $scope.user.infos = user;
+                    });
+                    $scope.user.account = Account.me().then(function(account) {
+                        $scope.user.account = account;
+                    });
+                    $scope.login = {password: ''};
+                    $scope.inLogin = false;
+                }, function() {
+                    $scope.loginError = true;
+                    $scope.login.password = '';
+                    $scope.inLogin = false;
+                }
+            );
+        };
+    }])
+
+.controller(
+    'main.ctrl.bar',
+    ['$scope', function($scope) {
+        $scope.bar.active = 'index';
+        document.getElementById("queryf").focus();
+    }])
 ;
