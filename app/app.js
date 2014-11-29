@@ -1,6 +1,6 @@
 'use strict';
 
-var BACKEND_URL = "http://localhost:8000";
+var BACKEND_URL = "http://nadrieril.fr/bars/api";
 
 angular.module('barsApp', [
   'ui.router',
@@ -11,6 +11,7 @@ angular.module('barsApp', [
   'bars.main',
   'bars.admin',
   'bars.magicbar',
+  'bars.meal',
 
   'bars.api.bar',
   'bars.api.food',
