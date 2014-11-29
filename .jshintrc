@@ -1,9 +1,9 @@
 {
-  "node": true,
+  /*"node": true,*/
   "browser": true,
   "esnext": true,
   "bitwise": true,
-  "camelcase": true,
+  /*"camelcase": true,*/
   "curly": true,
   "devel": true,
   "eqeqeq": true,
@@ -13,15 +13,18 @@
   "latedef": true,
   "newcap": true,
   "noarg": true,
-  "quotmark": "single",
+  /*"quotmark": "single",*/
   "undef": true,
   "unused": true,
   "strict": true,
   "trailing": true,
   "smarttabs": true,
   "globals": {
-        "performance": false,
-      "angular": false,
-      "_": false
+    "moment": false,
+    "module": false,
+    "require": false,
+    "performance": false,
+    "angular": false,
+    "_": false
   }
 }
