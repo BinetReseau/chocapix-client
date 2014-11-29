@@ -277,7 +277,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             APIModel.createEntityClass.call(this, this.structure);
             APIModel.addMethods.call(this, this.methods);
 
-            this.reload(); // TODO: handle caching correctly
+            // this.reload(); // TODO: handle caching correctly
         }
 
         APIModel.createEntityClass = function(structure) {

@@ -13,12 +13,14 @@ angular.module('bars.main', [
                     APIInterface.setBar($stateParams.bar);
                 }],
                 bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
-                    return Bar.getSync($stateParams.bar);
+                    return Bar.get($stateParams.bar);
                 }],
                 foods: ['api.models.food', function(Food) {
+                    Food.reload();
                     return Food.all();
                 }],
                 accounts: ['api.models.account', function(Account) {
+                    Account.reload();
                     return Account.all();
                 }],
                 user: ['api.models.user', 'auth.service', function(User, AuthService) {

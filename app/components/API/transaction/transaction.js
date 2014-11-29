@@ -53,6 +53,7 @@ angular.module('bars.api.transaction', [
             resolve: {
                 history: ['api.models.transaction', '$stateParams',
                     function(Transaction) {
+                        Transaction.reload();
                         return Transaction.all();
                 }]
             },
