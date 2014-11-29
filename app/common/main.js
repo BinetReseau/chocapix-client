@@ -48,6 +48,10 @@ angular.module('bars.main', [
                 'header@bar': {
                     templateUrl: "common/header.html",
                 },
+                'meal@bar': {
+                    templateUrl: "components/meal/panel.html",
+                    controller: 'meal.ctrl'
+                },
                 '@bar': {
                     templateUrl: "common/home.html",
                     controller: 'main.ctrl.bar'
