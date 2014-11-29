@@ -15,7 +15,7 @@
   "noarg": true,
   /*"quotmark": "single",*/
   "undef": true,
-  "unused": true,
+  /*"unused": true,*/
   "strict": true,
   "trailing": true,
   "smarttabs": true,
