@@ -18,6 +18,16 @@ angular.module('bars.api.transaction', [
                 methods: {
                     'cancel': {method:'POST', url: 'cancel'},
                     'restore': {method:'POST', url: 'restore'}
+                },
+                hooks: {
+                    'add': function() {
+                        if(this.account) {
+                            this.account.$reload();
+                        }
+                        if(this.item) {
+                            this.item.$reload();
+                        }
+                    }
                 }
             });
     }])
