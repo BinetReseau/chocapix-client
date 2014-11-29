@@ -89,7 +89,7 @@ angular.module('barsApp', [
 }])
 
 .run(function(amMoment) {
-    moment.lang('fr', {
+    moment.locale('fr', {
         calendar : {
             lastDay : '[Hier]',
             sameDay : "[Aujourd'hui]",
@@ -99,6 +99,6 @@ angular.module('barsApp', [
             sameElse : 'L'
         }
     });
-    amMoment.changeLanguage('fr');
+    amMoment.changeLocale('fr');
 })
 ;
