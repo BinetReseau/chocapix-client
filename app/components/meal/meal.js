@@ -15,9 +15,7 @@ angular.module('bars.meal', [
             if ($filter('filter')($scope.customersList, function(value, index) { return value.account.id == item.id; }).length == 0) {
                 $scope.customersList[$scope.customersList.length] = { account: item, ratio: 1 };
                 $scope.accountToAdd = '';
-            } else {
-                console.log('Est déjà dans la liste...');
-            }
+            } 
         };
         $scope.removeCustomer = function(cstmr) {
             $scope.customersList.splice($scope.customersList.indexOf(cstmr), 1);
@@ -27,9 +25,7 @@ angular.module('bars.meal', [
                 $scope.itemsList[$scope.itemsList.length] = { item: item, qty: 1 };
                 console.log(item);
                 $scope.itemToAdd = '';
-            } else {
-                console.log('Est déjà dans la liste...');
-            }
+            } 
         }
         $scope.removeItem = function(item) {
             $scope.itemsList.splice($scope.itemsList.indexOf(item), 1);

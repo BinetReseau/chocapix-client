@@ -16,7 +16,7 @@
                     <tr ng-repeat="customer in customersList" class="animated fadeInRight no-border">
                         <td style="vertical-align: middle;"><input type="text" id="ratioCustomer{{ $index }}Input" class="form-control input-sm" style="width: 45px;" placeholder="1" ng-model="customer.ratio"></td>
                         <td style="vertical-align: middle;"><span class="form-control-static">{{ customer.account.owner.full_name }}</span></td>
-                        <td style="vertical-aglin: middle;"><span class="label label-info">{{ customer.amount | currency }}</span></td>
+                        <td style="vertical-align: middle;" class="text-right"><span class="label label-info">{{ customer.amount | currency }}</span></td>
                         <td style="vertical-align: baseline;">
                             <button type="button" class="close" ng-click="removeCustomer(customer)"><span aria-hidden="true">&times;</span><span class="sr-only">Retirer</span></button>
                         </td>
