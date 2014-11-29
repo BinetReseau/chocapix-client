@@ -11,8 +11,11 @@
     <div class="col-sm-8 col-sm-offset-2">
         <span class="legend">Appuyez sur <kbd>Enter</kbd> pour
             <ng:switch on="query.type">
-                <span ng-switch-when="amende">mettre une amende</span>
+                <span ng-switch-when="punish">mettre une amende</span>
                 <span ng-switch-when="appro">approvisionner</span>
+                <span ng-switch-when="buy">acheter</span>
+                <span ng-switch-when="give">donner</span>
+                <span ng-switch-when="throw">jeter</span>
                 <span ng-switch-default>{{ query.type }}</span>
             </ng:switch>
             <span ng-switch on="query.type">
