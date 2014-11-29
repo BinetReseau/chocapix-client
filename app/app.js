@@ -32,54 +32,6 @@ angular.module('barsApp', [
                         AuthService.logout();
                     };
                 }]
-            })
-            .state('bar', {
-                url: "/:bar",
-                resolve: {
-                    api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
-                        APIInterface.setBar($stateParams.bar);
-                    }],
-                    bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
-                        return Bar.getSync($stateParams.bar);
-                    }],
-                    foods: ['api.models.food', function(Food) {
-                        return Food.all();
-                    }],
-                    accounts: ['api.models.account', function(Account) {
-                        return Account.all();
-                    }],
-                    user: ['api.models.user', 'auth.service', function(User, AuthService) {
-                        if (AuthService.isAuthenticated()) {
-                            return User.me();
-                        } else {
-                            return null;
-                        }
-                    }],
-                    account: ['api.models.account', 'auth.service', function(Account, AuthService) {
-                        if (AuthService.isAuthenticated()) {
-                            return Account.me();
-                        } else {
-                            return null;
-                        }
-                    }]
-                },
-                views: {
-                    '@': {
-                        templateUrl: "common/bar.html",
-                        controller: 'main.ctrl.base'
-                    },
-                    'form@bar': {
-                        templateUrl: "components/magicbar/form.html",
-                        controller: 'magicbar.ctrl'
-                    },
-                    'header@bar': {
-                        templateUrl: "common/header.html",
-                    },
-                    '@bar': {
-                        templateUrl: "common/home.html",
-                        controller: 'main.ctrl.bar'
-                    }
-                }
             });
 }])
 
