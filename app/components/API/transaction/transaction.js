@@ -82,7 +82,6 @@ angular.module('bars.api.transaction', [
                 $scope.history_by_date = _.groupBy($scope.history, 'timestamp_day');
                 $scope.history_dates = _.keys($scope.history_by_date);
                 $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
-                console.log($scope.history_dates);
             }
             initList();
 
