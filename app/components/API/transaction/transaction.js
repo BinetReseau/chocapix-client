@@ -71,7 +71,7 @@ angular.module('bars.api.transaction', [
                 $scope.history.forEach(parseTimestamp);
                 $scope.history_by_date = _.groupBy($scope.history, 'timestamp_day');
                 $scope.history_dates = _.keys($scope.history_by_date);
-                $scope.history_dates = _.map($scope.history_dates, function(x){return new Date(x);}).sort();
+                $scope.history_dates = _.map($scope.history_dates, function(x){return new Date(x);}).sort().reverse();
             }
             initList();
 
