@@ -85,6 +85,9 @@ li.active a:hover {
 .history td.buttons {
     width: 110px;
 }
+.history td.par {
+    width: 30px;
+}
 
 .glyphicon-refresh-animate {
     -webkit-animation: rotateThis 1s infinite linear;
