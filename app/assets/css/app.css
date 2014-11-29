@@ -130,3 +130,17 @@ li li {
     border-left: 0;
 }
 
+/* Animations */
+.meal.ng-enter {
+    -webkit-animation: fadeInRight 1s;
+    -moz-animation: fadeInRight 1s;
+    -o-animation: fadeInRight 1s;
+    animation: fadeInRight 1s;
+}
+.meal.ng-leave {
+    -webkit-animation: fadeOutRight 1s;
+    -moz-animation: fadeOutRight 1s;
+    -o-animation: fadeOutRight 1s;
+    animation: fadeOutRight 1s;
+}
+

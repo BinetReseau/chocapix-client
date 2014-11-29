@@ -6,6 +6,7 @@ angular.module('barsApp', [
   'ui.router',
   'ui.bootstrap',
   'angularMoment',
+  'ngAnimate',
 
   'bars.auth',
   'bars.main',
