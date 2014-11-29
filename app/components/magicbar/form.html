@@ -19,13 +19,13 @@
                 <span ng-switch-default>{{ query.type }}</span>
             </ng:switch>
             <span ng-switch on="query.type">
-                <span ng-switch-when="donner">
+                <span ng-switch-when="give">
                     {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
                 </span>
-                <span ng-switch-when="jeter">
+                <span ng-switch-when="throw">
                     <bars:food food="query.food" qty="query.qty" unit="query.unit"></bars:food> à la poubelle.
                 </span>
-                <span ng-switch-when="amende">
+                <span ng-switch-when="punish">
                     de {{ query.qty | currency }} à <bars:account account="query.account"></bars:account>.
                 </span>
                 <span ng-switch-default>
