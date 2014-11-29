@@ -14,31 +14,30 @@ angular.module('bars.magicbar', [
             name: '',
             hideAnalysis: false,
             hasError: false,
-            errorMessage: ''
+            errorMessage: '',
+            suggest: []
         };
 
         $scope.$watch('bar.search', function(qo) {
             analyse(qo, $scope);
         });
 
-        $scope.executeQuery = function() {
-            if ($scope.query.food === null && $scope.query.account === null) {
+        $scope.executeQuery = function($item, $model, $label) {
+            if ($model.food === null && $model.account === null) {
                 return;
             }
-            var type = $scope.query.type;
+            var type = $model.type;
 
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
-                if (!$scope.query.hasError) {
                     var req;
                     if(_.contains(['buy', 'throw', 'appro'], type)) {
-                        req = {item: $scope.query.food.id, qty: $scope.query.qty};
+                        req = {item: $model.food.id, qty: $model.qty};
                     } else {
-                        req = {account: $scope.query.account.id, amount: $scope.query.qty};
+                        req = {account: $model.account.id, amount: $model.qty};
                     }
                     APIAction[type](req).then(function() {
                         $scope.bar.search = '';
                     });
-                }
             }
         };
     }])
@@ -50,14 +49,13 @@ angular.module('bars.magicbar', [
             qty: 1,
             unit: '',
             name: '',
-            food: null,
-            account: null,
             hasError: false,
-            errorMessage: ''
+            errorMessage: '',
+            suggest: []
         };
         var query = $scope.query;
 
-        if(qo === "") {
+        if(typeof qo != 'string' && !(qo instanceof String) || qo == "") {
             return query;
         }
         // On découpe la requête en termes
@@ -127,6 +125,7 @@ angular.module('bars.magicbar', [
                 isQty: false,
                 isFood: false,
                 isUnit: false,
+                isAccount: false,
                 used: false
             };
 
@@ -144,12 +143,6 @@ angular.module('bars.magicbar', [
             } else {
                 var unit = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
                 if (unit != terms[i] && units.indexOf(unit) > -1) {
-                    var itemu = {
-                        isQty: false,
-                        isFood: false,
-                        isUnit: false,
-                        used: false
-                    };
                     itemu.isUnit = true;
                     itemu.unit = unit;
                     aUnits.push(itemu);
@@ -167,67 +160,63 @@ angular.module('bars.magicbar', [
                         o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1));
                 }, false);
             }
-            if (foods.length == 1) {
+            if (foods.length >= 1) {
                 item.isFood = true;
-                item.food = foods[0];
-            }
-
-            // Push food et quantité
-            if (item.isQty) {
-                aQty.push(item);
-            }
-            if (item.isFood) {
-                aFoods.push(item);
+                item.foods = foods;
             }
 
             // Account
             var accounts = $filter('filter')($scope.bar.accounts, function (o) {
                 return (o.owner.full_name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
             }, false);
-            if (accounts.length == 1) {
-                aAccounts.push(accounts[0]);
+            if (accounts.length >= 1) {
+                item.isAccount = true;
+                item.accounts = accounts;
             }
+
+            // Push
+            if (item.isQty) {
+                aQty.push(item);
+            }
+            if (item.isFood) {
+                aFoods.push(item);
+            }
+            if (item.isAccount) {
+                aAccounts.push(item);
+            }
+
         }
+
+        var qFoods = [];
+        var qAccounts = [];
 
         function analyseTerms() {
             // Réflexion et exécution
-            if (aFoods.length == 1) {
+            if (aFoods.length == 1) { // un seul terme donnait des aliments
                 aFoods[0].used = true;
-                query.food = aFoods[0].food;
+                qFoods = aFoods[0].foods;
                 if (query.type === '') {
                     query.type = 'buy';
                 }
                 cleana();
             }
-            if (aAccounts.length == 1) {
-                query.account = aAccounts[0];
+            if (aAccounts.length == 1) { // un seul terme donnait des accounts
+                qAccounts = aAccounts[0].accounts;
                 aAccounts[0].used = true;
                 if (query.type === '') {
                     query.type = 'give';
                 }
                 cleana();
             }
-            if (aQty.length == 1) {
+            if (aQty.length == 1) { // un seul terme donnait des quantités
                 query.qty = aQty[0].qty;
                 aQty[0].used = true;
                 cleana();
-                if (aUnits.length == 1 && query.food !== null) {
-                    query.unit = aUnits[0].unit;
-                    aUnits[0].used = true;
-                    cleana();
-                    if ((/^k/i.test(query.food.unit) && !/^k/i.test(query.unit)) || (!/^m/i.test(query.food.unit) && /^m/i.test(query.unit))) {
-                        query.qty *= 0.001;
-                    } else if ((!/^k/i.test(query.food.unit) && /^k/i.test(query.unit)) || (/^m/i.test(query.food.unit) && !/^m/i.test(query.unit))) {
-                        query.qty *= 1000;
-                    } else if (/^c/i.test(query.food.unit) && !/^c/i.test(query.unit)) {
-                        query.qty *= 100;
-                    } else if (!/^c/i.test(query.food.unit) && /^c/i.test(query.unit)) {
-                        query.qty *= 0.01;
-                    }
-                }
             }
-            if (query.food !== null) {
-                query.unit = query.food.unit;
+            if (aUnits.length == 1) { // un seul terme donnait une unité
+                query.unit = aUnits[0].unit;
+                aUnits[0].used = true;
+                cleana();
             }
         }
 
@@ -236,6 +225,46 @@ angular.module('bars.magicbar', [
         analyseTerms();
         analyseTerms();
 
+        // Puis on ajoute/fusionne liste définitive de suggestion
+        if (qFoods.length == 0) {
+            for (var i = 0; i < aFoods.length; i++) {
+                qFoods = qFoods.concat(aFoods[i].foods);
+            }
+        }
+        qAccounts = qAccounts.concat(aAccounts);
+
+        for (var i = 0; i < qFoods.length; i++) {
+            var os = {
+                otype: 'food',
+                food: qFoods[i],
+                qty: query.qty,
+                unit: query.unit,
+                type: query.type
+            };
+            if (os.unit != "") {
+                if ((/^k/i.test(os.food.unit) && !/^k/i.test(os.unit)) || (!/^m/i.test(os.food.unit) && /^m/i.test(os.unit))) {
+                    os.qty *= 0.001;
+                } else if ((!/^k/i.test(os.food.unit) && /^k/i.test(os.unit)) || (/^m/i.test(os.food.unit) && !/^m/i.test(os.unit))) {
+                    os.qty *= 1000;
+                } else if (/^c/i.test(os.food.unit) && !/^c/i.test(os.unit)) {
+                    os.qty *= 100;
+                } else if (!/^c/i.test(os.food.unit) && /^c/i.test(os.unit)) {
+                    os.qty *= 0.01;
+                }
+            }
+            query.suggest.push(os);
+        }
+        for (var i = 0; i < qAccounts.length; i++) {
+            var os = {
+                otype: 'account',
+                account: qAccounts[i],
+                qty: query.qty,
+                type: query.type
+            };
+            query.suggest.push(os);
+        }
+
+        /*
         // Erreurs
         if (query.type == 'buy' || query.type == 'throw' || query.type == 'appro') {
             if (query.food === null) {
@@ -261,6 +290,7 @@ angular.module('bars.magicbar', [
                 query.errorMessage = "On ne peut donner que des montants strictement positifs.";
             }
         }
+        */
 
         return query;
     };

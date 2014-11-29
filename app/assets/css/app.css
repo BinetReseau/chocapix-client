@@ -41,6 +41,13 @@ a.link {
 .atooltip:hover {
     text-decoration: none;
 }
+li.active a {
+    color: white;
+    cursor: default;
+}
+li.active a:hover {
+    text-decoration: none;
+}
 
 .form-control.number {
     width: 80px;
