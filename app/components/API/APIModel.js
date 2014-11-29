@@ -51,9 +51,15 @@ module.factory('APIInterface', ['$http', 'BaseAPIEntity',
         };
 
         APIInterface.prototype.parse = function(obj) {
+            var self = this;
             if(_.isArray(obj)) {
                 return _.map(obj, _.bind(this.parse, this));
             } else if(!(obj instanceof BaseAPIEntity) && obj._type && this.getModel(obj._type)) {
+                _.forOwn(obj, function(v, k) {
+                    if(_.isObject(v) && (v._type || _.isArray(v))) {
+                        obj[k] = self.parse(v);
+                    }
+                });
                 return this.getModel(obj._type).create(obj);
             }
             return obj;
@@ -273,6 +279,17 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         APIModel.createEntityClass = function(structure) {
             var self = this;
             this.APIEntity = function APIEntity(obj){
+                _.forOwn(structure, function(type, key) {
+                    var v = obj[key];
+                    if(v) {
+                        if(_.isNumber(v) || _.isString(v)) {
+                            obj[key+"_id"] = v;
+                        } else if(_.isObject(v)) {
+                            obj[key+"_id"] = v.id;
+                        }
+                        delete obj[key];
+                    }
+                });
                 BaseAPIEntity.call(this, obj);
             };
             this.APIEntity.prototype = new BaseAPIEntity();
