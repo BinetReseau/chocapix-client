@@ -70,6 +70,13 @@ angular.module('bars.magicbar', [
             'punish',
             'appro',
         ];
+        var humanTypes = {
+            'acheter': 'buy',
+            'jeter': 'throw',
+            'donner': 'give',
+            'amende': 'punish',
+            'appro': 'appro'
+        };
 
         var units = [
             'g',
@@ -111,8 +118,8 @@ angular.module('bars.magicbar', [
 
         for (var i = 0; i < terms.length; i++) {
             // Type
-            if (types.indexOf(terms[i]) > -1) {
-                query.type = terms[i];
+            if (humanTypes[terms[i]] != undefined) {
+                query.type = humanTypes[terms[i]];
                 continue;
             }
 
