@@ -25,6 +25,13 @@
     text-transform: uppercase;
 }
 
+.form-control.right {
+    float: right;
+}
+.form-control.small {
+    width: 30%;
+}
+
 table.max {
     width: 100%;
 }
