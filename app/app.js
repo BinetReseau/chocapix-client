@@ -21,7 +21,7 @@ angular.module('barsApp', [
 
 .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/avironjone");
 
         $stateProvider
             .state('index', {
