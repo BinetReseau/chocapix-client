@@ -50,7 +50,7 @@
                     </td>
                     <td class="par">par</td>
                     <td class="user">
-                        <bars:account account="transaction.account"></bars:account>
+                        <bars:user user="transaction.author" bar_="transaction.bar"></bars:user>
                     </td>
                     <td class="price">
                         <span class="label" ng-class="transaction.canceled && 'label-default' || transaction.type === 'punish' && 'label-danger' || 'label-success'">

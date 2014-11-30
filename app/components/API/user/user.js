@@ -22,7 +22,7 @@ angular.module('bars.api.user', [
             abstract: true,
             template:'<ui-view/>'
         })
-        .state('bar.user.detail', {
+        .state('bar.user.details', {
             url: "/:id",
             resolve:{
                 account: ['APIInterface', 'api.models.account', '$stateParams',
