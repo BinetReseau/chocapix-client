@@ -132,6 +132,10 @@ li li {
 .no-border td {
     border: none !important;
 }
+.no-vertical-margin {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 .vmiddle {
     vertical-align: middle !important;
 }
@@ -140,6 +144,11 @@ li li {
 }
 .vtop {
     vertical-align: top !important;
+}
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
 }
 
 /* Animations */

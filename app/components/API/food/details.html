@@ -1,13 +1,29 @@
 <div class="container-fluid"><div class="row"><div class="col-sm-12">
 <hr />
 
-    <h1 class="text-center">{{ food_item.name }}</h1>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 vcenter">
+            <h1 class="text-center no-vertical-margin">{{ food_item.name }}</h1>
+        </div><!--
+        --><div class="col-sm-2 vcenter">
+            <div class="btn-group">
+                <button type="button" class="btn btn-block btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Gestion <span class="caret"></span></button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a title="Modifier cet aliment">
+                        <span class="glyphicon glyphicon-edit"></span> Modifier
+                    </a></li>
+                    <li><a title="{{ food_item.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" ng-class="food_item.deleted && 'active'" ng-click="trashIt()">
+                        <span class="glyphicon glyphicon-trash"></span> {{ food_item.deleted && 'Restaurer' || 'Supprimer' }}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <br />
     <div class="row">
         <div class="col-sm-12">
-            <div class="navbar navbar-default">
-            <form class="navbar-form" role="form" ng-submit="query(query_qty, query_type)">
+            <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)">
                 <select class="form-control" ng-model="query_type">
                     <option value="buy">Acheter</option>
                     <option>Ajouter au panier</option>
@@ -20,7 +36,6 @@
                 </div>
                 <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
             </form>
-            </div>
         </div>
     </div>
     <br />
@@ -39,7 +54,7 @@
                     <div class="col-sm-6"><span class="h4">Stock</span></div>
                     <div class="col-sm-6 text-right">
                         <span class="h4"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
-                            {{ food_item.qty | number }} {{ food_item.unit == '' && (food_item.name|affs:food_item.qty) || food_item.unit }}
+                            {{ food_item.qty * food_item.unit_value | number }} {{ food_item.unit == '' && '' || food_item.unit }}
                         </span></span>
                     </div>
                 </div>
@@ -52,12 +67,8 @@
                     </div>
                 </div>
                 <!--<div class="row list-group-item">
-                    <a title="Modifier cet aliment" class="btn btn-default btn-block">
-                        <span class="glyphicon glyphicon-edit"></span> Modifier
-                    </a>
-                    <a title="{{ food_item.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger btn-block" ng-class="food_item.deleted && 'active'" ng-click="trashIt()">
-                        <span class="glyphicon glyphicon-trash"></span> {{ food_item.deleted && 'Restaurer' || 'Supprimer' }}
-                    </a>
+                    
+                    
                 </div>-->
             </div>
         </div>
