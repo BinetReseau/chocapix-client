@@ -23,18 +23,17 @@ angular.module('bars.magicbar', [
         });
 
         $scope.executeQuery = function($item, $model, $label) {
-			console.log($model);
-            if ($model.food === null && $model.account === null) {
+            if ($item.food === null && $item.account === null) {
                 return;
             }
-            var type = $model.type;
+            var type = $item.type;
 
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
                     var req;
                     if(_.contains(['buy', 'throw', 'appro'], type)) {
-                        req = {item: $model.food.id, qty: $model.qty*$model.food.unit_value};
+                        req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
                     } else {
-                        req = {account: $model.account.id, amount: $model.qty};
+                        req = {account: $item.account.id, amount: $item.qty};
                     }
                     APIAction[type](req).then(function() {
                         $scope.bar.search = '';

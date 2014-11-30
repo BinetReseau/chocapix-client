@@ -5,7 +5,7 @@
             <div class="col-sm-10">
                 <input type="search" class="form-control" ng-model="bar.search" id="q_alim"
                     placeholder="(acheter) 2l de lait • 120g pates • (donner) 2€ à Thomas • ajouter (à la bouffe à plusieurs) 6 steaks • jeter 3 pommes"
-                    typeahead="el as el.type for el in query.suggest | limitTo:5"
+                    typeahead="'' as el for el in query.suggest | limitTo:7"
                     typeahead-template-url="components/magicbar/typeahead.html" typeahead-wait-ms="100"
                     typeahead-on-select="executeQuery($item, $model, $label)" />
             </div>
