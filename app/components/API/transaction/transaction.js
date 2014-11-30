@@ -6,6 +6,11 @@ angular.module('bars.api.transaction', [
 
 .factory('api.models.transaction', ['APIModel',
     function(APIModel) {
+        function parseTimestamp(t) {
+            var ts = new Date(t.timestamp);
+            t.timestamp = ts;
+            t.timestamp_day = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
+        }
         return new APIModel({
                 url: 'transaction',
                 type: "Transaction",
@@ -31,6 +36,10 @@ angular.module('bars.api.transaction', [
                         if(this.item) {
                             this.item.$reload();
                         }
+                        parseTimestamp(this);
+                    },
+                    'update': function(o) {
+                        parseTimestamp(this);
                     }
                 }
             });
@@ -73,32 +82,18 @@ angular.module('bars.api.transaction', [
     return {
         restrict: 'E',
         scope: {
-            history: '=history'
+            filter: '&filter'
         },
         templateUrl: 'components/API/transaction/directive.html',
-        controller: ['$scope', function($scope) {
-            // Todo: calculate date object on creation
-            function parseTimestamp(transaction) {
-                transaction.timestamp = new Date(transaction.timestamp);
-                transaction.timestamp_day = new Date(transaction.timestamp.getFullYear(), transaction.timestamp.getMonth(), transaction.timestamp.getDate());
-            }
-            function initList() {
-                $scope.history.forEach(parseTimestamp);
-                $scope.history_by_date = _.groupBy($scope.history, 'timestamp_day');
+        controller: ['$scope', 'api.models.transaction', function($scope, Transaction) {
+            function updateList() {
+                var history = _.filter(Transaction.all(), $scope.filter);
+                $scope.history_by_date = _.groupBy(history, 'timestamp_day');
                 $scope.history_dates = _.keys($scope.history_by_date);
                 $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
             }
-            initList();
-
-            $scope.$on('api.model.transaction.add', initList);
-            $scope.$on('api.model.transaction.update', function(evt, transaction) {
-                parseTimestamp(transaction);
-            });
-            $scope.$on('api.model.transaction.remove', initList);
-            $scope.$on('api.model.transaction.clear', initList);
-            // $scope.$watchCollection('history', function(){
-            //     initList(); // Todo: use model events instead
-            // });
+            updateList();
+            $scope.$on('api.model.transaction.*', updateList);
         }]
     };
 })

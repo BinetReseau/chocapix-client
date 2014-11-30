@@ -49,10 +49,9 @@ angular.module('bars.api.food', [
                 food_item: ['$stateParams', 'api.models.food', function($stateParams, Food){
                     return Food.getSync($stateParams.id);
                 }],
-                food_item_history: ['$stateParams', 'api.models.transaction', function($stateParams, Transaction) {
-                    // TODO: return Transaction.byItem({id: $stateParams.id});
+                history: ['api.models.transaction', function(Transaction) {
                     Transaction.reload();
-                    return Transaction.all();
+                    // return Transaction.all();
                 }]
             }
         });
@@ -77,10 +76,10 @@ angular.module('bars.api.food', [
         };
     }])
 .controller('api.ctrl.food_details',
-    ['$scope', '$stateParams', 'food_item', 'food_item_history', 'api.services.action',
-    function($scope, $stateParams, food_item, food_item_history, APIAction) {
+    ['$scope', '$stateParams', 'food_item', 'api.services.action',
+    function($scope, $stateParams, food_item, APIAction) {
         $scope.food_item = food_item;
-        $scope.food_item_history = food_item_history;
+
         $scope.query_qty = 1;
         $scope.query_type = 'buy';
         $scope.query = function(qty, type) {

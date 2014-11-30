@@ -44,7 +44,7 @@
                                 {{ transaction.amount | currency }} à <bars:account account="transaction.account"></bars:account>
                             </span>
                             <span ng-switch-when="punish">
-                                {{ -transaction.amount | currency }} mise à <bars:account account="transaction.account"></bars:account>
+                                {{ transaction.amount | abs | currency }} mise à <bars:account account="transaction.account"></bars:account>
                             </span>
                         </ng:switch>
                     </td>

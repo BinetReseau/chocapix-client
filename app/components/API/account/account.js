@@ -53,10 +53,9 @@ angular.module('bars.api.account', [
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
                     return Account.getSync($stateParams.id);
                 }],
-                account_history: ['api.models.transaction', '$stateParams', function(Transaction, $stateParams) {
-                    // TODO: return Transaction.byItem({id: $stateParams.id});
+                history: ['api.models.transaction', function(Transaction) {
                     Transaction.reload();
-                    return Transaction.all();
+                    // return Transaction.all();
                 }]
             }
         });
@@ -77,10 +76,9 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'account_history', 'api.services.action',
-    function($scope, account, account_history, APIAction) {
+    ['$scope', 'account', 'api.services.action',
+    function($scope, account, APIAction) {
         $scope.account = account;
-        $scope.account_history = account_history;
         $scope.query_type = 'give';
         $scope.query_motive = '';
         $scope.query_qty = '';
