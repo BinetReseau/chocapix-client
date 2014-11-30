@@ -53,8 +53,8 @@
                         <bars:user user="transaction.author" bar_="transaction.bar"></bars:user>
                     </td>
                     <td class="price">
-                        <span class="label" ng-class="transaction.canceled && 'label-default' || transaction.type === 'punish' && 'label-danger' || 'label-success'">
-                            {{ transaction.moneyflow | currency }}
+                        <span class="label" ng-class="transaction.canceled && 'label-default' || transaction.moneyflow < 0 && 'label-danger' || 'label-success'">
+                            {{ transaction.moneyflow | abs | currency }}
                         </span>
                     </td>
                     <td class="buttons">
