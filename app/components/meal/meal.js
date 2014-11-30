@@ -5,7 +5,7 @@ angular.module('bars.meal', [
 ])
 
 .controller('meal.ctrl',
-    ['$scope', 'api.models.food', 'api.models.account', 'api.services.action', '$filter', 
+    ['$scope', 'api.models.food', 'api.models.account', 'api.services.action', '$filter',
     function($scope, Food, Account, APIAction, $filter) {
         $scope.customersList = [ { account: $scope.user.account, ratio: 1, amount: 0 } ];
         $scope.itemsList = [];
@@ -36,7 +36,7 @@ angular.module('bars.meal', [
                 customer.amount = array_sum(itemsPrices) * customer.ratio / nbParts;
                 totalPrice += customer.amount;
             });
-            $scope.totalPrice = totalPrice;
+            $scope.totalPrice = parseInt(totalPrice);
         }
 
         $scope.addCustomer = function(item, model, label) {
@@ -55,7 +55,7 @@ angular.module('bars.meal', [
                 $scope.itemsList[$scope.itemsList.length] = { item: item, qty: 1 };
                 console.log(item);
                 $scope.itemToAdd = '';
-            } 
+            }
             $scope.amountCompute();
         };
         $scope.removeItem = function(item) {
