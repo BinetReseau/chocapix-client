@@ -107,7 +107,7 @@ angular.module('bars.magicbar', [
             }
 
             // Quantity
-			var match = /^([0-9]+(\.[0-9]+)?)(.*)$/g.exec(term);
+			var match = /^([0-9]+(\.[0-9]+)?)(\D*)$/g.exec(term);
             if (match) {
                 var qty = match[1];
 				var unit = match[3];
@@ -202,7 +202,6 @@ angular.module('bars.magicbar', [
 			}
 			return _.flatten(suggestions, true);
 		}
-		console.log(listSuggestions());
 
 		query.suggest = _.flatten(_.map(listSuggestions(),
 			function(suggestion) {
@@ -223,7 +222,7 @@ angular.module('bars.magicbar', [
 					res.otype = 'food';
 					res.type = res.type || 'buy';
 					if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro')
-						|| res.unit === "€"){
+							|| res.unit === "€"){
 						return []; // Discard
 					}
 				}
