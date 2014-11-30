@@ -20,9 +20,15 @@ angular.module('bars.admin', [
         })
         .state('bar.admin.food', {
             url: "/food",
-            templateUrl: "components/admin/Food/home.html",
+            templateUrl: "components/admin/food/home.html",
             controller: 'admin.ctrl.food'
-        });
+        })
+        .state('bar.admin.account', {
+            url: "/account",
+            templateUrl: "components/admin/account/home.html",
+            controller: 'admin.ctrl.account'
+        })
+        ;
 }])
 
 .controller('admin.ctrl.base',
@@ -53,5 +59,11 @@ angular.module('bars.admin', [
             });
         };
     }
+])
+.controller('admin.ctrl.account',
+['$scope', 'api.models.account', 'api.models.user',
+function($scope, Account, User) {
+    $scope.admin.active = 'account';
+}
 ])
 ;
