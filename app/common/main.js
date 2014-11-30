@@ -23,6 +23,10 @@ angular.module('bars.main', [
                     Account.reload();
                     return Account.all();
                 }],
+                users: ['api.models.user', function(User) {
+                    User.reload();
+                    return User.all();
+                }],
                 user: ['api.models.user', 'auth.service', function(User, AuthService) {
                     if (AuthService.isAuthenticated()) {
                         return User.me();
