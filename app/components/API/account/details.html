@@ -1,25 +1,31 @@
 <div class="container-fluid"><div class="row"><div class="col-sm-12">
 <hr />
 
-    <h1 class="text-center">{{ account.owner.full_name }}</h1>
-
-    <div class="row h4">
-        <div class="col-sm-3 text-right"><strong>Solde</strong></div>
-        <div class="col-sm-9">
-            <span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
-                {{ account.money | currency }}
-            </span>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 vcenter">
+            <h1 class="text-center no-vertical-margin">{{ account.owner.full_name }}</h1>
+        </div><!--
+        --><div class="col-sm-2 vcenter text-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-block btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Gestion <span class="caret"></span></button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a title="Modifier ce compte">
+                        <span class="glyphicon glyphicon-edit"></span> Modifier
+                    </a></li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="row" ng-show="true || account.id != user.account.id">
-        <div class="col-sm-3">
-            <select class="form-control" ng-model="query_type">
-                <option value="give">Faire un don</option>
-                <option value="punish">Mettre une amende</option>
-            </select>
-        </div>
-        <div class="col-sm-9">
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-12">
             <form class="form-inline" role="form" ng-submit="query(query_qty, query_type, query_motive)">
+                <select class="form-control" ng-model="query_type">
+                    <option value="give">Faire un don</option>
+                    <option value="punish">Mettre une amende</option>
+                </select>
                 <input type="number" class="form-control number" ng-model="query_qty" />
                 <span ng-show="query_type == 'punish'">
                     <input type="text" class="form-control large" ng-model="query_motive" placeholder="Motif de l'amende" />
@@ -30,12 +36,51 @@
         </div>
     </div>
 
-    <br /><br />
+    <br />
 
     <div class="row">
-        <div class="col-sm-12">
-            <bars:history history="account_history"></bars:history>
+        <div class="col-sm-4">
+            <div class="list-group">
+                <div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-6"><span class="h4">Solde</span></div>
+                    <div class="col-sm-6 text-right">
+                        <span class="h4"><span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
+                            {{ account.money | currency }}
+                        </span></span>
+                    </div>
+                </div>
+                </div>
+                <div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-6"><span class="h4">Total dépensé</span></div>
+                    <div class="col-sm-6 text-right">
+                        <span class="h4"><span class="label label-default">
+                            {{ 1000 | currency}}
+                        </span></span>
+                    </div>
+                </div>
+                </div>
+                <div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-6"><span class="h4">Rang semaine</span></div>
+                    <div class="col-sm-6 text-right">
+                        <span class="h4"><span class="badge">
+                            3
+                        </span></span>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8 text-center">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h1>ICI un BÔÔÔ GRAPHIQUE</h1>
+                </div>
+            </div>
         </div>
     </div>
-
 </div></div></div>
+
+<bars:history history="account_history"></bars:history>
