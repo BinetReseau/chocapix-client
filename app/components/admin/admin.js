@@ -62,7 +62,8 @@ angular.module('bars.admin', [
             ykeys: ['value'],
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ['Value']
+            labels: ['Value'],
+            smooth: false
         });
     }
 ])

@@ -5,7 +5,7 @@
         <div class="col-sm-8 col-sm-offset-2 vcenter">
             <h1 class="text-center no-vertical-margin">{{ food_item.name }}</h1>
         </div><!--
-        --><div class="col-sm-2 vcenter">
+        --><div class="col-sm-2 vcenter text-right">
             <div class="btn-group">
                 <button type="button" class="btn btn-block btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Gestion <span class="caret"></span></button>
                 <ul class="dropdown-menu pull-right" role="menu">
@@ -42,7 +42,8 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="list-group">
-                <div class="row list-group-item">
+                <div class="list-group-item">
+                <div class="row">
                     <div class="col-sm-6"><span class="h4">Prix</span></div>
                     <div class="col-sm-6 text-right">
                         <span class="h4"><span class="label label-info">
@@ -50,7 +51,9 @@
                         </span></span>
                     </div>
                 </div>
-                <div class="row list-group-item">
+                </div>
+                <div class="list-group-item">
+                <div class="row">
                     <div class="col-sm-6"><span class="h4">Stock</span></div>
                     <div class="col-sm-6 text-right">
                         <span class="h4"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
@@ -58,13 +61,16 @@
                         </span></span>
                     </div>
                 </div>
-                <div class="row list-group-item">
+                </div>
+                <div class="list-group-item">
+                <div class="row">
                     <div class="col-sm-6"><span class="h4">Vols</span></div>
                     <div class="col-sm-6 text-right">
                         <span class="h4"><span class="label label-warning">
                             12 %
                         </span></span>
                     </div>
+                </div>
                 </div>
                 <!--<div class="row list-group-item">
                     
@@ -80,69 +86,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-3 col-sm-offset-3 h4">
-            
-        </div>
-        <div class="col-sm-3 h4">
-            
-        </div>
-    </div>
-    <!--
-    <div class="row h4">
-        <div class="col-sm-3 text-right"><strong>Prix</strong></div>
-        <div class="col-sm-9"><span class="label label-info">{{ food_item.price|currency }}<span ng-hide="food_item.unit == ''"> / {{ food_item.unit }}</span></span></div>
-    </div>
-    <div class="row h4">
-        <div class="col-sm-3 text-right"><strong>Stock</strong></div>
-        <div class="col-sm-9"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">{{ food_item.qty | number }} {{ food_item.unit == '' && (food_item.name|affs:food_item.qty) || food_item.unit }}</span></div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">
-            <select class="form-control" ng-model="query_type">
-                <option value="buy">Acheter</option>
-                <option>Ajouter au panier</option>
-                <option value="throw">Jeter</option>
-                <option value="appro">Approvisionner</option>
-            </select>
-        </div>
-        <div class="col-sm-9">
-            <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)">
-                <input type="number" class="form-control number" step="any" ng-model="query_qty" />
-                <div class="checkbox unit">
-                    {{ food_item.unit == '' && (food_item.name|affs:query_qty) || food_item.unit }}
-                </div>
-                <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
-            </form>
-        </div>
-    </div>
-    <div class="row h4">
-        <div class="col-sm-3 text-right"><strong>Gestion</strong></div>
-        <div class="col-sm-9">
-            <div class="btn-toolbar" role="toolbar">
-                <div class="btn-group">
-                    <a title="Modifier cet aliment" class="btn btn-default">
-                        <span class="glyphicon glyphicon-edit"></span>
-                        Modifier
-                    </a>
-                </div>
-                <div class="btn-group">
-                    <a title="{{ food_item.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger" ng-class="food_item.deleted && 'active'" ng-click="trashIt()">
-                        <span class="glyphicon glyphicon-trash"></span>
-                        {{ food_item.deleted && 'Restaurer' || 'Supprimer' }}
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- -->
-
-    <br /><br />
-
-    <div class="row">
-        <div class="col-sm-12">
-            <bars:history history="food_item_history"></bars:history>
-        </div>
-    </div>
-    
 </div></div></div>
+
+<bars:history history="food_item_history"></bars:history>
+
+    
