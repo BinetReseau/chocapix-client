@@ -59,7 +59,6 @@
                     </td>
                     <td class="buttons">
                         <a title="Annuler cette transaction" ng-if="!transaction.canceled" ng-click="transaction.cancel()" class="label label-warning">Annuler</a>
-                        <span class="label label-default" ng-if="transaction.canceled">Annulée</span>
                         <a title="Rétablir cette transaction" ng-if="transaction.canceled" ng-click="transaction.restore()" class="label label-warning">Rétablir</a>
                     </td>
                 </tr>
