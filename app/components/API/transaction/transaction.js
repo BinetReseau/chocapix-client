@@ -12,6 +12,7 @@ angular.module('bars.api.transaction', [
                 structure: {
                     'bar': 'Bar',
                     'author': 'User',
+                    'author_account': 'Account',
                     'account': 'Account',
                     'item': 'Item'
                 },
@@ -21,6 +22,9 @@ angular.module('bars.api.transaction', [
                 },
                 hooks: {
                     'add': function() {
+                        if(this.author_account) {
+                            this.author_account.$reload();
+                        }
                         if(this.account) {
                             this.account.$reload();
                         }
