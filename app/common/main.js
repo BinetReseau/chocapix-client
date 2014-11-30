@@ -113,6 +113,6 @@ angular.module('bars.main', [
     'main.ctrl.bar',
     ['$scope', function($scope) {
         $scope.bar.active = 'index';
-        document.getElementById("queryf").focus();
+        document.getElementById("q_alim").focus();
     }])
 ;
