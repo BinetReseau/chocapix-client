@@ -40,4 +40,15 @@ angular.module('bars.api.user', [
                 }]
         });
 }])
+
+.directive('barsUser', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            user: '=user',
+            bar: '=bar_'
+        },
+        templateUrl: 'components/API/user/directive.html'
+    };
+})
 ;
