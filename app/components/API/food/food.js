@@ -85,7 +85,7 @@ angular.module('bars.api.food', [
         $scope.query_type = 'buy';
         $scope.query = function(qty, type) {
             if (type == 'buy' || type == 'throw' || type == 'appro') {
-                APIAction[type]({item: $scope.food_item.id, qty: qty}).then(function() {
+                APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
                     $scope.query_qty = 1;
                 });
             }
@@ -138,6 +138,7 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             food: '=food',
+            qty: '=?qty',
             buy: '=?buy'
         },
         templateUrl: 'components/API/food/price-directive.html',
@@ -147,6 +148,9 @@ angular.module('bars.api.food', [
                 $scope.price = $scope.food.price * $scope.food.buy_unit_value;
             } else {
                 $scope.price = $scope.food.price * $scope.food.unit_value;
+            }
+            if ($scope.qty) {
+                $scope.price = $scope.price * $scope.qty;
             }
         }]
     };

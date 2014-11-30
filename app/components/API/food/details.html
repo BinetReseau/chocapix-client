@@ -34,7 +34,7 @@
                 <div class="checkbox unit">
                     {{ food_item.unit == '' && (food_item.name|affs:query_qty) || food_item.unit }}
                 </div>
-                <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
+                <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price*food_item.unit_value) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
             </form>
         </div>
     </div>
