@@ -92,33 +92,18 @@ angular.module('bars.magicbar', [
         var aAccounts = [];
 
         function cleana() {
-            var i;
-            for (i = (aQty.length - 1); i >= 0; i--) {
-                if (aQty[i].used) {
-                    aQty.splice(i, 1);
-                }
-            }
-            for (i = (aFoods.length - 1); i >= 0; i--) {
-                if (aFoods[i].used) {
-                    aFoods.splice(i, 1);
-                }
-            }
-            for (i = (aUnits.length - 1); i >= 0; i--) {
-                if (aUnits[i].used) {
-                    aUnits.splice(i, 1);
-                }
-            }
-            for (i = (aAccounts.length - 1); i >= 0; i--) {
-                if (aAccounts[i].used) {
-                    aAccounts.splice(i, 1);
-                }
-            }
+			aQty = _.reject(aQty, 'used');
+			aFoods = _.reject(aFoods, 'used');
+			aUnits = _.reject(aUnits, 'used');
+			aAccounts = _.reject(aAccounts, 'used');
         }
 
         for (var i = 0; i < terms.length; i++) {
+			var term = terms[i];
+
             // Type
-            if (humanTypes[terms[i]] !== undefined) {
-                query.type = humanTypes[terms[i]];
+            if (humanTypes[term] !== undefined) {
+                query.type = humanTypes[term];
                 continue;
             }
 
@@ -130,20 +115,20 @@ angular.module('bars.magicbar', [
                 used: false
             };
 
-            // Quantité
-            if (/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/.test(terms[i])) {
-                item.qty = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$1').replace('/,/', '.').replace(/€/, '.').replace(/euros?/, '.');
+            // Quantity
+            if (/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/.test(term)) {
+                item.qty = term.replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$1').replace('/,/', '.').replace(/€/, '.').replace(/euros?/, '.');
                 item.isQty = true;
             }
 
-            // Unité
-            if (units.indexOf(terms[i]) > -1) {
+            // Unit
+            if (units.indexOf(term) > -1) {
                 item.isUnit = true;
-                item.unit = terms[i];
+                item.unit = term;
                 aUnits.push(item);
             } else {
-                var unit = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
-                if (unit !== terms[i] && units.indexOf(unit) > -1) {
+                var unit = term.replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
+                if (unit !== term && units.indexOf(unit) > -1) {
                     item.isUnit = true;
                     item.unit = unit;
                     aUnits.push(item);
@@ -152,11 +137,11 @@ angular.module('bars.magicbar', [
 
             // Food
             var foods = _.filter($scope.bar.foods, function (o) {
-				return o.filter(terms[i]);
+				return o.filter(term);
             });
             if (foods.length === 0) {
                 foods = _.filter($scope.bar.foods, function (o) {
-					return o.filter(terms[i].replace(/s$/, ''));
+					return o.filter(term.replace(/s$/, ''));
                 });
             }
             if (foods.length >= 1) {
@@ -166,7 +151,7 @@ angular.module('bars.magicbar', [
 
             // Account
             var accounts = _.filter($scope.bar.accounts, function (o) {
-				return o.filter(terms[i]);
+				return o.filter(term);
             });
             if (accounts.length >= 1) {
                 item.isAccount = true;
@@ -183,7 +168,6 @@ angular.module('bars.magicbar', [
             if (item.isAccount) {
                 aAccounts.push(item);
             }
-
         }
 
         var qFoods = [];
