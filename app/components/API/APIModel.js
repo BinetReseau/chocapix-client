@@ -276,8 +276,6 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
 
             APIModel.createEntityClass.call(this, this.structure);
             APIModel.addMethods.call(this, this.methods);
-
-            // this.reload(); // TODO: handle caching correctly
         }
 
         APIModel.createEntityClass = function(structure) {
@@ -329,32 +327,35 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         APIModel.addMethods = function(methods) {
             var self = this;
             _.forOwn(methods, function(method, key) {
-                _.defaults(method, {linkResult: true});
-                var obj = method.static ? self : self.APIEntity.prototype;
-                addNonEnumerableProperty(obj, key, function() {
-                    var self_entity = this;
-                    function request(data) {
-                        var req = _.omit(method, ["static", "linkResult"]);
-                        if(req.url && req.url.charAt(0) != "/") {
-                            req.url = self.url + (method.static ? "" : "/" + self_entity.id) + "/" + req.url;
-                        }
-                        if(!method.static) {
-                            req.data = data || req.data || self_entity;
-                        }
-                        return APIInterface.request(req);
-                    }
-                    var promise = request(); // TODO: wrapper function?
-                    if(method.linkResult) {
-                        promise = promise.then(function(entity) {
-                            if(entity instanceof BaseAPIEntity) {
-                                return APIInterface.link(entity);
+                if(_.isFunction(method)) {
+                    self.APIEntity.prototype[key] = method;
+                } else {
+                    _.defaults(method, {linkResult: true});
+                    var obj = method.static ? self : self.APIEntity.prototype;
+                    addNonEnumerableProperty(obj, key, function() {
+                        var self_entity = this;
+                        function request(data) {
+                            var req = _.omit(method, ["static", "linkResult"]);
+                            if(req.url && req.url.charAt(0) !== "/") {
+                                req.url = self.url + (method.static ? "" : "/" + self_entity.id) + "/" + req.url;
                             }
-                            return entity;
-                        });
-                    }
-                    return promise;
+                            if(!method.static) {
+                                req.data = data || req.data || self_entity;
+                            }
+                            return APIInterface.request(req);
+                        }
+                        var promise = request(); // TODO: wrapper function?
+                        if(method.linkResult) {
+                            promise = promise.then(function(entity) {
+                                if(entity instanceof BaseAPIEntity) {
+                                    return APIInterface.link(entity);
+                                }
+                                return entity;
+                            });
+                        }
+                        return promise;
+                    });
                 }
-                );
             });
         };
 
