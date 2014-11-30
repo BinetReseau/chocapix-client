@@ -47,6 +47,7 @@ angular.module('bars.api.food', [
                 }],
                 food_item_history: ['$stateParams', 'api.models.transaction', function($stateParams, Transaction) {
                     // TODO: return Transaction.byItem({id: $stateParams.id});
+                    Transaction.reload();
                     return Transaction.all();
                 }]
             }

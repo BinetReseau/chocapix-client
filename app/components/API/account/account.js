@@ -47,6 +47,7 @@ angular.module('bars.api.account', [
                 }],
                 account_history: ['api.models.transaction', '$stateParams', function(Transaction, $stateParams) {
                     // TODO: return Transaction.byItem({id: $stateParams.id});
+                    Transaction.reload();
                     return Transaction.all();
                 }]
             }
