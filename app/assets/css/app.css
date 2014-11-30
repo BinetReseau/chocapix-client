@@ -135,10 +135,10 @@ li li {
 
 /* Animations */
 .meal.ng-enter {
-    -webkit-animation: fadeInRight 1s;
-    -moz-animation: fadeInRight 1s;
-    -o-animation: fadeInRight 1s;
-    animation: fadeInRight 1s;
+    -webkit-animation: fadeInDown 1s;
+    -moz-animation: fadeInDown 1s;
+    -o-animation: fadeInDown 1s;
+    animation: fadeInDown 1s;
 }
 .meal.ng-leave {
     -webkit-animation: fadeOut .5s;
