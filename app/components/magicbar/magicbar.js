@@ -23,6 +23,7 @@ angular.module('bars.magicbar', [
         });
 
         $scope.executeQuery = function($item, $model, $label) {
+						console.log($model);
             if ($model.food === null && $model.account === null) {
                 return;
             }
@@ -195,19 +196,12 @@ angular.module('bars.magicbar', [
             if (aFoods.length == 1) { // un seul terme donnait des aliments
                 aFoods[0].used = true;
                 qFoods = aFoods[0].foods;
-                if (query.type === '') {
-                    query.type = 'buy';
-                }
-                cleana();
             }
             if (aAccounts.length == 1) { // un seul terme donnait des accounts
                 qAccounts = aAccounts[0].accounts;
                 aAccounts[0].used = true;
-                if (query.type === '') {
-                    query.type = 'give';
-                }
-                cleana();
             }
+			cleana();
             if (aQty.length == 1) { // un seul terme donnait des quantités
                 query.qty = aQty[0].qty;
                 aQty[0].used = true;
@@ -224,49 +218,71 @@ angular.module('bars.magicbar', [
         analyseTerms();
         analyseTerms();
         analyseTerms();
-				console.log(aFoods);
-        // Puis on ajoute/fusionne liste définitive de suggestion
+
+        // On intersecte les différentes listes
         if (qFoods.length == 0 && aFoods.length > 0) {
-						qFoods = aFoods[0].foods;
+			qFoods = aFoods[0].foods;
 
             for (var i = 1; i < aFoods.length; i++) {
-								qFoods = qFoods.filter(function(o) {
-										return aFoods[i].foods.indexOf(o) != -1
-								});
+				qFoods = qFoods.filter(function(o) {
+						return aFoods[i].foods.indexOf(o) != -1
+				});
             }
         }
-        qAccounts = qAccounts.concat(aAccounts);
+		if (qAccounts.length == 0 && aAccounts.length > 0) {
+			qAccounts = aAccounts[0].accounts;
 
-        for (var i = 0; i < qFoods.length; i++) {
-            var os = {
-                otype: 'food',
-                food: qFoods[i],
-                qty: query.qty,
-                unit: query.unit,
-                type: query.type
-            };
-            if (os.unit != "") {
-                if ((/^k/i.test(os.food.unit) && !/^k/i.test(os.unit)) || (!/^m/i.test(os.food.unit) && /^m/i.test(os.unit))) {
-                    os.qty *= 0.001;
-                } else if ((!/^k/i.test(os.food.unit) && /^k/i.test(os.unit)) || (/^m/i.test(os.food.unit) && !/^m/i.test(os.unit))) {
-                    os.qty *= 1000;
-                } else if (/^c/i.test(os.food.unit) && !/^c/i.test(os.unit)) {
-                    os.qty *= 100;
-                } else if (!/^c/i.test(os.food.unit) && /^c/i.test(os.unit)) {
-                    os.qty *= 0.01;
-                }
-            }
-            query.suggest.push(os);
-        }
-        for (var i = 0; i < qAccounts.length; i++) {
-            var os = {
-                otype: 'account',
-                account: qAccounts[i],
-                qty: query.qty,
-                type: query.type
-            };
-            query.suggest.push(os);
-        }
+			for (var i = 1; i < aAccounts.length; i++) {
+				qAccounts = qAccounts.filter(function(o) {
+					return aAccounts[i].accounts.indexOf(o) != -1
+				});
+			}
+		}
+
+		// Puis on ajoute le tout aux suggestions
+		var fType = query.type;
+		if (fType == '') {
+			fType = 'buy';
+		}
+		if (fType != 'punish' && fType != 'give') {
+	        for (var i = 0; i < qFoods.length; i++) {
+	            var os = {
+	                otype: 'food',
+	                food: qFoods[i],
+	                qty: query.qty,
+	                unit: query.unit,
+	                type: fType
+	            };
+	            if (os.unit != "") {
+	                if ((/^k/i.test(os.food.unit) && !/^k/i.test(os.unit)) || (!/^m/i.test(os.food.unit) && /^m/i.test(os.unit))) {
+	                    os.qty *= 0.001;
+	                } else if ((!/^k/i.test(os.food.unit) && /^k/i.test(os.unit)) || (/^m/i.test(os.food.unit) && !/^m/i.test(os.unit))) {
+	                    os.qty *= 1000;
+	                } else if (/^c/i.test(os.food.unit) && !/^c/i.test(os.unit)) {
+	                    os.qty *= 100;
+	                } else if (!/^c/i.test(os.food.unit) && /^c/i.test(os.unit)) {
+	                    os.qty *= 0.01;
+	                }
+	            }
+	            query.suggest.push(os);
+	        }
+		}
+
+		var aType = query.type;
+		if (aType == '') {
+			aType = 'give';
+		}
+		if (aType == 'give' || aType == 'punish') {
+	        for (var i = 0; i < qAccounts.length; i++) {
+	            var os = {
+	                otype: 'account',
+	                account: qAccounts[i],
+	                qty: query.qty,
+	                type: aType
+	            };
+	            query.suggest.push(os);
+	        }
+		}
 
         /*
         // Erreurs
