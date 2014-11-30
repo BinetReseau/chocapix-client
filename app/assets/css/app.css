@@ -138,6 +138,9 @@ li li {
 .vbottom {
     vertical-align: bottom !important;
 }
+.vtop {
+    vertical-align: top !important;
+}
 
 /* Animations */
 .meal.ng-enter {

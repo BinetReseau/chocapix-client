@@ -4,6 +4,80 @@
     <h1 class="text-center">{{ food_item.name }}</h1>
 
     <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="navbar navbar-default">
+            <form class="navbar-form" role="form" ng-submit="query(query_qty, query_type)">
+                <select class="form-control" ng-model="query_type">
+                    <option value="buy">Acheter</option>
+                    <option>Ajouter au panier</option>
+                    <option value="throw">Jeter</option>
+                    <option value="appro">Approvisionner</option>
+                </select>
+                <input type="number" class="form-control number" step="any" ng-model="query_qty" />
+                <div class="checkbox unit">
+                    {{ food_item.unit == '' && (food_item.name|affs:query_qty) || food_item.unit }}
+                </div>
+                <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
+            </form>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="list-group">
+                <div class="row list-group-item">
+                    <div class="col-sm-6"><span class="h4">Prix</span></div>
+                    <div class="col-sm-6 text-right">
+                        <span class="h4"><span class="label label-info">
+                            {{ food_item.price | currency }}<span ng-hide="food_item.unit == ''"> / {{ food_item.unit }}</span>
+                        </span></span>
+                    </div>
+                </div>
+                <div class="row list-group-item">
+                    <div class="col-sm-6"><span class="h4">Stock</span></div>
+                    <div class="col-sm-6 text-right">
+                        <span class="h4"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
+                            {{ food_item.qty | number }} {{ food_item.unit == '' && (food_item.name|affs:food_item.qty) || food_item.unit }}
+                        </span></span>
+                    </div>
+                </div>
+                <div class="row list-group-item">
+                    <div class="col-sm-6"><span class="h4">Vols</span></div>
+                    <div class="col-sm-6 text-right">
+                        <span class="h4"><span class="label label-warning">
+                            12 %
+                        </span></span>
+                    </div>
+                </div>
+                <!--<div class="row list-group-item">
+                    <a title="Modifier cet aliment" class="btn btn-default btn-block">
+                        <span class="glyphicon glyphicon-edit"></span> Modifier
+                    </a>
+                    <a title="{{ food_item.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" class="btn btn-danger btn-block" ng-class="food_item.deleted && 'active'" ng-click="trashIt()">
+                        <span class="glyphicon glyphicon-trash"></span> {{ food_item.deleted && 'Restaurer' || 'Supprimer' }}
+                    </a>
+                </div>-->
+            </div>
+        </div>
+        <div class="col-sm-8 text-center">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h1>ICI un BÔÔÔ GRAPHIQUE</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-3 h4">
+            
+        </div>
+        <div class="col-sm-3 h4">
+            
+        </div>
+    </div>
+    <!--
     <div class="row h4">
         <div class="col-sm-3 text-right"><strong>Prix</strong></div>
         <div class="col-sm-9"><span class="label label-info">{{ food_item.price|currency }}<span ng-hide="food_item.unit == ''"> / {{ food_item.unit }}</span></span></div>
@@ -50,6 +124,7 @@
             </div>
         </div>
     </div>
+    <!-- -->
 
     <br /><br />
 
