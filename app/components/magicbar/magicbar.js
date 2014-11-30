@@ -222,7 +222,8 @@ angular.module('bars.magicbar', [
 				} else {
 					res.otype = 'food';
 					res.type = res.type || 'buy';
-					if(res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro') {
+					if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro')
+						|| res.unit === "€"){
 						return []; // Discard
 					}
 				}
