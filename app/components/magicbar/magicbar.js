@@ -167,9 +167,9 @@ angular.module('bars.magicbar', [
             }
 
             // Account
-            var accounts = $filter('filter')($scope.bar.accounts, function (o) {
-                return (o.owner.full_name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1);
-            }, false);
+            var accounts = _.filter($scope.bar.accounts, function (o) {
+				return o.filter(terms[i].toLocaleLowerCase());
+            });
             if (accounts.length >= 1) {
                 item.isAccount = true;
                 item.accounts = accounts;

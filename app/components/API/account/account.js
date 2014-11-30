@@ -15,6 +15,13 @@ angular.module('bars.api.account', [
                 },
                 methods: {
                     'me': {url: 'me', static: true},
+                    'filter': function(s) {
+                        if(!this.owner.full_name) {
+                            return false;
+                        } else {
+                            return this.owner.full_name.toLocaleLowerCase().indexOf(s) > -1;
+                        }
+                    }
                 }
             });
     }])
