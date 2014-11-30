@@ -59,8 +59,10 @@ angular.module('bars.magicbar', [
         if(typeof qo !== 'string' && !(qo instanceof String) || qo === "") {
             return query;
         }
-        // On découpe la requête en termes
-        var terms = qo.toLocaleLowerCase().split(' ');
+        // Preprocessing
+		qo = qo.toLocaleLowerCase();
+		qo = qo.replace(/ ?(,|€|euro(s?)) ?/, '.');
+        var terms = qo.split(' ');
 
         var types = [
             'buy',
@@ -116,23 +118,23 @@ angular.module('bars.magicbar', [
             };
 
             // Quantity
-            if (/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/.test(term)) {
-                item.qty = term.replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?).*$/g, '$1').replace('/,/', '.').replace(/€/, '.').replace(/euros?/, '.');
+			var match = /^([0-9]+(\.[0-9]+)?)(.*)$/g.exec(term);
+            if (match) {
+                var qty = match[1];
+				var unit = match[3];
                 item.isQty = true;
+				item.qty = qty;
+
+				if(unit !== '') {
+					item.isUnit = true;
+					item.unit = unit;
+				}
             }
 
             // Unit
             if (units.indexOf(term) > -1) {
                 item.isUnit = true;
                 item.unit = term;
-                aUnits.push(item);
-            } else {
-                var unit = term.replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
-                if (unit !== term && units.indexOf(unit) > -1) {
-                    item.isUnit = true;
-                    item.unit = unit;
-                    aUnits.push(item);
-                }
             }
 
             // Food
@@ -162,6 +164,9 @@ angular.module('bars.magicbar', [
             if (item.isQty) {
                 aQty.push(item);
             }
+			if (item.isUnit) {
+				aUnits.push(item);
+			}
             if (item.isFood) {
                 aFoods.push(item);
             }
