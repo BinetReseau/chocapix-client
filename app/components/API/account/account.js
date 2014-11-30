@@ -71,6 +71,10 @@ angular.module('bars.api.account', [
         $scope.account_list = account_list;
         $scope.list_order = 'owner.full_name';
         $scope.reverse = false;
+        $scope.searchl = "";
+        $scope.filterAccounts = function(o) {
+            return o.filter($scope.searchl);
+        };
     }])
 .controller('api.ctrl.account_detail',
     ['$scope', 'account', 'account_history', 'api.services.action',
