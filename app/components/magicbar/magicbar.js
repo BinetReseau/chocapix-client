@@ -60,7 +60,7 @@ angular.module('bars.magicbar', [
             return query;
         }
         // On découpe la requête en termes
-        var terms = qo.split(' ');
+        var terms = qo.toLocaleLowerCase().split(' ');
 
         var types = [
             'buy',
@@ -151,15 +151,13 @@ angular.module('bars.magicbar', [
             }
 
             // Food
-            var foods = $filter('filter')($scope.bar.foods, function (o) {
-                return (!o.deleted && (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1 ||
-                    o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase()) > -1));
-            }, false);
+            var foods = _.filter($scope.bar.foods, function (o) {
+				return o.filter(terms[i]);
+            });
             if (foods.length === 0) {
-                foods = $filter('filter')($scope.bar.foods, function (o) {
-                    return (!o.deleted && (o.name.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1 ||
-                        o.keywords.toLocaleLowerCase().indexOf(terms[i].toLocaleLowerCase().replace(/s$/, '')) > -1));
-                }, false);
+                foods = _.filter($scope.bar.foods, function (o) {
+					return o.filter(terms[i].replace(/s$/, ''));
+                });
             }
             if (foods.length >= 1) {
                 item.isFood = true;
@@ -168,7 +166,7 @@ angular.module('bars.magicbar', [
 
             // Account
             var accounts = _.filter($scope.bar.accounts, function (o) {
-				return o.filter(terms[i].toLocaleLowerCase());
+				return o.filter(terms[i]);
             });
             if (accounts.length >= 1) {
                 item.isAccount = true;

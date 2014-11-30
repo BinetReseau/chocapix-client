@@ -14,7 +14,11 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'markDeleted': {method:'PUT', url: 'markDeleted'},
-                    'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted'}
+                    'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted'},
+                    'filter': function(s) {
+                        return !this.deleted && (this.name.toLocaleLowerCase().indexOf(s) > -1 ||
+                            this.keywords.toLocaleLowerCase().indexOf(s) > -1);
+                    }
                 }
             });
     }])
