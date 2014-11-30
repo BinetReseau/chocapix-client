@@ -224,11 +224,15 @@ angular.module('bars.magicbar', [
         analyseTerms();
         analyseTerms();
         analyseTerms();
-
+				console.log(aFoods);
         // Puis on ajoute/fusionne liste définitive de suggestion
-        if (qFoods.length == 0) {
-            for (var i = 0; i < aFoods.length; i++) {
-                qFoods = qFoods.concat(aFoods[i].foods);
+        if (qFoods.length == 0 && aFoods.length > 0) {
+						qFoods = aFoods[0].foods;
+
+            for (var i = 1; i < aFoods.length; i++) {
+								qFoods = qFoods.filter(function(o) {
+										return aFoods[i].foods.indexOf(o) != -1
+								});
             }
         }
         qAccounts = qAccounts.concat(aAccounts);
