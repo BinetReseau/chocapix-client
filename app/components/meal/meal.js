@@ -62,6 +62,11 @@ angular.module('bars.meal', [
             $scope.itemsList.splice($scope.itemsList.indexOf(item), 1);
             $scope.amountCompute();
         };
+
+        $scope.accountToAdd = "";
+        $scope.filterAccounts = function(o) {
+            return o.filter($scope.accountToAdd);
+        };
     }]
 )
 ;

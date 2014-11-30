@@ -10,7 +10,7 @@
                 <form class="form-inline text-center">
                     <div class="form-group">
                         <label class="sr-only" for="addMealCustomerInput">Ajouter</label>
-                        <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" typeahead="account.owner.full_name for account in bar.accounts | filter:$viewValue | limitTo:5" ng-model="accountToAdd" autocomplete="off" typeahead-on-select="addCustomer($item, $model, $label)" />
+                        <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" typeahead="account.owner.full_name for account in bar.accounts | filter:filterAccounts | limitTo:5" ng-model="accountToAdd" autocomplete="off" typeahead-on-select="addCustomer($item, $model, $label)" />
                     </div>
                 </form>
                 <br />
