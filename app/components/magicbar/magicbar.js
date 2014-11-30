@@ -61,7 +61,8 @@ angular.module('bars.magicbar', [
         }
         // Preprocessing
 		qo = qo.toLocaleLowerCase();
-		qo = qo.replace(/ ?(,|€|euro(s?)) ?/, '.');
+		qo = qo.replace(/,/, '.');
+		qo = qo.replace(/ ?(€|euro(s?))/, '€');
         var terms = qo.split(' ');
 
         var types = [
@@ -86,6 +87,7 @@ angular.module('bars.magicbar', [
             'l',
             'ml',
             'cl',
+            '€',
         ];
 
 
@@ -186,7 +188,7 @@ angular.module('bars.magicbar', [
 				} else if(canBe.type === 'food' && hasType(suggestion, 'account')) {
 					continue;
 				} else if(canBe.type === 'account' || canBe.type === 'food') {
-					var other = hasType(suggestion, canBe.type);
+					var other = _.find(suggestion, {type:canBe.type});
 					if(other && other.value !== canBe.value) {
 						continue;
 					} else if (other) { // Do not add food again
