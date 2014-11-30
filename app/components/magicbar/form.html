@@ -1,9 +1,13 @@
 <div class="container-fluid">
-    <form class="form-horizontal" ng-submit="executeQuery()">
+    <form class="form-horizontal">
         <div class="form-group" ng-class="query.hasError && 'has-error'">
             <label for="q_alim" class="col-sm-2 control-label">Je veux</label>
             <div class="col-sm-10">
-                <input type="search" class="form-control" ng-model="bar.search" placeholder="(acheter) 2l de lait • 120g pates • (donner) 2€ à Thomas • ajouter (à la bouffe à plusieurs) 6 steaks • jeter 3 pommes" id="queryf" id="q_alim" typeahead="el as el.type for el in query.suggest | limitTo:5" typeahead-template-url="components/magicbar/typeahead.html" typeahead-wait-ms="100" typeahead-on-select="executeQuery($item, $model, $label)" />
+                <input type="search" class="form-control" ng-model="bar.search" id="q_alim"
+                    placeholder="(acheter) 2l de lait • 120g pates • (donner) 2€ à Thomas • ajouter (à la bouffe à plusieurs) 6 steaks • jeter 3 pommes"
+                    typeahead="el as el.type for el in query.suggest | limitTo:5"
+                    typeahead-template-url="components/magicbar/typeahead.html" typeahead-wait-ms="100"
+                    typeahead-on-select="executeQuery($item, $model, $label)" />
             </div>
         </div>
     </form>
