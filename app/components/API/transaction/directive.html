@@ -31,13 +31,13 @@
                     <td class="item">
                         <ng:switch on="transaction.type">
                             <span ng-switch-when="buy">
-                                <bars:food food="transaction.item" qty="transaction.qty"></bars:food>
+                                <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
                             </span>
                             <span ng-switch-when="appro">
-                                <bars:food food="transaction.item" qty="transaction.qty"></bars:food>
+                                <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
                             </span>
                             <span ng-switch-when="throw">
-                                <bars:food food="transaction.item" qty="transaction.qty"></bars:food>
+                                <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
                             </span>
 
                             <span ng-switch-when="give">

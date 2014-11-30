@@ -32,7 +32,7 @@ angular.module('bars.magicbar', [
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
                     var req;
                     if(_.contains(['buy', 'throw', 'appro'], type)) {
-                        req = {item: $model.food.id, qty: $model.qty};
+                        req = {item: $model.food.id, qty: $model.qty*$model.food.unit_value};
                     } else {
                         req = {account: $model.account.id, amount: $model.qty};
                     }

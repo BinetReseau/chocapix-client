@@ -47,7 +47,7 @@
                     <div class="col-sm-6"><span class="h4">Prix</span></div>
                     <div class="col-sm-6 text-right">
                         <span class="h4"><span class="label label-info">
-                            <bars:food:price food="food_item"></bars:food:price>
+                            <bars:food:price food="food_item" in="'sell'" qty="1"></bars:food:price>
                         </span></span>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <div class="col-sm-6"><span class="h4">Stock</span></div>
                     <div class="col-sm-6 text-right">
                         <span class="h4"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
-                            <bars:food:qty food="food_item"></bars:food:qty>
+                            <bars:food:qty food="food_item" qty="food_item.qty" out="'sell'"></bars:food:qty>
                         </span></span>
                     </div>
                 </div>

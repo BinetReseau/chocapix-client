@@ -22,8 +22,8 @@
                 </tr>
                 <tr ng-repeat="f in food_list | filter:filterDeleted() | filter:searchl | orderBy:'name':reverse" ng-class="f.deleted && 'del'">
                     <td><bars:food food="f"></bars:food></td>
-                    <td><bars:food:qty food="f"></bars:food:qty></td>
-                    <td><bars:food:price food="f"></bars:food:price></td>
+                    <td><bars:food:qty food="f" qty="f.qty" out="'sell'"></bars:food:qty></td>
+                    <td><bars:food:price food="f" qty="1" in="'sell'"></bars:food:price> <span ng-if="f.unit">/ {{ f.unit }}</span></td>
                 </tr>
             </table>
             <div class="panel-body" ng-if="(food_list | filter:filterDeleted() | filter:searchl).length == 0">
