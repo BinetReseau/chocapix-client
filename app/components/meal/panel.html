@@ -2,6 +2,15 @@
     <div class="panel-heading"><h3 class="panel-title text-center">Bouffe<span ng-if="customersList.length > 1"> à plusieurs</span></h3></div>
     <div class="list-group">
         <div class="list-group-item">
+            <table class="table table-condensed no-border">
+                <tr class="no-border">
+                    <td class="vmiddle">Coût total :</td>
+                    <td class="vmiddle"><span class="label label-primary">{{ totalPrice | currency }}</span></td>
+                    <td><button class="btn btn-success btn-sm"><span class="glyphicon glyphicon-floppy-disk"></span> Valider !</button></td>
+                </tr>
+            </table>
+        </div>
+        <div class="list-group-item">
             <h5 class="list-group-item-heading text-center">Participants</h5>
             <div class="list-group-item-text">
                 <form class="form-inline text-center">
