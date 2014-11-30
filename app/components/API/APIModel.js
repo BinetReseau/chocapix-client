@@ -281,6 +281,7 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         APIModel.createEntityClass = function(structure) {
             var self = this;
             this.APIEntity = function APIEntity(obj){
+                obj = obj || {};
                 _.forOwn(structure, function(type, key) {
                     var v = obj[key];
                     if(v) {
