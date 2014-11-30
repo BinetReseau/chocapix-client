@@ -68,6 +68,12 @@ li.active a:hover {
     text-align: center;
     padding-top: 80px;
 }
+.graph {
+    height: 200px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+}
 
 /* Styles for history table */
 .history td.time {
@@ -97,19 +103,19 @@ li.active a:hover {
 }
 
 @-webkit-keyframes rotateThis {
- from { 
+ from {
         -webkit-transform: rotate(0deg);
     }
- to  { 
+ to  {
         -webkit-transform: rotate(360deg);
     }
 }
 
 @keyframes rotateThis {
- from { 
+ from {
         transform: rotate(0deg);
     }
- to  { 
+ to  {
         transform: rotate(360deg);
     }
 }
