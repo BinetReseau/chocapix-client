@@ -1,5 +1,5 @@
 <div class="container-fluid"><div class="row">
-    <!-- 
+    <!--
     <div class="col-sm-2">
         <div class="btn-group-vertical">
             <a title="Afficher les aliments supprimés" ng-click="showDeleted = !showDeleted" class="btn btn-primary" ng-class="showDeleted && 'active'">
@@ -22,8 +22,8 @@
                 </tr>
                 <tr ng-repeat="f in food_list | filter:filterDeleted() | filter:searchl | orderBy:'name':reverse" ng-class="f.deleted && 'del'">
                     <td><bars:food food="f"></bars:food></td>
-                    <td>{{ f.qty | number }}<span ng-if="f.unit != ''"> {{ f.unit }}</span></td>
-                    <td>{{ f.price | currency }}<span ng-if="f.unit != ''"> / {{ f.unit }}</span></td>
+                    <td><bars:food:qty food="f"></bars:food:qty></td>
+                    <td><bars:food:price food="f"></bars:food:price></td>
                 </tr>
             </table>
             <div class="panel-body" ng-if="(food_list | filter:filterDeleted() | filter:searchl).length == 0">

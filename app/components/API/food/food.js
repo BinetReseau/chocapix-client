@@ -113,4 +113,42 @@ angular.module('bars.api.food', [
         }]
     };
 })
+.directive('barsFoodQty', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            food: '=food',
+            qty: '=?qty',
+            buy: '=?buy'
+        },
+        templateUrl: 'components/API/food/qty-directive.html',
+        controller: ['$scope', function($scope) {
+            var buy = $scope.buy || false;
+            var qty = $scope.qty || $scope.food.qty;
+            if (buy) {
+                $scope.qty = qty / $scope.food.buy_unit_value;
+            } else {
+                $scope.qty = qty / $scope.food.unit_value;
+            }
+        }]
+    };
+})
+.directive('barsFoodPrice', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            food: '=food',
+            buy: '=?buy'
+        },
+        templateUrl: 'components/API/food/price-directive.html',
+        controller: ['$scope', function($scope) {
+            var buy = $scope.buy || false;
+            if (buy) {
+                $scope.price = $scope.food.price * $scope.food.buy_unit_value;
+            } else {
+                $scope.price = $scope.food.price * $scope.food.unit_value;
+            }
+        }]
+    };
+})
 ;
