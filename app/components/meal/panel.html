@@ -14,9 +14,9 @@
                 <div class="div-scroll">
                 <table class="table table-condensed no-border">
                     <tr ng-repeat="customer in customersList" class="animated meal no-border">
-                        <td style="vertical-align: middle;"><input type="text" id="ratioCustomer{{ $index }}Input" class="form-control input-sm" style="width: 45px;" placeholder="1" ng-model="customer.ratio"></td>
-                        <td style="vertical-align: middle;"><span class="form-control-static">{{ customer.account.owner.full_name }}</span></td>
-                        <td style="vertical-align: middle;" class="text-right"><span class="label label-info">{{ customer.amount | currency }}</span></td>
+                        <td class="vmiddle"><input type="text" id="ratioCustomer{{ $index }}Input" class="form-control input-sm" style="width: 45px;" placeholder="1" ng-model="customer.ratio"></td>
+                        <td class="vmiddle"><span class="form-control-static">{{ customer.account.owner.full_name }}</span></td>
+                        <td class="vmiddle text-right"><span class="label label-info">{{ customer.amount | currency }}</span></td>
                         <td style="vertical-align: baseline;">
                             <button type="button" class="close" ng-click="removeCustomer(customer)"><span aria-hidden="true">&times;</span><span class="sr-only">Retirer</span></button>
                         </td>
@@ -37,8 +37,8 @@
                 <br />
                 <table class="table table-condensed no-border">
                     <tr ng-repeat="item in itemsList" class="animated fadeInRight no-border">
-                        <td style="vertical-align: middle;"><input type="text" id="qtyItem{{ $index }}Input" class="form-control input-sm" style="width: 60px;" placeholder="Quantité" ng-model="item.qty"> {{ item.item.unit }}</td>
-                        <td style="vertical-align: middle;"><span class="form-control-static">{{ item.item.name }}</span></td>
+                        <td class="vmiddle"><input type="text" id="qtyItem{{ $index }}Input" class="form-control input-sm" style="width: 60px;" placeholder="Quantité" ng-model="item.qty"> {{ item.item.unit }}</td>
+                        <td class="vmiddle"><span class="form-control-static">{{ item.item.name }}</span></td>
                         <td style="vertical-align: baseline;">
                             <button type="button" class="close" ng-click="removeItem(item)"><span aria-hidden="true">&times;</span><span class="sr-only">Retirer</span></button>
                         </td>
