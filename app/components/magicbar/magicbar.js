@@ -23,7 +23,7 @@ angular.module('bars.magicbar', [
         });
 
         $scope.executeQuery = function($item, $model, $label) {
-						console.log($model);
+			console.log($model);
             if ($model.food === null && $model.account === null) {
                 return;
             }
@@ -56,7 +56,7 @@ angular.module('bars.magicbar', [
         };
         var query = $scope.query;
 
-        if(typeof qo != 'string' && !(qo instanceof String) || qo == "") {
+        if(typeof qo !== 'string' && !(qo instanceof String) || qo === "") {
             return query;
         }
         // On découpe la requête en termes
@@ -117,7 +117,7 @@ angular.module('bars.magicbar', [
 
         for (var i = 0; i < terms.length; i++) {
             // Type
-            if (humanTypes[terms[i]] != undefined) {
+            if (humanTypes[terms[i]] !== undefined) {
                 query.type = humanTypes[terms[i]];
                 continue;
             }
@@ -143,10 +143,10 @@ angular.module('bars.magicbar', [
                 aUnits.push(item);
             } else {
                 var unit = terms[i].replace(/^([0-9]+(((\.)|€|,|(euro(s?)))[0-9]+)?)(.*)$/g, '$7');
-                if (unit != terms[i] && units.indexOf(unit) > -1) {
-                    itemu.isUnit = true;
-                    itemu.unit = unit;
-                    aUnits.push(itemu);
+                if (unit !== terms[i] && units.indexOf(unit) > -1) {
+                    item.isUnit = true;
+                    item.unit = unit;
+                    aUnits.push(item);
                 }
             }
 
@@ -191,21 +191,21 @@ angular.module('bars.magicbar', [
 
         function analyseTerms() {
             // Réflexion et exécution
-            if (aFoods.length == 1) { // un seul terme donnait des aliments
+            if (aFoods.length === 1) { // un seul terme donnait des aliments
                 aFoods[0].used = true;
                 qFoods = aFoods[0].foods;
             }
-            if (aAccounts.length == 1) { // un seul terme donnait des accounts
+            if (aAccounts.length === 1) { // un seul terme donnait des accounts
                 qAccounts = aAccounts[0].accounts;
                 aAccounts[0].used = true;
             }
 			cleana();
-            if (aQty.length == 1) { // un seul terme donnait des quantités
+            if (aQty.length === 1) { // un seul terme donnait des quantités
                 query.qty = aQty[0].qty;
                 aQty[0].used = true;
                 cleana();
             }
-            if (aUnits.length == 1) { // un seul terme donnait une unité
+            if (aUnits.length === 1) { // un seul terme donnait une unité
                 query.unit = aUnits[0].unit;
                 aUnits[0].used = true;
                 cleana();
@@ -218,32 +218,32 @@ angular.module('bars.magicbar', [
         analyseTerms();
 
         // On intersecte les différentes listes
-        if (qFoods.length == 0 && aFoods.length > 0) {
+        if (qFoods.length === 0 && aFoods.length > 0) {
 			qFoods = aFoods[0].foods;
 
-            for (var i = 1; i < aFoods.length; i++) {
+            for (i = 1; i < aFoods.length; i++) {
 				qFoods = qFoods.filter(function(o) {
-						return aFoods[i].foods.indexOf(o) != -1
+						return aFoods[i].foods.indexOf(o) !== -1;
 				});
             }
         }
-		if (qAccounts.length == 0 && aAccounts.length > 0) {
+		if (qAccounts.length === 0 && aAccounts.length > 0) {
 			qAccounts = aAccounts[0].accounts;
 
-			for (var i = 1; i < aAccounts.length; i++) {
+			for (i = 1; i < aAccounts.length; i++) {
 				qAccounts = qAccounts.filter(function(o) {
-					return aAccounts[i].accounts.indexOf(o) != -1
+					return aAccounts[i].accounts.indexOf(o) !== -1;
 				});
 			}
 		}
 
 		// Puis on ajoute le tout aux suggestions
 		var fType = query.type;
-		if (fType == '') {
+		if (fType === '') {
 			fType = 'buy';
 		}
-		if (fType != 'punish' && fType != 'give') {
-	        for (var i = 0; i < qFoods.length; i++) {
+		if (fType !== 'punish' && fType !== 'give') {
+	        for (i = 0; i < qFoods.length; i++) {
 	            var os = {
 	                otype: 'food',
 	                food: qFoods[i],
@@ -251,7 +251,7 @@ angular.module('bars.magicbar', [
 	                unit: query.unit,
 	                type: fType
 	            };
-	            if (os.unit != "") {
+	            if (os.unit !== "") {
 	                if ((/^k/i.test(os.food.unit) && !/^k/i.test(os.unit)) || (!/^m/i.test(os.food.unit) && /^m/i.test(os.unit))) {
 	                    os.qty *= 0.001;
 	                } else if ((!/^k/i.test(os.food.unit) && /^k/i.test(os.unit)) || (/^m/i.test(os.food.unit) && !/^m/i.test(os.unit))) {
@@ -267,18 +267,17 @@ angular.module('bars.magicbar', [
 		}
 
 		var aType = query.type;
-		if (aType == '') {
+		if (aType === '') {
 			aType = 'give';
 		}
-		if (aType == 'give' || aType == 'punish') {
-	        for (var i = 0; i < qAccounts.length; i++) {
-	            var os = {
-	                otype: 'account',
-	                account: qAccounts[i],
-	                qty: query.qty,
-	                type: aType
-	            };
-	            query.suggest.push(os);
+		if (aType === 'give' || aType === 'punish') {
+	        for (i = 0; i < qAccounts.length; i++) {
+	            query.suggest.push({
+					otype: 'account',
+					account: qAccounts[i],
+					qty: query.qty,
+					type: aType
+				});
 	        }
 		}
 
