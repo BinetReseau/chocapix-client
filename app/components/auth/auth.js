@@ -5,8 +5,8 @@ angular.module('bars.auth', [
 ])
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
-.factory('auth.service', ['$injector', '$localStorage', '$q',
-    function ($injector, $localStorage, $q) {
+.factory('auth.service', ['$injector', '$localStorage', '$q', 'APIURL',
+    function ($injector, $localStorage, $q, APIURL) {
         if ($localStorage.auth === undefined) {
             $localStorage.auth = {
                 token: null
@@ -14,7 +14,7 @@ angular.module('bars.auth', [
         }
         return {
             login: function(credentials, resultLogin) {
-                return $injector.get('$http').post(BACKEND_URL + '/api-token-auth/', credentials, {'headers':{'Content-Type':"application/json"}}).then(
+                return $injector.get('$http').post(APIURL + '/api-token-auth/', credentials, {'headers':{'Content-Type':"application/json"}}).then(
                     function(response) {
                         $localStorage.auth.token = response.data.token;
                         return response.data.user;

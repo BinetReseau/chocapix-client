@@ -1,7 +1,5 @@
 'use strict';
 
-var BACKEND_URL = "http://nadrieril.fr/bars/api";
-
 angular.module('barsApp', [
   'ui.router',
   'ui.bootstrap',
@@ -14,12 +12,18 @@ angular.module('barsApp', [
   'bars.magicbar',
   'bars.meal',
 
+  'APIModel',
   'bars.api.bar',
   'bars.api.food',
   'bars.api.user',
   'bars.api.account',
-  'bars.api.transaction',
+  'bars.api.transaction'
 ])
+
+.config(['APIURLProvider', function(APIURL) {
+    APIURL.url = "http://nadrieril.fr/bars/api";
+    // APIURL.url = "http://127.0.0.1:8000";
+}])
 
 .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
