@@ -6,15 +6,15 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
+
+    <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
     <link rel="stylesheet" href="bower_components/morris.js/morris.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
-    <!-- <link rel="stylesheet" href="styles/main.css"> -->
+    <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="assets/css/app.css">
     <!-- endbuild -->
   </head>
@@ -26,14 +26,14 @@
     <!-- Add your site or application content here -->
     <div ui-view></div>
 
-    <!-- build:js(.) scripts/oldieshim.js -->
+    <!-- build:js scripts/oldieshim.js -->
     <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="../bower_components/es5-shim/es5-shim.js"></script>
+    <script src="../bower_components/json3/lib/json3.js"></script>
     <![endif]-->
     <!-- endbuild -->
 
-    <!-- build:js(.) scripts/vendor.js -->
+    <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
@@ -56,24 +56,30 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="assets/js/angular-locale_fr-fr.js"></script>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="assets/js/angular-locale_fr-fr.js"></script>
 
-        <script src="components/API/APIModel.js"></script>
-        <script src="components/API/bar/bar.js"></script>
-        <script src="components/API/user/user.js"></script>
-        <script src="components/API/account/account.js"></script>
-        <script src="components/API/food/food.js"></script>
-        <script src="components/API/transaction/transaction.js"></script>
+    <script src="components/API/APIModel.js"></script>
+    <script src="components/API/bar/bar.js"></script>
+    <script src="components/API/user/user.js"></script>
+    <script src="components/API/account/account.js"></script>
+    <script src="components/API/food/food.js"></script>
+    <script src="components/API/transaction/transaction.js"></script>
 
-        <script src="components/auth/auth.js"></script>
-        <script src="components/display.js"></script>
-        <script src="components/magicbar/magicbar.js"></script>
-        <script src="components/meal/meal.js"></script>
-        <script src="common/main.js"></script>
+    <script src="components/auth/auth.js"></script>
+    <script src="components/display.js"></script>
+    <script src="components/magicbar/magicbar.js"></script>
+    <script src="components/meal/meal.js"></script>
+    <script src="common/main.js"></script>
 
-        <script src="components/admin/admin.js"></script>
-        <script src="app.js"></script>
-        <!-- endbuild -->
+    <script src="components/admin/admin.js"></script>
+    <script src="app.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/partials.js -->
+    <!-- inject:partials -->
+    <!-- angular templates will be automaticaly converted in js and inserted here -->
+    <!-- endinject -->
+    <!-- endbuild -->
 </body>
 </html>
