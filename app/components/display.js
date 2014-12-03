@@ -22,4 +22,15 @@ angular.module('bars.filters', [])
 })
 .filter('abs', function() {
     return Math.abs;
+})
+.filter('qty', function($locale, numberFilter) {
+    var decSep = $locale.NUMBER_FORMATS.DECIMAL_SEP;
+    var trailingZeros = new RegExp("("+decSep+"\\d*?)0+");
+    var trailingSep = new RegExp(decSep+'$');
+
+    return function(n, fractionSize) {
+        var s = numberFilter(n, fractionSize);
+        s = s.replace(trailingZeros, "$1");
+        return s.replace(trailingSep, "");
+    };
 });
