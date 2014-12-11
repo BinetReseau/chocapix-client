@@ -111,6 +111,11 @@ angular.module('bars.api.food', [
         templateUrl: 'components/API/food/directive.html',
         controller: ['$scope', function($scope) {
             //$scope.unit = $scope.unit || ($scope.food && $scope.food.unit) || '';
+            if ($scope.out == 'buy') {
+                $scope.unit = $scope.food.buy_unit;
+            } else if ($scope.out == 'sell') {
+                $scope.unit = $scope.food.unit;
+            }
         }]
     };
 })
