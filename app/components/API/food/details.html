@@ -44,14 +44,8 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a aria-controls="account-infos" role="tab" data-toggle="tab">Infos</a></li>
-                <li role="presentation"><a aria-controls="account-graphs" role="tab" data-toggle="tab">Graphiques</a></li>
-                <li role="presentation"><a aria-controls="account-edit" role="tab" data-toggle="tab">Modifier</a></li>
-            </ul>
-
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade in active" id="food-infos">
+            <tabset>
+                <tab heading="Infos">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="list-group">
@@ -102,8 +96,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="food-graphs">
+                </tab>
+                <tab heading="Graphiques">
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <div class="list-group">
@@ -113,11 +107,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="food-edit">
+                </tab>
+                <tab heading="Modifier">
                     Rien pour le moment...
-                </div>
-            </div>
+                </tab>
+            </tabset>
         </div>
     </div>
 </div></div></div>
