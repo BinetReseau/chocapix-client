@@ -21,6 +21,7 @@
                     <td class="type">
                         <ng:switch on="transaction.type">
                             <span ng-switch-when="buy">Achat de</span>
+                            <span ng-switch-when="meal">Bouffe de</span>
                             <span ng-switch-when="appro">Appro de</span>
                             <span ng-switch-when="throw">Mise à la poubelle de</span>
 
@@ -32,6 +33,9 @@
                         <ng:switch on="transaction.type">
                             <span ng-switch-when="buy">
                                 <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
+                            </span>
+                            <span ng-switch-when="meal">
+                                <bars:food ng-repeat="x in transaction.items" food="x.item" qty="x.qty" out="'sell'"></bars:food>
                             </span>
                             <span ng-switch-when="appro">
                                 <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>

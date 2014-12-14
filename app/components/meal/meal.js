@@ -62,6 +62,15 @@ angular.module('bars.meal', [
         $scope.filterAccounts = function(o) {
             return o.filter($scope.accountToAdd);
         };
+
+        $scope.validate = function() {
+            APIAction.meal({
+                items: $scope.itemsList,
+                accounts: $scope.customersList})
+            .then(function() {
+                // TODO
+            });
+        };
     }]
 )
 ;

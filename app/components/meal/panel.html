@@ -2,7 +2,7 @@
     <div class="panel-heading"><h3 class="panel-title text-center">Bouffe<span ng-if="customersList.length > 1"> à plusieurs</span></h3></div>
     <div class="list-group">
         <div class="list-group-item">
-            <button class="btn btn-success btn-block" ng-class="totalPrice <= 0 && 'disabled'">Valider <span ng-if="totalPrice > 0">pour <strong>{{ totalPrice | currency }}</strong></span></button>
+            <button class="btn btn-success btn-block" ng-class="totalPrice <= 0 && 'disabled'" ng-click="validate()">Valider <span ng-if="totalPrice > 0">pour <strong>{{ totalPrice | currency }}</strong></span></button>
         </div>
         <div class="list-group-item">
             <h5 class="list-group-item-heading text-center">Participants</h5>
