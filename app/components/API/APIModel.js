@@ -279,16 +279,41 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             APIModel.addMethods.call(this, this.methods);
         }
 
+        /** Modifies obj in-place by applying f to the variable at path
+          * Path is like ['accounts', '*', 'money']
+          */
+        function mapPath(obj, f, path) {
+            if(path.length === 0) {
+                return f(obj);
+            } else {
+                if(obj) {
+                    var key = path[0];
+                    var rest = _.rest(path);
+                    if(key === "*") {
+                        _.forEach(obj, function(v, k){
+                            if(v !== undefined) {
+                                obj[k] = mapPath(v, f, rest);
+                            }
+                        });
+                    } else {
+                        if(obj[key] !== undefined) {
+                            obj[key] = mapPath(obj[key], f, rest);
+                        }
+                    }
+                }
+                return obj;
+            }
+        }
         APIModel.createEntityClass = function(structure) {
             var self = this;
             this.APIEntity = function APIEntity(obj){
                 obj = obj || {};
-                _.forOwn(structure, function(type, key) {
-                    // var path = key.split(".");
-                    var v = obj[key];
-                    if(v !== undefined) {
-                        obj[key] = APIInterface.getModel(type).get(v);
-                    }
+                _.forOwn(structure, function(type, path) {
+                    path = path.split(".");
+                    var f = function(x) {
+                        return APIInterface.getModel(type).get(x);
+                    };
+                    mapPath(obj, f, path);
                 });
                 BaseAPIEntity.call(this, obj);
             };
