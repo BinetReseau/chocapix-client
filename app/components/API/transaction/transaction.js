@@ -19,7 +19,9 @@ angular.module('bars.api.transaction', [
                     'author': 'User',
                     'author_account': 'Account',
                     'account': 'Account',
-                    'item': 'Item'
+                    'accounts': '[Account]',
+                    'item': 'Item',
+                    'items': '[Item]'
                 },
                 methods: {
                     'cancel': {method:'POST', url: 'cancel'},

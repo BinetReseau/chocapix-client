@@ -39,8 +39,8 @@ module.factory('BaseAPIEntity', [
 ]);
 
 
-module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
-    function($http, APIURL, BaseAPIEntity) {
+module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity', 'APIArrayModel',
+    function($http, APIURL, BaseAPIEntity, APIArrayModel) {
         function APIInterface() {
             this.model_map = {};
         }
@@ -49,10 +49,14 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             this.model_map[key] = model;
         };
         APIInterface.prototype.getModel = function(key) {
-            if(!this.model_map[key]) {
+            if(key[0] === "[") {
+                var model = key.substring(1, key.length-1);
+                return new APIArrayModel(this.model_map[model]);
+            } else if(!this.model_map[key]) {
                 throw 'Unknown model: ' + key;
+            } else {
+                return this.model_map[key];
             }
-            return this.model_map[key];
         };
 
         APIInterface.prototype.parse = function(obj) {
@@ -69,22 +73,31 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             }
             return obj;
         };
-        APIInterface.prototype.unparse = function(obj) {
-            if(obj instanceof BaseAPIEntity) {
-                var ret = {};
-                _.forEach(obj, function(value, key) {
-                    var k = key.substring(0, key.length-3);
-                    if(key.substring(key.length-3) === '_id' && obj.model.structure[k]) {
-                        ret[k] = obj[key];
-                    } else {
-                        ret[key] = value;
-                    }
-                });
-                return ret;
+        function unparse(obj, notroot) {
+            if(!_.isObject(obj)) {
+                return obj;
+            } else if(obj instanceof BaseAPIEntity) {
+                if(!!notroot && obj.id) {
+                    return obj.id;
+                } else {
+                    var ret = {};
+                    _.forEach(obj, function(value, key) {
+                        var k = key.substring(0, key.length-3);
+                        if(key.substring(key.length-3) === '_id' && obj.model.structure[k]) {
+                            ret[k] = value;
+                        } else {
+                            ret[key] = unparse(value, true);
+                        }
+                    });
+                    return ret;
+                }
+            } else if(_.isArray(obj)){
+                return _.map(obj, unparse);
             } else {
-                return _.clone(obj);
+                return _.mapValues(obj, unparse);
             }
-        };
+        }
+        APIInterface.prototype.unparse = function(o) {return unparse(o, false);};
         APIInterface.prototype.link = function(obj) {
             if(_.isArray(obj)) {
                 return _.map(obj, _.bind(this.link, this));
@@ -105,9 +118,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         };
         APIInterface.prototype.request = function(req) {
             var self = this;
-            if(req.data instanceof BaseAPIEntity) {
-                req.data = this.unparse(req.data);
-            }
+            req.data = this.unparse(req.data);
             req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url; // TODO: use correct bar
             req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");
             return $http(req).then(function(data) {
@@ -166,7 +177,7 @@ module.factory('MemoryEntityStore', [
                 this._broadcast("remove", this.get(id));
                 delete this.entity_map[id];
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
-                if(this.entity_array[index].id == id) {
+                if(this.entity_array[index].id === id) {
                     this.entity_array.splice(index, 1);
                 }
             }
@@ -320,6 +331,8 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     set: function(v) {
                         if(typeof(v) !== 'object') {
                             this[key+"_id"] = v;
+                        } else if(_.isArray(v)) {
+                            this[key+"_id"] = _.map(v, 'id');
                         } else {
                             if(!v || !v.id) {
                                 console.log("Warning: affecting an object without id to navigation property", key, "of entity", this,".\nRelationship won't be saved");
@@ -443,5 +456,56 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         };
 
         return APIModel;
+    }
+]);
+
+module.factory('APIArrayModel', ['$q',
+    function($q) {
+        function addNonEnumerableProperty(obj, key, value) {
+            Object.defineProperty(obj, key, {
+                configurable: true, enumerable: false,
+                writable: true, value: value
+            });
+        }
+
+        function APIArrayModel(model) {
+            var self = this;
+            addNonEnumerableProperty(this, 'model', model);
+        }
+
+        APIArrayModel.prototype.create = function(ids) {
+            return this.get(ids);
+        };
+        APIArrayModel.prototype.get = function(ids) {
+            var self = this;
+            var obj = _.map(ids, function(id){return self.model.get(id);});
+            Object.defineProperty(obj, 'id', {
+                configurable: true, enumerable: false,
+                get: function() {
+                    return _.map(this, 'id');
+                },
+                set: function(ids) {
+                    var self = this;
+                    _.forEach(this, function(v, i) {
+                        delete self[i];
+                    });
+                    _.forEach(ids, function(v, i) {
+                        self[i] = self.model.get(v);
+                    });
+                }
+            });
+            return obj;
+        };
+        APIArrayModel.prototype.getSync = function(id) {
+            // TODO
+        };
+        APIArrayModel.prototype.save = function(obj) {
+            // TODO
+        };
+        APIArrayModel.prototype.link = function(obj) {
+            return obj; // TODO
+        };
+
+        return APIArrayModel;
     }
 ]);
