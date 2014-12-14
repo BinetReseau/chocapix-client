@@ -225,9 +225,8 @@ module.factory('RemoteEntityStore', ['APIInterface',
  * @param {string} config.type Name of the model. Response objects whose _type property matches
  *                             the model's name will be transformed into corresponding entities
  * @param {object} config.structure Defines the model's relations with other models.
- *                                  Each ($key: $name) pair will add to the model's entities a
- *                                  getter/setter this[$key] that returns the entity with id
- *                                  this[$key + "_id"] from model with name $name;
+ *                                  For each ($key: $name), obj[$key] will be parsed as an object
+ *                                  from model with name $name;
  * @param {object} config.methods Defines the model's methods. Each ($key: $parameters) pair will
  *                                create a method with name $key according to the given $parameters.
  *
