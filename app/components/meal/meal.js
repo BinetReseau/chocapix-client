@@ -6,10 +6,13 @@ angular.module('bars.meal', [
 .controller('meal.ctrl',
     ['$scope', 'api.models.food', 'api.models.account', 'api.services.action',
     function($scope, Food, Account, APIAction) {
-        $scope.customersList = [ { account: $scope.user.account, ratio: 1, amount: 0 } ];
-        $scope.itemsList = [];
-        $scope.totalPrice = 0;
-        $scope.accountToAdd = "";
+        function init() {
+            $scope.customersList = [ { account: $scope.user.account, ratio: 1, amount: 0 } ];
+            $scope.itemsList = [];
+            $scope.totalPrice = 0;
+            $scope.accountToAdd = "";
+        }
+        init();
 
         $scope.recomputeAmount = function() {
             var nbParts = 0; // nombre de parts pour le calcul (somme des ratios)
@@ -22,7 +25,7 @@ angular.module('bars.meal', [
 
             var totalPrice = 0;
             _.forEach($scope.itemsList, function(item, i) {
-                totalPrice += item.item.price * item.qty;
+                totalPrice += item.item.price * item.buy_qty * item.item.unit_value;
             });
 
             _.forEach($scope.customersList, function(customer) {
@@ -47,9 +50,9 @@ angular.module('bars.meal', [
         $scope.addItem = function(item, model, label) {
             var other = _.find($scope.itemsList, {'item': item});
             if (other) {
-                other.qty += 1;
+                other.buy_qty += 1;
             } else {
-                $scope.itemsList.push({ item: item, qty: 1 });
+                $scope.itemsList.push({ item: item, buy_qty: 1 });
             }
             $scope.itemToAdd = '';
             $scope.recomputeAmount();
@@ -64,11 +67,15 @@ angular.module('bars.meal', [
         };
 
         $scope.validate = function() {
+            $scope.inRequest = true;
+            _.forEach($scope.itemsList, function(item, i) {
+                item.qty = item.buy_qty * item.item.unit_value;
+            });
             APIAction.meal({
                 items: $scope.itemsList,
                 accounts: $scope.customersList})
             .then(function() {
-                // TODO
+                init();
             });
         };
     }]
