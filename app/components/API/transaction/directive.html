@@ -21,7 +21,9 @@
                     <td class="type">
                         <ng:switch on="transaction.type">
                             <span ng-switch-when="buy">Achat de</span>
-                            <span ng-switch-when="meal">Bouffe de</span>
+                            <a ng-switch-when="meal" tooltip="Loggué par {{ transaction.author.full_name }}" class="atooltip">
+                                Achat de
+                            </a>
                             <span ng-switch-when="appro">Appro de</span>
                             <span ng-switch-when="throw">Mise à la poubelle de</span>
 
@@ -35,7 +37,14 @@
                                 <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
                             </span>
                             <span ng-switch-when="meal">
-                                <bars:food ng-repeat="x in transaction.items" food="x.item" qty="x.qty" out="'sell'"></bars:food>
+                                <a ng-show="transaction.items.length > 1 && !detailsFood" ng-click="detailsFood = true">
+                                    {{ transaction.items.length }} aliments
+                                </a>
+                                <div collapse="transaction.items.length > 1 && !detailsFood">
+                                    <div ng-repeat="x in transaction.items">
+                                        <bars:food food="x.item" qty="x.qty" out="'sell'"></bars:food><br />
+                                    </div>
+                                </div>
                             </span>
                             <span ng-switch-when="appro">
                                 <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
@@ -54,7 +63,17 @@
                     </td>
                     <td class="par">par</td>
                     <td class="user">
-                        <bars:user user="transaction.author" bar_="transaction.bar"></bars:user>
+                        <div ng-if="transaction.type == 'meal'">
+                            <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true">
+                                {{ transaction.accounts.length }} personnes
+                            </a>
+                            <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
+                                <div ng-repeat="x in transaction.accounts">
+                                    <bars:account account="x.account"></bars:account>
+                                </div>
+                            </div>
+                        </div>
+                        <bars:user ng-if="transaction.type != 'meal'" user="transaction.author" bar_="transaction.bar"></bars:user>
                     </td>
                     <td class="price">
                         <span class="label" ng-class="transaction.canceled && 'label-default' || transaction.moneyflow < 0 && 'label-danger' || 'label-success'">
