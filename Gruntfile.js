@@ -34,14 +34,14 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-          files: ['<%= yeoman.app %>/{*,*/*,*/*/*,*/*/*/*}.js'],
+          files: ['<%= yeoman.app %>/**/*.js'],
             tasks: ['newer:jshint:all'],
             options: {
               livereload: '<%= connect.options.livereload %>'
             }
       },
       html: {
-        files: ['<%= yeoman.app %>/{*,*/*,*/*/*,*/*/*/*}.html'],
+        files: ['<%= yeoman.app %>/**/*.html'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -207,8 +207,8 @@ module.exports = function (grunt) {
 
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/**.html'],
-      css: ['<%= yeoman.dist %>/**.css'],
+      html: ['<%= yeoman.dist %>/**/*.html'],
+      css: ['<%= yeoman.dist %>/**/*.css'],
       options: {
         assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
       }
@@ -274,7 +274,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', '**.html'],
+          src: ['*.html', '<%= yeoman.app %>/**/*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
