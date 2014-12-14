@@ -70,6 +70,10 @@
                             <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
                                 <div ng-repeat="x in transaction.accounts">
                                     <bars:account account="x.account"></bars:account>
+                                    <div class="pull-right" ng-if="transaction.accounts.length > 1">
+                                        <span class="label" ng-class="transaction.canceled && 'label-default' || 'label-info'">{{ transaction.moneyflow*x.ratio | abs | currency }}</span>
+                                    </div>
+                                    <br />
                                 </div>
                             </div>
                         </div>
