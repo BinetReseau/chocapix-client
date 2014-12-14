@@ -70,18 +70,18 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             }
             return obj;
         };
-        function unparse(obj, notroot) {
+        function unparse(obj, root) {
             if(!_.isObject(obj)) {
                 return obj;
-            } else if(!!notroot && obj.id && obj instanceof BaseAPIEntity) {
+            } else if(!root && obj.id && (obj instanceof BaseAPIEntity)) {
                 return obj.id;
-            } else if(_.isArray(obj)){
-                return _.map(obj, unparse);
+            } else if(_.isArray(obj)) {
+                return _.map(obj, function(x){return unparse(x, false);});
             } else {
-                return _.mapValues(obj, unparse);
+                return _.mapValues(obj, function(x){return unparse(x, false);});
             }
         }
-        APIInterface.prototype.unparse = function(o) {return unparse(o, false);};
+        APIInterface.prototype.unparse = function(o) {return unparse(o, true);};
         APIInterface.prototype.link = function(obj) {
             if(_.isArray(obj)) {
                 return _.map(obj, _.bind(this.link, this));
@@ -311,7 +311,11 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                 _.forOwn(structure, function(type, path) {
                     path = path.split(".");
                     var f = function(x) {
-                        return APIInterface.getModel(type).get(x);
+                        if(!(x instanceof BaseAPIEntity)) {
+                            return APIInterface.getModel(type).get(x);
+                        } else {
+                            return x;
+                        }
                     };
                     mapPath(obj, f, path);
                 });
