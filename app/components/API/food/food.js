@@ -96,6 +96,22 @@ angular.module('bars.api.food', [
                 $scope.food_item.markDeleted(); // Todo: adapt to new API
             }
         };
+
+        $scope.newFood_item = _.clone(food_item);
+        var initPrice = food_item.price * food_item.unit_value;
+        $scope.newFood_item.price = initPrice;
+        $scope.newFood_item.new_unit_value = 1;
+        $scope.computeNewPrice = function() {
+            if ($scope.newFood_item.unit == food_item.unit) {
+                $scope.newFood_item.price = initPrice;
+            } else {
+                if ($scope.newFood_item.new_unit_value) {
+                    $scope.newFood_item.price = initPrice * $scope.newFood_item.new_unit_value;
+                } else {
+                    $scope.newFood_item.price = initPrice;
+                }
+            }
+        };
     }])
 
 .directive('barsFood', function() {
