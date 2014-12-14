@@ -51,8 +51,9 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         APIInterface.prototype.getModel = function(key) {
             if(!this.model_map[key]) {
                 throw 'Unknown model: ' + key;
+            } else {
+                return this.model_map[key];
             }
-            return this.model_map[key];
         };
 
         APIInterface.prototype.parse = function(obj) {
@@ -69,22 +70,18 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             }
             return obj;
         };
-        APIInterface.prototype.unparse = function(obj) {
-            if(obj instanceof BaseAPIEntity) {
-                var ret = {};
-                _.forEach(obj, function(value, key) {
-                    var k = key.substring(0, key.length-3);
-                    if(key.substring(key.length-3) === '_id' && obj.model.structure[k]) {
-                        ret[k] = obj[key];
-                    } else {
-                        ret[key] = value;
-                    }
-                });
-                return ret;
+        function unparse(obj, notroot) {
+            if(!_.isObject(obj)) {
+                return obj;
+            } else if(!!notroot && obj.id && obj instanceof BaseAPIEntity) {
+                return obj.id;
+            } else if(_.isArray(obj)){
+                return _.map(obj, unparse);
             } else {
-                return _.clone(obj);
+                return _.mapValues(obj, unparse);
             }
-        };
+        }
+        APIInterface.prototype.unparse = function(o) {return unparse(o, false);};
         APIInterface.prototype.link = function(obj) {
             if(_.isArray(obj)) {
                 return _.map(obj, _.bind(this.link, this));
@@ -105,9 +102,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         };
         APIInterface.prototype.request = function(req) {
             var self = this;
-            if(req.data instanceof BaseAPIEntity) {
-                req.data = this.unparse(req.data);
-            }
+            req.data = this.unparse(req.data);
             req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url; // TODO: use correct bar
             req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");
             return $http(req).then(function(data) {
@@ -166,7 +161,7 @@ module.factory('MemoryEntityStore', [
                 this._broadcast("remove", this.get(id));
                 delete this.entity_map[id];
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
-                if(this.entity_array[index].id == id) {
+                if(this.entity_array[index].id === id) {
                     this.entity_array.splice(index, 1);
                 }
             }
@@ -284,20 +279,41 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             APIModel.addMethods.call(this, this.methods);
         }
 
+        /** Modifies obj in-place by applying f to the variable at path
+          * Path is like ['accounts', '*', 'money']
+          */
+        function mapPath(obj, f, path) {
+            if(path.length === 0) {
+                return f(obj);
+            } else {
+                if(obj) {
+                    var key = path[0];
+                    var rest = _.rest(path);
+                    if(key === "*") {
+                        _.forEach(obj, function(v, k){
+                            if(v !== undefined) {
+                                obj[k] = mapPath(v, f, rest);
+                            }
+                        });
+                    } else {
+                        if(obj[key] !== undefined) {
+                            obj[key] = mapPath(obj[key], f, rest);
+                        }
+                    }
+                }
+                return obj;
+            }
+        }
         APIModel.createEntityClass = function(structure) {
             var self = this;
             this.APIEntity = function APIEntity(obj){
                 obj = obj || {};
-                _.forOwn(structure, function(type, key) {
-                    var v = obj[key];
-                    if(v) {
-                        if(_.isNumber(v) || _.isString(v)) {
-                            obj[key+"_id"] = v;
-                        } else if(_.isObject(v)) {
-                            obj[key+"_id"] = v.id;
-                        }
-                        delete obj[key];
-                    }
+                _.forOwn(structure, function(type, path) {
+                    path = path.split(".");
+                    var f = function(x) {
+                        return APIInterface.getModel(type).get(x);
+                    };
+                    mapPath(obj, f, path);
                 });
                 BaseAPIEntity.call(this, obj);
             };
@@ -305,30 +321,6 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
             this.APIEntity.prototype._type = this.model_type;
             // Prevents infinite recursion in searches
             addNonEnumerableProperty(this.APIEntity.prototype, 'model', self);
-
-            _.forOwn(structure, function(type, key) {
-                Object.defineProperty(self.APIEntity.prototype, key, {
-                    configurable: true,
-                    enumerable: false,
-                    get: function() {
-                        if(this[key+"_id"]) {
-                            return APIInterface.getModel(type).get(this[key+"_id"]);
-                        } else {
-                            return;
-                        }
-                    },
-                    set: function(v) {
-                        if(typeof(v) !== 'object') {
-                            this[key+"_id"] = v;
-                        } else {
-                            if(!v || !v.id) {
-                                console.log("Warning: affecting an object without id to navigation property", key, "of entity", this,".\nRelationship won't be saved");
-                            }
-                            this[key+"_id"] = v.id;
-                        }
-                    }
-                });
-            });
         };
 
         APIModel.addMethods = function(methods) {
