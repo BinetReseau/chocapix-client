@@ -41,6 +41,15 @@ angular.module('bars.api.transaction', [
                         parseTimestamp(this);
                     },
                     'update': function(o) {
+                        if(this.author_account) {
+                            this.author_account.$reload();
+                        }
+                        if(this.account) {
+                            this.account.$reload();
+                        }
+                        if(this.item) {
+                            this.item.$reload();
+                        }
                         parseTimestamp(this);
                     }
                 }
