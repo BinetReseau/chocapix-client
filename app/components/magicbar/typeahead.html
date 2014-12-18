@@ -9,17 +9,17 @@
     </ng:switch>
     <span ng-switch on="match.model.type">
         <span ng-switch-when="give">
-            {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>.
+            {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>
         </span>
         <span ng-switch-when="throw">
-            <bars:food food="match.model.food" qty="match.model.qty" unit="match.model.unit"></bars:food> à la poubelle.
+            <bars:food food="match.model.food" qty="match.model.qty" unit="match.model.unit"></bars:food> à la poubelle
         </span>
         <span ng-switch-when="punish">
-            de {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>.
+            de {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>
         </span>
         <span ng-switch-default>
             <bars:food food="match.model.food" qty="match.model.qty" unit="match.model.unit" in="'sell'" out="'sell'"></bars:food> pour
-			<bars:food:price food="match.model.food" qty="match.model.qty" in="'sell'"></bars:food:price>.
+			<bars:food:price food="match.model.food" qty="match.model.qty" in="'sell'"></bars:food:price>
         </span>
     </span>
 </a>
