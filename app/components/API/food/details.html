@@ -4,19 +4,6 @@
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 vcenter">
             <h1 class="text-center no-vertical-margin">{{ food_item.name }}</h1>
-        </div><!--
-        --><div class="col-sm-2 vcenter text-right">
-            <div class="btn-group">
-                <button type="button" class="btn btn-block btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Gestion <span class="caret"></span></button>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li><a title="Modifier cet aliment">
-                        <span class="glyphicon glyphicon-edit"></span> Modifier
-                    </a></li>
-                    <li><a title="{{ food_item.deleted && 'Restaurer cet aliment' || 'Supprimer cet aliment' }}" ng-class="food_item.deleted && 'active'" ng-click="trashIt()">
-                        <span class="glyphicon glyphicon-trash"></span> {{ food_item.deleted && 'Restaurer' || 'Supprimer' }}
-                    </a></li>
-                </ul>
-            </div>
         </div>
     </div>
 

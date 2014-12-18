@@ -155,6 +155,18 @@ li li {
 .space-below {
     margin-bottom: .5em;
 }
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #dddddd;
+    border-radius: 0 0 4px 4px;
+    padding: 10px;
+    margin-bottom: 1em
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
 
 /* Animations */
 .meal.ng-enter {
