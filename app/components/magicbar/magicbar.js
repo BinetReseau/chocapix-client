@@ -62,6 +62,8 @@ angular.module('bars.magicbar', [
 		qo = qo.toLocaleLowerCase();
 		qo = qo.replace(/,/, '.');
 		qo = qo.replace(/ ?(€|euro(s?))/, '€');
+		qo = qo.replace(/ à /, ' ');
+		qo = qo.replace(/ de /, ' ');
         var terms = qo.split(' ');
 
         var types = [
