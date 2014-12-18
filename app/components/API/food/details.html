@@ -169,6 +169,18 @@
                                         <span class="label label-info">{{ food_item.qty/food_item.unit_value*newFood_item.price/newFood_item.new_unit_value | currency }}</span>
                                     </label>
                                 </div>
+                                <div class="form-group" ng-show="newFood_item.unit != food_item.unit">
+                                    <label class="col-sm-6 control-label">Ancienne quantité présente dans le bar</label>
+                                    <label class="col-sm-6 control-label">
+                                        <span class="label label-info">{{ food_item.qty/food_item.unit_value | number }} {{ food_item.unit }}</span>
+                                    </label>
+                                </div>
+                                <div class="form-group" ng-show="newFood_item.unit != food_item.unit">
+                                    <label class="col-sm-6 control-label">Nouvelle quantité présente dans le bar</label>
+                                    <label class="col-sm-6 control-label">
+                                        <span class="label label-info">{{ food_item.qty/newFood_item.new_unit_value/food_item.unit_value | number }} {{ newFood_item.unit }}</span>
+                                    </label>
+                                </div>
                             </form>
                         </div>
                         <div class="col-sm-3 text-right">
