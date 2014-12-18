@@ -72,8 +72,12 @@ angular.module('bars.admin', [
     function($scope, Food) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
-        $scope.addFood = function(food) {
-            Food.save(food).then(function(newFood) {
+        $scope.addFood = function() {
+            $scope.food.buy_unit_value = 1;
+            $scope.food.qty = $scope.food.qty/$scope.food.unit_value;
+            $scope.food.unit_value = 1/$scope.food.unit_value;
+            $scope.food.bar = 'avironjone'; // [TODO]Adapter bars-django
+            $scope.food.$save().then(function(newFood) {
                 $scope.food = Food.create();
             }, function(errors) {
                 // TODO: display form errors
