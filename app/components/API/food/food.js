@@ -97,11 +97,7 @@ angular.module('bars.api.food', [
             }
         };
 
-        $scope.newFood_item = _.clone(food_item);
         var initPrice = food_item.price * food_item.unit_value;
-        $scope.newFood_item.price = initPrice;
-        $scope.newFood_item.new_unit_value = 1;
-        $scope.newFood_item.new_buy_unit_value = 1;
         $scope.computeNewPrice = function() {
             if ($scope.newFood_item.unit == food_item.unit) {
                 $scope.newFood_item.price = initPrice;
@@ -113,6 +109,12 @@ angular.module('bars.api.food', [
                 }
             }
         };
+        $scope.resetFood = function() {
+            $scope.newFood_item = _.clone(food_item);
+            $scope.newFood_item.price = initPrice;
+            $scope.newFood_item.new_unit_value = 1;
+            $scope.newFood_item.new_buy_unit_value = 1;
+        };
         $scope.editFood = function() {
             food_item.name = $scope.newFood_item.name;
             food_item.keywords = $scope.newFood_item.keywords;
@@ -123,6 +125,7 @@ angular.module('bars.api.food', [
             food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
             food_item.$save();
         };
+        $scope.resetFood();
     }])
 
 .directive('barsFood', function() {
