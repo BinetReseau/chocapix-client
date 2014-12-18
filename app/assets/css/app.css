@@ -152,6 +152,9 @@ li li {
     vertical-align: middle;
     float: none;
 }
+.space-below {
+    margin-bottom: .5em;
+}
 
 /* Animations */
 .meal.ng-enter {
