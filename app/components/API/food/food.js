@@ -160,19 +160,24 @@ angular.module('bars.api.food', [
         },
         templateUrl: 'components/API/food/qty-directive.html',
         controller: ['$scope', function($scope) {
-            $scope.ratio = 1;
-            if ($scope.in == 'buy') {
-                $scope.ratio *= $scope.food.buy_unit_value;
-            } else if ($scope.in == 'sell') {
-                $scope.ratio *= $scope.food.unit_value;
+            function refresh() {
+                $scope.ratio = 1;
+                if ($scope.in == 'buy') {
+                    $scope.ratio *= $scope.food.buy_unit_value;
+                } else if ($scope.in == 'sell') {
+                    $scope.ratio *= $scope.food.unit_value;
+                }
+                if ($scope.out == 'buy') {
+                    $scope.ratio *= 1/$scope.food.buy_unit_value;
+                    $scope.unit = $scope.food.buy_unit;
+                } else if ($scope.out == 'sell') {
+                    $scope.ratio *= 1/$scope.food.unit_value;
+                    $scope.unit = $scope.food.unit;
+                }
             }
-            if ($scope.out == 'buy') {
-                $scope.ratio *= 1/$scope.food.buy_unit_value;
-                $scope.unit = $scope.food.buy_unit;
-            } else if ($scope.out == 'sell') {
-                $scope.ratio *= 1/$scope.food.unit_value;
-                $scope.unit = $scope.food.unit;
-            }
+            $scope.$watch('food.buy_unit_value', refresh);
+            $scope.$watch('food.unit_value', refresh);
+            refresh();
         }]
     };
 })
@@ -186,13 +191,18 @@ angular.module('bars.api.food', [
         },
         templateUrl: 'components/API/food/price-directive.html',
         controller: ['$scope', function($scope) {
-            if ($scope.in == 'buy') {
-                $scope.price = $scope.food.price * $scope.food.buy_unit_value;
-            } else if ($scope.in == 'sell') {
-                $scope.price = $scope.food.price * $scope.food.unit_value;
-            } else {
-                $scope.price = $scope.food.price;
+            function refresh() {
+                if ($scope.in == 'buy') {
+                    $scope.price = $scope.food.price * $scope.food.buy_unit_value;
+                } else if ($scope.in == 'sell') {
+                    $scope.price = $scope.food.price * $scope.food.unit_value;
+                } else {
+                    $scope.price = $scope.food.price;
+                }
             }
+            $scope.$watch('food.buy_unit_value', refresh);
+            $scope.$watch('food.unit_value', refresh);
+            refresh();
         }]
     };
 })
