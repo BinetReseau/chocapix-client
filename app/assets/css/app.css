@@ -155,18 +155,28 @@ li li {
 .space-below {
     margin-bottom: .5em;
 }
+
 .tab-content {
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #dddddd;
     border-radius: 0 0 4px 4px;
-    padding: 10px;
-    margin-bottom: 1em
+    padding: 15px;
+    margin-bottom: 1em;
 }
-
 .nav-tabs {
     margin-bottom: 0;
 }
+.table-tab {
+    margin: -15px 0px;
+}
+.table-tab tr:first-of-type, .table-tab tr:first-of-type td {
+    border-top-width: 0;
+}
+.table-tab td.end-of-column {
+    border-right: 1px solid #ddd;
+}
+
 
 /* Animations */
 .meal.ng-enter {

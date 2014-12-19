@@ -34,64 +34,44 @@
             <tabset>
                 <tab heading="Infos">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-sm-6"><span class="h4">Prix</span></div>
-                                        <div class="col-sm-6 text-right">
-                                            <span class="h4"><span class="label label-info">
-                                                <bars:food:price food="food_item" in="'sell'" qty="1"></bars:food:price>
-                                            </span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-sm-6"><span class="h4">Stock</span></div>
-                                        <div class="col-sm-6 text-right">
-                                            <span class="h4"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
-                                                <bars:food:qty food="food_item" qty="food_item.qty" out="'sell'"></bars:food:qty>
-                                            </span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-sm-6"><span class="h4">Vols</span></div>
-                                        <div class="col-sm-6 text-right">
-                                            <span class="h4"><span class="label label-warning">
-                                                12 %
-                                            </span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-sm-6"><span class="h4">Rang</span></div>
-                                        <div class="col-sm-6 text-right">
-                                            <span class="h4"><span class="badge">
-                                                13
-                                            </span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table class="table table-tab">
+                            <tbody>
+                                <tr>
+                                    <td class="h4">Prix</td>
+                                    <td class="end-of-column text-right">
+                                        <span class="h4"><span class="label label-info">
+                                            <bars:food:price food="food_item" in="'sell'" qty="1"></bars:food:price>
+                                        </span></span>
+                                    </td>
+                                    <td class="h4">Vols</td>
+                                    <td class="text-right">
+                                        <span class="h4"><span class="label label-warning">
+                                            12 %
+                                        </span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h4">Stock</td>
+                                    <td class="end-of-column text-right">
+                                        <span class="h4"><span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
+                                            <bars:food:qty food="food_item" qty="food_item.qty" out="'sell'"></bars:food:qty>
+                                        </span></span>
+                                    </td>
+                                    <td class="h4">Rang</td>
+                                    <td class="text-right">
+                                        <span class="h4"><span class="badge">
+                                            1
+                                        </span></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </tab>
                 <tab heading="Graphiques">
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    <h1>ICI un BÔÔÔ GRAPHIQUE</h1>
-                                </div>
-                            </div>
+                            <h1>ICI un BÔÔÔ GRAPHIQUE</h1>
                         </div>
                     </div>
                 </tab>
