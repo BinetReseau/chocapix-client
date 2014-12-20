@@ -42,38 +42,40 @@
         <div class="col-sm-12">
             <tabset>
                 <tab heading="Infos">
-                    <table class="table table-tab">
-                        <tbody>
-                            <tr>
-                                <td class="h4">Solde</td>
-                                <td class="end-of-column text-right">
-                                    <span class="h4"><span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
-                                        {{ account.money | currency }}
-                                    </span></span>
-                                </td>
-                                <td class="h4">Rang</td>
-                                <td class="text-right">
-                                    <span class="h4"><span class="badge">
-                                        4
-                                    </span></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="h4">Total dépensé</td>
-                                <td class="end-of-column text-right">
-                                    <span class="h4"><span class="label label-default">
-                                        {{ 1000 | currency}}
-                                    </span></span>
-                                </td>
-                                <td class="h4">Amendes</td>
-                                <td class="text-right">
-                                    <span class="h4"><span class="label label-danger">
-                                        {{ 13 | currency }}
-                                    </span></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <table class="table table-tab">
+                            <tbody>
+                                <tr>
+                                    <td class="h4">Solde</td>
+                                    <td class="end-of-column text-right">
+                                        <span class="h4"><span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
+                                            {{ account.money | currency }}
+                                        </span></span>
+                                    </td>
+                                    <td class="h4">Rang</td>
+                                    <td class="text-right">
+                                        <span class="h4"><span class="badge">
+                                            4
+                                        </span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h4">Total dépensé</td>
+                                    <td class="end-of-column text-right">
+                                        <span class="h4"><span class="label label-default">
+                                            {{ 1000 | currency}}
+                                        </span></span>
+                                    </td>
+                                    <td class="h4">Amendes</td>
+                                    <td class="text-right">
+                                        <span class="h4"><span class="label label-danger">
+                                            {{ 13 | currency }}
+                                        </span></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </tab>
                 <tab heading="Graphiques">
                     <div class="row">
