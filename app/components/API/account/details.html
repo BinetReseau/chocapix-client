@@ -42,46 +42,38 @@
         <div class="col-sm-12">
             <tabset>
                 <tab heading="Infos">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6"><span class="h4">Solde</span></div>
-                                    <div class="col-sm-6 text-right">
-                                        <span class="h4"><span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
-                                            {{ account.money | currency }}
-                                        </span></span>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6"><span class="h4">Total dépensé</span></div>
-                                    <div class="col-sm-6 text-right">
-                                        <span class="h4"><span class="label label-default">
-                                            {{ 1000 | currency}}
-                                        </span></span>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6"><span class="h4">Rang semaine</span></div>
-                                    <div class="col-sm-6 text-right">
-                                        <span class="h4"><span class="badge">
-                                            3
-                                        </span></span>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table table-tab">
+                        <tbody>
+                            <tr>
+                                <td class="h4">Solde</td>
+                                <td class="end-of-column text-right">
+                                    <span class="h4"><span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
+                                        {{ account.money | currency }}
+                                    </span></span>
+                                </td>
+                                <td class="h4">Rang</td>
+                                <td class="text-right">
+                                    <span class="h4"><span class="badge">
+                                        4
+                                    </span></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="h4">Total dépensé</td>
+                                <td class="end-of-column text-right">
+                                    <span class="h4"><span class="label label-default">
+                                        {{ 1000 | currency}}
+                                    </span></span>
+                                </td>
+                                <td class="h4">Amendes</td>
+                                <td class="text-right">
+                                    <span class="h4"><span class="label label-danger">
+                                        {{ 13 | currency }}
+                                    </span></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </tab>
                 <tab heading="Graphiques">
                     <div class="row">
