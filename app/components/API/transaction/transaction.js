@@ -93,12 +93,17 @@ angular.module('bars.api.transaction', [
     return {
         restrict: 'E',
         scope: {
-            filter: '&filter'
+            filter: '&filter',
+            limitTo: '=?limit'
         },
         templateUrl: 'components/API/transaction/directive.html',
-        controller: ['$scope', 'api.models.transaction', function($scope, Transaction) {
+        controller: ['$scope', '$filter', 'api.models.transaction', function($scope, $filter, Transaction) {
             function updateList() {
                 var history = _.filter(Transaction.all(), $scope.filter);
+                if ($scope.limitTo !== undefined) {
+                    history = $filter('limitTo')(history, -$scope.limitTo);
+                }
+                console.log($scope.limitTo);
                 $scope.history_by_date = _.groupBy(history, 'timestamp_day');
                 $scope.history_dates = _.keys($scope.history_by_date);
                 $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
