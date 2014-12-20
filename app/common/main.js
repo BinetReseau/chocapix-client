@@ -40,6 +40,10 @@ angular.module('bars.main', [
                     } else {
                         return null;
                     }
+                }],
+                history: ['api.models.transaction', function(Transaction) {
+                    Transaction.reload();
+                    // return Transaction.all();
                 }]
             },
             views: {
