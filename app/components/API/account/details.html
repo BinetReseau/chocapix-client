@@ -96,4 +96,4 @@
     </div>
 </div></div></div>
 
-<bars:history filter="account.owner.id == author.id || account.id == account.id"></bars:history>
+<bars:history ng-init="uaccount = account" filter="author.id == uaccount.owner.id"></bars:history>
