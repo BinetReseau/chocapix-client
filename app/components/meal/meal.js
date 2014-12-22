@@ -29,6 +29,7 @@ angular.module('bars.meal', [
                 this.itemsList = [];
                 this.totalPrice = 0;
                 this.accountToAdd = "";
+                this.inRequest = false;
             },
             recomputeAmount: function() {
                 var nbParts = 0; // nombre de parts pour le calcul (somme des ratios)
@@ -61,12 +62,15 @@ angular.module('bars.meal', [
                 this.customersList.splice(this.customersList.indexOf(cstmr), 1);
                 this.recomputeAmount();
             },
-            addItem: function(item, model, label) {
+            addItem: function(item, qty) {
+                if (!qty) {
+                    qty = 1;
+                }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.buy_qty += 1;
+                    other.buy_qty += qty;
                 } else {
-                    this.itemsList.push({ item: item, buy_qty: 1 });
+                    this.itemsList.push({ item: item, buy_qty: qty });
                 }
                 this.itemToAdd = '';
                 this.recomputeAmount();

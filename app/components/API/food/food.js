@@ -76,8 +76,8 @@ angular.module('bars.api.food', [
         };
     }])
 .controller('api.ctrl.food_details',
-    ['$scope', '$stateParams', 'food_item', 'api.services.action',
-    function($scope, $stateParams, food_item, APIAction) {
+    ['$scope', '$stateParams', 'food_item', 'api.services.action', 'bars.meal',
+    function($scope, $stateParams, food_item, APIAction, Meal) {
         $scope.food_item = food_item;
 
         $scope.query_qty = 1;
@@ -87,6 +87,8 @@ angular.module('bars.api.food', [
                 APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
                     $scope.query_qty = 1;
                 });
+            } else if (type == 'add') {
+                Meal.addItem($scope.food_item, $scope.query_qty);
             }
         };
         $scope.trashIt = function() {

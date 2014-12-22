@@ -38,7 +38,7 @@
                 <form class="form-inline text-center">
                     <div class="form-group">
                         <label class="sr-only" for="addMealItemInput">Ajouter</label>
-                        <input type="text" id="addMealItemInput" class="form-control" placeholder="Ajouter" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="meal.itemToAdd" autocomplete="off" typeahead-on-select="meal.addItem($item, $model, $label)" />
+                        <input type="text" id="addMealItemInput" class="form-control" placeholder="Ajouter" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="meal.itemToAdd" autocomplete="off" typeahead-on-select="meal.addItem($item)" />
                     </div>
                 </form>
                 <br />
