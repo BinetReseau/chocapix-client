@@ -103,7 +103,6 @@ angular.module('bars.api.transaction', [
                 if ($scope.limitTo !== undefined) {
                     history = $filter('limitTo')(history, -$scope.limitTo);
                 }
-                console.log($scope.limitTo);
                 $scope.history_by_date = _.groupBy(history, 'timestamp_day');
                 $scope.history_dates = _.keys($scope.history_by_date);
                 $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
