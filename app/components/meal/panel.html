@@ -1,12 +1,12 @@
 <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title text-center">Bouffe<span ng-if="customersList.length > 1"> à plusieurs</span></h3></div>
+    <div class="panel-heading"><h3 class="panel-title text-center">Bouffe<span ng-if="meal.customersList.length > 1"> à plusieurs</span></h3></div>
     <div class="list-group">
         <div class="list-group-item">
             <form class="form-horizontal text-center">
                 <label class="sr-only" for="mealTitleInput">Nom de la bouffe</label>
-                <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Nom de la bouffe" ng-model="mealName" />
+                <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Nom de la bouffe" ng-model="meal.mealName" />
             </form>
-            <button class="btn btn-success btn-block" ng-class="(inRequest || totalPrice <= 0) && 'disabled'" ng-click="validate()">Valider <span ng-if="totalPrice > 0">pour <strong>{{ totalPrice | currency }}</strong></span></button>
+            <button class="btn btn-success btn-block" ng-class="(meal.inRequest || meal.totalPrice <= 0) && 'disabled'" ng-click="meal.validate()">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
         </div>
         <div class="list-group-item">
             <h5 class="list-group-item-heading text-center">Participants</h5>
@@ -14,18 +14,18 @@
                 <form class="form-inline text-center">
                     <div class="form-group">
                         <label class="sr-only" for="addMealCustomerInput">Ajouter</label>
-                        <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" typeahead="account.owner.full_name for account in bar.accounts | filter:filterAccounts | limitTo:5" ng-model="accountToAdd" autocomplete="off" typeahead-on-select="addCustomer($item, $model, $label)" />
+                        <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" typeahead="account.owner.full_name for account in bar.accounts | filter:filterAccounts | limitTo:5" ng-model="meal.accountToAdd" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
                     </div>
                 </form>
                 <br />
                 <div class="div-scroll">
                 <table class="table table-condensed no-border">
-                    <tr ng-repeat="customer in customersList" class="animated meal no-border">
-                        <td class="vmiddle"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm" style="width: 45px;" placeholder="1" ng-model="customer.ratio" ng-change="recomputeAmount()"></td>
+                    <tr ng-repeat="customer in meal.customersList" class="animated meal no-border">
+                        <td class="vmiddle"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm" style="width: 45px;" placeholder="1" ng-model="customer.ratio" ng-change="meal.recomputeAmount()"></td>
                         <td class="vmiddle"><span class="form-control-static"><bars:account account="customer.account"></bars:account></span></td>
                         <td class="text-right"><span class="label label-info vbottom">{{ customer.amount | currency }}</span></td>
                         <td class="vmiddle text-right">
-                            <a class="text-muted" ng-click="removeCustomer(customer)"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="text-muted" ng-click="meal.removeCustomer(customer)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 </table>
@@ -38,16 +38,16 @@
                 <form class="form-inline text-center">
                     <div class="form-group">
                         <label class="sr-only" for="addMealItemInput">Ajouter</label>
-                        <input type="text" id="addMealItemInput" class="form-control" placeholder="Ajouter" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="itemToAdd" autocomplete="off" typeahead-on-select="addItem($item, $model, $label)" />
+                        <input type="text" id="addMealItemInput" class="form-control" placeholder="Ajouter" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="meal.itemToAdd" autocomplete="off" typeahead-on-select="meal.addItem($item, $model, $label)" />
                     </div>
                 </form>
                 <br />
                 <table class="table table-condensed no-border">
-                    <tr ng-repeat="item in itemsList" class="animated fadeInRight no-border">
-                        <td class="vmiddle"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm" style="width: 60px;" placeholder="Quantité" ng-model="item.buy_qty" ng-change="recomputeAmount()"> {{ item.item.unit }}</td>
+                    <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
+                        <td class="vmiddle"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm" style="width: 60px;" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit }}</td>
                         <td class="vmiddle"><span class="form-control-static"><bars:food food="item.item"></bars:food></span></td>
                         <td class="vmiddle text-right">
-                            <a class="text-muted" ng-click="removeItem(item)"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="text-muted" ng-click="meal.removeItem(item)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                 </table>
