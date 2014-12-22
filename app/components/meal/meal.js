@@ -95,6 +95,9 @@ angular.module('bars.meal', [
                 .then(function() {
                     refThis.init();
                 });
+            },
+            in: function() {
+                return this.customersList.length > 1 || this.itemsList.length > 0;
             }
         };
     }]

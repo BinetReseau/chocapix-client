@@ -82,6 +82,9 @@ angular.module('bars.api.food', [
 
         $scope.query_qty = 1;
         $scope.query_type = 'buy';
+        $scope.inMeal = function () {
+            return Meal.in();
+        };
         $scope.query = function(qty, type) {
             if (type == 'buy' || type == 'throw' || type == 'appro') {
                 APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
