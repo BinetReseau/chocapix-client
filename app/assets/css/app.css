@@ -176,6 +176,10 @@ li li {
 .table-tab td.end-of-column {
     border-right: 1px solid #ddd;
 }
+.pqty {
+    display: inline-block;
+    width: 60px;
+}
 
 
 /* Animations */
