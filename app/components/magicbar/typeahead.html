@@ -5,6 +5,7 @@
         <span ng-switch-when="buy">Acheter</span>
         <span ng-switch-when="give">Donner</span>
         <span ng-switch-when="throw">Jeter</span>
+		<span ng-switch-when="add">Ajouter</span>
         <span ng-switch-default>{{ match.model.type }}</span>
     </ng:switch>
     <span ng-switch on="match.model.type">
@@ -22,4 +23,5 @@
 			<bars:food:price food="match.model.food" qty="match.model.qty" in="'sell'"></bars:food:price>
         </span>
     </span>
+	<span ng-if="match.model.type == 'add'"> à la bouffe à plusieurs</span>
 </a>

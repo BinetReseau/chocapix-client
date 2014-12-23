@@ -5,8 +5,8 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', 'api.models.food', 'api.services.action', 'magicbar.analyse',
-    function($scope, $filter, Food, APIAction, analyse) {
+    ['$scope', '$filter', 'api.models.food', 'api.services.action', 'magicbar.analyse', 'bars.meal',
+    function($scope, $filter, Food, APIAction, analyse, Meal) {
         $scope.query = {
             type: 'buy',
             qty: 1,
@@ -29,16 +29,18 @@ angular.module('bars.magicbar', [
             var type = $item.type;
 
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
-                    var req;
-                    if(_.contains(['buy', 'throw', 'appro'], type)) {
-                        req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
-                    } else {
-                        req = {account: $item.account.id, amount: $item.qty};
-                    }
-                    APIAction[type](req).then(function() {
-                        $scope.bar.search = '';
-                    });
-            }
+                var req;
+                if(_.contains(['buy', 'throw', 'appro'], type)) {
+                    req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
+                } else {
+                    req = {account: $item.account.id, amount: $item.qty};
+                }
+                APIAction[type](req).then(function() {
+                    $scope.bar.search = '';
+                });
+            } else if (type == 'add') {
+				Meal.addItem($item.food, $item.qty*$item.food.unit_value);
+			}
         };
     }])
 
@@ -72,13 +74,15 @@ angular.module('bars.magicbar', [
             'give',
             'punish',
             'appro',
+			'add',
         ];
         var humanTypes = {
             'acheter': 'buy',
             'jeter': 'throw',
             'donner': 'give',
             'amende': 'punish',
-            'appro': 'appro'
+            'appro': 'appro',
+			'ajouter': 'add'
         };
 
         var units = [
@@ -222,7 +226,7 @@ angular.module('bars.magicbar', [
 				} else {
 					res.otype = 'food';
 					res.type = res.type || 'buy';
-					if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro')
+					if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add')
 							|| res.unit === "€"){
 						return []; // Discard
 					}
