@@ -20,7 +20,6 @@ angular.module('bars.meal', [
             itemsList: [],
             totalPrice: 0,
             accountToAdd: "",
-            itemToAdd: "",
             account: null,
             inRequest: false,
             mealName: "",
@@ -72,7 +71,6 @@ angular.module('bars.meal', [
                 } else {
                     this.itemsList.push({ item: item, buy_qty: qty/item.unit_value });
                 }
-                this.itemToAdd = '';
                 this.recomputeAmount();
             },
             removeItem: function(item) {

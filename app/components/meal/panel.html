@@ -35,13 +35,6 @@
         <div class="list-group-item">
             <h5 class="list-group-item-heading text-center">Aliments</h5>
             <div class="list-group-item-text">
-                <form class="form-inline text-center">
-                    <div class="form-group">
-                        <label class="sr-only" for="addMealItemInput">Ajouter</label>
-                        <input type="text" id="addMealItemInput" class="form-control" placeholder="Ajouter" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="meal.itemToAdd" autocomplete="off" typeahead-on-select="meal.addItem($item)" />
-                    </div>
-                </form>
-                <br />
                 <table class="table table-condensed no-border">
                     <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
                         <td class="vmiddle"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm" style="width: 60px;" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit }}</td>
