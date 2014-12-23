@@ -68,8 +68,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.food',
-    ['$scope', 'api.models.food',
-    function($scope, Food) {
+    ['$scope', 'api.models.food', 'admi.appro',
+    function($scope, Food, Appro) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
         $scope.addFood = function() {
@@ -83,6 +83,7 @@ angular.module('bars.admin', [
                 // TODO: display form errors
             });
         };
+        $scope.appro = Appro;
     }
 ])
 .controller('admin.ctrl.account',
@@ -108,7 +109,7 @@ angular.module('bars.admin', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    totalPrice += item.item.price * item.buy_qty * item.item.unit_value;
+                    totalPrice += item.item.price * item.qty * item.item.unit_value;
                 });
 
                 this.totalPrice = totalPrice;
@@ -119,9 +120,9 @@ angular.module('bars.admin', [
                 }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.buy_qty += qty/item.unit_value;
+                    other.qty += qty/item.unit_value;
                 } else {
-                    this.itemsList.push({ item: item, buy_qty: qty/item.unit_value });
+                    this.itemsList.push({ item: item, qty: qty/item.unit_value });
                 }
                 this.recomputeAmount();
             },
@@ -132,7 +133,7 @@ angular.module('bars.admin', [
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.buy_qty * item.item.unit_value;
+                    item.qty = item.qty * item.item.unit_value;
                 });
                 var refThis = this;
                 APIAction.appro({
