@@ -91,7 +91,7 @@ angular.module('bars.api.food', [
                     $scope.query_qty = 1;
                 });
             } else if (type == 'add') {
-                Meal.addItem($scope.food_item, $scope.query_qty);
+                Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
             }
         };
         $scope.trashIt = function() {

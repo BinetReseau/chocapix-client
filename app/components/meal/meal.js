@@ -64,13 +64,13 @@ angular.module('bars.meal', [
             },
             addItem: function(item, qty) {
                 if (!qty) {
-                    qty = 1;
+                    qty = item.unit_value;
                 }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.buy_qty += qty;
+                    other.buy_qty += qty/item.unit_value;
                 } else {
-                    this.itemsList.push({ item: item, buy_qty: qty });
+                    this.itemsList.push({ item: item, buy_qty: qty/item.unit_value });
                 }
                 this.itemToAdd = '';
                 this.recomputeAmount();
