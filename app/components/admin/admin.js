@@ -86,9 +86,66 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.account',
-['$scope', 'api.models.account', 'api.models.user',
-function($scope, Account, User) {
-    $scope.admin.active = 'account';
-}
+    ['$scope', 'api.models.account', 'api.models.user',
+    function($scope, Account, User) {
+        $scope.admin.active = 'account';
+    }
 ])
+.factory('admin.appro',
+    ['api.models.food', 'api.services.action',
+    function (Food, APIAction) {
+        return {
+            itemsList: [],
+            totalPrice: 0,
+            inRequest: false,
+            init: function() {
+                this.itemsList = [];
+                this.totalPrice = 0;
+                this.inRequest = false;
+            },
+            recomputeAmount: function() {
+                var nbItems = this.itemsList.length;
+
+                var totalPrice = 0;
+                _.forEach(this.itemsList, function(item, i) {
+                    totalPrice += item.item.price * item.buy_qty * item.item.unit_value;
+                });
+
+                this.totalPrice = totalPrice;
+            },
+            addItem: function(item, qty) {
+                if (!qty) {
+                    qty = item.unit_value;
+                }
+                var other = _.find(this.itemsList, {'item': item});
+                if (other) {
+                    other.buy_qty += qty/item.unit_value;
+                } else {
+                    this.itemsList.push({ item: item, buy_qty: qty/item.unit_value });
+                }
+                this.recomputeAmount();
+            },
+            removeItem: function(item) {
+                this.itemsList.splice(this.itemsList.indexOf(item), 1);
+                this.recomputeAmount();
+            },
+            validate: function() {
+                this.inRequest = true;
+                _.forEach(this.itemsList, function(item, i) {
+                    item.qty = item.buy_qty * item.item.unit_value;
+                });
+                var refThis = this;
+                APIAction.appro({
+                    items: this.itemsList
+                })
+                .then(function() {
+                    refThis.init();
+                });
+            },
+            in: function() {
+                return this.itemsList.length > 0;
+            }
+        };
+    }]
+)
 ;
