@@ -21,7 +21,7 @@
                         <th>Quantité</th>
                         <th>Valeur</th>
                     </tr>
-                    <tr ng-repeat="item in appro.itemsList | filter:searchl" ng-class="item.item.deleted && 'del'">
+                    <tr ng-repeat="item in appro.itemsList | orderBy:'':'true' | filter:searchl" ng-class="item.item.deleted && 'del'">
                         <td><bars:food food="item.item"></bars:food></td>
                         <td>
                             <input type="number" ng-model="item.qty" class="form-control input-sm pqty" />
