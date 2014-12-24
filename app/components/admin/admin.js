@@ -110,7 +110,7 @@ angular.module('bars.admin', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    totalPrice += item.item.price * item.qty * item.item.unit_value;
+                    totalPrice += item.item.price * item.qty * item.unit_value;
                 });
 
                 this.totalPrice = totalPrice;
