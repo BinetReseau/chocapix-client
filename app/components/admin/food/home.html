@@ -9,6 +9,19 @@
                         <input type="text" id="addApproItemInput" class="form-control" placeholder="Aliment à ajouter à l'appro" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="appro.itemToAdd" autocomplete="off" typeahead-on-select="appro.addItem($item)" />
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Total</label>
+                    <div class="col-sm-10">
+                        <span class="h3">
+                            <span class="label label-success">{{ appro.totalPrice | currency }}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <input type="button" class="btn btn-primary" value="Valider l'appro" />
+                    </div>
+                </div>
             </form>
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
@@ -19,7 +32,9 @@
                     <tr>
                         <th>Nom</th>
                         <th>Quantité</th>
-                        <th>Valeur</th>
+                        <th>
+                            Total
+                        </th>
                     </tr>
                     <tr ng-repeat="item in appro.itemsList | orderBy:'':'true' | filter:searchl" ng-class="item.item.deleted && 'del'">
                         <td><bars:food food="item.item"></bars:food></td>
