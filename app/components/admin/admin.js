@@ -99,6 +99,7 @@ angular.module('bars.admin', [
             itemsList: [],
             totalPrice: 0,
             inRequest: false,
+            itemToAdd: "",
             init: function() {
                 this.itemsList = [];
                 this.totalPrice = 0;
@@ -122,9 +123,10 @@ angular.module('bars.admin', [
                 if (other) {
                     other.qty += qty/item.unit_value;
                 } else {
-                    this.itemsList.push({ item: item, qty: qty/item.unit_value });
+                    this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.buy_unit_value });
                 }
                 this.recomputeAmount();
+                this.itemToAdd = "";
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
