@@ -68,7 +68,7 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.food',
-    ['$scope', 'api.models.food', 'admi.appro',
+    ['$scope', 'api.models.food', 'admin.appro',
     function($scope, Food, Appro) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
