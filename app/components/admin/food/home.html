@@ -36,16 +36,16 @@
                         <th> </th>
                     </tr>
                     <tr ng-repeat="item in appro.itemsList | orderBy:'':'true' | filter:searchl" ng-class="item.item.deleted && 'del'">
-                        <td><bars:food food="item.item"></bars:food></td>
-                        <td>
+                        <td class="vmiddle"><bars:food food="item.item"></bars:food></td>
+                        <td class="vmiddle">
                             <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="10" />
                             <select ng-model="item.unit_value" ng-change="appro.recomputeAmount()">
                                 <option value="{{ item.item.buy_unit_value }}">{{ item.item.buy_unit || item.item.name }}</option>
                                 <option value="{{ item.item.unit_value }}" ng-if="item.item.buy_unit != item.item.unit">{{ item.item.unit || item.item.name }}</option>
                             </select>
                         </td>
-                        <td><span class="label label-info">{{ item.qty*item.unit_value*item.item.price | currency }}</span></td>
-                        <td>
+                        <td class="vmiddle"><span class="label label-info">{{ item.qty*item.unit_value*item.item.price | currency }}</span></td>
+                        <td class="vmiddle">
                             <a title="Supprimer de l'appro cet aliment" ng-click="appro.removeItem(item)" class="link">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </a>
