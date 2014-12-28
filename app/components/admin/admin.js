@@ -84,6 +84,7 @@ angular.module('bars.admin', [
             });
         };
         $scope.appro = Appro;
+        $scope.formAppro = Appro.in();
     }
 ])
 .controller('admin.ctrl.account',
