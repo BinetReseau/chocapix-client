@@ -176,6 +176,12 @@ li li {
 .table-tab td.end-of-column {
     border-right: 1px solid #ddd;
 }
+.table-tab .title {
+    width: 20%;
+}
+.table-tab .value {
+    width: 30%;
+}
 .pqty {
     display: inline-block;
     width: 60px;
