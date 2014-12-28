@@ -18,6 +18,9 @@ angular.module('bars.admin', [
                     resolve: {
                         account_list: ['api.models.account', function(Account) {
                             return Account.all();
+                        }],
+                        food_list: ['api.models.food', function(Food){
+                            return Food.all();
                         }]
                     }
                 }
@@ -46,8 +49,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.home',
-    ['$scope', 'account_list',
-    function($scope, account_list) {
+    ['$scope', 'account_list', 'food_list',
+    function($scope, account_list, food_list) {
         $scope.admin.active = 'dashboard';
         new Morris.Line({
             // ID of the element in which to draw the chart.
@@ -71,10 +74,15 @@ angular.module('bars.admin', [
             smooth: false
         });
 
-        $scope.nbNegativ = _.filter(account_list, function (o) {
+        $scope.nbAccountNegativ = _.filter(account_list, function (o) {
             return o.money <= 0;
         }).length;
-        $scope.ratioNegativ = $scope.nbNegativ/account_list.length;
+        $scope.ratioAccountNegativ = $scope.nbAccountNegativ/account_list.length;
+
+        $scope.nbFoodNegativ = _.filter(food_list, function (o) {
+            return o.qty <= 0;
+        }).length;
+        $scope.ratioFoodNegativ = $scope.nbFoodNegativ/food_list.length;
     }
 ])
 .controller('admin.ctrl.food',

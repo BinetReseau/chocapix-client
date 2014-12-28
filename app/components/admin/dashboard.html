@@ -7,14 +7,14 @@
     <div class="row">
         <div class="col-sm-6">
             <h2 class="text-center">
-                <span class="label" ng-class="ratioNegativ > 0.25 && 'label-danger' || (ratioNegativ > 0.15 && 'label-warning' || 'label-success')">{{ nbNegativ }}</span>
+                <span class="label" ng-class="ratioAccountNegativ > 0.25 && 'label-danger' || (ratioAccountNegativ > 0.15 && 'label-warning' || 'label-success')">{{ nbAccountNegativ }}</span>
                 <br /><small>élève{{ nbNegativ > 1 && 's' || '' }} en négatif</small>
             </h2>
         </div>
         <div class="col-sm-6">
             <h2 class="text-center">
-                <span class="label label-danger">5</span>
-                <br /><small>aliments en rupture</small>
+                <span class="label" ng-class="ratioFoodNegativ > 0.25 && 'label-danger' || (ratioFoodNegativ > 0.15 && 'label-warning' || 'label-success')">{{ nbFoodNegativ }}</span>
+                <br /><small>aliment{{ nbFoodNegativ > 1 && 's' || '' }} en rupture</small>
             </h2>
         </div>
     </div>
