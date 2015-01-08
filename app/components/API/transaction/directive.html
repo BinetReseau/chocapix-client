@@ -36,19 +36,6 @@
                             <span ng-switch-when="buy">
                                 <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
                             </span>
-                            <span ng-switch-when="meal">
-                                <a ng-show="transaction.items.length > 1 && !detailsFood" ng-click="detailsFood = true">
-                                    {{ transaction.items.length }} aliments
-                                </a>
-                                <div collapse="transaction.items.length > 1 && !detailsFood">
-                                    <div ng-repeat="x in transaction.items">
-                                        <bars:food food="x.item" qty="x.qty" out="'sell'"></bars:food><br />
-                                    </div>
-                                </div>
-                            </span>
-                            <span ng-switch-when="appro">
-                                <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
-                            </span>
                             <span ng-switch-when="throw">
                                 <bars:food food="transaction.item" qty="transaction.qty" out="'sell'"></bars:food>
                             </span>
@@ -60,6 +47,16 @@
                                 {{ transaction.amount | abs | currency }} mise à <bars:account account="transaction.account"></bars:account>
                             </span>
                         </ng:switch>
+                        <span ng-if="transaction.type == 'meal' || transaction.type == 'appro'">
+                            <a ng-show="transaction.items.length > 1 && !detailsFood" ng-click="detailsFood = true">
+                                {{ transaction.items.length }} aliments
+                            </a>
+                            <div collapse="transaction.items.length > 1 && !detailsFood">
+                                <div ng-repeat="x in transaction.items">
+                                    <bars:food food="x.item" qty="x.qty" out="'sell'"></bars:food><br />
+                                </div>
+                            </div>
+                        </span>
                     </td>
                     <td class="par">par</td>
                     <td class="user">

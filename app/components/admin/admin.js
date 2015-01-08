@@ -154,7 +154,7 @@ angular.module('bars.admin', [
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.qty * item.item.unit_value;
+                    item.qty = item.qty * item.unit_value;
                 });
                 var refThis = this;
                 APIAction.appro({
