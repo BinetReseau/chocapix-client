@@ -60,22 +60,13 @@ angular.module('bars.api.transaction', [
                         }
                         this.parseTimestamp();
                     }
-                },
-                hooks: {
-                    // 'add': function() {
-                    //     this.parseTimestamp();
-                    // },
-                    // 'update': function(o) {
-                    //     this.parseTimestamp();
-                    // }
                 }
             });
-        model.paginate = function(page, page_size) {
-            page_size = page_size || 10;
+        model.request = function(params) {
             return APIInterface.request({
                 'url': 'transaction',
                 'method': 'GET',
-                'params': {'page': page, 'page_size': page_size}});
+                'params': params});
         }
         return model;
     }])
@@ -126,11 +117,12 @@ angular.module('bars.api.transaction', [
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', '$filter', 'api.models.transaction', function($scope, $filter, Transaction) {
             function updateList() {
-                Transaction.paginate(1).then(function(transactions){
-                    _.forEach(transactions, function(t){
+                var req = $scope.filter;
+                req.page = 1;
+                Transaction.request(req).then(function(history){
+                    _.forEach(history, function(t){
                         t.parseTimestamp();
-                    })
-                    var history = _.filter(transactions, $scope.filter);
+                    });
                     if ($scope.limitTo !== undefined) {
                         history = $filter('limitTo')(history, -$scope.limitTo);
                     }
