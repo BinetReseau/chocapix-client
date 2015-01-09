@@ -24,11 +24,31 @@ angular.module('bars.api.transaction', [
                     'items.*.item': 'Item'
                 },
                 methods: {
-                    'cancel': {method:'POST', url: 'cancel'},
-                    'restore': {method:'POST', url: 'restore'}
-                },
-                hooks: {
-                    'add': function() {
+                    'cancel': function() {
+                        var self = this;
+                        self.canceled = true;
+                        APIInterface.request({
+                            'url': "transaction/"+self.id+"/cancel",
+                            'method': 'POST',
+                            'data': self})
+                        .then(function(t) {
+                            self.canceled = t.canceled;
+                            self.reloadRelated();
+                        })
+                    },
+                    'restore': function() {
+                        var self = this;
+                        self.canceled = false;
+                        APIInterface.request({
+                            'url': "transaction/"+self.id+"/restore",
+                            'method': 'POST',
+                            'data': self})
+                        .then(function(t) {
+                            self.canceled = t.canceled;
+                            self.reloadRelated();
+                        })
+                    },
+                    'reloadRelated': function() {
                         if(this.author_account) {
                             this.author_account.$reload();
                         }
@@ -39,17 +59,13 @@ angular.module('bars.api.transaction', [
                             this.item.$reload();
                         }
                         parseTimestamp(this);
+                    }
+                },
+                hooks: {
+                    'add': function() {
+                        parseTimestamp(this);
                     },
                     'update': function(o) {
-                        if(this.author_account) {
-                            this.author_account.$reload();
-                        }
-                        if(this.account) {
-                            this.account.$reload();
-                        }
-                        if(this.item) {
-                            this.item.$reload();
-                        }
                         parseTimestamp(this);
                     }
                 }
@@ -71,7 +87,10 @@ angular.module('bars.api.transaction', [
             Action[action] = function(params) {
                 var transaction = Transaction.create(params);
                 transaction.type = action;
-                return transaction.$save();
+                return transaction.$save().then(function(t) {
+                        t.reloadRelated();
+                        return t;
+                    });
             };
         });
         return Action;
