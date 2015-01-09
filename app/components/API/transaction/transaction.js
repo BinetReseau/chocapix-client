@@ -4,14 +4,14 @@ angular.module('bars.api.transaction', [
     'APIModel'
     ])
 
-.factory('api.models.transaction', ['APIModel',
-    function(APIModel) {
+.factory('api.models.transaction', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
         function parseTimestamp(t) {
             var ts = new Date(t.timestamp);
             t.timestamp = ts;
             t.timestamp_day = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
         }
-        return new APIModel({
+        var model = new APIModel({
                 url: 'transaction',
                 type: "Transaction",
                 structure: {
@@ -54,6 +54,14 @@ angular.module('bars.api.transaction', [
                     }
                 }
             });
+        model.paginate = function(page, page_size) {
+            page_size = page_size || 10;
+            return APIInterface.request({
+                'url': 'transaction',
+                'method': 'GET',
+                'params': {'page': page, 'page_size': page_size}});
+        }
+        return model;
     }])
 .factory('api.services.action', ['api.models.transaction',
     function(Transaction) {
