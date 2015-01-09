@@ -114,19 +114,23 @@ angular.module('bars.magicbar', [
 	            }
 
 	            // Quantity
-				var match = /^([0-9]+(\.[0-9]+)?)(\D*)$/g.exec(term);
+				// var match = /^([0-9]+(\.[0-9]+)?)(\D*)$/.exec(term);
+				var match = /^([0-9.()+\-*/]+)(\D*)$/.exec(term);
 	            if (match) {
-	                var qty = match[1];
-					var unit = match[3];
+					try {
+						var qty = eval(match[1]);
+						var unit = match[2];
 
-					var canBe ={
-						type: 'qty',
-						value: qty
-					};
-					if(unit !== '') {
-						canBe.unit = unit;
-					}
-					parsedTerms[i].push(canBe);
+						var canBe ={
+							type: 'qty',
+							value: qty
+						};
+						if(unit !== '') {
+							canBe.unit = unit;
+						}
+
+						parsedTerms[i].push(canBe);
+					} catch (e) {}
 	            }
 
 	            // Unit
