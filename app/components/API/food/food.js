@@ -50,7 +50,7 @@ angular.module('bars.api.food', [
                     return Food.getSync($stateParams.id);
                 }],
                 history: ['api.models.transaction', function(Transaction) {
-                    Transaction.reload();
+                    // Transaction.reload();
                     // return Transaction.all();
                 }]
             }

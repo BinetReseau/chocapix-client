@@ -54,7 +54,7 @@ angular.module('bars.api.account', [
                     return Account.getSync($stateParams.id);
                 }],
                 history: ['api.models.transaction', function(Transaction) {
-                    Transaction.reload();
+                    // Transaction.reload();
                     // return Transaction.all();
                 }]
             }

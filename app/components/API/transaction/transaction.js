@@ -6,11 +6,6 @@ angular.module('bars.api.transaction', [
 
 .factory('api.models.transaction', ['APIModel', 'APIInterface',
     function(APIModel, APIInterface) {
-        function parseTimestamp(t) {
-            var ts = new Date(t.timestamp);
-            t.timestamp = ts;
-            t.timestamp_day = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
-        }
         var model = new APIModel({
                 url: 'transaction',
                 type: "Transaction",
@@ -24,6 +19,11 @@ angular.module('bars.api.transaction', [
                     'items.*.item': 'Item'
                 },
                 methods: {
+                    'parseTimestamp':  function() {
+                        var ts = new Date(this.timestamp);
+                        this.timestamp = ts;
+                        this.timestamp_day = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
+                    },
                     'cancel': function() {
                         var self = this;
                         self.canceled = true;
@@ -58,16 +58,16 @@ angular.module('bars.api.transaction', [
                         if(this.item) {
                             this.item.$reload();
                         }
-                        parseTimestamp(this);
+                        this.parseTimestamp();
                     }
                 },
                 hooks: {
-                    'add': function() {
-                        parseTimestamp(this);
-                    },
-                    'update': function(o) {
-                        parseTimestamp(this);
-                    }
+                    // 'add': function() {
+                    //     this.parseTimestamp();
+                    // },
+                    // 'update': function(o) {
+                    //     this.parseTimestamp();
+                    // }
                 }
             });
         model.paginate = function(page, page_size) {
@@ -104,8 +104,8 @@ angular.module('bars.api.transaction', [
             resolve: {
                 history: ['api.models.transaction', '$stateParams',
                     function(Transaction) {
-                        Transaction.reload();
-                        return Transaction.all();
+                        // Transaction.reload();
+                        // return Transaction.all();
                 }]
             },
             controller: ['$scope', 'history',
@@ -126,13 +126,18 @@ angular.module('bars.api.transaction', [
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', '$filter', 'api.models.transaction', function($scope, $filter, Transaction) {
             function updateList() {
-                var history = _.filter(Transaction.all(), $scope.filter);
-                if ($scope.limitTo !== undefined) {
-                    history = $filter('limitTo')(history, -$scope.limitTo);
-                }
-                $scope.history_by_date = _.groupBy(history, 'timestamp_day');
-                $scope.history_dates = _.keys($scope.history_by_date);
-                $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
+                Transaction.paginate(1).then(function(transactions){
+                    _.forEach(transactions, function(t){
+                        t.parseTimestamp();
+                    })
+                    var history = _.filter(transactions, $scope.filter);
+                    if ($scope.limitTo !== undefined) {
+                        history = $filter('limitTo')(history, -$scope.limitTo);
+                    }
+                    $scope.history_by_date = _.groupBy(history, 'timestamp_day');
+                    $scope.history_dates = _.keys($scope.history_by_date);
+                    $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
+                })
             }
             updateList();
             $scope.$on('api.model.transaction.*', updateList);

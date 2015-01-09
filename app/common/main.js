@@ -42,7 +42,7 @@ angular.module('bars.main', [
                     }
                 }],
                 history: ['api.models.transaction', function(Transaction) {
-                    Transaction.reload();
+                    // Transaction.reload();
                     // return Transaction.all();
                 }]
             },
