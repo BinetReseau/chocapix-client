@@ -116,24 +116,46 @@ angular.module('bars.api.transaction', [
         },
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', '$filter', 'api.models.transaction', function($scope, $filter, Transaction) {
-            function updateList() {
+            function loadList(index, count, success) {
+                if (index < 0) {
+                    success([]);
+                    return;
+                }
                 var req = $scope.filter;
-                req.page = 1;
-                Transaction.request(req).then(function(history){
+                req.page = Math.ceil(index/count);
+                req.page_size = count;
+                Transaction.request(req).then(function(history) {
+                    var endHistory = (history.length < count);
                     _.forEach(history, function(t){
                         t.parseTimestamp();
                     });
                     if ($scope.limitTo !== undefined) {
                         history = $filter('limitTo')(history, -$scope.limitTo);
                     }
-                    $scope.history_by_date = _.groupBy(history, 'timestamp_day');
-                    $scope.history_dates = _.keys($scope.history_by_date);
-                    $scope.history_dates = _.map($scope.history_dates, function(x){return { date: new Date(x) }; });
+                    var history_by_date = _.groupBy(history, 'timestamp_day');
+                    var history_dates = _.keys(history_by_date);
+                    history_dates = _.map(history_dates, function(x){return { date: new Date(x) }; });
+
+                    var realLength = history_dates.length;
+                    for (var i = 0; i < count; i++) {
+                        if (i < realLength) {
+                            history_dates[i].display = true;
+                            history_dates[i].history = history_by_date[history_dates[i].date];
+                        } else if (!endHistory) {
+                            history_dates[i] = {
+                                display: false
+                            };
+                        }
+                    }
+
+                    success(history_dates);
                 })
             }
-            updateList();
-            $scope.$on('api.model.transaction.*', updateList);
-            $scope.$on('auth.hasLoggedIn', updateList);
+            $scope.history_dates = {
+                get: loadList
+            };
+            // $scope.$on('api.model.transaction.*', updateList);
+            // $scope.$on('auth.hasLoggedIn', updateList);
         }]
     };
 })

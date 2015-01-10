@@ -24,7 +24,8 @@
     "lodash": "*",
     "moment": "*",
     "ngstorage": "*",
-    "morris.js": "~0.5.1"
+    "morris.js": "~0.5.1",
+    "angular-ui-utils": "bower-scroll"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.0",
