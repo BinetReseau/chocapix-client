@@ -122,7 +122,7 @@ angular.module('bars.api.transaction', [
                     success([]);
                     return;
                 }
-                var req = $scope.filter;
+                var req = $scope.filter();
                 req.page = Math.ceil(index/count);
                 req.page_size = count;
                 Transaction.request(req).then(function(history) {
@@ -158,7 +158,7 @@ angular.module('bars.api.transaction', [
             function update() {
                 needUpdate = true;
             }
-            
+
             $scope.history_dates = {
                 get: loadList,
                 revision:  function () {
