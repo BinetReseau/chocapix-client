@@ -112,11 +112,12 @@ angular.module('bars.api.transaction', [
         restrict: 'E',
         scope: {
             filter: '&filter',
-            limitTo: '=?limit'
+            // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', '$filter', 'api.models.transaction', function($scope, $filter, Transaction) {
             function loadList(index, count, success) {
+                // no negative index
                 if (index < 0) {
                     success([]);
                     return;
@@ -126,16 +127,17 @@ angular.module('bars.api.transaction', [
                 req.page_size = count;
                 Transaction.request(req).then(function(history) {
                     var endHistory = (history.length < count);
+
                     _.forEach(history, function(t){
                         t.parseTimestamp();
                     });
-                    if ($scope.limitTo !== undefined) {
-                        history = $filter('limitTo')(history, -$scope.limitTo);
-                    }
                     var history_by_date = _.groupBy(history, 'timestamp_day');
                     var history_dates = _.keys(history_by_date);
                     history_dates = _.map(history_dates, function(x){return { date: new Date(x) }; });
 
+                    // if it is not the end, success(array) wants array.length == count.
+                    // But we groupBy day, so the next part is a trick to add empty
+                    // items to history_dates which are not displayed
                     var realLength = history_dates.length;
                     for (var i = 0; i < count; i++) {
                         if (i < realLength) {
@@ -151,11 +153,23 @@ angular.module('bars.api.transaction', [
                     success(history_dates);
                 })
             }
+
+            var needUpdate = true;
+            function update() {
+                needUpdate = true;
+            }
+            
             $scope.history_dates = {
-                get: loadList
+                get: loadList,
+                revision:  function () {
+                    var current = needUpdate;
+                    needUpdate = false;
+                    return current;
+                }
             };
-            // $scope.$on('api.model.transaction.*', updateList);
-            // $scope.$on('auth.hasLoggedIn', updateList);
+
+            $scope.$on('api.model.transaction.*', update);
+            $scope.$on('auth.hasLoggedIn', update);
         }]
     };
 })
