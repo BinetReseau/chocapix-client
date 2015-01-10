@@ -5,8 +5,8 @@ angular.module('bars.auth', [
 ])
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
-.factory('auth.service', ['$injector', '$localStorage', '$q', 'APIURL',
-    function ($injector, $localStorage, $q, APIURL) {
+.factory('auth.service', ['$injector', '$localStorage', '$q', 'APIURL', '$rootScope', 
+    function ($injector, $localStorage, $q, APIURL, $rootScope) {
         if ($localStorage.auth === undefined) {
             $localStorage.auth = {
                 token: null
@@ -26,6 +26,8 @@ angular.module('bars.auth', [
             },
             logout: function() {
                 $localStorage.auth.token = null;
+                // Mieux gérer ça dans main.js (supprimer les objets, etc.) -- TODO
+                $rootScope.$broadcast('auth.hasLoggedOut');
             },
             isAuthenticated: function() {
                 return $localStorage.auth.token !== null;

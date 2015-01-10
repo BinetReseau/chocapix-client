@@ -133,6 +133,7 @@ angular.module('bars.api.transaction', [
             }
             updateList();
             $scope.$on('api.model.transaction.*', updateList);
+            $scope.$on('auth.hasLoggedIn', updateList);
         }]
     };
 })

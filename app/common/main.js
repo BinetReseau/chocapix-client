@@ -71,8 +71,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
-    function($scope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
+    function($scope, $rootScope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -101,6 +101,7 @@ angular.module('bars.main', [
                     });
                     $scope.user.account = Account.me().then(function(account) {
                         $scope.user.account = account;
+                        $rootScope.$broadcast('auth.hasLoggedIn');
                     });
                     $scope.login = {password: ''};
                     $scope.inLogin = false;
