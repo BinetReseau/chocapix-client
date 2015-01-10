@@ -6,6 +6,7 @@ angular.module('barsApp', [
   'ui.scroll',
   'angularMoment',
   'ngAnimate',
+  'ngSanitize',
 
   'bars.auth',
   'bars.main',

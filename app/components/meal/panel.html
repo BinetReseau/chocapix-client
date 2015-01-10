@@ -4,7 +4,7 @@
         <div class="list-group-item">
             <form class="form-horizontal text-center">
                 <label class="sr-only" for="mealTitleInput">Nom de la bouffe</label>
-                <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Nom de la bouffe" ng-model="meal.mealName" />
+                <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Nom de la bouffe" ng-model="meal.name" />
             </form>
             <button class="btn btn-success btn-block" ng-class="(meal.inRequest || meal.totalPrice <= 0) && 'disabled'" ng-click="meal.validate()">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
         </div>

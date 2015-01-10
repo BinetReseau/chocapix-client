@@ -115,7 +115,7 @@ angular.module('bars.api.transaction', [
             // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
-        controller: ['$scope', '$filter', 'api.models.transaction', function($scope, $filter, Transaction) {
+        controller: ['$scope', '$filter', '$sanitize', 'api.models.transaction', function($scope, $filter, $sanitize, Transaction) {
             function loadList(index, count, success) {
                 // no negative index
                 if (index < 0) {
@@ -167,6 +167,7 @@ angular.module('bars.api.transaction', [
                     return current;
                 }
             };
+            $scope.safe = $sanitize;
 
             $scope.$on('api.model.transaction.*', update);
             $scope.$on('auth.hasLoggedIn', update);

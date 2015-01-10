@@ -22,13 +22,14 @@ angular.module('bars.meal', [
             accountToAdd: "",
             account: null,
             inRequest: false,
-            mealName: "",
+            name: "",
             init: function() {
                 this.customersList = [ { account: this.account, ratio: 1, amount: 0 } ];
                 this.itemsList = [];
                 this.totalPrice = 0;
                 this.accountToAdd = "";
                 this.inRequest = false;
+                this.name = "";
             },
             recomputeAmount: function() {
                 var nbParts = 0; // nombre de parts pour le calcul (somme des ratios)
@@ -88,7 +89,8 @@ angular.module('bars.meal', [
                 var refThis = this;
                 APIAction.meal({
                     items: this.itemsList,
-                    accounts: this.customersList
+                    accounts: this.customersList,
+                    name: this.name
                 })
                 .then(function() {
                     refThis.init();
