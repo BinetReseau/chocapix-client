@@ -217,7 +217,7 @@ angular.module('bars.magicbar', [
 				return _.flatten(suggestions, true);
 			}
 
-			query.suggest = _.flatten(_.map(listSuggestions(),
+			query.suggest = _.uniq(_.flatten(_.map(listSuggestions(),
 				function(suggestion) {
 					var res = {};
 					_.forEach(suggestion, function(v) {
@@ -246,7 +246,15 @@ angular.module('bars.magicbar', [
 					}
 					res.qty = res.qty || 1;
 					return [res];
-			}), true);
+			}), true), function (o) {
+				var out = o.qty + ";" + o.otype + ";" + o.type + ";";
+				if (o.food) {
+					out = out + o.food.id;
+				} else if (o.account) {
+					out = o.account.id;
+				}
+				return out;
+			});
 
 
 	        /*
