@@ -41,7 +41,6 @@ angular.module('bars.api.account', [
             controller: 'api.ctrl.account_list',
             resolve: {
                 account_list: ['api.models.account', function(Account) {
-                    Account.reload();
                     return Account.all();
                 }]
             }

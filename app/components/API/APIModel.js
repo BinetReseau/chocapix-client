@@ -403,7 +403,14 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                 });
             } else {
                 return this.remote_store.all().then(function(array) {
-                    self.memory_store.clear();
+                    // self.memory_store.clear();
+                    // Ça permet de ne pas supprimer des objets qui avaient été linkés
+                    // par contre si un objet a été supprimé on le gardera
+                    // cependant ça arrive rarement (jamais ?) donc ce comportement
+                    // ne doit pas être trop handicapant
+                    // néanmoins il faudrait je pense mettre à jour sans les supprimer
+                    // les objets existants
+                    // et regarder lesquels ont disparus et les virer
                     _.each(array, function(o) {
                         self.memory_store.update(o.id, o);
                     });
