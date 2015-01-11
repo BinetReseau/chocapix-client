@@ -79,12 +79,12 @@ angular.module('bars.magicbar', [
 				'add',
 	        ];
 	        var humanTypes = {
-	            'acheter': 'buy',
-	            'jeter': 'throw',
-	            'donner': 'give',
-	            'amende': 'punish',
+	            'buy': 'acheter',
+	            'throw': 'jeter',
+	            'give': 'donner',
+	            'punish': 'amende',
 	            'appro': 'appro',
-				'ajouter': 'add'
+				'add': 'ajouter'
 	        };
 
 	        var units = [
@@ -104,11 +104,14 @@ angular.module('bars.magicbar', [
 				parsedTerms[i] = [];
 
 	            // Type
-	            if (humanTypes[term]) {
-	                query.type = humanTypes[term];
+				var type = _.findKey(humanTypes, function (v) {
+					return v.indexOf(term) == 0;
+				});
+	            if (type) {
+	                query.type = type;
 					parsedTerms[i].push({
 						type: 'type',
-						value: humanTypes[term]
+						value: type
 					});
 	                continue;
 	            }
