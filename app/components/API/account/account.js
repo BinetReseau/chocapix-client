@@ -40,7 +40,8 @@ angular.module('bars.api.account', [
             templateUrl: "components/API/account/list.html",
             controller: 'api.ctrl.account_list',
             resolve: {
-                account_list: ['api.models.account', function(Account){
+                account_list: ['api.models.account', function(Account) {
+                    Account.reload();
                     return Account.all();
                 }]
             }
