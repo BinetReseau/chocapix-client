@@ -26,17 +26,7 @@
                                     Achat de
                                 </a>
                                 <span ng-switch-when="appro">Appro de</span>
-                                <span ng-switch-when="inventory">
-                                    <span ng-if="transaction.items.length > 1">Inventaire</span>
-                                    <span ng-if="transaction.items.length == 1">
-                                        <span ng-if="transaction.items[0].qty > 0">
-                                            Appro de
-                                        </span>
-                                        <span ng-if="transaction.items[0].qty <= 0">
-                                            Vol de
-                                        </span>
-                                    </span>
-                                </span>
+                                <span ng-switch-when="inventory">Inventaire</span>
                                 <span ng-switch-when="throw">Mise à la poubelle de</span>
 
                                 <span ng-switch-when="give">Don de</span>
@@ -77,18 +67,24 @@
                                     <div ng-repeat="x in transaction.items">
                                         <bars:food food="x.item"></bars:food>
                                         <div class="pull-right">
-                                            <span ng-if="x.qty > 0" class="label label-success">
+                                            <span ng-if="x.qty >= 0" class="label label-success">
                                                 +<bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
                                             </span>
-                                            <span ng-if="x.qty <= 0" class="label label-danger">
+                                            <span ng-if="x.qty < 0" class="label label-danger">
                                                 <bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <span ng-if="transaction.items.length == 1">
-                                    <bars:food ng-if="transaction.items[0].qty >= 0" food="transaction.items[0].item" qty="transaction.items[0].qty" out="'sell'"></bars:food>
-                                    <bars:food ng-if="transaction.items[0].qty < 0" food="transaction.items[0].item" qty="-transaction.items[0].qty" out="'sell'"></bars:food>
+                                <span ng-if="transaction.items.length == 1" ng-init="x = transaction.items[0]">
+                                    <span ng-if="x.qty >= 0" class="label label-success">
+                                        +<bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
+                                    </span>
+                                    <span ng-if="x.qty < 0" class="label label-danger">
+                                        <bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <bars:food food="x.item"></bars:food>
                                 </span>
                             </div>
                         </td>
