@@ -28,11 +28,18 @@ angular.module('bars.magicbar', [
             }
             var type = $item.type;
 
-            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro'], type)) {
+            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory'], type)) {
                 var req;
                 if(_.contains(['buy', 'throw', 'appro'], type)) {
                     req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
-                } else {
+                } else if(_.contains(['inventory'], type)) {
+					req = {items:
+						[{
+							item: $item.food.id,
+							qty: $item.qty*$item.food.unit_value
+						}]
+					};
+				} else {
                     req = {account: $item.account.id, amount: $item.qty};
                 }
                 APIAction[type](req).then(function() {
@@ -77,6 +84,7 @@ angular.module('bars.magicbar', [
 	            'punish',
 	            'appro',
 				'add',
+				'inventory',
 	        ];
 	        var humanTypes = {
 	            'buy': 'acheter',
@@ -84,7 +92,8 @@ angular.module('bars.magicbar', [
 	            'give': 'donner',
 	            'punish': 'amende',
 	            'appro': 'appro',
-				'add': 'ajouter'
+				'add': 'ajouter',
+				'inventory': 'reste'
 	        };
 
 	        var units = [
@@ -239,7 +248,7 @@ angular.module('bars.magicbar', [
 						} else {
 							res.type = res.type || 'buy';
 						}
-						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add')
+						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory')
 								|| res.unit === "€"){
 							return []; // Discard
 						}
