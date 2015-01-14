@@ -30,6 +30,7 @@
 
                                 <span ng-switch-when="give">Don de</span>
                                 <a ng-switch-when="punish" tooltip="{{ transaction.motive }}" class="atooltip">Amende de</a>
+                                <span ng-switch-when="inventory">Inventaire de</span>
                             </ng:switch>
                         </td>
                         <td class="item">
@@ -48,7 +49,7 @@
                                     {{ transaction.amount | abs | currency }} mise à <bars:account account="transaction.account"></bars:account>
                                 </span>
                             </ng:switch>
-                            <span ng-if="transaction.type == 'meal' || transaction.type == 'appro'">
+                            <span ng-if="transaction.type == 'meal' || transaction.type == 'appro' || transaction.type == 'inventory'">
                                 <a ng-show="transaction.items.length > 1 && !detailsFood" ng-click="detailsFood = true">
                                     {{ transaction.items.length }} aliments
                                 </a>
