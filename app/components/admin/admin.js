@@ -86,8 +86,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.food',
-    ['$scope', 'api.models.food', 'admin.appro',
-    function($scope, Food, Appro) {
+    ['$scope', 'api.models.food', 'admin.appro', 'admin.inventory',
+    function($scope, Food, Appro, Inventory) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
         $scope.addFood = function() {
@@ -103,6 +103,9 @@ angular.module('bars.admin', [
         };
         $scope.appro = Appro;
         $scope.formAppro = Appro.in();
+
+        $scope.inventory = Inventory;
+        $scope.formInventory = Inventory.in();
     }
 ])
 .controller('admin.ctrl.account',
@@ -169,5 +172,50 @@ angular.module('bars.admin', [
             }
         };
     }]
+)
+.factory('admin.inventory',
+['api.models.food', 'api.services.action',
+function (Food, APIAction) {
+    return {
+        itemsList: [],
+        inRequest: false,
+        itemToAdd: "",
+        init: function() {
+            this.itemsList = [];
+            this.inRequest = false;
+        },
+        addItem: function(item, qty) {
+            if (!qty) {
+                qty = item.unit_value;
+            }
+            var other = _.find(this.itemsList, {'item': item});
+            if (other) {
+                other.qty += qty/item.unit_value;
+            } else {
+                this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.buy_unit_value });
+            }
+            this.itemToAdd = "";
+        },
+        removeItem: function(item) {
+            this.itemsList.splice(this.itemsList.indexOf(item), 1);
+        },
+        validate: function() {
+            this.inRequest = true;
+            _.forEach(this.itemsList, function(item, i) {
+                item.qty = item.qty * item.unit_value;
+            });
+            var refThis = this;
+            APIAction.inventory({
+                items: this.itemsList
+            })
+            .then(function() {
+                refThis.init();
+            });
+        },
+        in: function() {
+            return this.itemsList.length > 0;
+        }
+    };
+}]
 )
 ;
