@@ -103,7 +103,14 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         APIInterface.prototype.request = function(req) {
             var self = this;
             req.data = this.unparse(req.data);
-            req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url; // TODO: use correct bar
+            if (this.getBar()) {
+                if (req.params) {
+                    req.params['bar'] = this.getBar();
+                } else {
+                    req.params = {bar: this.getBar()};
+                }
+            }
+            req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url;
             req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");
             return $http(req).then(function(data) {
                 return self.parse(data.data);
