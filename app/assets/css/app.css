@@ -41,11 +41,11 @@ a.link {
 .atooltip:hover {
     text-decoration: none;
 }
-li.active a {
+li.active.menubar a {
     color: white;
     cursor: default;
 }
-li.active a:hover {
+li.active.menubar a:hover {
     text-decoration: none;
 }
 
@@ -122,9 +122,6 @@ li.active a:hover {
     }
 }
 
-li li {
-    list-style-type: square;
-}
 
 .div-scroll {
     max-height: 10em;

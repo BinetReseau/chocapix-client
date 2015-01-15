@@ -26,11 +26,33 @@ angular.module('bars.admin', [
                 }
             }
         })
+        // Admin food
         .state('bar.admin.food', {
+            abstract: true,
             url: "/food",
-            templateUrl: "components/admin/food/home.html",
-            controller: 'admin.ctrl.food'
+            template: '<ui-view />'
         })
+            .state('bar.admin.food.add', {
+                url: "/add",
+                templateUrl: "components/admin/food/add.html",
+                controller: 'admin.ctrl.food.add'
+            })
+            .state('bar.admin.food.appro', {
+                url: "/appro",
+                templateUrl: "components/admin/food/appro.html",
+                controller: 'admin.ctrl.food.appro'
+            })
+            .state('bar.admin.food.inventory', {
+                url: "/inventory",
+                templateUrl: "components/admin/food/inventory.html",
+                controller: 'admin.ctrl.food.inventory'
+            })
+            .state('bar.admin.food.graphs', {
+                url: "/graphs",
+                templateUrl: "components/admin/food/graphs.html",
+                controller: 'admin.ctrl.food.graphs'
+            })
+        // Admin account
         .state('bar.admin.account', {
             url: "/account",
             templateUrl: "components/admin/account/home.html",
@@ -85,9 +107,10 @@ angular.module('bars.admin', [
         $scope.ratioFoodNegativ = $scope.nbFoodNegativ/food_list.length;
     }
 ])
-.controller('admin.ctrl.food',
-    ['$scope', 'api.models.food', 'admin.appro', 'admin.inventory',
-    function($scope, Food, Appro, Inventory) {
+// Admin food
+.controller('admin.ctrl.food.add',
+    ['$scope', 'api.models.food', 
+    function($scope, Food) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
         $scope.addFood = function() {
@@ -101,13 +124,32 @@ angular.module('bars.admin', [
                 // TODO: display form errors
             });
         };
-        $scope.appro = Appro;
-        $scope.formAppro = Appro.in();
-
-        $scope.inventory = Inventory;
-        $scope.formInventory = Inventory.in();
     }
 ])
+.controller('admin.ctrl.food.appro',
+    ['$scope', 'api.models.food', 'admin.appro',
+    function($scope, Food, Appro) {
+        $scope.admin.active = 'food';
+
+        $scope.appro = Appro;
+    }
+])
+
+.controller('admin.ctrl.food.inventory',
+    ['$scope', 'api.models.food', 'admin.inventory',
+    function($scope, Food, Inventory) {
+        $scope.admin.active = 'food';
+        
+        $scope.inventory = Inventory;
+    }
+])
+.controller('admin.ctrl.food.graphs', 
+    ['$scope', 'api.models.food', 
+    function($scope, Food) {
+        $scope.admin.active = 'food;'
+    }
+])
+// Admin account
 .controller('admin.ctrl.account',
     ['$scope', 'api.models.account', 'api.models.user',
     function($scope, Account, User) {
