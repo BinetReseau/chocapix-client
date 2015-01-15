@@ -29,7 +29,7 @@ angular.module('barsApp', [
 
 .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/avironjone");
+        $urlRouterProvider.otherwise("/");
 
         $stateProvider
             .state('index', {

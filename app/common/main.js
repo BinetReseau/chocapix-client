@@ -7,7 +7,7 @@ angular.module('bars.main', [
 .config(['$stateProvider', function($stateProvider) {
     $stateProvider
         .state('bar', {
-            url: "/:bar",
+            url: "/{bar:[^/]+}",
             resolve: {
                 api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
                     APIInterface.setBar($stateParams.bar);
