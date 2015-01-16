@@ -86,8 +86,12 @@ angular.module('bars.api.food', [
             return Meal.in();
         };
         $scope.query = function(qty, type) {
-            if (type == 'buy' || type == 'throw' || type == 'appro') {
+            if (type == 'buy' || type == 'throw') {
                 APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
+                    $scope.query_qty = 1;
+                });
+            } else if (type == 'appro') {
+                APIAction[type]({items: [{item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}]}).then(function() {
                     $scope.query_qty = 1;
                 });
             } else if (type == 'add') {
