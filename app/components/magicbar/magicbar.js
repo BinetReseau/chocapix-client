@@ -30,9 +30,9 @@ angular.module('bars.magicbar', [
 
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory'], type)) {
                 var req;
-                if(_.contains(['buy', 'throw', 'appro'], type)) {
+                if(_.contains(['buy', 'throw'], type)) {
                     req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
-                } else if(_.contains(['inventory'], type)) {
+                } else if(_.contains(['inventory', 'appro'], type)) {
 					req = {items:
 						[{
 							item: $item.food.id,
