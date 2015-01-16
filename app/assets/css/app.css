@@ -126,6 +126,10 @@ li li {
     list-style-type: square;
 }
 
+dl.no-margin {
+    margin: 0px;
+}
+
 .div-scroll {
     max-height: 10em;
     overflow: auto;
@@ -185,6 +189,9 @@ li li {
 .pqty {
     display: inline-block;
     width: 60px;
+}
+.margin-left {
+    margin-left: 1em;
 }
 
 

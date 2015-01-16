@@ -23,8 +23,8 @@ angular.module('barsApp', [
 ])
 
 .config(['APIURLProvider', function(APIURL) {
-    APIURL.url = "http://nadrieril.fr/bars/api";
-    // APIURL.url = "http://127.0.0.1:8000";
+    // APIURL.url = "http://nadrieril.fr/bars/api";
+    APIURL.url = "http://127.0.0.1:8000";
 }])
 
 .config(['$stateProvider', '$urlRouterProvider',
@@ -34,10 +34,64 @@ angular.module('barsApp', [
         $stateProvider
             .state('index', {
                 url: "/",
-                template: "<div ui-view><a title='Déconnexion' ng-click='deconnexion()'>Déconnexion</a></div>",
-                controller : ['$scope', 'auth.service', function($scope, AuthService) {
-                    $scope.deconnexion = function() {
-                        AuthService.logout();
+                resolve: {
+                    bars_list: ['api.models.bar', function(Bar) {
+                        Bar.reload();
+                        return Bar.all();
+                    }],
+                    user: ['api.models.user', 'auth.service', function(User, AuthService) {
+                        if (AuthService.isAuthenticated()) {
+                            return User.me();
+                        } else {
+                            return null;
+                        }
+                    }]
+                },
+                templateUrl: "common/bars.html",
+                controller : ['$scope', 'auth.service', 'bars_list', 'user', 'api.models.user', 'api.models.account',
+                function($scope, AuthService, bars_list, user, User, Account) {
+                    function upBars() {
+                        $scope.gbars = [];
+                        for (var i = 0; i < bars_list.length; i++) {
+                            if (i%3 == 0) {
+                                var current = [];
+                            }
+                            current.push(bars_list[i]);
+                            if (i%3==2) {
+                                $scope.gbars.push(current);
+                            }
+                        }
+                        if (i%3 != 0) {
+                            $scope.gbars.push(current);
+                        }
+                    };
+                    upBars();
+                    $scope.$on('api.model.bar.*', upBars);
+
+                    $scope.user = {
+                        infos: user,
+                        isAuthenticated: AuthService.isAuthenticated,
+                        logout: AuthService.logout
+                    };
+                    $scope.connexion = function (login) {
+                        $scope.loginError = false;
+                        $scope.inLogin = true;
+                        AuthService.login(login).then(
+                            function(user) {
+                                $scope.user.infos = User.me().then(function(user) {
+                                    $scope.user.infos = user;
+                                });
+                                $scope.user.account = Account.me().then(function(account) {
+                                    $scope.user.account = account;
+                                });
+                                $scope.login = {password: ''};
+                                $scope.inLogin = false;
+                            }, function() {
+                                $scope.loginError = true;
+                                $scope.login.password = '';
+                                $scope.inLogin = false;
+                            }
+                        );
                     };
                 }]
             });
