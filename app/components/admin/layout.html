@@ -5,8 +5,16 @@
                 <li ng-class="admin.active == 'dashboard' && 'active'">
                     <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
                 </li>
-                <li ng-class="admin.active == 'food' && 'active'">
-                    <a title="Aliments" ui-sref="bar.admin.food({ bar: bar.id })"><span class="glyphicon glyphicon-cutlery"></span> Aliments</a>
+                <li ng-class="admin.active == 'food' && 'active'" class="dropdown">
+                    <a title="Aliments" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><!-- ui-sref="bar.admin.food({ bar: bar.id })" -->
+                        <span class="glyphicon glyphicon-cutlery"></span> Aliments <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="bar.admin.food.add({ bar: bar.id })">Ajouter un aliment</a></li>
+                        <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })">Faire une appro</a></li>
+                        <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })">Faire un inventaire</a></li>
+                        <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })">Graphiques</a></li>
+                    </ul>
                 </li>
                 <li ng-class="admin.active == 'account' && 'active'">
                     <a title="Utilisateurs" ui-sref="bar.admin.account({ bar: bar.id })"><span class="glyphicon glyphicon-user"></span> Utilisateurs</a>
