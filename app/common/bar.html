@@ -55,6 +55,11 @@
                 </a>
             </li>
             <li>
+                <a title="Aller à la liste de tous les bars" ui-sref="index">
+                    <span class="glyphicon glyphicon-transfer"></span> Changer de bar
+                </a>
+            </li>
+            <li>
                 <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="user.logout()">
                     <span class="glyphicon glyphicon-off"></span> Déconnexion
                 </a>
