@@ -1,0 +1,24 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <h3>Ajouter une news sur la page d'accueil</h3>
+    <div>
+        <form class="form-horizontal" ng-submit="addNews()">
+            <div class="form-group">
+                <label for="ntitle" class="col-sm-3 control-label">Titre</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="ntitle" placeholder="Message de fascisation" ng-model="news.name" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ntext" class="col-sm-3 control-label">Contenu</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" id="ntext" placeholder="" ng-model="news.text"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <input type="submit" class="btn btn-primary" value="Publier" ng-if="news.text != ''" />
+                </div>
+              </div>
+        </form>
+    </div>
+</div>
