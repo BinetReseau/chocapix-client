@@ -24,27 +24,27 @@
 <div class="row">
     <div class="col-md-2">
         <ul class="nav nav-pills nav-stacked">
-            <li ng-class="bar.active == 'index' && 'active menubar'">
+            <li ng-class="bar.active == 'index' && 'active'">
                 <a title="Accueil du bar" ui-sref="bar({ bar: bar.id })">
                     <span class="glyphicon glyphicon-home"></span> Accueil
                 </a>
             </li>
-            <li ng-class="bar.active == 'history' && 'active menubar'">
+            <li ng-class="bar.active == 'history' && 'active'">
                 <a title="Historique" ui-sref="bar.history({ bar: bar.id })">
                     <span class="glyphicon glyphicon-list"></span> Historique
                 </a>
             </li>
-            <li ng-class="bar.active == 'account' && 'active menubar'">
+            <li ng-class="bar.active == 'account' && 'active'">
                 <a title="Utilisateurs du bar" ui-sref="bar.account.list({ bar: bar.id })">
                     <span class="glyphicon glyphicon-user"></span> Utilisateurs
                 </a>
             </li>
-            <li ng-class="bar.active == 'food' && 'active menubar'">
+            <li ng-class="bar.active == 'food' && 'active'">
                 <a title="Aliments du bar" ui-sref="bar.food.list({ bar: bar.id })">
                     <span class="glyphicon glyphicon-cutlery"></span> Aliments
                 </a>
             </li>
-            <li ng-class="bar.active == 'admin' && 'active menubar'">
+            <li ng-class="bar.active == 'admin' && 'active'">
                 <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
                     <span class="glyphicon glyphicon-dashboard"></span> Administration
                 </a>

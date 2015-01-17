@@ -41,12 +41,15 @@ a.link {
 .atooltip:hover {
     text-decoration: none;
 }
-li.active.menubar a {
+li.active a {
     color: white;
     cursor: default;
 }
-li.active.menubar a:hover {
+li.active a:hover {
     text-decoration: none;
+}
+li.active.dropdownli a {
+    color: black;
 }
 
 .form-control.number {

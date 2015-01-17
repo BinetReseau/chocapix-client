@@ -58,6 +58,12 @@ angular.module('bars.admin', [
             templateUrl: "components/admin/account/home.html",
             controller: 'admin.ctrl.account'
         })
+        // Admin news
+        .state('bar.admin.news', {
+            url: "/news",
+            templateUrl: "components/admin/news/home.html",
+            controller: 'admin.ctrl.news'
+        })
         ;
 }])
 
@@ -134,7 +140,6 @@ angular.module('bars.admin', [
         $scope.appro = Appro;
     }
 ])
-
 .controller('admin.ctrl.food.inventory',
     ['$scope', 'api.models.food', 'admin.inventory',
     function($scope, Food, Inventory) {
@@ -154,6 +159,22 @@ angular.module('bars.admin', [
     ['$scope', 'api.models.account', 'api.models.user',
     function($scope, Account, User) {
         $scope.admin.active = 'account';
+    }
+])
+// Admin news
+.controller('admin.ctrl.news',
+    ['$scope', 'api.models.news', 'api.models.account',
+    function($scope, News, Account) {
+        $scope.admin.active = 'news';
+        $scope.news = News.create();
+        $scope.addNews = function() {
+            $scope.news.bar = 'avironjone'; // [TODO]Adapter bars-django
+            $scope.news.$save().then(function(newNews) {
+                $scope.news = News.create();
+            }, function(errors) {
+                // TODO: display form errors
+            });
+        };
     }
 ])
 .factory('admin.appro',

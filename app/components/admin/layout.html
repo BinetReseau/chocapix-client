@@ -5,7 +5,7 @@
                 <li ng-class="admin.active == 'dashboard' && 'active'">
                     <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
                 </li>
-                <li ng-class="admin.active == 'food' && 'active'" class="dropdown">
+                <li ng-class="admin.active == 'food' && 'active'" class="dropdown dropdownli">
                     <a title="Aliments" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><!-- ui-sref="bar.admin.food({ bar: bar.id })" -->
                         <span class="glyphicon glyphicon-cutlery"></span> Aliments <span class="caret"></span>
                     </a>
@@ -18,6 +18,9 @@
                 </li>
                 <li ng-class="admin.active == 'account' && 'active'">
                     <a title="Utilisateurs" ui-sref="bar.admin.account({ bar: bar.id })"><span class="glyphicon glyphicon-user"></span> Utilisateurs</a>
+                </li>
+                <li ng-class="admin.active == 'news' && 'active'">
+                    <a title="Actualités" ui-sref="bar.admin.news({ bar: bar.id })"><span class="glyphicon glyhpicon-bullhorn"></span> Actualités</a>
                 </li>
                 <li>
                     <a href="#"><span class="glyphicon glyphicon-wrench"></span> Paramètres</a>

@@ -19,7 +19,8 @@ angular.module('barsApp', [
   'bars.api.food',
   'bars.api.user',
   'bars.api.account',
-  'bars.api.transaction'
+  'bars.api.transaction',
+  'bars.api.news'
 ])
 
 .config(['APIURLProvider', function(APIURL) {
