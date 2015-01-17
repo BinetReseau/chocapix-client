@@ -450,6 +450,10 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     self.memory_store.delete(id);
             });
         };
+        APIModel.prototype.clear = function() {
+            var self = this;
+            self.memory_store.clear();
+        };
 
         return APIModel;
     }

@@ -16,18 +16,22 @@ angular.module('bars.main', [
                     return Bar.get($stateParams.bar);
                 }],
                 foods: ['api.models.food', function(Food) {
+                    Food.clear();
                     Food.reload();
                     return Food.all();
                 }],
                 accounts: ['api.models.account', function(Account) {
+                    Account.clear();
                     Account.reload();
                     return Account.all();
                 }],
                 users: ['api.models.user', function(User) {
+                    User.clear();
                     User.reload();
                     return User.all();
                 }],
                 user: ['api.models.user', 'auth.service', function(User, AuthService) {
+                    User.clear();
                     if (AuthService.isAuthenticated()) {
                         return User.me();
                     } else {
@@ -35,6 +39,7 @@ angular.module('bars.main', [
                     }
                 }],
                 account: ['api.models.account', 'auth.service', function(Account, AuthService) {
+                    Account.clear();
                     if (AuthService.isAuthenticated()) {
                         return Account.me();
                     } else {

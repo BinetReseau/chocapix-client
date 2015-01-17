@@ -81,9 +81,6 @@ angular.module('barsApp', [
                                 $scope.user.infos = User.me().then(function(user) {
                                     $scope.user.infos = user;
                                 });
-                                $scope.user.account = Account.me().then(function(account) {
-                                    $scope.user.account = account;
-                                });
                                 $scope.login = {password: ''};
                                 $scope.inLogin = false;
                             }, function() {
