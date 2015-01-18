@@ -41,7 +41,11 @@ angular.module('bars.main', [
                 account: ['api.models.account', 'auth.service', function(Account, AuthService) {
                     Account.clear();
                     if (AuthService.isAuthenticated()) {
-                        return Account.me();
+                        return Account.me().then(function(me) {
+                            return me;
+                        }, function (error) {
+                            return null;
+                        });
                     } else {
                         return null;
                     }
@@ -89,6 +93,9 @@ angular.module('bars.main', [
         $scope.user = {
             infos: user,
             isAuthenticated: AuthService.isAuthenticated,
+            hasAccount: function() {
+                return this.account != null;
+            },
             logout: AuthService.logout,
             account: account
         };
@@ -107,6 +114,8 @@ angular.module('bars.main', [
                     $scope.user.account = Account.me().then(function(account) {
                         $scope.user.account = account;
                         $rootScope.$broadcast('auth.hasLoggedIn');
+                    }, function (error) {
+                        $scope.user.account = null;
                     });
                     $scope.login = {password: ''};
                     $scope.inLogin = false;
