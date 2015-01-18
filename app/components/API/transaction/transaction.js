@@ -55,8 +55,18 @@ angular.module('bars.api.transaction', [
                         if(this.account) {
                             this.account.$reload();
                         }
+                        if(this.accounts) {
+                            _.forEach(this.accounts, function(x) {
+                                x.accout.$reload();
+                            });
+                        }
                         if(this.item) {
                             this.item.$reload();
+                        }
+                        if(this.items) {
+                            _.forEach(this.items, function(x) {
+                                x.item.$reload();
+                            });
                         }
                         this.parseTimestamp();
                     }
