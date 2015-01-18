@@ -57,7 +57,7 @@ angular.module('bars.api.transaction', [
                         }
                         if(this.accounts) {
                             _.forEach(this.accounts, function(x) {
-                                x.accout.$reload();
+                                x.account.$reload();
                             });
                         }
                         if(this.item) {
