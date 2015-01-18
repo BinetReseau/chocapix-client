@@ -34,16 +34,18 @@
                     <th>Total</th>
                     <th> </th>
                 </tr>
-                <tr ng-repeat="item in appro.itemsList | orderBy:'':'true' | filter:searchl" ng-class="item.item.deleted && 'del'">
+                <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'':'true' | filter:searchl" ng-class="item.item.deleted && 'del'">
                     <td class="vmiddle"><bars:food food="item.item"></bars:food></td>
                     <td class="vmiddle">
-                        <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="10" />
+                        <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" />
                         <select ng-model="item.unit_value" ng-change="appro.recomputeAmount()">
                             <option value="{{ item.item.buy_unit_value }}">{{ item.item.buy_unit || item.item.name }}</option>
                             <option value="{{ item.item.unit_value }}" ng-if="item.item.buy_unit != item.item.unit">{{ item.item.unit || item.item.name }}</option>
                         </select>
                     </td>
-                    <td class="vmiddle"><span class="label label-info">{{ item.qty*item.unit_value*item.item.price | currency }}</span></td>
+                    <td class="vmiddle">
+                        <input type="number" ng-model="item.price" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}2" />&nbsp;€
+                    </td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="appro.removeItem(item)" class="link">
                             <span class="glyphicon glyphicon-remove"></span>

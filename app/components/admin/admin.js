@@ -115,7 +115,7 @@ angular.module('bars.admin', [
 ])
 // Admin food
 .controller('admin.ctrl.food.add',
-    ['$scope', 'api.models.food', 
+    ['$scope', 'api.models.food',
     function($scope, Food) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
@@ -144,12 +144,12 @@ angular.module('bars.admin', [
     ['$scope', 'api.models.food', 'admin.inventory',
     function($scope, Food, Inventory) {
         $scope.admin.active = 'food';
-        
+
         $scope.inventory = Inventory;
     }
 ])
-.controller('admin.ctrl.food.graphs', 
-    ['$scope', 'api.models.food', 
+.controller('admin.ctrl.food.graphs',
+    ['$scope', 'api.models.food',
     function($scope, Food) {
         $scope.admin.active = 'food;'
     }
@@ -195,20 +195,33 @@ angular.module('bars.admin', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    totalPrice += item.item.price * item.qty * item.unit_value;
+                    console.log(item);
+                    // totalPrice += item.item.price * item.qty * item.unit_value;
+                    if (item.qty && item.qty > 0 && item.price && item.unit_value) {
+                        item.price = item.price * item.qty * item.unit_value/(item.old_qty * item.old_unit_value);
+                        item.old_qty = item.qty;
+                        item.old_unit_value = item.unit_value;
+                    }
+                    totalPrice += item.price;
                 });
 
                 this.totalPrice = totalPrice;
             },
             addItem: function(item, qty) {
                 if (!qty) {
-                    qty = item.unit_value;
+                    qty = item.buy_unit_value;
                 }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.qty += qty/item.unit_value;
+                    other.qty += qty/item.buy_unit_value;
                 } else {
-                    this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.buy_unit_value });
+                    this.itemsList.push({
+                        item: item,
+                        qty: qty/item.buy_unit_value,
+                        old_qty: qty/item.buy_unit_value,
+                        unit_value: item.buy_unit_value,
+                        old_unit_value: item.buy_unit_value,
+                        price: item.buy_price * qty * item.buy_unit_value});
                 }
                 this.recomputeAmount();
                 this.itemToAdd = "";
