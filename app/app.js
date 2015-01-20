@@ -3,7 +3,7 @@
 angular.module('barsApp', [
   'ui.router',
   'ui.bootstrap',
-  'ui.scroll',
+  'infinite-scroll',
   'angularMoment',
   'ngAnimate',
   'ngSanitize',

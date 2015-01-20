@@ -126,61 +126,47 @@ angular.module('bars.api.transaction', [
         },
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', '$filter', '$sanitize', 'api.models.transaction', function($scope, $filter, $sanitize, Transaction) {
-            function loadList(index, count, success) {
-                // no negative index
-                if (index < 0) {
-                    success([]);
-                    return;
-                }
-                var req = $scope.filter();
-                req.page = Math.ceil(index/count);
-                req.page_size = count;
-                Transaction.request(req).then(function(history) {
-                    var endHistory = (history.length < count);
-
-                    _.forEach(history, function(t){
-                        t.parseTimestamp();
+            $scope.history = [];
+            var allHistory = [];
+            var page = 1;
+            var inRequest = false;
+            function loadMore() {
+                if (!inRequest) {
+                    inRequest = true;
+                    var req = $scope.filter();
+                    req.page = page++;
+                    req.page_size = 30;
+                    Transaction.request(req).then(function(history) {
+                        allHistory = _.uniq(allHistory.concat(history), "id");
+                        calculateHistory();
                     });
-                    var history_by_date = _.groupBy(history, 'timestamp_day');
-                    var history_dates = _.keys(history_by_date);
-                    history_dates = _.map(history_dates, function(x){return { date: new Date(x) }; });
-
-                    // if it is not the end, success(array) wants array.length == count.
-                    // But we groupBy day, so the next part is a trick to add empty
-                    // items to history_dates which are not displayed
-                    var realLength = history_dates.length;
-                    for (var i = 0; i < count; i++) {
-                        if (i < realLength) {
-                            history_dates[i].display = true;
-                            history_dates[i].history = history_by_date[history_dates[i].date];
-                        } else if (!endHistory) {
-                            history_dates[i] = {
-                                display: false
-                            };
-                        }
-                    }
-
-                    success(history_dates);
-                })
-            }
-
-            var needUpdate = true;
-            function update() {
-                needUpdate = true;
-            }
-
-            $scope.history_dates = {
-                get: loadList,
-                revision:  function () {
-                    var current = needUpdate;
-                    needUpdate = false;
-                    return current;
                 }
-            };
-            $scope.safe = $sanitize;
+            }
+            function calculateHistory(event, transaction) {
+                if (transaction) {
+                    allHistory.unshift(transaction[0]);
+                }
 
-            $scope.$on('api.model.transaction.*', update);
-            $scope.$on('auth.hasLoggedIn', update);
+                _.forEach(allHistory, function(t) {
+                    t.parseTimestamp();
+                });
+                var history_by_date = _.groupBy(allHistory, 'timestamp_day');
+                var history_dates = _.keys(history_by_date);
+                history_dates = _.map(history_dates, function(x){return { date: new Date(x) }; });
+                for (var i = 0; i < history_dates.length; i++) {
+                    history_dates[i].history = history_by_date[history_dates[i].date];
+                }
+                $scope.history = history_dates;
+                inRequest = false;
+            }
+
+            $scope.safe = $sanitize;
+            $scope.loadMore = loadMore;
+
+            loadMore();
+
+            $scope.$on('api.model.transaction.*', calculateHistory);
+            $scope.$on('auth.hasLoggedIn', calculateHistory);
         }]
     };
 })
