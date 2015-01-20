@@ -124,8 +124,7 @@ module.exports = function (grunt) {
       },
       all: {
         src: [
-          'Gruntfile.js',
-          '<%= yeoman.app %>/**.js'
+          'Gruntfile.js'
         ]
       },
       test: {
