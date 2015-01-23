@@ -6,7 +6,7 @@
                     <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
                 </li>
                 <li ng-class="admin.active == 'food' && 'active'" class="dropdown dropdownli">
-                    <a title="Aliments" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><!-- ui-sref="bar.admin.food({ bar: bar.id })" -->
+                    <a title="Aliments" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         <span class="glyphicon glyphicon-cutlery"></span> Aliments <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
@@ -19,8 +19,15 @@
                 <li ng-class="admin.active == 'account' && 'active'">
                     <a title="Utilisateurs" ui-sref="bar.admin.account({ bar: bar.id })"><span class="glyphicon glyphicon-user"></span> Utilisateurs</a>
                 </li>
-                <li ng-class="admin.active == 'news' && 'active'">
-                    <a title="Actualités" ui-sref="bar.admin.news({ bar: bar.id })"><span class="glyphicon glyphicon-bullhorn"></span> Actualités</a>
+                <li ng-class="admin.active == 'news' && 'active'" class="dropdown dropdownli">
+                    <a title="Actualités" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <span class="glyphicon glyphicon-bullhorn"></span> Actualités <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a>Annoncer la prochaine appro</a></li>
+                        <li><a ui-sref="bar.admin.news.add({ bar: bar.id })">Ajouter une news</a></li>
+                        <li><a ui-sref="bar.admin.news.list({ bar: bar.id })">Liste des news</a></li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#"><span class="glyphicon glyphicon-wrench"></span> Paramètres</a>

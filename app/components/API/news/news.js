@@ -12,7 +12,7 @@ angular.module('bars.api.news', [
                 structure: {
                     'bar': 'Bar',
                     'author': 'User'
-                },
+                }
                 // methods: {
                 //     'markDeleted': {method:'PUT', url: 'markDeleted'},
                 //     'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted'},

@@ -19,7 +19,7 @@ angular.module('bars.admin', [
                         account_list: ['api.models.account', function(Account) {
                             return Account.all();
                         }],
-                        food_list: ['api.models.food', function(Food){
+                        food_list: ['api.models.food', function(Food) {
                             return Food.all();
                         }]
                     }
@@ -60,10 +60,31 @@ angular.module('bars.admin', [
         })
         // Admin news
         .state('bar.admin.news', {
+            abstract: true,
             url: "/news",
-            templateUrl: "components/admin/news/home.html",
-            controller: 'admin.ctrl.news'
+            template: '<ui-view />'
         })
+            .state('bar.admin.news.add', {
+                url: '/add',
+                templateUrl: "components/admin/news/add.html",
+                controller: 'admin.ctrl.news.add'
+            })
+            .state('bar.admin.news.list', {
+                url: '/list',
+                templateUrl: "components/admin/news/list.html",
+                controller: 'admin.ctrl.news.list',
+                resolve: {
+                    news_list: ['api.models.news', function(News) {
+                        News.reload();
+                        return News.all();
+                    }]
+                }
+            })
+            .state('bar.admin.news.edit', {
+                url: '/edit',
+                templateUrl: "components/admin/news/add.html",
+                controller: 'admin.ctrl.news.edit'
+            })
         ;
 }])
 
@@ -162,7 +183,7 @@ angular.module('bars.admin', [
     }
 ])
 // Admin news
-.controller('admin.ctrl.news',
+.controller('admin.ctrl.news.add',
     ['$scope', 'api.models.news', 'api.models.account',
     function($scope, News, Account) {
         $scope.admin.active = 'news';
@@ -175,6 +196,20 @@ angular.module('bars.admin', [
                 // TODO: display form errors
             });
         };
+    }
+])
+.controller('admin.ctrl.news.list',
+    ['$scope', 'api.models.news', 'api.models.account', 'news_list',
+    function($scope, News, Account, news_list) {
+        $scope.admin.active = 'news';
+        $scope.news_list = news_list;
+    }
+])
+.controller('admin.ctrl.news.edit',
+    ['$scope', 'api.models.news', 'api.models.account',
+    function($scope, News, Account) {
+        $scope.admin.active = 'news';
+        
     }
 ])
 .factory('admin.appro',
