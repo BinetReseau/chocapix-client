@@ -29,7 +29,7 @@ angular.module('bars.api.transaction', [
                         self.canceled = true;
                         APIInterface.request({
                             'url': "transaction/"+self.id+"/cancel",
-                            'method': 'POST',
+                            'method': 'PUT',
                             'data': self})
                         .then(function(t) {
                             self.canceled = t.canceled;
@@ -41,7 +41,7 @@ angular.module('bars.api.transaction', [
                         self.canceled = false;
                         APIInterface.request({
                             'url': "transaction/"+self.id+"/restore",
-                            'method': 'POST',
+                            'method': 'PUT',
                             'data': self})
                         .then(function(t) {
                             self.canceled = t.canceled;
