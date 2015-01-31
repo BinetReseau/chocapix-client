@@ -74,6 +74,10 @@ angular.module('barsApp', [
                         isAuthenticated: AuthService.isAuthenticated,
                         logout: AuthService.logout
                     };
+                    $scope.login = {
+                        username: '',
+                        password: ''
+                    };
                     $scope.connexion = function (login) {
                         $scope.loginError = false;
                         $scope.inLogin = true;
@@ -82,7 +86,7 @@ angular.module('barsApp', [
                                 $scope.user.infos = User.me().then(function(user) {
                                     $scope.user.infos = user;
                                 });
-                                $scope.login = {password: ''};
+                                $scope.login = {username: '', password: ''};
                                 $scope.inLogin = false;
                             }, function() {
                                 $scope.loginError = true;
