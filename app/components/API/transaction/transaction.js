@@ -35,6 +35,10 @@ angular.module('bars.api.transaction', [
                             self.canceled = t.canceled;
                             self.reloadRelated();
                         })
+                        .catch(function(e) {
+                            self.canceled = false;
+                            console.log("Permission denied (probably)"); //TODO: notifications
+                        });
                     },
                     'restore': function() {
                         var self = this;
@@ -47,6 +51,10 @@ angular.module('bars.api.transaction', [
                             self.canceled = t.canceled;
                             self.reloadRelated();
                         })
+                        .catch(function(e) {
+                            self.canceled = true;
+                            console.log("Permission denied (probably)"); //TODO: notifications
+                        });
                     },
                     'reloadRelated': function() {
                         if(this.author_account) {
