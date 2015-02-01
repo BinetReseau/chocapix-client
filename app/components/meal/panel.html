@@ -21,10 +21,10 @@
                 <div class="div-scroll">
                 <table class="table table-condensed no-border">
                     <tr ng-repeat="customer in meal.customersList" class="animated meal no-border">
-                        <td class="vmiddle"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm" style="width: 45px;" placeholder="1" ng-model="customer.ratio" ng-change="meal.recomputeAmount()"></td>
+                        <td class="vmiddle qty"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm pqty" placeholder="1" ng-model="customer.ratio" ng-change="meal.recomputeAmount()"></td>
                         <td class="vmiddle"><span class="form-control-static"><bars:account account="customer.account"></bars:account></span></td>
                         <td class="text-right"><span class="label label-info vbottom">{{ customer.amount | currency }}</span></td>
-                        <td class="vmiddle text-right">
+                        <td class="vmiddle text-right remove">
                             <a class="text-muted" ng-click="meal.removeCustomer(customer)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
@@ -37,9 +37,9 @@
             <div class="list-group-item-text">
                 <table class="table table-condensed no-border">
                     <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
-                        <td class="vmiddle"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm pqty" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit }}</td>
+                        <td class="vmiddle qty"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm pqty" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit }}</td>
                         <td class="vmiddle"><span class="form-control-static"><bars:food food="item.item"></bars:food></span></td>
-                        <td class="vmiddle text-right">
+                        <td class="vmiddle text-right remove">
                             <a class="text-muted" ng-click="meal.removeItem(item)"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>

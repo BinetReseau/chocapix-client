@@ -194,7 +194,12 @@ dl.no-margin {
     margin-left: 1em;
 }
 
-
+td.qty {
+    width: 90px;
+}
+td.remove {
+    width: 20px;
+}
 /* Animations */
 .meal.ng-enter {
     -webkit-animation: fadeInDown 1s;
