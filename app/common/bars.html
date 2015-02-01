@@ -53,9 +53,9 @@
                                         <dd>{{ user.infos.full_name }}</dd>
                                         <dt>Login :</dt>
                                         <dd>{{ user.infos.username }}</dd>
-                                        <dt>Solde total :</dt>
+                                        <dt>Solde cumulé :</dt>
                                         <dd>
-                                            <span class="label label-success">{{ 23 | currency }}</span>
+                                            <span class="label" ng-class="totalMoney < 0 && 'label-danger' || 'label-success'">{{ totalMoney | currency }}</span>
                                         </dd>
                                     </dl>
                                 </div>
@@ -74,11 +74,20 @@
                             <h3 class="panel-title text-center">Vos bars</h3>
                         </div>
                         <table class="table">
-                            <tr>
-                                <td>Aviron Jône</td>
-                            </tr>
-                            <tr>
-                                <td>Foot Jône</td>
+                            <tr ng-repeat="account in accounts">
+                                <td>
+                                    <a title="Accueil du bar" ui-sref="bar({bar: account.bar.id})" class="pull-left">
+                                        <img ng-src="assets/img/sections/{{ account.bar.id }}.png" class="logo petit" alt="{{ account.bar.name }}" />
+                                    </a>
+                                    <div class="pull-left margin-left">
+                                        <h4>
+                                            {{ account.bar.name }}<br />
+                                            <small>
+                                                <span class="label" ng-class="account.money < 0 && 'label-danger' || 'label-success'">{{ account.money | currency }}</span>
+                                            </small>
+                                        </h4>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
                     </div>

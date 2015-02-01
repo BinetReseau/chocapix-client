@@ -36,6 +36,9 @@ angular.module('barsApp', [
             .state('index', {
                 url: "/",
                 resolve: {
+                    api: ['APIInterface' , function(APIInterface) {
+                        APIInterface.setBar('');
+                    }],
                     bars_list: ['api.models.bar', function(Bar) {
                         Bar.reload();
                         return Bar.all();
@@ -46,11 +49,18 @@ angular.module('barsApp', [
                         } else {
                             return null;
                         }
+                    }],
+                    accounts: ['api.models.account', 'auth.service', 'user', function(Account, AuthService, user) {
+                        if (AuthService.isAuthenticated()) {
+                            return Account.ofUser(user.id);
+                        } else {
+                            return null;
+                        }
                     }]
                 },
                 templateUrl: "common/bars.html",
-                controller : ['$scope', 'auth.service', 'bars_list', 'user', 'api.models.user', 'api.models.account',
-                function($scope, AuthService, bars_list, user, User, Account) {
+                controller : ['$scope', 'auth.service', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'accounts',
+                function($scope, AuthService, bars_list, user, User, Account, accounts) {
                     function upBars() {
                         $scope.gbars = [];
                         for (var i = 0; i < bars_list.length; i++) {
@@ -74,6 +84,11 @@ angular.module('barsApp', [
                         isAuthenticated: AuthService.isAuthenticated,
                         logout: AuthService.logout
                     };
+                    $scope.accounts = accounts;
+                    $scope.totalMoney = _.reduce(accounts, function (sum, o) {
+                        return sum + o.money;
+                    }, 0);
+
                     $scope.login = {
                         username: '',
                         password: ''
@@ -85,6 +100,12 @@ angular.module('barsApp', [
                             function(user) {
                                 $scope.user.infos = User.me().then(function(user) {
                                     $scope.user.infos = user;
+                                    Account.ofUser(user.id).then(function(accounts) {
+                                        $scope.accounts = accounts;
+                                        $scope.totalMoney = _.reduce(accounts, function (sum, o) {
+                                            return sum + o.money;
+                                        }, 0);
+                                    });
                                 });
                                 $scope.login = {username: '', password: ''};
                                 $scope.inLogin = false;

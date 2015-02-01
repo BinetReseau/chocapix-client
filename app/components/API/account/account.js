@@ -4,9 +4,9 @@ angular.module('bars.api.account', [
     'APIModel'
     ])
 
-.factory('api.models.account', ['APIModel',
-    function(APIModel) {
-        return new APIModel({
+.factory('api.models.account', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
+        var model = new APIModel({
                 url: 'account',
                 type: "Account",
                 structure: {
@@ -25,6 +25,14 @@ angular.module('bars.api.account', [
                     }
                 }
             });
+        model.ofUser = function(user) {
+            return APIInterface.request({
+                'url': 'account',
+                'method': 'GET',
+                'params': {owner: user}});
+        };
+
+        return model;
     }])
 
 .config(['$stateProvider', function($stateProvider) {

@@ -9,8 +9,8 @@
             </div>
         </form>
         <div ng-show="user.isAuthenticated()" class="text-center">
-            <h1 ng-if="user.hasAccount()" ng-class="user.account.money <= 0 && 'animated wobble' || ''">
-                <span ng-class="user.account.money <= 0 && 'label label-danger' || ''">
+            <h1 ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || ''">
+                <span ng-class="user.account.money < 0 && 'label label-danger' || ''">
                     {{ user.account.money | currency }}
                 </span>
             </h1>
