@@ -22,5 +22,15 @@ angular.module('bars.api.news', [
                 //     }
                 // }
             });
-    }])
+    }
+])
+.directive('barsNews', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            news: '=news'
+        },
+        templateUrl: 'components/API/news/directive.html'
+    };
+})
 ;

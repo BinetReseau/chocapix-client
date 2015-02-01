@@ -53,6 +53,11 @@ angular.module('bars.main', [
                 history: ['api.models.transaction', function(Transaction) {
                     // Transaction.reload();
                     // return Transaction.all();
+                }],
+                last_news: ['api.models.news', '$filter', function(News, $filter) {
+                    News.clear();
+                    News.reload();
+                    return News.all();
                 }]
             },
             views: {
@@ -131,8 +136,9 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope', function($scope) {
+    ['$scope','last_news', function($scope, last_news) {
         $scope.bar.active = 'index';
+        $scope.last_news = last_news[0]; // il faudrait trier par ordre décroissant de last_modified, retirer les News deleted et prendre le premier élément...
         document.getElementById("q_alim").focus();
     }])
 ;
