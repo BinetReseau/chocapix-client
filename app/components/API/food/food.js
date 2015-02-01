@@ -79,9 +79,15 @@ angular.module('bars.api.food', [
     ['$scope', '$stateParams', 'food_item', 'api.services.action', 'bars.meal',
     function($scope, $stateParams, food_item, APIAction, Meal) {
         $scope.food_item = food_item;
+        $scope.actions = [
+            { name: "buy", value: "Acheter" },
+            { name: "add", value: "Ajouter à la bouffe" },
+            { name: "throw", value: "Jeter" },
+            { name: "appro", value: "Approvisionner" }
+        ];
 
         $scope.query_qty = 1;
-        $scope.query_type = 'buy';
+        $scope.query_type = Meal.in() && 'add' || 'buy';
         $scope.inMeal = function () {
             return Meal.in();
         };

@@ -12,11 +12,7 @@
     <div class="row">
         <div class="col-sm-12">
             <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)">
-                <select class="form-control" ng-model="query_type">
-                    <option value="buy">Acheter</option>
-                    <option value="add">Ajouter au panier</option>
-                    <option value="throw">Jeter</option>
-                    <option value="appro">Approvisionner</option>
+                <select class="form-control" ng-model="query_type" ng-options="option.name as option.value for option in actions">
                 </select>
                 <input type="number" class="form-control number" step="any" ng-model="query_qty" />
                 <div class="checkbox unit">
