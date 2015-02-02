@@ -38,14 +38,9 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                account: ['api.models.account', 'auth.service', function(Account, AuthService) {
-                    Account.clear();
+                account: ['api.models.account', 'auth.service', 'user', function(Account, AuthService, user) {
                     if (AuthService.isAuthenticated()) {
-                        return Account.me().then(function(me) {
-                            return me;
-                        }, function (error) {
-                            return null;
-                        });
+                        return Account.ofUser(user.id);
                     } else {
                         return null;
                     }
@@ -87,6 +82,12 @@ angular.module('bars.main', [
 .controller('main.ctrl.base',
     ['$scope', '$rootScope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
     function($scope, $rootScope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
+        if (account && account.length > 0) {
+            account = account[0];
+        } else {
+            account = null;
+        }
+
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -116,12 +117,18 @@ angular.module('bars.main', [
                 function(user) {
                     $scope.user.infos = User.me().then(function(user) {
                         $scope.user.infos = user;
-                    });
-                    $scope.user.account = Account.me().then(function(account) {
-                        $scope.user.account = account;
-                        $rootScope.$broadcast('auth.hasLoggedIn');
-                    }, function (error) {
-                        $scope.user.account = null;
+                        $scope.user.account = Account.ofUser(user.id).then(function(account) {
+                            if (account && account.length > 0) {
+                                account = account[0];
+                            } else {
+                                account = null;
+                            }
+
+                            $scope.user.account = account;
+                            $rootScope.$broadcast('auth.hasLoggedIn');
+                        }, function (error) {
+                            $scope.user.account = null;
+                        });
                     });
                     $scope.login = {username: '', password: ''};
                     $scope.inLogin = false;

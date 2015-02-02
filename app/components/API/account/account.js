@@ -14,7 +14,6 @@ angular.module('bars.api.account', [
                     'owner': 'User'
                 },
                 methods: {
-                    'me': {url: 'me', static: true},
                     'filter': function(s) {
                         if(!this.owner.full_name) {
                             return false;
