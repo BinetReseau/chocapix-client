@@ -49,7 +49,7 @@ angular.module('bars.main', [
                     // Transaction.reload();
                     // return Transaction.all();
                 }],
-                last_news: ['api.models.news', '$filter', function(News, $filter) {
+                news: ['api.models.news', function(News) {
                     News.clear();
                     News.reload();
                     return News.all();
@@ -143,9 +143,9 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','last_news', function($scope, last_news) {
+    ['$scope','news', function($scope, news) {
         $scope.bar.active = 'index';
-        $scope.last_news = last_news[0]; // il faudrait trier par ordre décroissant de last_modified, retirer les News deleted et prendre le premier élément...
+        $scope.last_news = _.sortBy(news, 'last_modified')[news.length-1]; // il faudrait trier par ordre décroissant de last_modified, retirer les News deleted et prendre le premier élément...
         document.getElementById("q_alim").focus();
     }])
 

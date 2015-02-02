@@ -75,7 +75,6 @@ angular.module('bars.admin', [
                 controller: 'admin.ctrl.news.list',
                 resolve: {
                     news_list: ['api.models.news', function(News) {
-                        News.reload();
                         return News.all();
                     }]
                 }
@@ -209,7 +208,7 @@ angular.module('bars.admin', [
     ['$scope', 'api.models.news', 'api.models.account',
     function($scope, News, Account) {
         $scope.admin.active = 'news';
-        
+
     }
 ])
 .factory('admin.appro',
@@ -230,7 +229,6 @@ angular.module('bars.admin', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    console.log(item);
                     // totalPrice += item.item.price * item.qty * item.unit_value;
                     if (item.qty && item.qty > 0 && item.price && item.unit_value) {
                         item.price = item.price * item.qty * item.unit_value/(item.old_qty * item.old_unit_value);
