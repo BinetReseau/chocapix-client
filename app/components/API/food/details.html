@@ -14,7 +14,7 @@
             <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)">
                 <select class="form-control" ng-model="query_type" ng-options="option.name as option.value for option in actions">
                 </select>
-                <input type="number" class="form-control number" step="any" ng-model="query_qty" />
+                <input type="number" class="form-control number" step="any" ng-model="query_qty" select-on-click />
                 <div class="checkbox unit">
                     {{ food_item.unit == '' && (food_item.name|affs:query_qty) || food_item.unit }}
                 </div>

@@ -141,4 +141,17 @@ angular.module('bars.main', [
         $scope.last_news = last_news[0]; // il faudrait trier par ordre décroissant de last_modified, retirer les News deleted et prendre le premier élément...
         document.getElementById("q_alim").focus();
     }])
+
+.directive(
+    'selectOnClick',
+    function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                element.on('click', function () {
+                    this.select();
+                });
+            }
+        };
+    })
 ;

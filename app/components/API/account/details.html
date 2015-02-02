@@ -16,7 +16,7 @@
                     <option value="give">Faire un don</option>
                     <option value="punish">Mettre une amende</option>
                 </select>
-                <input type="number" class="form-control number" ng-model="query_qty" />
+                <input type="number" class="form-control number" ng-model="query_qty" select-on-click />
                 <span ng-show="query_type == 'punish'">
                     <input type="text" class="form-control large" ng-model="query_motive" placeholder="Motif de l'amende" />
                     <input type="submit" class="btn btn-warning" value="Mettre une amende{{ query_qty > 0 && ' de ' + (query_qty | currency) || '' }}" ng-class="(query_qty <= 0) && 'disabled' || ''" />
