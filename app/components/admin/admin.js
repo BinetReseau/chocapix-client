@@ -257,21 +257,14 @@ angular.module('bars.admin', [
         $scope.news_list = _.sortBy(news_list, 'last_modified');
         $scope.trash = function(news) {
             news.deleted = true;
-            news.$save().then(function() {
-                News.reload();
-                $scope.news_list = News.all();
-            });
+            news.$save();
         };
         $scope.untrash = function(news) {
             news.deleted = false;
-            news.$save().then(function() {
-                News.reload();
-                $scope.news_list = News.all();
-            });
+            news.$save();
         };
         $scope.upNews = function(news) {
             news.$save().then(function() {
-                News.reload();
                 $scope.news_list = _.sortBy(News.all(), 'last_modified');
             });
         }
