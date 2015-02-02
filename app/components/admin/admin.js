@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('bars.admin', [
+
     ])
 
 .config(['$stateProvider', function($stateProvider) {
@@ -183,14 +184,18 @@ angular.module('bars.admin', [
 ])
 // Admin news
 .controller('admin.ctrl.news.add',
-    ['$scope', 'api.models.news', 'api.models.account',
-    function($scope, News, Account) {
+    ['$scope', 'api.models.news', 'api.models.user', '$state', 
+    function($scope, News, User, $state) {
+        $scope.formType = 'add';
         $scope.admin.active = 'news';
         $scope.news = News.create();
-        $scope.addNews = function() {
+        $scope.saveNews = function() {
+            $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
+            $scope.news.deleted = false;
+            $scope.news.author = 5; // [TODO]Adapter bars-django... ou pas
             $scope.news.bar = 'avironjone'; // [TODO]Adapter bars-django
             $scope.news.$save().then(function(newNews) {
-                $scope.news = News.create();
+                $state.go('bar.admin.news.list');
             }, function(errors) {
                 // TODO: display form errors
             });
@@ -206,14 +211,14 @@ angular.module('bars.admin', [
             news.deleted = true;
             news.$save().then(function() {
                 News.reload();
-                $scope.news_list = _.sortBy(News.all(), 'last_modified');
+                $scope.news_list = News.all();
             });
         };
         $scope.untrash = function(news) {
             news.deleted = false;
             news.$save().then(function() {
                 News.reload();
-                $scope.news_list = _.sortBy(News.all(), 'last_modified');
+                $scope.news_list = News.all();
             });
         };
         $scope.upNews = function(news) {
@@ -225,10 +230,21 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.news.edit',
-    ['$scope', 'api.models.news', 'api.models.account',
-    function($scope, News, Account) {
+    ['$scope', 'api.models.news', 'api.models.user', '$stateParams', '$state', 
+    function($scope, News, User, $stateParams, $state) {
+        $scope.formType = 'edit';
         $scope.admin.active = 'news';
-
+        $scope.news = News.get($stateParams.id);
+        $scope.saveNews = function() {
+            $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
+            $scope.news.author = 5; // [TODO]Adapter bars-django... ou pas
+            $scope.news.bar = 'avironjone'; // [TODO]Adapter bars-django
+            $scope.news.$save().then(function(newNews) {
+                $state.go('bar.admin.news.list');
+            }, function(errors) {
+                // TODO: display form errors
+            });
+        };
     }
 ])
 .factory('admin.appro',
