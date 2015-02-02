@@ -55,10 +55,26 @@ angular.module('bars.admin', [
             })
         // Admin account
         .state('bar.admin.account', {
-            url: "/account",
-            templateUrl: "components/admin/account/home.html",
+            url: '/account',
+            abstract: true,
+            template: "<ui-view />",
             controller: 'admin.ctrl.account'
         })
+            .state('bar.admin.account.add', {
+                url: '/add',
+                templateUrl: "components/admin/account/add.html",
+                controller: 'admin.ctrl.account.add'
+            })
+            .state('bar.admin.account.link', {
+                url: '/link',
+                templateUrl: "components/admin/account/link.html",
+                controller: 'admin.ctrl.account.link',
+                resolve: {
+                    users_list: ['api.models.user', function(User) {
+                        return User.all();
+                    }]
+                }
+            })
         // Admin news
         .state('bar.admin.news', {
             abstract: true,
@@ -182,6 +198,35 @@ angular.module('bars.admin', [
         $scope.admin.active = 'account';
     }
 ])
+.controller('admin.ctrl.account.add',
+    ['$scope', 'api.models.account', 'api.models.user',
+    function($scope, Account, User) {
+        $scope.admin.active = 'account';
+        $scope.user = User.create();
+        $scope.account = Account.create();
+    }
+])
+.controller('admin.ctrl.account.link',
+    ['$scope', 'api.models.account', 'api.models.user', 'users_list', '$state', 
+    function($scope, Account, User, users_list, $state) {
+        $scope.admin.active = 'account';
+        $scope.users_list = users_list;
+        $scope.user = null;
+        $scope.findUser = function(usr) {
+            $scope.user = usr;
+        }
+        $scope.account = Account.create();
+        $scope.createAccount = function(usr) {
+            $scope.account.bar = 'footrouje'; // [TODO]Adapter bars-django
+            $scope.account.owner = $scope.user.id;
+            $scope.account.$save().then(function() {
+                $state.go('bar.admin');
+            }, function(errors) {
+                console.log('Something went wrong...');
+            });
+        }
+    }
+])
 // Admin news
 .controller('admin.ctrl.news.add',
     ['$scope', 'api.models.news', 'api.models.user', '$state', 
@@ -192,7 +237,11 @@ angular.module('bars.admin', [
         $scope.saveNews = function() {
             $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
             $scope.news.deleted = false;
-            $scope.news.author = 5; // [TODO]Adapter bars-django... ou pas
+            $scope.news.author = 5;
+            User.me().then(function(usr) {
+                console.log(usr.id);
+                //$scope.news.author = usr.id; // [TODO]Adapter bars-django... ou pas
+            });
             $scope.news.bar = 'avironjone'; // [TODO]Adapter bars-django
             $scope.news.$save().then(function(newNews) {
                 $state.go('bar.admin.news.list');
