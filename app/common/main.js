@@ -146,7 +146,7 @@ angular.module('bars.main', [
     ['$scope','news', function($scope, news) {
         $scope.bar.active = 'index';
         $scope.last_news = function () {
-            return _.sortBy(news, 'last_modified').pop(); // il faudrait retirer les News deleted
+            return _.sortBy(_.reject(news, 'deleted'), 'last_modified').pop(); // il faudrait retirer les News deleted
         };
         document.getElementById("q_alim").focus();
     }])
