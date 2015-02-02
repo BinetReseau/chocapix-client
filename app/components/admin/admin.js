@@ -66,7 +66,7 @@ angular.module('bars.admin', [
         })
             .state('bar.admin.news.add', {
                 url: '/add',
-                templateUrl: "components/admin/news/add.html",
+                templateUrl: "components/admin/news/form.html",
                 controller: 'admin.ctrl.news.add'
             })
             .state('bar.admin.news.list', {
@@ -80,8 +80,8 @@ angular.module('bars.admin', [
                 }
             })
             .state('bar.admin.news.edit', {
-                url: '/edit',
-                templateUrl: "components/admin/news/add.html",
+                url: '/edit/:id',
+                templateUrl: "components/admin/news/form.html",
                 controller: 'admin.ctrl.news.edit'
             })
         ;
@@ -201,7 +201,27 @@ angular.module('bars.admin', [
     ['$scope', 'api.models.news', 'api.models.account', 'news_list',
     function($scope, News, Account, news_list) {
         $scope.admin.active = 'news';
-        $scope.news_list = news_list;
+        $scope.news_list = _.sortBy(news_list, 'last_modified');
+        $scope.trash = function(news) {
+            news.deleted = true;
+            news.$save().then(function() {
+                News.reload();
+                $scope.news_list = _.sortBy(News.all(), 'last_modified');
+            });
+        };
+        $scope.untrash = function(news) {
+            news.deleted = false;
+            news.$save().then(function() {
+                News.reload();
+                $scope.news_list = _.sortBy(News.all(), 'last_modified');
+            });
+        };
+        $scope.upNews = function(news) {
+            news.$save().then(function() {
+                News.reload();
+                $scope.news_list = _.sortBy(News.all(), 'last_modified');
+            });
+        }
     }
 ])
 .controller('admin.ctrl.news.edit',
