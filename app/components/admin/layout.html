@@ -35,8 +35,8 @@
                         <li><a ui-sref="bar.admin.news.list({ bar: bar.id })" ng-if="user.can('change_news') || user.can('delete_news')">Liste des news</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#"><span class="glyphicon glyphicon-wrench"></span> Paramètres</a>
+                <li ng-class="admin.active == 'settings' && 'active'">
+                    <a ui-sref="bar.admin.settings({ bar: bar.id })"><span class="glyphicon glyphicon-wrench"></span> Paramètres</a>
                 </li>
             </ul>
             <br />

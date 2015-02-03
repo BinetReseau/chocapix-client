@@ -101,6 +101,12 @@ angular.module('bars.admin', [
                 templateUrl: "components/admin/news/form.html",
                 controller: 'admin.ctrl.news.edit'
             })
+        // Admin settings
+        .state('bar.admin.settings', {
+            url: "/settings",
+            templateUrl: "components/admin/settings/home.html",
+            controller: 'admin.ctrl.settings'
+        })
         ;
 }])
 
@@ -280,8 +286,27 @@ angular.module('bars.admin', [
                     // TODO: display form errors
             });
         };
-    }
-])
+    }]
+)
+// Admin settings
+.controller('admin.ctrl.settings', 
+    ['$scope', 
+    function($scope) {
+        $scope.admin.active = 'settings';
+        // Seuil d'alerte
+        $scope.moneyLimit = null;
+        $scope.saveMoneyLimit = function() {
+            // [TODO]
+        };
+        // Agios
+        $scope.activateAgio = false;
+        $scope.graceTime = null;
+        $scope.agioFormula = null;
+        $scope.saveAgio = function() {
+            // [TODO]
+        };
+    }]
+)
 .factory('admin.appro',
     ['api.models.food', 'api.services.action',
     function (Food, APIAction) {
