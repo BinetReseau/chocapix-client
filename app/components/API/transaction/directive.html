@@ -30,7 +30,7 @@
                                 <span ng-switch-when="throw">Mise à la poubelle de</span>
 
                                 <span ng-switch-when="give">Don de</span>
-                                <span ng-switch-when="deposit">Crédit de</span>
+                                <span ng-switch-when="deposit">Ajout de</span>
                                 <a ng-switch-when="punish" tooltip="{{ transaction.motive }}" class="atooltip">Amende de</a>
                             </ng:switch>
                         </td>
@@ -47,7 +47,7 @@
                                     {{ transaction.amount | currency }} à <bars:account account="transaction.account"></bars:account>
                                 </span>
                                 <span ng-switch-when="deposit">
-                                    {{ transaction.amount | currency }} à <bars:account account="transaction.account"></bars:account>
+                                    {{ transaction.amount | currency }} sur le compte de <bars:account account="transaction.account"></bars:account>
                                 </span>
                                 <span ng-switch-when="punish">
                                     {{ transaction.amount | abs | currency }} mise à <bars:account account="transaction.account"></bars:account>
