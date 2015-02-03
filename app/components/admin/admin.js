@@ -238,14 +238,10 @@ angular.module('bars.admin', [
         $scope.saveNews = function() {
             $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
             $scope.news.deleted = false;
-            User.me().then(function(usr) { // [TODO]A faire côté serveur
-                $scope.news.author = usr.id;
-                $scope.news.bar = 'avironjone'; // [TODO]Adapter bars-django
-                $scope.news.$save().then(function(newNews) {
-                    $state.go('bar.admin.news.list');
-                }, function(errors) {
-                    // TODO: display form errors
-                });
+            $scope.news.$save().then(function(newNews) {
+                $state.go('bar.admin.news.list');
+            }, function(errors) {
+                // TODO: display form errors
             });
         };
     }
@@ -278,14 +274,10 @@ angular.module('bars.admin', [
         $scope.news = News.get($stateParams.id);
         $scope.saveNews = function() {
             $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
-            $scope.news.bar = 'avironjone'; // [TODO]Adapter bars-django
-            User.me().then(function(usr) { // [TODO]A faire côté serveur
-                $scope.news.author = usr.id;
-                $scope.news.$save().then(function(newNews) {
-                    $state.go('bar.admin.news.list');
-                }, function(errors) {
+            $scope.news.$save().then(function(newNews) {
+                $state.go('bar.admin.news.list');
+            }, function(errors) {
                     // TODO: display form errors
-                });
             });
         };
     }
