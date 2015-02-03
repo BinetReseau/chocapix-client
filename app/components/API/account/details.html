@@ -15,13 +15,14 @@
                 <select class="form-control" ng-model="query_type">
                     <option value="give">Faire un don</option>
                     <option value="punish">Mettre une amende</option>
+                    <option value="deposit">Créditer un chèque</option>
                 </select>
                 <input type="number" class="form-control number" ng-model="query_qty" select-on-click />
                 <span ng-show="query_type == 'punish'">
                     <input type="text" class="form-control large" ng-model="query_motive" placeholder="Motif de l'amende" />
                     <input type="submit" class="btn btn-warning" value="Mettre une amende{{ query_qty > 0 && ' de ' + (query_qty | currency) || '' }}" ng-class="(query_qty <= 0) && 'disabled' || ''" />
                 </span>
-                <input ng-show="query_type == 'give'" type="submit" class="btn btn-success" value="Donner {{ query_qty > 0 && ' ' + (query_qty | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
+                <input ng-show="query_type != 'punish'" type="submit" class="btn btn-success" value="{{ query_type == 'give' && 'Donner' || 'Créditer' }} {{ query_qty > 0 && ' ' + (query_qty | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
             </form>
         </div>
     </div>

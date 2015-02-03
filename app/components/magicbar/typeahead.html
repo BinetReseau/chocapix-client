@@ -7,12 +7,16 @@
         <span ng-switch-when="throw">Jeter</span>
 		<span ng-switch-when="add">Ajouter</span>
 		<span ng-switch-when="inventory">Indiquer qu'il reste</span>
+		<span ng-switch-when="deposit">Créditer</span>
         <span ng-switch-default>{{ match.model.type }}</span>
     </ng:switch>
     <span ng-switch on="match.model.type">
         <span ng-switch-when="give">
             {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>
         </span>
+		<span ng-switch-when="deposit">
+			de {{ match.model.qty | currency }} <bars:account account="match.model.account"></bars:account>
+		</span>
         <span ng-switch-when="throw">
             <bars:food food="match.model.food" qty="match.model.qty" unit="match.model.unit" in="'sell'" out="'sell'"></bars:food> à la poubelle
         </span>

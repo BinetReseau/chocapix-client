@@ -28,7 +28,7 @@ angular.module('bars.magicbar', [
             }
             var type = $item.type;
 
-            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory'], type)) {
+            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory', 'deposit'], type)) {
                 var req;
                 if(_.contains(['buy', 'throw'], type)) {
                     req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
@@ -85,6 +85,7 @@ angular.module('bars.magicbar', [
 	            'appro',
 				'add',
 				'inventory',
+				'deposit',
 	        ];
 	        var humanTypes = {
 	            'buy': 'acheter',
@@ -93,7 +94,8 @@ angular.module('bars.magicbar', [
 	            'punish': 'amende',
 	            'appro': 'appro',
 				'add': 'ajouter',
-				'inventory': 'reste'
+				'inventory': 'reste',
+				'deposit': 'credit'
 	        };
 
 	        var units = [
@@ -238,7 +240,7 @@ angular.module('bars.magicbar', [
 					if(_.find(suggestion, {type:'account'})) {
 						res.otype = 'account';
 						res.type = res.type || 'give';
-						if(res.type !== 'give' && res.type !== 'punish') {
+						if(res.type !== 'give' && res.type !== 'punish' && res.type !== 'deposit') {
 							return []; // Discard
 						}
 					} else {

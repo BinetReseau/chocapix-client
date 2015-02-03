@@ -95,6 +95,11 @@ angular.module('bars.api.account', [
                     $scope.query_qty = '';
                 });
             }
+            if (type == 'deposit') {
+                APIAction.deposit({account: account.id, amount: qty}).then(function() {
+                    $scope.query_qty = '';
+                });
+            }
             if (type == 'punish') {
                 APIAction.punish({account: account.id, amount: qty, motive: motive}).then(function() {
                     $scope.query_qty = '';
