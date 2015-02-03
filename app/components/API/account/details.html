@@ -15,7 +15,7 @@
                 <select class="form-control" ng-model="query_type">
                     <option value="give" ng-if="user.can('add_givetransaction')">Faire un don</option>
                     <option value="punish" ng-if="user.can('add_punishtransaction')">Mettre une amende</option>
-                    <option value="deposit" ng-if="user.can('add_deposittransaction')">Créditer un chèque</option>
+                    <option value="deposit" ng-if="user.can('add_deposittransaction')">Créditer le compte</option>
                 </select>
                 <input type="number" class="form-control number" ng-model="query_qty" select-on-click />
                 <span ng-show="query_type == 'punish'">
