@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)">
+            <form class="form-inline" role="form" ng-submit="query(query_qty, query_type)" ng-if="user.can('add_transaction')">
                 <select class="form-control" ng-model="query_type" ng-options="option.name as option.value for option in actions">
                 </select>
                 <input type="number" class="form-control number" step="any" ng-model="query_qty" select-on-click />
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Modifier">
+                <tab heading="Modifier" ng-if="user.can('change_item')">
                     <div class="row">
                         <div class="col-sm-9">
                             <form class="form-horizontal" role="form">

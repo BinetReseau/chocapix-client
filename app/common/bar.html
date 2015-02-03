@@ -48,7 +48,7 @@
                     <span class="glyphicon glyphicon-cutlery"></span> Aliments
                 </a>
             </li>
-            <li ng-class="bar.active == 'admin' && 'active'">
+            <li ng-class="bar.active == 'admin' && 'active'" ng-if="user.can('add_news') || user.can('add_approtransaction') || user.can('add_item') || user.can('add_inventorytransaction') || user.can('add_account') || user.can('change_news')">
                 <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
                     <span class="glyphicon glyphicon-dashboard"></span> Administration
                 </a>
@@ -71,16 +71,16 @@
         </ul>
     </div>
 
-    <div ng-class="user.hasAccount() && 'col-md-7' || 'col-md-10'">
+    <div ng-class="user.can('add_mealtransaction') && 'col-md-7' || 'col-md-10'">
         <div class="row">
-            <div ng-show="user.hasAccount()" ui-view="form"></div>
+            <div ng-show="user.can('add_transaction')" ui-view="form"></div>
         </div>
         <div class="row">
             <div ui-view=""></div>
         </div>
     </div>
 
-    <div class="col-md-3" ng-if="user.hasAccount()">
+    <div class="col-md-3" ng-if="user.can('add_mealtransaction')">
         <div ui-view="meal"></div>
     </div>
 </div>

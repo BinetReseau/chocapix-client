@@ -77,26 +77,21 @@ angular.module('bars.magicbar', [
 			qo = qo.replace(/ de /, ' ');
 	        var terms = qo.split(' ');
 
-	        var types = [
-	            'buy',
-	            'throw',
-	            'give',
-	            'punish',
-	            'appro',
-				'add',
-				'inventory',
-				'deposit',
-	        ];
 	        var humanTypes = {
 	            'buy': 'acheter',
 	            'throw': 'jeter',
 	            'give': 'donner',
 	            'punish': 'amende',
 	            'appro': 'appro',
-				'add': 'ajouter',
 				'inventory': 'reste',
 				'deposit': 'credit'
 	        };
+			_.map(humanTypes, function (o, k) {
+				if (!$scope.user.can('add_' + k + 'transaction')) {
+					delete humanTypes[k];
+				}
+			});
+			humanTypes['add'] = 'Ajouter';
 
 	        var units = [
 	            'g',

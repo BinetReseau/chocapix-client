@@ -10,9 +10,9 @@
                         <span class="glyphicon glyphicon-cutlery"></span> Aliments <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a ui-sref="bar.admin.food.add({ bar: bar.id })">Ajouter un aliment</a></li>
-                        <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })">Faire une appro</a></li>
-                        <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })">Faire un inventaire</a></li>
+                        <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_item')">Ajouter un aliment</a></li>
+                        <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a></li>
+                        <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                         <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })">Graphiques</a></li>
                     </ul>
                 </li>
@@ -22,7 +22,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="bar.admin.account.add({ bar: bar.id })">Créer un utilisateur</a></li>
-                        <li><a ui-sref="bar.admin.account.link({ bar: bar.id })">Ajouter un utilisateur existant</a></li>
+                        <li><a ui-sref="bar.admin.account.link({ bar: bar.id })" ng-if="user.can('add_account')">Ajouter un utilisateur existant</a></li>
                     </ul>
                 </li>
                 <li ng-class="admin.active == 'news' && 'active'" class="dropdown dropdownli">
@@ -31,8 +31,8 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a>Annoncer la prochaine appro</a></li>
-                        <li><a ui-sref="bar.admin.news.add({ bar: bar.id })">Ajouter une news</a></li>
-                        <li><a ui-sref="bar.admin.news.list({ bar: bar.id })">Liste des news</a></li>
+                        <li><a ui-sref="bar.admin.news.add({ bar: bar.id })" ng-if="user.can('add_news')">Ajouter une news</a></li>
+                        <li><a ui-sref="bar.admin.news.list({ bar: bar.id })" ng-if="user.can('change_news') || user.can('delete_news')">Liste des news</a></li>
                     </ul>
                 </li>
                 <li>

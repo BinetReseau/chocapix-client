@@ -117,7 +117,10 @@ angular.module('bars.main', [
             },
             logout: AuthService.logout,
             account: account,
-            role: role
+            role: role,
+            can: function (perm) {
+                return this.isAuthenticated() && this.role && _.indexOf(this.role.perms, "bars_api." + perm) > -1;
+            }
         };
         $scope.login = {
             username: '',

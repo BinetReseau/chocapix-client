@@ -11,11 +11,11 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <form class="form-inline" role="form" ng-submit="query(query_qty, query_type, query_motive)">
+            <form class="form-inline" role="form" ng-submit="query(query_qty, query_type, query_motive)" ng-if="user.can('add_transaction')">
                 <select class="form-control" ng-model="query_type">
-                    <option value="give">Faire un don</option>
-                    <option value="punish">Mettre une amende</option>
-                    <option value="deposit">Créditer un chèque</option>
+                    <option value="give" ng-if="user.can('add_givetransaction')">Faire un don</option>
+                    <option value="punish" ng-if="user.can('add_punishtransaction')">Mettre une amende</option>
+                    <option value="deposit" ng-if="user.can('add_deposittransaction')">Créditer un chèque</option>
                 </select>
                 <input type="number" class="form-control number" ng-model="query_qty" select-on-click />
                 <span ng-show="query_type == 'punish'">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Modifier">
+                <tab heading="Modifier" ng-if="user.can('change_account')">
                     Rien pour le moment...
                 </tab>
             </tabset>
