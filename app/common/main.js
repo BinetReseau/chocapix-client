@@ -83,7 +83,7 @@ angular.module('bars.main', [
     ['$scope', '$rootScope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'foods', 'bar', 'accounts', 'user', 'account',
     function($scope, $rootScope, $stateParams, AuthService, Account, User, foods, bar, accounts, user, account) {
         if (account && account.length > 0) {
-            account = account[0];
+            account = Account.get(account[0].id);
         } else {
             account = null;
         }
@@ -119,7 +119,7 @@ angular.module('bars.main', [
                         $scope.user.infos = user;
                         $scope.user.account = Account.ofUser(user.id).then(function(account) {
                             if (account && account.length > 0) {
-                                account = account[0];
+                                account = Account.get(account[0].id);
                             } else {
                                 account = null;
                             }
