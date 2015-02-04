@@ -13,6 +13,7 @@ angular.module('barsApp', [
   'bars.admin',
   'bars.magicbar',
   'bars.meal',
+  'bars.settings',
 
   'APIModel',
   'bars.api.bar',

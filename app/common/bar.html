@@ -53,8 +53,8 @@
                     <span class="glyphicon glyphicon-dashboard"></span> Administration
                 </a>
             </li>
-            <li>
-                <a title="Réglages">
+            <li ng-class="bar.active == 'settings' && 'active'">
+                <a title="Réglages" ui-sref="bar.settings({ bar: bar.id })">
                     <span class="glyphicon glyphicon-wrench"></span> Préférences
                 </a>
             </li>
