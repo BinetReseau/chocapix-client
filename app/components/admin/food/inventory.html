@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addInventoryItemInput">Ajouter</label>
                 <div class="col-sm-10">
-                    <input type="text" tabindex="40" id="addInventoryItemInput" class="form-control" placeholder="Aliment à ajouter à l'inventaire" typeahead="item.name for item in bar.foods | filter:$viewValue | limitTo:5" ng-model="inventory.itemToAdd" autocomplete="off" typeahead-on-select="inventory.addItem($item)" />
+                    <input type="text" tabindex="40" id="addInventoryItemInput" class="form-control" placeholder="Aliment à ajouter à l'inventaire" typeahead="item.name for item in bar.foods | filter:{deleted: false} | filter:$viewValue | limitTo:5" ng-model="inventory.itemToAdd" autocomplete="off" typeahead-on-select="inventory.addItem($item)" />
                 </div>
             </div>
             <div class="form-group">
