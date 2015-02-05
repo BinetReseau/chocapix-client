@@ -217,8 +217,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.account.link',
-    ['$scope', 'api.models.account', 'api.models.user', 'users_list', '$state',
-    function($scope, Account, User, users_list, $state) {
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'users_list', '$state',
+    function($scope, Account, User, APIAction, users_list, $state) {
         $scope.admin.active = 'account';
         $scope.users_list = users_list;
         $scope.user = null;
@@ -226,11 +226,14 @@ angular.module('bars.admin', [
             $scope.user = usr;
         }
         $scope.account = Account.create();
+        $scope.money = 0;
         $scope.createAccount = function(usr) {
             $scope.account.bar = 'avironjone'; // [TODO]Adapter bars-django
             $scope.account.owner = $scope.user.id;
-            $scope.account.$save().then(function() {
-                $state.go('bar.admin');
+            $scope.account.$save().then(function(account) {
+                APIAction.deposit({account: account.id, amount: $scope.money}).then(function() {
+                    $state.go('bar.account.details', {id: account.id});
+                });
             }, function(errors) {
                 console.log('Something went wrong...');
                 // [TODO] Form error

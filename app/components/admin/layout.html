@@ -22,7 +22,8 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="bar.admin.account.add({ bar: bar.id })">Créer un utilisateur</a></li>
-                        <li><a ui-sref="bar.admin.account.link({ bar: bar.id })" ng-if="user.can('add_account')">Ajouter un utilisateur existant</a></li>
+                        <li><a ui-sref="bar.admin.account.link({ bar: bar.id })" ng-if="user.can('add_account')">Importer un utilisateur existant</a></li>
+                        <li><a ui-sref="bar.admin.account.collectivePayment({ bar: bar.id })">Paiement collectif</a></li>
                     </ul>
                 </li>
                 <li ng-class="admin.active == 'news' && 'active'" class="dropdown dropdownli">
