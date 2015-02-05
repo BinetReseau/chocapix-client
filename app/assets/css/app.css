@@ -100,6 +100,10 @@ li.active.dropdownli a {
     width: 30px;
 }
 
+th.box {
+    width: 100px;
+}
+
 .glyphicon-refresh-animate {
     -webkit-animation: rotateThis 1s infinite linear;
     -moz-animation: rotateThis 1s infinite linear;

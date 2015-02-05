@@ -70,8 +70,18 @@ angular.module('bars.admin', [
                 templateUrl: "components/admin/account/link.html",
                 controller: 'admin.ctrl.account.link',
                 resolve: {
-                    users_list: ['api.models.user', function(User) {
+                    user_list: ['api.models.user', function(User) {
                         return User.all();
+                    }]
+                }
+            })
+            .state('bar.admin.account.collectivePayment', {
+                url: '/fist',
+                templateUrl: "components/admin/account/collectivePayment.html",
+                controller: 'admin.ctrl.account.collectivePayment',
+                resolve: {
+                    account_list: ['api.models.account', function(Account) {
+                        return Account.all();
                     }]
                 }
             })
@@ -218,9 +228,9 @@ angular.module('bars.admin', [
 ])
 .controller('admin.ctrl.account.link',
     ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'users_list', '$state',
-    function($scope, Account, User, APIAction, users_list, $state) {
+    function($scope, Account, User, APIAction, user_list, $state) {
         $scope.admin.active = 'account';
-        $scope.users_list = users_list;
+        $scope.users_list = user_list;
         $scope.user = null;
         $scope.findUser = function(usr) {
             $scope.user = usr;
@@ -240,6 +250,26 @@ angular.module('bars.admin', [
             });
         }
     }
+])
+.controller('admin.ctrl.account.collectivePayment',
+['$scope', 'account_list',
+function($scope, account_list) {
+    $scope.admin.active = 'account';
+    $scope.account_list = account_list;
+    $scope.list_order = 'owner.full_name';
+    $scope.reverse = false;
+    $scope.searchl = "";
+    $scope.filterAccounts = function(o) {
+        return o.filter($scope.searchl);
+    };
+    $scope.allSelected = true;
+    $scope.toggleAll = function () {
+        $scope.allSelected = !$scope.allSelected;
+        _.map($scope.account_list, function (o) {
+            o.pay = $scope.allSelected;
+        });
+    };
+}
 ])
 // Admin news
 .controller('admin.ctrl.news.add',
