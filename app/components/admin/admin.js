@@ -158,16 +158,20 @@ angular.module('bars.admin', [
 ])
 // Admin food
 .controller('admin.ctrl.food.add',
-    ['$scope', 'api.models.food',
-    function($scope, Food) {
+    ['$scope', 'api.models.food', 'api.services.action',
+    function($scope, Food, APIAction) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
         $scope.addFood = function() {
             $scope.food.buy_unit_value = 1;
-            $scope.food.qty = $scope.food.qty/$scope.food.unit_value;
+            var qty = $scope.food.qty/$scope.food.unit_value
+            $scope.food.qty = 0;
             $scope.food.unit_value = 1/$scope.food.unit_value;
             $scope.food.bar = 'avironjone'; // [TODO]Adapter bars-django
             $scope.food.$save().then(function(newFood) {
+                APIAction.appro({
+                    items: [{item: newFood.id, qty: qty}]
+                });
                 $scope.food = Food.create();
             }, function(errors) {
                 // TODO: display form errors
@@ -213,7 +217,7 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.account.link',
-    ['$scope', 'api.models.account', 'api.models.user', 'users_list', '$state', 
+    ['$scope', 'api.models.account', 'api.models.user', 'users_list', '$state',
     function($scope, Account, User, users_list, $state) {
         $scope.admin.active = 'account';
         $scope.users_list = users_list;
@@ -228,7 +232,7 @@ angular.module('bars.admin', [
             $scope.account.$save().then(function() {
                 $state.go('bar.admin');
             }, function(errors) {
-                console.log('Something went wrong...'); 
+                console.log('Something went wrong...');
                 // [TODO] Form error
             });
         }
@@ -236,7 +240,7 @@ angular.module('bars.admin', [
 ])
 // Admin news
 .controller('admin.ctrl.news.add',
-    ['$scope', 'api.models.news', 'api.models.user', '$state', 
+    ['$scope', 'api.models.news', 'api.models.user', '$state',
     function($scope, News, User, $state) {
         $scope.formType = 'add';
         $scope.admin.active = 'news';
@@ -273,7 +277,7 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.news.edit',
-    ['$scope', 'api.models.news', 'api.models.user', '$stateParams', '$state', 
+    ['$scope', 'api.models.news', 'api.models.user', '$stateParams', '$state',
     function($scope, News, User, $stateParams, $state) {
         $scope.formType = 'edit';
         $scope.admin.active = 'news';
@@ -289,8 +293,8 @@ angular.module('bars.admin', [
     }]
 )
 // Admin settings
-.controller('admin.ctrl.settings', 
-    ['$scope', 
+.controller('admin.ctrl.settings',
+    ['$scope',
     function($scope) {
         $scope.admin.active = 'settings';
         // Seuil d'alerte
@@ -307,6 +311,7 @@ angular.module('bars.admin', [
         };
     }]
 )
+
 .factory('admin.appro',
     ['api.models.food', 'api.services.action',
     function (Food, APIAction) {
