@@ -13,10 +13,8 @@ angular.module('bars.api.food', [
                     'bar': 'Bar'
                 },
                 methods: {
-                    'markDeleted': {method:'PUT', url: 'markDeleted'},
-                    'unMarkDeleted': {method:'PUT', url: 'unMarkDeleted'},
                     'filter': function(s) {
-                        return !this.deleted && (this.name.toLocaleLowerCase().indexOf(s) > -1 ||
+                        return !this.deleted && !this.unavailable && (this.name.toLocaleLowerCase().indexOf(s) > -1 ||
                             this.keywords.toLocaleLowerCase().indexOf(s) > -1);
                     }
                 }
@@ -65,12 +63,12 @@ angular.module('bars.api.food', [
     ['$scope', 'food_list', function($scope, food_list) {
         $scope.food_list = food_list;
         $scope.reverse = false;
-        $scope.filterDeleted = function() {
-            if ($scope.showDeleted) {
+        $scope.filterHidden = function() {
+            if ($scope.showHidden) {
                 return '';
             } else {
                 return {
-                    deleted: false
+                    unavailable: false
                 };
             }
         };
@@ -111,12 +109,13 @@ angular.module('bars.api.food', [
                 Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
             }
         };
-        $scope.trashIt = function() {
-            if ($scope.food_item.deleted) {
-                $scope.food_item.unMarkDeleted(); // Todo: adapt to new API
-            } else {
-                $scope.food_item.markDeleted(); // Todo: adapt to new API
-            }
+        $scope.toggleDeleted = function() {
+            $scope.food_item.deleted = !$scope.food_item.deleted;
+            $scope.food_item.$save();
+        };
+        $scope.toggleHidden = function() {
+            $scope.food_item.unavailable = !$scope.food_item.unavailable;
+            $scope.food_item.$save();
         };
 
         var initPrice = food_item.price * food_item.unit_value;

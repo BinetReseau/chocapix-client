@@ -159,10 +159,10 @@
                                 <a type="submit" class="btn btn-info" ng-click="resetFood()">
                                     <span class="glyphicon glyphicon-remove"> Annuler</span>
                                 </a>
-                                <a class="btn btn-warning">
+                                <a class="btn btn-warning" ng-class="food_item.unavailable && 'active'" ng-click="toggleHidden()">
                                     <span class="glyphicon glyphicon-eye-close"> Cacher</span>
                                 </a>
-                                <a class="btn btn-danger">
+                                <a class="btn btn-danger" ng-class="food_item.deleted && 'active'" ng-click="toggleDeleted()">
                                     <span class="glyphicon glyphicon-trash"> Supprimer</span>
                                 </a>
                             </div>
