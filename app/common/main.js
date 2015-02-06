@@ -45,9 +45,9 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                role: ['api.models.role', 'auth.user', 'user', 'bar', function(Role, AuthUser, user, bar) {
+                role: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
                     if (AuthUser.isAuthenticated()) {
-                        return Role.find(user.id, bar.id);
+                        return Role.ofUser(user.id);
                     } else {
                         return null;
                     }
@@ -74,6 +74,10 @@ angular.module('bars.main', [
                     templateUrl: "components/meal/panel.html",
                     controller: 'meal.ctrl'
                 },
+                'user-infos@bar': {
+                    templateUrl: "common/user-infos.html",
+                    controller: 'main.ctrl.userInfos'
+                },
                 '@bar': {
                     templateUrl: "common/home.html",
                     controller: 'main.ctrl.bar'
@@ -83,8 +87,35 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'foods', 'bar', 'accounts', 'user', 'account', 'role',
-    function($scope, $rootScope, $stateParams, AuthUser, Account, User, Role, foods, bar, accounts, user, account, role) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'foods', 'bar', 'accounts',
+    function($scope, $rootScope, $stateParams, AuthUser, foods, bar, accounts) {
+        $scope.bar = {
+            id: $stateParams.bar,
+            name: bar.name,
+            accounts: accounts,
+            search: '',
+            foods: foods,
+            active: 'index',
+        };
+
+        $scope.user = AuthUser;
+    }])
+
+.controller(
+    'main.ctrl.bar',
+    ['$scope','news',
+    function($scope, news) {
+        $scope.bar.active = 'index';
+        $scope.last_news = function () {
+            return _.sortBy(_.reject(news, 'deleted'), 'last_modified').pop();
+        };
+        document.getElementById("q_alim").focus();
+    }])
+
+.controller(
+    'main.ctrl.userInfos',
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'user', 'account', 'role',
+    function($scope, AuthUser, Account, User, ROle, user, account, role) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
@@ -101,16 +132,6 @@ angular.module('bars.main', [
         AuthUser.user = user;
         AuthUser.role = role;
 
-        $scope.user = AuthUser;
-
-        $scope.bar = {
-            id: $stateParams.bar,
-            name: bar.name,
-            accounts: accounts,
-            search: '',
-            foods: foods,
-            active: 'index',
-        };
         $scope.login = {
             username: '',
             password: ''
@@ -130,16 +151,6 @@ angular.module('bars.main', [
                 }
             );
         };
-    }])
-
-.controller(
-    'main.ctrl.bar',
-    ['$scope','news', function($scope, news) {
-        $scope.bar.active = 'index';
-        $scope.last_news = function () {
-            return _.sortBy(_.reject(news, 'deleted'), 'last_modified').pop();
-        };
-        document.getElementById("q_alim").focus();
     }])
 
 .directive(

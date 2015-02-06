@@ -45,10 +45,11 @@ angular.module('bars.auth', [
             account: null,
             role: null,
             login: function(credentials) {
+                var self = this;
                 return AuthService.login(credentials).then(
                     function(user) {
                         User.me().then(function(user) {
-                            this.user = user;
+                            self.user = user;
                             Account.ofUser(user.id).then(function(account) {
                                 if (account && account.length > 0) {
                                     account = Account.get(account[0].id);
@@ -56,31 +57,31 @@ angular.module('bars.auth', [
                                     account = null;
                                 }
 
-                                this.account = account;
+                                self.account = account;
                                 $rootScope.$broadcast('auth.hasLoggedIn');
                             }, function (error) {
-                                this.account = null;
+                                self.account = null;
                             });
-                            Role.find(user.id, bar.id).then(function(role) {
+                            Role.ofUser(user.id).then(function(role) {
                                 if (role && role.length > 0) {
                                     role = role[0];
                                 } else {
                                     role = null;
                                 }
 
-                                this.role = role;
+                                self.role = role;
                             }, function (error) {
-                                this.role = null;
+                                self.role = null;
                             });
                         });
-                        return this.user;
+                        return self.user;
                     }, function(response) {
                         return $q.reject(response);
                     }
                 );
             },
             logout: function() {
-                Auth.logout();
+                AuthService.logout();
                 this.user = null;
                 this.account = null;
                 this.role = null;
