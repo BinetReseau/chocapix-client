@@ -111,14 +111,10 @@ angular.module('bars.api.transaction', [
             url: "/history",
             templateUrl: "components/API/transaction/list.html",
             resolve: {
-                history: ['api.models.transaction', '$stateParams',
-                    function(Transaction) {
-                        // Transaction.reload();
-                        // return Transaction.all();
-                }]
+
             },
             controller: ['$scope', 'history',
-                function($scope, history) {
+                function($scope) {
                     $scope.bar.active = 'history';
                     $scope.history = history;
             }]

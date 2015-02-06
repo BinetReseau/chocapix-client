@@ -59,10 +59,6 @@ angular.module('bars.api.account', [
             resolve:{
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
                     return Account.getSync($stateParams.id);
-                }],
-                history: ['api.models.transaction', function(Transaction) {
-                    // Transaction.reload();
-                    // return Transaction.all();
                 }]
             }
         });

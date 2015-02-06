@@ -34,7 +34,7 @@ angular.module('bars.api.food', [
             templateUrl: "components/API/food/list.html",
             controller: 'api.ctrl.food_list',
             resolve: {
-                food_list: ['api.models.food', function(Food){
+                food_list: ['api.models.food', function(Food) {
                     return Food.all();
                 }]
             }
@@ -44,12 +44,8 @@ angular.module('bars.api.food', [
             templateUrl: "components/API/food/details.html",
             controller: 'api.ctrl.food_details',
             resolve: {
-                food_item: ['$stateParams', 'api.models.food', function($stateParams, Food){
+                food_item: ['$stateParams', 'api.models.food', function($stateParams, Food) {
                     return Food.getSync($stateParams.id);
-                }],
-                history: ['api.models.transaction', function(Transaction) {
-                    // Transaction.reload();
-                    // return Transaction.all();
                 }]
             }
         });
