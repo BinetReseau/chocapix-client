@@ -45,7 +45,7 @@ angular.module('bars.auth', [
             account: null,
             role: null,
             login: function(credentials) {
-                AuthService.login(credentials).then(
+                return AuthService.login(credentials).then(
                     function(user) {
                         User.me().then(function(user) {
                             this.user = user;

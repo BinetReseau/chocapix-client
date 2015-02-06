@@ -30,31 +30,27 @@ angular.module('bars.main', [
                     User.reload();
                     return User.all();
                 }],
-                user: ['api.models.user', 'auth.service', function(User, AuthService) {
+                user: ['api.models.user', 'auth.user', function(User, AuthUser) {
                     User.clear();
-                    if (AuthService.isAuthenticated()) {
+                    if (AuthUser.isAuthenticated()) {
                         return User.me();
                     } else {
                         return null;
                     }
                 }],
-                account: ['api.models.account', 'auth.service', 'user', function(Account, AuthService, user) {
-                    if (AuthService.isAuthenticated()) {
+                account: ['api.models.account', 'auth.user', 'user', function(Account, AuthUser, user) {
+                    if (AuthUser.isAuthenticated()) {
                         return Account.ofUser(user.id);
                     } else {
                         return null;
                     }
                 }],
-                role: ['api.models.role', 'auth.service', 'user', 'bar', function(Role, AuthService, user, bar) {
-                    if (AuthService.isAuthenticated()) {
+                role: ['api.models.role', 'auth.user', 'user', 'bar', function(Role, AuthUser, user, bar) {
+                    if (AuthUser.isAuthenticated()) {
                         return Role.find(user.id, bar.id);
                     } else {
                         return null;
                     }
-                }],
-                history: ['api.models.transaction', function(Transaction) {
-                    // Transaction.reload();
-                    // return Transaction.all();
                 }],
                 news: ['api.models.news', function(News) {
                     News.clear();
@@ -87,8 +83,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.service', 'api.models.account', 'api.models.user', 'api.models.role', 'foods', 'bar', 'accounts', 'user', 'account', 'role',
-    function($scope, $rootScope, $stateParams, AuthService, Account, User, Role, foods, bar, accounts, user, account, role) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'foods', 'bar', 'accounts', 'user', 'account', 'role',
+    function($scope, $rootScope, $stateParams, AuthUser, Account, User, Role, foods, bar, accounts, user, account, role) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
@@ -101,6 +97,12 @@ angular.module('bars.main', [
             role = null;
         }
 
+        AuthUser.account = account;
+        AuthUser.user = user;
+        AuthUser.role = role;
+
+        $scope.user = AuthUser;
+
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -108,19 +110,6 @@ angular.module('bars.main', [
             search: '',
             foods: foods,
             active: 'index',
-        };
-        $scope.user = {
-            infos: user,
-            isAuthenticated: AuthService.isAuthenticated,
-            hasAccount: function() {
-                return this.account != null;
-            },
-            logout: AuthService.logout,
-            account: account,
-            role: role,
-            can: function (perm) {
-                return this.isAuthenticated() && this.role && _.indexOf(this.role.perms, "bars_api." + perm) > -1;
-            }
         };
         $scope.login = {
             username: '',
@@ -130,37 +119,11 @@ angular.module('bars.main', [
         $scope.connexion = function (login) {
             $scope.loginError = false;
             $scope.inLogin = true;
-            AuthService.login(login).then(
+            AuthUser.login(login).then(
                 function(user) {
-                    $scope.user.infos = User.me().then(function(user) {
-                        $scope.user.infos = user;
-                        $scope.user.account = Account.ofUser(user.id).then(function(account) {
-                            if (account && account.length > 0) {
-                                account = Account.get(account[0].id);
-                            } else {
-                                account = null;
-                            }
-
-                            $scope.user.account = account;
-                            $rootScope.$broadcast('auth.hasLoggedIn');
-                        }, function (error) {
-                            $scope.user.account = null;
-                        });
-                        $scope.user.role = Role.find(user.id, bar.id).then(function(role) {
-                            if (role && role.length > 0) {
-                                role = role[0];
-                            } else {
-                                role = null;
-                            }
-
-                            $scope.user.role = role;
-                        }, function (error) {
-                            $scope.user.role = null;
-                        });
-                    });
                     $scope.login = {username: '', password: ''};
                     $scope.inLogin = false;
-                }, function() {
+                }, function(error) {
                     $scope.loginError = true;
                     $scope.login.password = '';
                     $scope.inLogin = false;
