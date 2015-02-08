@@ -52,8 +52,8 @@ angular.module('bars.magicbar', [
     }])
 
 .factory('magicbar.analyse',
-	['$filter', 'bars.meal',
-	function($filter, Meal) {
+	['$filter', 'bars.meal', 'auth.user',
+	function($filter, Meal, AuthUser) {
 	    var analyse = function(qo, $scope) {
 	        $scope.query = {
 	            type: '',
@@ -87,7 +87,7 @@ angular.module('bars.magicbar', [
 				'deposit': 'credit'
 	        };
 			_.map(humanTypes, function (o, k) {
-				if (!$scope.user.can('add_' + k + 'transaction')) {
+				if (!AuthUser.can('add_' + k + 'transaction')) {
 					delete humanTypes[k];
 				}
 			});
@@ -220,7 +220,7 @@ angular.module('bars.magicbar', [
 					nsuggestion.push(canBe);
 					suggestions.push(listSuggestions(i+1, nsuggestion));
 				}
-				return _.flatten(suggestions, true);
+				return _.flatten(suggestions);
 			}
 
 			query.suggest = _.uniq(_.flatten(_.map(listSuggestions(),
