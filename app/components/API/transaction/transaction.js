@@ -110,10 +110,7 @@ angular.module('bars.api.transaction', [
         .state('bar.history', {
             url: "/history",
             templateUrl: "components/API/transaction/list.html",
-            resolve: {
-
-            },
-            controller: ['$scope', 'history',
+            controller: ['$scope',
                 function($scope) {
                     $scope.bar.active = 'history';
                     $scope.history = history;
