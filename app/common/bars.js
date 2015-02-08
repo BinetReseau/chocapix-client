@@ -40,8 +40,8 @@ angular.module('bars.bars', [
 }])
 
 .controller('bars.ctrl',
-    ['$scope', 'auth.service', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'accounts',
-    function($scope, AuthService, bars_list, user, User, Account, accounts) {
+    ['$scope', 'auth.user', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'accounts',
+    function($scope, AuthUser, bars_list, user, User, Account, accounts) {
         function upBars() {
             $scope.gbars = [];
             for (var i = 0; i < bars_list.length; i++) {
@@ -60,11 +60,8 @@ angular.module('bars.bars', [
         upBars();
         $scope.$on('api.model.bar.*', upBars);
 
-        $scope.user = {
-            infos: user,
-            isAuthenticated: AuthService.isAuthenticated,
-            logout: AuthService.logout
-        };
+        AuthUser.user = user;
+        $scope.user = AuthUser;
         $scope.accounts = accounts;
         $scope.totalMoney = _.reduce(accounts, function (sum, o) {
             return sum + o.money;
@@ -77,16 +74,13 @@ angular.module('bars.bars', [
         $scope.connexion = function (login) {
             $scope.loginError = false;
             $scope.inLogin = true;
-            AuthService.login(login).then(
+            AuthUser.login(login).then(
                 function(user) {
-                    $scope.user.infos = User.me().then(function(user) {
-                        $scope.user.infos = user;
-                        Account.ofUser(user.id).then(function(accounts) {
-                            $scope.accounts = accounts;
-                            $scope.totalMoney = _.reduce(accounts, function (sum, o) {
-                                return sum + o.money;
-                            }, 0);
-                        });
+                    Account.ofUser(user.id).then(function(accounts) {
+                        $scope.accounts = accounts;
+                        $scope.totalMoney = _.reduce(accounts, function (sum, o) {
+                            return sum + o.money;
+                        }, 0);
                     });
                     $scope.login = {username: '', password: ''};
                     $scope.inLogin = false;

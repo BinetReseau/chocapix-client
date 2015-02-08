@@ -48,10 +48,10 @@ angular.module('bars.auth', [
                 var self = this;
                 return AuthService.login(credentials).then(
                     function(user) {
-                        User.me().then(function(user) {
+                        return User.me().then(function(user) {
                             self.user = user;
                             Account.ofUser(user.id).then(function(account) {
-                                if (account && account.length > 0) {
+                                if (account && account.length == 1) {
                                     account = Account.get(account[0].id);
                                 } else {
                                     account = null;
@@ -73,8 +73,8 @@ angular.module('bars.auth', [
                             }, function (error) {
                                 self.role = null;
                             });
+                            return self.user;
                         });
-                        return self.user;
                     }, function(response) {
                         return $q.reject(response);
                     }

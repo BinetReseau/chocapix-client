@@ -8,7 +8,7 @@
                     </td>
                     <td style="padding-left: 2.5em;">
                         <h1 class="text-left">
-                            PizzaTiX<br />
+                            Chocapix<br />
                             <small>Le site des bars d'étage</small>
                         </h1>
                     </td>
@@ -50,9 +50,9 @@
                                 <div class="col-sm-9">
                                     <dl class="dl-horizontal no-margin">
                                         <dt>Nom :</dt>
-                                        <dd>{{ user.infos.full_name }}</dd>
+                                        <dd>{{ user.user.full_name }}</dd>
                                         <dt>Login :</dt>
-                                        <dd>{{ user.infos.username }}</dd>
+                                        <dd>{{ user.user.username }}</dd>
                                         <dt>Solde cumulé :</dt>
                                         <dd>
                                             <span class="label" ng-class="totalMoney < 0 && 'label-danger' || 'label-success'">{{ totalMoney | currency }}</span>
