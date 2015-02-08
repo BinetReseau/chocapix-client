@@ -70,20 +70,20 @@ angular.module('bars.api.food', [
         };
     }])
 .controller('api.ctrl.food_details',
-    ['$scope', '$stateParams', 'food_item', 'api.services.action', 'bars.meal',
-    function($scope, $stateParams, food_item, APIAction, Meal) {
+    ['$scope', '$stateParams', 'food_item', 'api.services.action', 'bars.meal', 'auth.user',
+    function($scope, $stateParams, food_item, APIAction, Meal, AuthUser) {
         $scope.food_item = food_item;
         $scope.actions = [];
-        if ($scope.user.can('add_buytransaction')) {
+        if (AuthUser.can('add_buytransaction')) {
             $scope.actions.push({ name: "buy", value: "Acheter" });
         }
-        if ($scope.user.can('add_throwtransaction')) {
+        if (AuthUser.can('add_throwtransaction')) {
             $scope.actions.push({ name: "throw", value: "Jeter" });
         }
-        if ($scope.user.can('add_mealtransaction')) {
+        if (AuthUser.can('add_mealtransaction')) {
             $scope.actions.push({ name: "add", value: "Ajouter à la bouffe" });
         }
-        if ($scope.user.can('add_approtransaction')) {
+        if (AuthUser.can('add_approtransaction')) {
             $scope.actions.push({ name: "appro", value: "Approvisionner" });
         }
 
