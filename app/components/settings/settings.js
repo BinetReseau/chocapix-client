@@ -16,13 +16,16 @@ angular.module('bars.settings', [
             }
         })
         // Settings password
-        .state('bar.settings.pwd', {
-            url: "/pwd",
-            templateUrl: "components/settings/pwd.html",
-            controller: 'settings.ctrl.pwd',
+        .state('bar.settings.credentials', {
+            url: "/credentials",
+            templateUrl: "components/settings/credentials.html",
+            controller: 'settings.ctrl.credentials',
             resolve: {
                 me: ['api.models.user', function(User) {
                     return User.me();
+                }],
+                user_list: ['api.models.user', function(User) {
+                    return User.all();
                 }]
             }
         })
@@ -38,25 +41,44 @@ angular.module('bars.settings', [
         };
     }
 ])
-.controller('settings.ctrl.pwd', 
-    ['$scope', 'me', 'auth.service', 'api.models.user', 
-    function($scope, me, Auth, User) {
-        $scope.settings.active = 'pwd';
+.controller('settings.ctrl.credentials', 
+    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list', 
+    function($scope, me, Auth, User, user_list) {
+        $scope.settings.active = 'credentials';
+        $scope.pwdSuccess = 0;
+        $scope.usernameSuccess = 0;
         $scope.oldPwd = null;
         $scope.newPwd = null;
         $scope.newPwdBis = null;
-        $scope.changeSuccess = 0;
+        $scope.myUser = me;
+        $scope.ousername = me.username;
+        $scope.checkUsername = function() {
+            return _.filter(user_list, {username: $scope.nusername}).length == 0;
+        };
+        $scope.changeUsername = function() {
+            if (_.filter(user_list, {username: $scope.nusername}).length == 0) {
+                $scope.myUser.username = $scope.nusername;
+                $scope.myUser.$save().then(function(u) {
+                    $scope.usernameSuccess = 1;
+                    $scope.nusername = '';
+                }, function(errors) {
+                    $scope.usernameSuccess = -1;
+                    $scope.nusername = '';
+                    console.log("Changement de username échoué.");
+                });
+            }
+        };
         $scope.changePwd = function() {
             // [TODO] Vérifier le mot de passe actuel via le serveur. Droits pour modifier un mot de passe ?
             // if ($scope.newPwd == $scope.newPwdBis) {
             //     me.password = $scope.newPwd;
             //     me.$save().then(function() {
-            //         $scope.changeSuccess = 1;
+            //         $scope.pwdSuccess = 1;
             //     }, function() {
-            //         $scope.changeSuccess = -1;
+            //         $scope.pwdSuccess = -1;
             //     });
             // } else {
-            //     $scope.changeSuccess = -1;
+            //     $scope.pwdSuccess = -1;
             //     console.log('Mots de passe différents.');
             // }
         };

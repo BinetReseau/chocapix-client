@@ -213,21 +213,68 @@ angular.module('bars.admin', [
 ])
 // Admin account
 .controller('admin.ctrl.account',
-    ['$scope', 'api.models.account', 'api.models.user',
-    function($scope, Account, User) {
+    ['$scope',
+    function($scope) {
         $scope.admin.active = 'account';
     }
 ])
 .controller('admin.ctrl.account.add',
-    ['$scope', 'api.models.account', 'api.models.user',
-    function($scope, Account, User) {
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 
+    function($scope, Account, User, APIAction, $state) {
         $scope.admin.active = 'account';
-        $scope.user = User.create();
-        $scope.account = Account.create();
+        $scope.nuser = User.create();
+        $scope.nuser.lastname = "";
+        $scope.nuser.firstname = "";
+        $scope.nuser.password = "";
+        $scope.nuser.passwordBis = "";
+        $scope.nuser.username = "";
+        $scope.nuser.pseudo = "";
+        $scope.naccount = Account.create();
+        $scope.naccount.amoney = 0;
+        $scope.isValidUser = function() {
+            console.log("");
+            var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
+            console.log($scope.nuser.lastname);
+            var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
+            var usernameTest = $scope.nuser.username.length > 0;
+            var pseudoTest = $scope.nuser.pseudo.length > 0;
+            var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
+            var moneyTest = $scope.naccount.amoney && $scope.naccount.amoney >= 0;
+            return lastnameTest && firstnameTest && usernameTest && pseudoTest && pwdTest && moneyTest;
+        };
+        $scope.createAccount = function() {
+            if ($scope.nuser.password == $scope.nuser.passwordBis) {
+                $scope.nuser.full_name = _.capitalize(_.trim($scope.nuser.lastname)) + " " + _.capitalize(_.trim($scope.nuser.firstname));
+                delete $scope.nuser.passwordBis;
+                delete $scope.nuser.lastname;
+                delete $scope.nuser.firstname;
+                $scope.nuser.$save().then(function(u) {
+                    $scope.naccount.owner = u.id;
+                    $scope.amoney = $scope.naccount.amoney;
+                    delete $scope.naccount.amoney;
+                    $scope.naccount.$save().then(function(a) {
+                        APIAction.deposit({account: a.id, amount: $scope.amoney}).then(function() {
+                            $state.go('bar.account.details', {id: a.id});
+                        }, function(errors) {
+                            console.log("Erreur dépôt chèque.")
+                        });
+                    }, function(errors) {
+                        console.log("Erreur création Account.");
+                    });
+                }, function(errors) {
+                    console.log("Erreur création User.");
+                });
+            } else {
+                $scope.password = '';
+                $scope.passwordBis = '';
+                console.log("Mots de passe différents");
+            }
+            
+        }
     }
 ])
 .controller('admin.ctrl.account.link',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'users_list', '$state',
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'user_list', '$state',
     function($scope, Account, User, APIAction, user_list, $state) {
         $scope.admin.active = 'account';
         $scope.users_list = user_list;
@@ -238,14 +285,15 @@ angular.module('bars.admin', [
         $scope.account = Account.create();
         $scope.money = 0;
         $scope.createAccount = function(usr) {
-            $scope.account.bar = 'avironjone'; // [TODO]Adapter bars-django
             $scope.account.owner = $scope.user.id;
             $scope.account.$save().then(function(account) {
                 APIAction.deposit({account: account.id, amount: $scope.money}).then(function() {
                     $state.go('bar.account.details', {id: account.id});
+                }, function(errors) {
+                    console.log('Erreur dépôt chèque.')
                 });
             }, function(errors) {
-                console.log('Something went wrong...');
+                console.log('Erreur création Account.');
                 // [TODO] Form error
             });
         }
