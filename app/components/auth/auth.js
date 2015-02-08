@@ -91,7 +91,9 @@ angular.module('bars.auth', [
                 return AuthService.isAuthenticated();
             },
             can: function (perm) {
-                return this.isAuthenticated() && this.role && _.indexOf(this.role.perms, "bars_api." + perm) > -1;
+                return this.isAuthenticated() && this.role && _.findIndex(this.role.perms, function (p) {
+                    return p.indexOf('.' + perm) > -1;
+                }) > -1;
             },
             hasAccount: function() {
                 return this.account != null;
