@@ -91,7 +91,7 @@ angular.module('bars.magicbar', [
 					delete humanTypes[k];
 				}
 			});
-			humanTypes['add'] = 'Ajouter';
+			humanTypes['add'] = 'ajouter';
 
 	        var units = [
 	            'g',
