@@ -80,6 +80,15 @@ angular.module('bars.api.account', [
         $scope.filterAccounts = function(o) {
             return o.filter($scope.searchl);
         };
+        $scope.filterHidden = function() {
+            if ($scope.showHidden) {
+                return '';
+            } else {
+                return {
+                    deleted: false
+                };
+            }
+        };
     }])
 .controller('api.ctrl.account_detail',
     ['$scope', 'account', 'api.services.action', 'api.models.user', 'user_list',
@@ -146,6 +155,10 @@ angular.module('bars.api.account', [
             //     $scope.pwdSuccess = -1;
             //     console.log('Mots de passe différents.');
             // }
+        };
+        $scope.toggleDeleted = function() {
+            $scope.account.deleted = !$scope.account.deleted;
+            $scope.account.$save();
         };
     }])
 

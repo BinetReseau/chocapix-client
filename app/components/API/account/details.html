@@ -148,6 +148,15 @@
                                     </form>
                                 </div>
                             </fieldset>
+                            <fieldset>
+                                <h3>Supprimer le compte</h3>
+                                <div class="col-sm-9 col-sm-offset-3">
+                                    <p>Un compte n'apparaîtra plus dans le bar, sauf pour les personnes possédant les droits de modifier les comptes.</p>
+                                    <a class="btn btn-danger" ng-class="account.deleted && 'active'" ng-click="toggleDeleted()">
+                                        <span class="glyphicon glyphicon-trash"> Supprimer</span>
+                                    </a>
+                                </div>
+                            </fieldset>
                         </div>
                     </div>
                 </tab>
