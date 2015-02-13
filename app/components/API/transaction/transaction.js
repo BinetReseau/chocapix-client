@@ -138,15 +138,17 @@ angular.module('bars.api.transaction', [
                     req.page = page++;
                     req.page_size = 30;
                     Transaction.request(req).then(function(history) {
-                        allHistory = _.uniq(allHistory.concat(history), "id");
+                        allHistory = allHistory.concat(history);
                         calculateHistory();
                     });
                 }
             }
             function calculateHistory(event, transaction) {
                 if (transaction) {
-                    allHistory.unshift(transaction[0]);
+                    allHistory.unshift(transaction);
                 }
+
+                allHistory = _.uniq(allHistory, "id");
 
                 _.forEach(allHistory, function(t) {
                     t.parseTimestamp();
@@ -166,7 +168,7 @@ angular.module('bars.api.transaction', [
 
             loadMore();
 
-            $scope.$on('api.model.transaction.*', calculateHistory);
+            $scope.$on('api.model.transaction.add', calculateHistory);
             $scope.$on('auth.hasLoggedIn', calculateHistory);
         }]
     };
