@@ -45,7 +45,7 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                role: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
+                roles: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
                     if (AuthUser.isAuthenticated()) {
                         return Role.ofUser(user.id);
                     } else {
@@ -114,23 +114,18 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'user', 'account', 'role',
-    function($scope, AuthUser, Account, User, ROle, user, account, role) {
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'user', 'account', 'roles',
+    function($scope, AuthUser, Account, User, ROle, user, account, roles) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
             account = null;
         }
 
-        if (role && role.length > 0) {
-            role = role[0];
-        } else {
-            role = null;
-        }
-
         AuthUser.account = account;
         AuthUser.user = user;
-        AuthUser.role = role;
+        AuthUser.roles = roles;
+        AuthUser.computePerms();
 
         $scope.login = {
             username: '',

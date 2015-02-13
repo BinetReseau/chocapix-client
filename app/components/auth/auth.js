@@ -43,7 +43,8 @@ angular.module('bars.auth', [
         return {
             user: null,
             account: null,
-            role: null,
+            roles: [],
+            perms: [],
             login: function(credentials) {
                 var self = this;
                 return AuthService.login(credentials).then(
@@ -62,16 +63,11 @@ angular.module('bars.auth', [
                             }, function (error) {
                                 self.account = null;
                             });
-                            Role.ofUser(user.id).then(function(role) {
-                                if (role && role.length > 0) {
-                                    role = role[0];
-                                } else {
-                                    role = null;
-                                }
-
-                                self.role = role;
+                            Role.ofUser(user.id).then(function(roles) {
+                                self.roles = roles;
+                                self.computePerms();
                             }, function (error) {
-                                self.role = null;
+                                self.roles = [];
                             });
                             return self.user;
                         });
@@ -84,14 +80,22 @@ angular.module('bars.auth', [
                 AuthService.logout();
                 this.user = null;
                 this.account = null;
-                this.role = null;
+                this.roles = [];
+                this.perms = [];
                 $rootScope.$broadcast('auth.hasLoggedOut');
             },
             isAuthenticated: function() {
                 return AuthService.isAuthenticated();
             },
+            computePerms: function() {
+                this.perms = [];
+                for (var i = 0; i < this.roles.length; i++) {
+                    this.perms = this.perms.concat(this.roles[i].perms);
+                }
+                _.uniq(this.perms);
+            },
             can: function (perm) {
-                return this.isAuthenticated() && this.role && _.findIndex(this.role.perms, function (p) {
+                return this.isAuthenticated() && _.findIndex(this.perms, function (p) {
                     return p.indexOf('.' + perm) > -1;
                 }) > -1;
             },
