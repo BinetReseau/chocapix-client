@@ -102,6 +102,31 @@ angular.module('bars.magicbar', [
 	            'cl',
 	            '€',
 	        ];
+			var unitsr = {
+				'g': {
+					'kg': 1000,
+					'g': 1
+				},
+				'kg': {
+					'g': 0.001,
+					'kg': 1
+				},
+				'l': {
+					'ml': 0.001,
+					'cl': 0.01,
+					'l': 1
+				},
+				'cl': {
+					'l': 100,
+					'ml': 0.1,
+					'cl': 1
+				},
+				'ml': {
+					'l': 1000,
+					'cl': 10,
+					'ml': 1
+				}
+			};
 
 
 			var parsedTerms = [];
@@ -130,15 +155,16 @@ angular.module('bars.magicbar', [
 						var qty = eval(match[1]);
 						var unit = match[2];
 
-						var canBe ={
+						var pitem = {
 							type: 'qty',
 							value: qty
 						};
-						if(unit !== '') {
-							canBe.unit = unit;
+
+						if(unit !== '' && units.indexOf(unit) > -1) {
+							pitem.unit = unit;
 						}
 
-						parsedTerms[i].push(canBe);
+						parsedTerms[i].push(pitem);
 					} catch (e) {}
 	            }
 
@@ -201,8 +227,6 @@ angular.module('bars.magicbar', [
 					var canBe = parsedTerms[i][j];
 					if((canBe.type === 'qty' || canBe.type === 'unit' || canBe.type === 'type') && hasType(suggestion, canBe.type)) {
 						continue;
-					} else if(canBe.type === 'qty' && canBe.unit && hasType(suggestion, 'unit')) {
-						continue;
 					} else if(canBe.type === 'account' && hasType(suggestion, 'food')) {
 						continue;
 					} else if(canBe.type === 'food' && hasType(suggestion, 'account')) {
@@ -216,7 +240,16 @@ angular.module('bars.magicbar', [
 							continue;
 						}
 					}
+
 					var nsuggestion = _.clone(suggestion);
+					if (canBe.unit) {
+						var canBe2 = {
+							type: 'unit',
+							value: canBe.unit
+						};
+						delete canBe.unit;
+						nsuggestion.push(canBe2);
+					}
 					nsuggestion.push(canBe);
 					suggestions.push(listSuggestions(i+1, nsuggestion));
 				}
@@ -228,10 +261,8 @@ angular.module('bars.magicbar', [
 					var res = {};
 					_.forEach(suggestion, function(v) {
 						res[v.type] = v.value;
-						if(v.type === 'qty' && v.unit) {
-							res.unit = v.unit;
-						}
 					});
+					console.log(res);
 					if(_.find(suggestion, {type:'account'})) {
 						res.otype = 'account';
 						res.type = res.type || 'give';
@@ -248,6 +279,15 @@ angular.module('bars.magicbar', [
 						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory')
 								|| res.unit === "€"){
 							return []; // Discard
+						}
+						if (res.unit) {
+							//console.log(res.food);
+							console.log("Unit: " + res.unit + "; Qty: " + res.qty);
+							if (unitsr[res.unit][res.food.unit]) {
+								res.qty = res.qty / unitsr[res.unit][res.food.unit];
+							} else if (unitsr[res.unit][res.food.buy_unit]) {
+								res.qty = res.qty / unitsr[res.unit][res.food.buy_unit] * res.food.buy_unit_value / res.food.unit_value;
+							}
 						}
 					}
 					res.qty = res.qty || 1;
