@@ -73,18 +73,22 @@ angular.module('bars.settings', [
             }
         };
         $scope.changePwd = function() {
-            // [TODO] Vérifier le mot de passe actuel via le serveur. Droits pour modifier un mot de passe ?
-            // if ($scope.newPwd == $scope.newPwdBis) {
-            //     me.password = $scope.newPwd;
-            //     me.$save().then(function() {
-            //         $scope.pwdSuccess = 1;
-            //     }, function() {
-            //         $scope.pwdSuccess = -1;
-            //     });
-            // } else {
-            //     $scope.pwdSuccess = -1;
-            //     console.log('Mots de passe différents.');
-            // }
+            if ($scope.newPwd == $scope.newPwdBis) {
+                console.log(me);
+                User.changePwd($scope.oldPwd, $scope.newPwd);//.then(function() {
+                //     $scope.pwdSuccess = 1;
+                // }, function(errors) {
+                //     $scope.pwdSuccess = -1;
+                // });
+                // me.$save().then(function() {
+                //     $scope.pwdSuccess = 1;
+                // }, function() {
+                //     $scope.pwdSuccess = -1;
+                // });
+            } else {
+                $scope.pwdSuccess = -1;
+                console.log('Mots de passe différents.');
+            }
         };
     }
 ])

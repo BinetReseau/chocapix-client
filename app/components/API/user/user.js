@@ -4,15 +4,25 @@ angular.module('bars.api.user', [
     'APIModel'
     ])
 
-.factory('api.models.user', ['APIModel',
-    function(APIModel) {
-        return new APIModel({
+.factory('api.models.user', ['APIModel', 'APIInterface', 
+    function(APIModel, APIInterface) {
+        var model = new APIModel({
                 url: 'user',
                 type: "User",
                 methods: {
                     'me': {url: 'me', static: true},
                 }
             });
+
+        model.changePwd = function(oldpwd, newpwd) {
+            return APIInterface.request({
+                'url': 'user/change_password',
+                'method': 'PUT',
+                'params': {'old_password': oldpwd, 'password': newpwd}
+            });
+        };
+
+        return model;
     }])
 
 .config(['$stateProvider', function($stateProvider) {
