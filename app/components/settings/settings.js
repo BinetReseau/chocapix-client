@@ -51,18 +51,22 @@ angular.module('bars.settings', [
         $scope.newPwd = null;
         $scope.newPwdBis = null;
         $scope.myUser = me;
-        $scope.ousername = me.username;
         $scope.checkUsername = function() {
             return _.filter(user_list, {username: $scope.nusername}).length == 0;
         };
         $scope.changeUsername = function() {
             if (_.filter(user_list, {username: $scope.nusername}).length == 0) {
-                $scope.myUser.username = $scope.nusername;
+                var tempUsername = $scope.nusername;
+                $scope.nusername = '';
+                $scope.myUser.username = tempUsername;
                 $scope.myUser.$save().then(function(u) {
                     $scope.usernameSuccess = 1;
-                    $scope.nusername = '';
+                    $scope.myUser = u;
                 }, function(errors) {
                     $scope.usernameSuccess = -1;
+                    User.me().then(function(u) {
+                        $scope.myUser = u;
+                    });
                     $scope.nusername = '';
                     console.log("Changement de username échoué.");
                 });
