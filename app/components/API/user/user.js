@@ -4,7 +4,7 @@ angular.module('bars.api.user', [
     'APIModel'
     ])
 
-.factory('api.models.user', ['APIModel', 'APIInterface', 
+.factory('api.models.user', ['APIModel', 'APIInterface',
     function(APIModel, APIInterface) {
         var model = new APIModel({
                 url: 'user',
@@ -18,7 +18,7 @@ angular.module('bars.api.user', [
             return APIInterface.request({
                 'url': 'user/change_password',
                 'method': 'PUT',
-                'params': {'old_password': oldpwd, 'password': newpwd}
+                'data': {'old_password': oldpwd, 'password': newpwd}
             });
         };
 
