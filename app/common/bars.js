@@ -40,8 +40,8 @@ angular.module('bars.bars', [
 }])
 
 .controller('bars.ctrl',
-    ['$scope', 'auth.user', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'accounts',
-    function($scope, AuthUser, bars_list, user, User, Account, accounts) {
+    ['$scope', 'auth.user', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'api.models.bar', 'accounts',
+    function($scope, AuthUser, bars_list, user, User, Account, Bar, accounts) {
         function upBars() {
             $scope.gbars = [];
             for (var i = 0; i < bars_list.length; i++) {
@@ -84,6 +84,7 @@ angular.module('bars.bars', [
                     });
                     $scope.login = {username: '', password: ''};
                     $scope.inLogin = false;
+                    Bar.reload();
                 }, function() {
                     $scope.loginError = true;
                     $scope.login.password = '';
