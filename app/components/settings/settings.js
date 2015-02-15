@@ -41,8 +41,8 @@ angular.module('bars.settings', [
         };
     }
 ])
-.controller('settings.ctrl.credentials', 
-    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list', 
+.controller('settings.ctrl.credentials',
+    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list',
     function($scope, me, Auth, User, user_list) {
         $scope.settings.active = 'credentials';
         $scope.pwdSuccess = 0;
@@ -75,16 +75,22 @@ angular.module('bars.settings', [
         $scope.changePwd = function() {
             if ($scope.newPwd == $scope.newPwdBis) {
                 console.log(me);
-                User.changePwd($scope.oldPwd, $scope.newPwd);//.then(function() {
-                //     $scope.pwdSuccess = 1;
-                // }, function(errors) {
-                //     $scope.pwdSuccess = -1;
-                // });
-                // me.$save().then(function() {
-                //     $scope.pwdSuccess = 1;
-                // }, function() {
-                //     $scope.pwdSuccess = -1;
-                // });
+                User.changePwd($scope.oldPwd, $scope.newPwd).then(function() {
+                    $scope.pwdSuccess = 1;
+                    $scope.newPwd = '';
+                    $scope.newPwdBis = '';
+                    $scope.oldPwd = '';
+                }, function(errors) {
+                    $scope.pwdSuccess = -1;
+                    $scope.oldPwd = '';
+                });
+                /*
+                me.$save().then(function() {
+                    $scope.pwdSuccess = 1;
+                }, function() {
+                    $scope.pwdSuccess = -1;
+                });
+                */
             } else {
                 $scope.pwdSuccess = -1;
                 console.log('Mots de passe différents.');
