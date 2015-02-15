@@ -262,7 +262,6 @@ angular.module('bars.magicbar', [
 					_.forEach(suggestion, function(v) {
 						res[v.type] = v.value;
 					});
-					console.log(res);
 					if(_.find(suggestion, {type:'account'})) {
 						res.otype = 'account';
 						res.type = res.type || 'give';
@@ -281,8 +280,6 @@ angular.module('bars.magicbar', [
 							return []; // Discard
 						}
 						if (res.unit) {
-							//console.log(res.food);
-							console.log("Unit: " + res.unit + "; Qty: " + res.qty);
 							if (unitsr[res.unit][res.food.unit]) {
 								res.qty = res.qty / unitsr[res.unit][res.food.unit];
 							} else if (unitsr[res.unit][res.food.buy_unit]) {
