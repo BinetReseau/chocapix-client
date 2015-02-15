@@ -169,7 +169,11 @@ angular.module('bars.api.transaction', [
             loadMore();
 
             $scope.$on('api.model.transaction.add', calculateHistory);
-            $scope.$on('auth.hasLoggedIn', calculateHistory);
+            $scope.$on('auth.hasLoggedIn', function () {
+                allHistory = [];
+                page = 1;
+                loadMore();
+            });
         }]
     };
 })
