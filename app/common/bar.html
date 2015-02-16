@@ -1,53 +1,55 @@
 <div class="container-fluid">
 <div class="row">
-    <div ui-view="user-infos" class="col-md-2">
+    <div ui-view="user-infos" class="col-md-2 col-xs-7">
     </div>
-    <div class="col-md-10" ui-view="header"></div>
+    <div class="col-md-10 col-xs-5" ui-view="header"></div>
 </div>
 
+<div class="hidden-xs">
 <br /><br />
+</div>
 
 <div class="row">
     <div class="col-md-2">
-        <ul class="nav nav-pills nav-stacked">
+        <ul class="nav nav-pills nav-stacked-sm">
             <li ng-class="bar.active == 'index' && 'active'">
                 <a title="Accueil du bar" ui-sref="bar({ bar: bar.id })">
-                    <span class="glyphicon glyphicon-home"></span> Accueil
+                    <span class="glyphicon glyphicon-home"></span><span class="hidden-xs"> Accueil</span>
                 </a>
             </li>
             <li ng-class="bar.active == 'history' && 'active'">
                 <a title="Historique" ui-sref="bar.history({ bar: bar.id })">
-                    <span class="glyphicon glyphicon-list"></span> Historique
+                    <span class="glyphicon glyphicon-list"></span><span class="hidden-xs"> Historique</span>
                 </a>
             </li>
             <li ng-class="bar.active == 'account' && 'active'">
                 <a title="Utilisateurs du bar" ui-sref="bar.account.list({ bar: bar.id })">
-                    <span class="glyphicon glyphicon-user"></span> Utilisateurs
+                    <span class="glyphicon glyphicon-user"></span><span class="hidden-xs"> Utilisateurs</span>
                 </a>
             </li>
             <li ng-class="bar.active == 'food' && 'active'">
                 <a title="Aliments du bar" ui-sref="bar.food.list({ bar: bar.id })">
-                    <span class="glyphicon glyphicon-cutlery"></span> Aliments
+                    <span class="glyphicon glyphicon-cutlery"></span><span class="hidden-xs"> Aliments</span>
                 </a>
             </li>
             <li ng-class="bar.active == 'admin' && 'active'" ng-if="user.can('add_news') || user.can('add_approtransaction') || user.can('add_item') || user.can('add_inventorytransaction') || user.can('add_account') || user.can('change_news')">
                 <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
-                    <span class="glyphicon glyphicon-dashboard"></span> Administration
+                    <span class="glyphicon glyphicon-dashboard"></span><span class="hidden-xs"> Administration</span>
                 </a>
             </li>
             <li ng-class="bar.active == 'settings' && 'active'">
                 <a title="Réglages" ui-sref="bar.settings.credentials({ bar: bar.id })">
-                    <span class="glyphicon glyphicon-wrench"></span> Préférences
+                    <span class="glyphicon glyphicon-wrench"></span><span class="hidden-xs"> Préférences</span>
                 </a>
             </li>
             <li>
                 <a title="Aller à la liste de tous les bars" ui-sref="index">
-                    <span class="glyphicon glyphicon-transfer"></span> Changer de bar
+                    <span class="glyphicon glyphicon-transfer"></span><span class="hidden-xs"> Changer de bar</span>
                 </a>
             </li>
-            <li>
+            <li class="hidden-xs">
                 <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-show="user.isAuthenticated()" ng-click="user.logout()">
-                    <span class="glyphicon glyphicon-off"></span> Déconnexion
+                    <span class="glyphicon glyphicon-off"></span><span class="hidden-xs"> Déconnexion</span>
                 </a>
             </li>
         </ul>

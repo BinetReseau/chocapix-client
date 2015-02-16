@@ -236,3 +236,35 @@ td.remove {
     -o-animation: fadeOut .5s;
     animation: fadeOut .5s;
 }
+@media screen and (min-width: 768px) {
+    .nav-stacked-sm > li {
+        float: none;
+    }
+}
+@media screen and (max-width: 768px) {
+    td.row {
+        display: block;
+    }
+    /* Styles for history table */
+    .history td.time {
+        width: 30px;
+    }
+    .history td.type {
+        width: 30%;
+    }
+    .history td.stock {
+        width: 25%;
+    }
+    .history td.price {
+        width: 40px;
+        text-align: right;
+    }
+    .history td.buttons {
+        width: 80px;
+        text-align: right;
+    }
+    .history td.par {
+        width: 30px;
+        display: block;
+    }
+}

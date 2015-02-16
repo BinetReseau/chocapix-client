@@ -60,7 +60,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             var self = this;
             if(_.isArray(obj)) {
                 return _.map(obj, _.bind(this.parse, this));
-            } else if(!(obj instanceof BaseAPIEntity) && obj._type && this.getModel(obj._type)) {
+            } else if(!(obj instanceof BaseAPIEntity) && obj && obj._type && this.getModel(obj._type)) {
                 _.forOwn(obj, function(v, k) {
                     if(_.isObject(v) && (v._type || _.isArray(v))) {
                         obj[k] = self.parse(v);

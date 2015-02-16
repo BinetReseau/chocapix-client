@@ -1,6 +1,6 @@
-<div class="col-md-2 text-right" style="padding-top: 0.6em;">
+<div class="col-md-2 text-right col-xs-12" style="padding-top: 0.6em;">
     <a title="Accueil du bar" ui-sref="bar({bar: bar.id})"><img ng-src="assets/img/sections/{{ bar.id }}.png" class="logo petit" alt="{{ bar.name }}" /></a>
 </div>
-<div class="col-md-8">
+<div class="col-md-8 hidden-xs">
     <h1 style="font-variant: small-caps; letter-spacing: 0.2em;" class="colors" ng-bind-html="colors('Bar ' + bar.name)"></h1>
 </div>
