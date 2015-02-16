@@ -14,8 +14,8 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return !this.deleted && !this.unavailable && (this.name.toLocaleLowerCase().indexOf(s) > -1 ||
-                            this.keywords.toLocaleLowerCase().indexOf(s) > -1);
+                        return !this.deleted && !this.unavailable && (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
             });

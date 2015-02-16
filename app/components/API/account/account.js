@@ -18,8 +18,8 @@ angular.module('bars.api.account', [
                         if(!this.owner.full_name) {
                             return false;
                         } else {
-                            return this.owner.full_name.toLocaleLowerCase().indexOf(s) > -1 ||
-                                this.owner.pseudo.toLocaleLowerCase().indexOf(s) > -1;
+                            return _.deburr(this.owner.full_name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                                _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
                         }
                     }
                 }
