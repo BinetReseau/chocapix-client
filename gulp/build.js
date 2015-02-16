@@ -18,7 +18,8 @@ gulp.task('partials', function () {
     .pipe($.minifyHtml({
       empty: true,
       spare: true,
-      quotes: true
+      quotes: true,
+      loose: true
     }))
     .pipe($.ngHtml2js({
       moduleName: 'barsApp'
