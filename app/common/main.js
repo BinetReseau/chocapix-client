@@ -97,13 +97,6 @@ angular.module('bars.main', [
             foods: foods,
             active: 'index',
         };
-        $scope.colors = function (t) {
-            var out = '';
-            for (var i = 0; i < t.length; i++) {
-                out += "<span>" + t[i] + "</span>";
-            }
-            return out;
-        }
 
         $scope.user = AuthUser;
     }])
