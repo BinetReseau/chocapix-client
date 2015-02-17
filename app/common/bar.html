@@ -1,12 +1,6 @@
 <div class="container-fluid">
 <div class="row">
-    <div ui-view="user-infos" class="col-md-2 col-xs-7">
-    </div>
-    <div class="col-md-10 col-xs-5" ui-view="header"></div>
-</div>
-
-<div class="hidden-xs">
-<br /><br />
+    <div ui-view="header"></div>
 </div>
 
 <div class="row">
@@ -56,9 +50,6 @@
     </div>
 
     <div ng-class="user.can('add_mealtransaction') && 'col-md-7' || 'col-md-10'">
-        <div class="row">
-            <div ng-show="user.can('add_transaction')" ui-view="form"></div>
-        </div>
         <div class="row">
             <div ui-view=""></div>
         </div>

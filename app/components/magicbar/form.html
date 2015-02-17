@@ -1,17 +1,11 @@
-<div class="container-fluid">
-    <form class="form-horizontal">
-        <div class="form-group" ng-class="query.hasError && 'has-error'">
-            <label for="q_alim" class="col-sm-2 control-label">Je veux</label>
-            <div class="col-sm-10">
-                <input type="search" class="form-control" ng-model="bar.search" id="q_alim" autocomplete="off"
-                    placeholder="(acheter) 2l de lait • 120g pates • (donner) 2€ à Thomas • ajouter (à la bouffe à plusieurs) 6 steaks • jeter 3 pommes"
-                    typeahead="'' as el for el in query.suggest | limitTo:7"
-                    typeahead-template-url="components/magicbar/typeahead.html" typeahead-wait-ms="100"
-                    typeahead-on-select="executeQuery($item, $model, $label)" />
-            </div>
-        </div>
-    </form>
-</div>
+<form class="navbar-form">
+    <input type="search" class="form-control" ng-model="bar.search" id="q_alim" autocomplete="off"
+        placeholder="Que voulez-vous faire ?"
+        style="width: 100%;"
+        typeahead="'' as el for el in query.suggest | limitTo:7"
+        typeahead-template-url="components/magicbar/typeahead.html" typeahead-wait-ms="100"
+        typeahead-on-select="executeQuery($item, $model, $label)" />
+</form>
 <!--
 <div ng-if="query.hasError" class="alert alert-danger col-sm-8 col-sm-offset-2" role="alert">
     {{ query.errorMessage }}

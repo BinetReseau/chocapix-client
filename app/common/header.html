@@ -1,6 +1,19 @@
-<div class="col-md-2 text-right col-xs-12" style="padding-top: 0.6em;">
-    <a title="Accueil du bar" ui-sref="bar({bar: bar.id})"><img ng-src="assets/img/sections/{{ bar.id }}.png" class="logo petit" alt="{{ bar.name }}" /></a>
-</div>
-<div class="col-md-8 hidden-xs">
-    <h1 style="font-variant: small-caps; letter-spacing: 0.2em;">Bar {{ bar.name }}</h1>
-</div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="col-sm-2 col-sm-offset-2">
+            <div class="navbar-header">
+                <a class="navbar-brand" ui-sref="index">
+                    <img alt="Chocapix" src="assets/img/logo.png" style="height: 100%;">
+                </a>
+                <a class="navbar-brand" ui-sref="bar({bar: bar.id})">
+                    <img alt="{{ bar.name }}" ng-src="assets/img/sections/{{ bar.id }}.png" style="height: 200%; margin-top: -0.6em;">
+                </a>
+                <p class="navbar-text">
+                    Bar {{ bar.name }}
+                </p>
+            </div>
+        </div>
+        <div class="col-sm-3" ng-show="user.can('add_transaction')" ui-view="form"></div>
+        <div class="col-sm-2" ui-view="user-infos"></div>
+    </div>
+</nav>

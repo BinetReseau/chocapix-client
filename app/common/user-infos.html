@@ -5,14 +5,17 @@
         <button type="submit" class="btn btn-default" ng-class="inLogin && 'disabled'">Connexion</button>
     </div>
 </form>
-<div ng-if="user.isAuthenticated()" class="text-center">
-    <h1 ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || ''">
+<p ng-if="user.isAuthenticated()" class="nav navbar-text navbar-right">
+    {{ user.user.full_name }}
+    <span ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || ''">
         <span ng-class="user.account.money < 0 && 'label label-danger' || ''">
             {{ user.account.money | currency }}
         </span>
-    </h1>
-    <h1 ng-if="!user.hasAccount()">
+    </span>
+    <span ng-if="!user.hasAccount()">
         - €
-    </h1>
-    <h4><small>{{ user.user.full_name }}</small></h4>
-</div>
+    </span>
+    <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-click="user.logout()">
+        <span class="glyphicon glyphicon-off"></span>
+    </a>
+</p>
