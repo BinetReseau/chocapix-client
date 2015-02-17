@@ -69,6 +69,7 @@ angular.module('bars.main', [
                 },
                 'header@bar': {
                     templateUrl: "common/header.html",
+                    controller: 'main.ctrl.header'
                 },
                 'meal@bar': {
                     templateUrl: "components/meal/panel.html",
@@ -109,7 +110,33 @@ angular.module('bars.main', [
         $scope.last_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified').pop();
         };
+
         document.getElementById("q_alim").focus();
+    }])
+.controller(
+    'main.ctrl.header',
+    ['$scope','auth.user',
+    function($scope, AuthUser) {
+        $scope.login = {
+            username: '',
+            password: ''
+        };
+
+        $scope.connexion = function (login) {
+            $scope.loginError = false;
+            $scope.inLogin = true;
+            AuthUser.login(login).then(
+                function(user) {
+                    $scope.login = {username: '', password: ''};
+                    $scope.inLogin = false;
+                    document.getElementById("q_alim").focus();
+                }, function(error) {
+                    $scope.loginError = true;
+                    $scope.login.password = '';
+                    $scope.inLogin = false;
+                }
+            );
+        };
     }])
 
 .controller(
@@ -130,26 +157,6 @@ angular.module('bars.main', [
             Meal.account = AuthUser.account;
             Meal.init();
         }
-
-        $scope.login = {
-            username: '',
-            password: ''
-        };
-
-        $scope.connexion = function (login) {
-            $scope.loginError = false;
-            $scope.inLogin = true;
-            AuthUser.login(login).then(
-                function(user) {
-                    $scope.login = {username: '', password: ''};
-                    $scope.inLogin = false;
-                }, function(error) {
-                    $scope.loginError = true;
-                    $scope.login.password = '';
-                    $scope.inLogin = false;
-                }
-            );
-        };
     }])
 
 .directive(
