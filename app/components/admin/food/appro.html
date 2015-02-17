@@ -39,8 +39,8 @@
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" />
                         <select ng-model="item.unit_value" ng-change="appro.recomputeAmount()">
-                            <option value="{{ item.item.buy_unit_value }}">{{ item.item.buy_unit || item.item.name }}</option>
-                            <option value="{{ item.item.unit_value }}" ng-if="item.item.buy_unit != item.item.unit">{{ item.item.unit || item.item.name }}</option>
+                            <option value="{{ item.item.buy_unit_value }}">{{ item.item.buy_unit_name || item.item.name }}</option>
+                            <option value="{{ item.item.unit_value }}" ng-if="item.item.buy_unit_name != item.item.unit_name">{{ item.item.unit_name || item.item.name }}</option>
                         </select>
                     </td>
                     <td class="vmiddle">

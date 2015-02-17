@@ -10,7 +10,7 @@ angular.module('bars.magicbar', [
         $scope.query = {
             type: 'buy',
             qty: 1,
-            unit: null,
+            unit_name: null,
             name: '',
             hideAnalysis: false,
             hasError: false,
@@ -58,7 +58,7 @@ angular.module('bars.magicbar', [
 	        $scope.query = {
 	            type: '',
 	            qty: 1,
-	            unit: '',
+	            unit_name: '',
 	            name: '',
 	            hasError: false,
 	            errorMessage: '',
@@ -153,15 +153,15 @@ angular.module('bars.magicbar', [
 	            if (match) {
 					try {
 						var qty = eval(match[1]);
-						var unit = match[2];
+						var unit_name = match[2];
 
 						var pitem = {
 							type: 'qty',
 							value: qty
 						};
 
-						if(unit !== '' && units.indexOf(unit) > -1) {
-							pitem.unit = unit;
+						if(unit_name !== '' && units.indexOf(unit_name) > -1) {
+							pitem.unit_name = unit_name;
 						}
 
 						parsedTerms[i].push(pitem);
@@ -171,7 +171,7 @@ angular.module('bars.magicbar', [
 	            // Unit
 	            if (units.indexOf(term) > -1) {
 					parsedTerms[i].push({
-						type: 'unit',
+						type: 'unit_name',
 						value: term
 					});
 	            }
@@ -225,7 +225,7 @@ angular.module('bars.magicbar', [
 				var suggestions = [];
 				for(var j = 0; j < parsedTerms[i].length; j++) {
 					var canBe = parsedTerms[i][j];
-					if((canBe.type === 'qty' || canBe.type === 'unit' || canBe.type === 'type') && hasType(suggestion, canBe.type)) {
+					if((canBe.type === 'qty' || canBe.type === 'unit_name' || canBe.type === 'type') && hasType(suggestion, canBe.type)) {
 						continue;
 					} else if(canBe.type === 'account' && hasType(suggestion, 'food')) {
 						continue;
@@ -242,12 +242,12 @@ angular.module('bars.magicbar', [
 					}
 
 					var nsuggestion = _.clone(suggestion);
-					if (canBe.unit) {
+					if (canBe.unit_name) {
 						var canBe2 = {
-							type: 'unit',
-							value: canBe.unit
+							type: 'unit_name',
+							value: canBe.unit_name
 						};
-						delete canBe.unit;
+						delete canBe.unit_name;
 						nsuggestion.push(canBe2);
 					}
 					nsuggestion.push(canBe);
@@ -276,14 +276,14 @@ angular.module('bars.magicbar', [
 							res.type = res.type || 'buy';
 						}
 						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory')
-								|| res.unit === "€"){
+								|| res.unit_name === "€"){
 							return []; // Discard
 						}
-						if (res.unit) {
-							if (unitsr[res.unit][res.food.unit]) {
-								res.qty = res.qty / unitsr[res.unit][res.food.unit];
-							} else if (unitsr[res.unit][res.food.buy_unit]) {
-								res.qty = res.qty / unitsr[res.unit][res.food.buy_unit] * res.food.buy_unit_value / res.food.unit_value;
+						if (res.unit_name) {
+							if (unitsr[res.unit_name][res.food.unit_name]) {
+								res.qty = res.qty / unitsr[res.unit_name][res.food.unit_name];
+							} else if (unitsr[res.unit_name][res.food.buy_unit_name]) {
+								res.qty = res.qty / unitsr[res.unit_name][res.food.buy_unit_name] * res.food.buy_unit_value / res.food.unit_value;
 							}
 						}
 					}

@@ -9,8 +9,8 @@
 </span> -->
 
 <bars:food:qty food="food" qty="qty" in="in" out="out" ng-if="qty"></bars:food:qty>
-{{ (qty && unit) && ' de ' }}
+{{ (qty && unit_name) && ' de ' }}
 <a title="Voir la fiche de cet aliment" ui-sref="bar.food.details({ bar: food.bar.id, id:food.id })">
-    <span ng-if="!(qty && unit == '')">{{ food.name }}</span>
-    <span ng-if="qty && unit == ''">{{ food.name | affs:qty }}</span>
+    <span ng-if="!(qty && unit_name == '')">{{ food.name }}</span>
+    <span ng-if="qty && unit_name == ''">{{ food.name | affs:qty }}</span>
 </a>

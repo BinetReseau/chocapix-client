@@ -11,13 +11,13 @@
             <div class="form-group">
                 <label for="fbuy_unit" class="col-sm-3 control-label">Unité d'achat</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="fbuy_unit" placeholder="kg" ng-model="food.buy_unit" tooltip="L'unité des appros" tooltip-trigger="focus" tooltip-placement="bottom">
+                    <input type="text" class="form-control" id="fbuy_unit" placeholder="kg" ng-model="food.buy_unit_name" tooltip="L'unité des appros" tooltip-trigger="focus" tooltip-placement="bottom">
                 </div>
             </div>
             <div class="form-group">
                 <label for="funit" class="col-sm-3 control-label">Unité de vente</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="food.unit" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom">
+                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="food.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom">
                 </div>
             </div>
             <div class="form-group">
@@ -25,14 +25,14 @@
                 <div class="col-sm-6">
                   <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="food.price">
                 </div>
-                <label class="col-sm-3 control-label">€ / {{ food.buy_unit }}</label>
+                <label class="col-sm-3 control-label">€ / {{ food.buy_unit_name }}</label>
             </div>
             <div class="form-group">
-                <label for="funit_value" class="col-sm-3 control-label">1 {{ food.buy_unit || food.name }} = </label>
+                <label for="funit_value" class="col-sm-3 control-label">1 {{ food.buy_unit_name || food.name }} = </label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="funit_value" placeholder="1000" ng-model="food.unit_value">
                 </div>
-                <label class="col-sm-3 control-label">{{ food.unit || food.name }}</label>
+                <label class="col-sm-3 control-label">{{ food.unit_name || food.name }}</label>
             </div>
             <div class="form-group">
                 <label for="fkeywords" class="col-sm-3 control-label">Mots clés</label>
@@ -45,7 +45,7 @@
                 <div class="col-sm-6">
                   <input type="text" class="form-control" id="fqty" placeholder="Quantité initiale" value="0" ng-model="food.qty">
                 </div>
-                <label class="col-sm-3 control-label">{{ food.unit || food.name }}</label>
+                <label class="col-sm-3 control-label">{{ food.unit_name || food.name }}</label>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">

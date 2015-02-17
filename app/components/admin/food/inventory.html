@@ -31,8 +31,8 @@
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" />
                         <select ng-model="item.unit_value">
-                            <option value="{{ item.item.buy_unit_value }}">{{ item.item.buy_unit || item.item.name }}</option>
-                            <option value="{{ item.item.unit_value }}" ng-if="item.item.buy_unit != item.item.unit">{{ item.item.unit || item.item.name }}</option>
+                            <option value="{{ item.item.buy_unit_value }}">{{ item.item.buy_unit_name || item.item.name }}</option>
+                            <option value="{{ item.item.unit_value }}" ng-if="item.item.buy_unit_name != item.item.unit_name">{{ item.item.unit_name || item.item.name }}</option>
                         </select>
                     </td>
                     <td class="vmiddle"><span class="label label-info"><bars:food:qty food="item.item" qty="item.item.qty" out="'buy'"></bars:food:qty></span></td>

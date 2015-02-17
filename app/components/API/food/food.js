@@ -116,7 +116,7 @@ angular.module('bars.api.food', [
 
         var initPrice = food_item.price * food_item.unit_value;
         $scope.computeNewPrice = function() {
-            if ($scope.newFood_item.unit == food_item.unit) {
+            if ($scope.newFood_item.unit_name == food_item.unit_name) {
                 $scope.newFood_item.price = initPrice;
             } else {
                 if ($scope.newFood_item.new_unit_value) {
@@ -135,8 +135,8 @@ angular.module('bars.api.food', [
         $scope.editFood = function() {
             food_item.name = $scope.newFood_item.name;
             food_item.keywords = $scope.newFood_item.keywords;
-            food_item.unit = $scope.newFood_item.unit;
-            food_item.buy_unit = $scope.newFood_item.buy_unit;
+            food_item.unit_name = $scope.newFood_item.unit_name;
+            food_item.buy_unit_name = $scope.newFood_item.buy_unit_name;
             food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
             food_item.buy_unit_value = $scope.newFood_item.new_buy_unit_value * food_item.buy_unit_value;
             food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
@@ -157,11 +157,11 @@ angular.module('bars.api.food', [
         },
         templateUrl: 'components/API/food/directive.html',
         controller: ['$scope', function($scope) {
-            //$scope.unit = $scope.unit || ($scope.food && $scope.food.unit) || '';
+            //$scope.unit_name = $scope.unit_name || ($scope.food && $scope.food.unit_name) || '';
             if ($scope.out == 'buy') {
-                $scope.unit = $scope.food.buy_unit;
+                $scope.unit_name = $scope.food.buy_unit_name;
             } else if ($scope.out == 'sell') {
-                $scope.unit = $scope.food.unit;
+                $scope.unit_name = $scope.food.unit_name;
             }
         }]
     };
@@ -186,10 +186,10 @@ angular.module('bars.api.food', [
                 }
                 if ($scope.out == 'buy') {
                     $scope.ratio *= 1/$scope.food.buy_unit_value;
-                    $scope.unit = $scope.food.buy_unit;
+                    $scope.unit_name = $scope.food.buy_unit_name;
                 } else if ($scope.out == 'sell') {
                     $scope.ratio *= 1/$scope.food.unit_value;
-                    $scope.unit = $scope.food.unit;
+                    $scope.unit_name = $scope.food.unit_name;
                 }
             }
             $scope.$watch('food.buy_unit_value', refresh);
