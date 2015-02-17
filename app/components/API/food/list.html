@@ -14,7 +14,7 @@
                 <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">Aliments</h4>
                 <input type="text" class="form-control right small" ng-model="searchl" placeholder="Rechercher">
                 <a title="Afficher les aliments cachés" ng-click="showHidden = !showHidden" class="pull-right btn btn-warning" ng-class="showHidden && 'active'" ng-show="user.can('change_item')">
-                    <span class="glyphicon glyphicon-eye-close"></span> Aliments cachés
+                    <span class="glyphicon glyphicon-eye-close"></span> <span class="hidden-xs">Aliments cachés</span>
                 </a>
             </div>
             <table class="table table-striped table-hover" ng-if="(food_list | filter:searchl).length > 0">

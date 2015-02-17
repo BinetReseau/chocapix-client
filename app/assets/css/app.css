@@ -256,31 +256,7 @@ td.remove {
 @media screen and (max-width: 768px) {
     body {
         padding-bottom: 40px;
-    }
-    td.row {
-        display: block;
-    }
-    /* Styles for history table */
-    .history td.time {
-        width: 30px;
-    }
-    .history td.type {
-        width: 30%;
-    }
-    .history td.stock {
-        width: 25%;
-    }
-    .history td.price {
-        width: 40px;
-        text-align: right;
-    }
-    .history td.buttons {
-        width: 80px;
-        text-align: right;
-    }
-    .history td.par {
-        width: 30px;
-        display: block;
+        padding-top: 50px;
     }
     #bar-menu {
         position: fixed;
@@ -290,5 +266,8 @@ td.remove {
         z-index: 3000;
         background-color: white;
         border-top: 1px solid #eee;
+    }
+    .navbar-nav {
+        margin: 0px;
     }
 }
