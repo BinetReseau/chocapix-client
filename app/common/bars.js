@@ -60,6 +60,14 @@ angular.module('bars.bars', [
         upBars();
         $scope.$on('api.model.bar.*', upBars);
 
+        $scope.colors = function (t) {
+            var out = '';
+            for (var i = 0; i < t.length; i++) {
+                out += "<span>" + t[i] + "</span>";
+            }
+            return out;
+        }
+        
         AuthUser.user = user;
         $scope.user = AuthUser;
         $scope.accounts = accounts;
