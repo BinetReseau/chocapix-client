@@ -1,9 +1,9 @@
-<div class="popover {{ placement }}" ng-class="{ in: isOpen(), fade: animation() }">
+<div class="popover {{ placement }}" ng-class="{ in: isOpen(), fade: animation() }" style="width: 400px; max-width: 400px;">
     <div class="arrow"></div>
     <div class="popover-inner">
         <h3 class="popover-title text-center">Bouffe<span ng-if="meal.customersList.length > 1"> à plusieurs</span></h3>
-        <div class="popover-content">
-            <div class="list-group">
+        <div class="popover-content" style="padding: 0;">
+            <div class="list-group" style="margin: 0px;">
                 <div class="list-group-item">
                     <form class="form-horizontal text-center">
                         <label class="sr-only" for="mealTitleInput">Nom de la bouffe</label>
