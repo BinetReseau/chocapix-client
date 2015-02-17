@@ -1,19 +1,24 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <div class="col-sm-2 col-sm-offset-2">
-            <div class="navbar-header">
-                <a class="navbar-brand" ui-sref="index">
-                    <img alt="Chocapix" src="assets/img/logo.png" style="height: 100%;">
-                </a>
-                <a class="navbar-brand" ui-sref="bar({bar: bar.id})">
-                    <img alt="{{ bar.name }}" ng-src="assets/img/sections/{{ bar.id }}.png" style="height: 200%; margin-top: -0.6em;">
-                </a>
-                <p class="navbar-text">
-                    Bar {{ bar.name }}
-                </p>
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="navbar-header">
+                    <a class="navbar-brand" ui-sref="index">
+                        <img alt="Chocapix" src="assets/img/logo.png" style="height: 100%;">
+                    </a>
+                    <a class="navbar-brand" ui-sref="bar({bar: bar.id})">
+                        <img alt="{{ bar.name }}" ng-src="assets/img/sections/{{ bar.id }}.png" style="height: 200%; margin-top: -0.6em;">
+                    </a>
+                    <p class="navbar-text" ng-if="false">
+                        Bar {{ bar.name }}
+                    </p>
+                </div>
             </div>
+            <div class="col-sm-7" ng-show="user.can('add_transaction')">
+                <div class="row" ui-view="form">
+                </div>
+            </div>
+            <div class="col-sm-3" ui-view="user-infos"></div>
         </div>
-        <div class="col-sm-3" ng-show="user.can('add_transaction')" ui-view="form"></div>
-        <div class="col-sm-2" ui-view="user-infos"></div>
     </div>
 </nav>

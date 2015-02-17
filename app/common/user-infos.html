@@ -5,17 +5,26 @@
         <button type="submit" class="btn btn-default" ng-class="inLogin && 'disabled'">Connexion</button>
     </div>
 </form>
-<p ng-if="user.isAuthenticated()" class="nav navbar-text navbar-right">
-    {{ user.user.full_name }}
-    <span ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || ''">
+<ul ng-if="user.isAuthenticated()" class="nav navbar-nav navbar-right">
+    <li>
+        <a>
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+        </a>
+    </li>
+    <li>
+        <a ui-sref="bar.account.details({ bar: bar.id, id: user.account.id })">{{ user.user.full_name }}</a>
+    </li>
+    <li class="navbar-brand" ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || ''">
         <span ng-class="user.account.money < 0 && 'label label-danger' || ''">
             {{ user.account.money | currency }}
         </span>
-    </span>
-    <span ng-if="!user.hasAccount()">
+    </li>
+    <li class="navbar-brand" ng-if="!user.hasAccount()">
         - €
-    </span>
-    <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-click="user.logout()">
-        <span class="glyphicon glyphicon-off"></span>
-    </a>
+    </li>
+    <li>
+        <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-click="user.logout()">
+            <span class="glyphicon glyphicon-off"></span>
+        </a>
+    </li>
 </p>
