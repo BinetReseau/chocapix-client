@@ -1,5 +1,7 @@
 /* app css stylesheet */
-
+body {
+    padding-top: 70px;
+}
 .logo.petit {
     width: 64px;
     height: 64px;

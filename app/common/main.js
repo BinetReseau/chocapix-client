@@ -114,8 +114,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'user', 'account', 'roles',
-    function($scope, AuthUser, Account, User, Role, user, account, roles) {
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'roles',
+    function($scope, AuthUser, Account, User, Role, Meal, user, account, roles) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
@@ -127,6 +127,8 @@ angular.module('bars.main', [
             AuthUser.user = user;
             AuthUser.roles = roles;
             AuthUser.computePerms();
+            Meal.account = AuthUser.account;
+            Meal.init();
         }
 
         $scope.login = {

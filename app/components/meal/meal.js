@@ -4,14 +4,24 @@ angular.module('bars.meal', [
 ])
 
 .controller('meal.ctrl',
-    ['$scope', 'api.models.food', 'api.models.account', 'api.services.action', 'bars.meal',
-    function($scope, Food, Account, APIAction, Meal) {
-        Meal.account = $scope.user.account;
-        Meal.init();
+    ['$scope', 'api.models.account', 'bars.meal',
+    function($scope,Account, Meal) {
         $scope.meal = Meal;
+        $scope.accounts = Account.all();
     }]
 )
-
+.directive('popoverMealPopup', [function() {
+    return {
+        restrict: 'EA',
+        templateUrl: 'components/meal/panel.html',
+        controller: 'meal.ctrl',
+        replace: true,
+        scope: {animation: '&', isOpen: '&', placement: '@'}
+    };
+}])
+.directive('popoverMeal', ['$compile', '$timeout', '$parse', '$window', '$tooltip', function ($compile, $timeout, $parse, $window, $tooltip) {
+    return $tooltip('popoverMeal', 'popover', 'click');
+}])
 .factory('bars.meal',
     ['api.models.food', 'api.models.account', 'api.services.action',
     function (Food, Account, APIAction) {

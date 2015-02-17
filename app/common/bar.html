@@ -49,13 +49,9 @@
         </ul>
     </div>
 
-    <div ng-class="user.can('add_mealtransaction') && 'col-md-7' || 'col-md-10'">
+    <div class="col-md-10">
         <div class="row">
             <div ui-view=""></div>
         </div>
-    </div>
-
-    <div class="col-md-3" ng-if="user.can('add_mealtransaction')">
-        <div ui-view="meal"></div>
     </div>
 </div>
