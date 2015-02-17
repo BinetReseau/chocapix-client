@@ -3,11 +3,11 @@
         <div class="col-sm-12">
             <ul class="nav nav-tabs" role="tablist">
                 <li ng-class="admin.active == 'dashboard' && 'active'">
-                    <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
+                    <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> <span class="hidden-xs">Dashboard</span></a>
                 </li>
                 <li ng-class="admin.active == 'food' && 'active'" class="dropdown dropdownli" dropdown>
                     <a title="Aliments" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
-                        <span class="glyphicon glyphicon-cutlery"></span> Aliments <span class="caret"></span>
+                        <span class="glyphicon glyphicon-cutlery"></span> <span class="hidden-xs">Aliments</span> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_item')">Ajouter un aliment</a></li>
@@ -18,7 +18,7 @@
                 </li>
                 <li ng-class="admin.active == 'account' && 'active'" class="dropdown dropdownli" dropdown>
                     <a title="Utilisateurs" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
-                        <span class="glyphicon glyphicon-user"></span> Utilisateurs <span class="caret"></span>
+                        <span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Utilisateurs</span> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a ui-sref="bar.admin.account.add({ bar: bar.id })">Créer un utilisateur</a></li>
@@ -28,7 +28,7 @@
                 </li>
                 <li ng-class="admin.active == 'news' && 'active'" class="dropdown dropdownli" dropdown>
                     <a title="Actualités" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
-                        <span class="glyphicon glyphicon-bullhorn"></span> Actualités <span class="caret"></span>
+                        <span class="glyphicon glyphicon-bullhorn"></span> <span class="hidden-xs">Actualités</span> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a>Annoncer la prochaine appro</a></li>
@@ -37,7 +37,7 @@
                     </ul>
                 </li>
                 <li ng-class="admin.active == 'settings' && 'active'">
-                    <a ui-sref="bar.admin.settings({ bar: bar.id })"><span class="glyphicon glyphicon-wrench"></span> Paramètres</a>
+                    <a ui-sref="bar.admin.settings({ bar: bar.id })"><span class="glyphicon glyphicon-wrench"></span> <span class="hidden-xs">Paramètres</span></a>
                 </li>
             </ul>
             <br />
