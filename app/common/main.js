@@ -157,6 +157,8 @@ angular.module('bars.main', [
             Meal.account = AuthUser.account;
             Meal.init();
         }
+
+        $scope.meal = Meal;
     }])
 
 .directive(

@@ -1,6 +1,9 @@
 <ul class="nav navbar-nav navbar-right">
-    <li>
-        <a popover-meal="nothing" popover-placement="bottom" class="link">
+    <li ng-show="user.can('add_mealtransaction')">
+        <a popover-meal="nothing" popover-placement="bottom" class="link" ng-class="meal.in() && 'in-meal'">
+            <span class="badge badge-info" ng-if="meal.in()">
+                {{ meal.totalPrice | currency }}
+            </span>
             <span class="glyphicon glyphicon-shopping-cart"></span>
         </a>
     </li>

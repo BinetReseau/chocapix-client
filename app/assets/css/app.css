@@ -238,6 +238,13 @@ td.remove {
     -o-animation: fadeOut .5s;
     animation: fadeOut .5s;
 }
+.navbar-default .navbar-nav > li > a.in-meal {
+    color: #337ab7;
+}
+
+.badge-info {
+    background-color: #5bc0de;
+}
 @media screen and (min-width: 768px) {
     .nav-stacked-sm > li {
         float: none;
