@@ -6,7 +6,7 @@
                     <a class="navbar-brand hidden-xs" ui-sref="index">
                         <img alt="Chocapix" src="assets/img/logo.png" style="height: 100%;">
                     </a>
-                    <a class="navbar-brand" ui-sref="bar({bar: bar.id})">
+                    <a class="navbar-brand" ui-sref="bar({bar: bar.id})" title="{{ bar.name }}">
                         <img alt="{{ bar.name }}" ng-src="assets/img/sections/{{ bar.id }}.png" style="height: 200%; margin-top: -0.6em;">
                     </a>
                     <p class="navbar-text" ng-if="false">
