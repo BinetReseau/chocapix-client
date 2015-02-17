@@ -1,9 +1,9 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-2 col-xs-2">
                 <div class="navbar-header">
-                    <a class="navbar-brand" ui-sref="index">
+                    <a class="navbar-brand hidden-xs" ui-sref="index">
                         <img alt="Chocapix" src="assets/img/logo.png" style="height: 100%;">
                     </a>
                     <a class="navbar-brand" ui-sref="bar({bar: bar.id})">
@@ -17,7 +17,7 @@
 
             <!-- When auth -->
             <div ng-show="user.isAuthenticated()">
-                <div class="col-sm-5 col-lg-6" ng-show="user.can('add_transaction')">
+                <div class="col-sm-5 col-lg-6 hidden-xs" ng-show="user.can('add_transaction')">
                     <div class="row" ui-view="form">
                     </div>
                 </div>
@@ -25,7 +25,7 @@
             </div>
 
             <!-- Else -->
-            <div class="col-sm-10" ng-hide="user.isAuthenticated()">
+            <div class="col-sm-10 col-xs-10" ng-hide="user.isAuthenticated()">
                 <div class="row">
                     <form class="navbar-form" role="form" ng-submit="connexion(login)">
                         <input type="text" class="form-control" placeholder="Login" ng-model="login.username">

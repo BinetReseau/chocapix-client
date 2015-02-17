@@ -249,8 +249,14 @@ td.remove {
     .nav-stacked-sm > li {
         float: none;
     }
+    #bar-menu {
+        position: relative;
+    }
 }
 @media screen and (max-width: 768px) {
+    body {
+        padding-bottom: 40px;
+    }
     td.row {
         display: block;
     }
@@ -275,5 +281,14 @@ td.remove {
     .history td.par {
         width: 30px;
         display: block;
+    }
+    #bar-menu {
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        height: 40px;
+        z-index: 3000;
+        background-color: white;
+        border-top: 1px solid #eee;
     }
 }
