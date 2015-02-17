@@ -17,11 +17,11 @@
 
             <!-- When auth -->
             <div ng-show="user.isAuthenticated()">
-                <div class="col-sm-7" ng-show="user.can('add_transaction')">
+                <div class="col-sm-5 col-lg-6" ng-show="user.can('add_transaction')">
                     <div class="row" ui-view="form">
                     </div>
                 </div>
-                <div ng-class="user.can('add_transaction') && 'col-sm-3' || 'col-sm-3 col-sm-offset-7'" ui-view="user-infos"></div>
+                <div ng-class="user.can('add_transaction') && 'col-sm-5 col-lg-4' || 'col-sm-5 col-sm-offset-5 col-lg-4 col-lg-offset-6'" ui-view="user-infos"></div>
             </div>
 
             <!-- Else -->
