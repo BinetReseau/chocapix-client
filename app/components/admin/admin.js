@@ -187,6 +187,22 @@ angular.module('bars.admin', [
                 // TODO: display form errors
             });
         };
+        $scope.$watch('food.name', function (newv, oldv) {
+            if ($scope.food.name_plural == oldv) {
+                $scope.food.name_plural = newv;
+            }
+        });
+        $scope.$watch('food.unit_name', function (newv, oldv) {
+            console.log('ici');
+            if ($scope.food.unit_name_plural == oldv) {
+                $scope.food.unit_name_plural = newv;
+            }
+        });
+        $scope.$watch('food.buy_unit_name', function (newv, oldv) {
+            if ($scope.food.buy_unit_name_plural == oldv) {
+                $scope.food.buy_unit_name_plural = newv;
+            }
+        });
     }
 ])
 .controller('admin.ctrl.food.appro',
@@ -219,7 +235,7 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.account.add',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state',
     function($scope, Account, User, APIAction, $state) {
         $scope.admin.active = 'account';
         $scope.nuser = User.create();
@@ -269,7 +285,7 @@ angular.module('bars.admin', [
                 $scope.passwordBis = '';
                 console.log("Mots de passe différents");
             }
-            
+
         }
     }
 ])
