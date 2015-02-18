@@ -1,17 +1,13 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav nav-tabs" role="tablist">
-                <li ng-class="settings.active == 'credentials' && 'active'">
-                    <a title="Identifiants" ui-sref="bar.settings.credentials({ bar: bar.id })"><span class="glyphicon glyphicon-lock"></span> Identifiants</a>
-                </li>
-                <li>
-                    <a href="">Mes menus</a>
-                </li>
-            </ul>
-            <br />
-            <div class="row" ui-view="">
-            </div>
-        </div>
+<div class="col-sm-12">
+    <ul class="nav nav-tabs" role="tablist">
+        <li ng-class="settings.active == 'credentials' && 'active'">
+            <a title="Identifiants" ui-sref="bar.settings.credentials({ bar: bar.id })"><span class="glyphicon glyphicon-lock"></span> Identifiants</a>
+        </li>
+        <li>
+            <a href="">Mes menus</a>
+        </li>
+    </ul>
+    <br />
+    <div class="row" ui-view="">
     </div>
 </div>
