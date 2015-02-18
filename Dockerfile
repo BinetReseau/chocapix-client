@@ -8,16 +8,18 @@ MAINTAINER Nadrieril "nadrieril@eleves.polytechnique.fr"
 RUN npm install -g npm && \
     npm install -g bower gulp grunt
 
-WORKDIR /app/client
-ADD package.json /app/client/
+RUN mkdir /app
+WORKDIR /app
+ADD package.json /app/
 RUN npm install
-ADD .bowerrc /app/client/
-ADD bower.json /app/client/
+ADD .bowerrc /app/
+ADD bower.json /app/
 RUN bower install --allow-root
 
-ADD . /app/client
+ADD . /app
 RUN sed -i 's/\(APIURL.url\).\+$/\1 = "api";/' app/app.js && \
     gulp build
 
-VOLUME /app/client/dist
-CMD /bin/true
+VOLUME /srv/client
+CMD rm -r /srv/client/*; \
+    cp -TR /app/dist /srv/client
