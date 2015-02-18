@@ -1,14 +1,4 @@
-<!-- <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-offset-7 col-sm-5">
-            <input type="search" class="form-control" ng-model="queryh" placeholder="Rechercher dans l'historique" id="queryh" />
-        </div>
-    </div>
-</div>
-
-<br /><br /> -->
-
-<div class="container-fluid"><div class="row">
+<div class="row">
     <div class="col-sm-12" infinite-scroll="loadMore()" infinite-scroll-distance="3">
         <div ng-repeat="d in history track by d.date">
             <div class="panel panel-default">
@@ -124,4 +114,4 @@
             </div>
         </div>
     </div>
-</div></div>
+</div>

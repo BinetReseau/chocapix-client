@@ -109,13 +109,42 @@ angular.module('bars.api.transaction', [
     $stateProvider
         .state('bar.history', {
             url: "/history",
-            templateUrl: "components/API/transaction/list.html",
+            abstract: true,
+            templateUrl: "components/API/transaction/layout.html",
             controller: ['$scope',
                 function($scope) {
                     $scope.bar.active = 'history';
-                    $scope.history = history;
+                    $scope.state = {active: ''};
             }]
-        });
+        })
+            .state('bar.history.all', {
+                url: "/all",
+                templateUrl: "components/API/transaction/list.html",
+                controller: ['$scope',
+                    function($scope) {
+                        $scope.state.active = 'all';
+                        $scope.history = history;
+                }]
+            })
+            .state('bar.history.appro', {
+                url: "/appro",
+                templateUrl: "components/API/transaction/appro-history.html",
+                controller: ['$scope',
+                    function($scope) {
+                        $scope.state.active = 'appro';
+                        $scope.history = history;
+                }]
+            })
+            .state('bar.history.inventory', {
+                url: "/inventory",
+                templateUrl: "components/API/transaction/inventory-history.html",
+                controller: ['$scope',
+                    function($scope) {
+                        $scope.state.active = 'inventory';
+                        $scope.history = history;
+                }]
+            })
+        ;
 }])
 
 .directive('barsHistory', function() {
