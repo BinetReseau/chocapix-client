@@ -145,6 +145,29 @@ angular.module('bars.api.food', [
         $scope.resetFood();
     }])
 
+.controller('api.ctrl.dir.barsfood',
+    ['$scope', function($scope) {
+        function refresh() {
+            $scope.ratio = 1;
+            if ($scope.in == 'buy') {
+                $scope.ratio *= $scope.food.buy_unit_value;
+            } else if ($scope.in == 'sell') {
+                $scope.ratio *= $scope.food.unit_value;
+            }
+            if ($scope.out == 'buy') {
+                $scope.ratio *= 1/$scope.food.buy_unit_value;
+                $scope.unit_name = $scope.food.buy_unit_name;
+                $scope.unit_name_plural = $scope.food.buy_unit_name_plural;
+            } else if ($scope.out == 'sell') {
+                $scope.ratio *= 1/$scope.food.unit_value;
+                $scope.unit_name = $scope.food.unit_name;
+                $scope.unit_name_plural = $scope.food.unit_name_plural;
+            }
+        }
+        $scope.$watch('food.buy_unit_value', refresh);
+        $scope.$watch('food.unit_value', refresh);
+        refresh();
+    }])
 .directive('barsFood', function() {
     return {
         restrict: 'E',
@@ -156,14 +179,7 @@ angular.module('bars.api.food', [
             out: '=?out'
         },
         templateUrl: 'components/API/food/directive.html',
-        controller: ['$scope', function($scope) {
-            //$scope.unit_name = $scope.unit_name || ($scope.food && $scope.food.unit_name) || '';
-            if ($scope.out == 'buy') {
-                $scope.unit_name = $scope.food.buy_unit_name;
-            } else if ($scope.out == 'sell') {
-                $scope.unit_name = $scope.food.unit_name;
-            }
-        }]
+        controller: 'api.ctrl.dir.barsfood'
     };
 })
 .directive('barsFoodQty', function() {
@@ -176,26 +192,7 @@ angular.module('bars.api.food', [
             out: '=?out'
         },
         templateUrl: 'components/API/food/qty-directive.html',
-        controller: ['$scope', function($scope) {
-            function refresh() {
-                $scope.ratio = 1;
-                if ($scope.in == 'buy') {
-                    $scope.ratio *= $scope.food.buy_unit_value;
-                } else if ($scope.in == 'sell') {
-                    $scope.ratio *= $scope.food.unit_value;
-                }
-                if ($scope.out == 'buy') {
-                    $scope.ratio *= 1/$scope.food.buy_unit_value;
-                    $scope.unit_name = $scope.food.buy_unit_name;
-                } else if ($scope.out == 'sell') {
-                    $scope.ratio *= 1/$scope.food.unit_value;
-                    $scope.unit_name = $scope.food.unit_name;
-                }
-            }
-            $scope.$watch('food.buy_unit_value', refresh);
-            $scope.$watch('food.unit_value', refresh);
-            refresh();
-        }]
+        controller: 'api.ctrl.dir.barsfood'
     };
 })
 .directive('barsFoodPrice', function() {
