@@ -74,7 +74,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Modifier" ng-if="!user.can('change_item')">
+                <tab heading="Modifier" ng-if="user.can('change_item')">
                     <div class="row">
                         <div class="col-sm-9">
                             <form class="form-horizontal" role="form">

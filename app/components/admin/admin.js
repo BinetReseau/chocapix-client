@@ -168,21 +168,28 @@ angular.module('bars.admin', [
 ])
 // Admin food
 .controller('admin.ctrl.food.add',
-    ['$scope', 'api.models.food', 'api.services.action',
-    function($scope, Food, APIAction) {
+    ['$scope', 'api.models.food', 'api.models.fooddetails', 'api.services.action',
+    function($scope, Food, FoodDetails, APIAction) {
         $scope.admin.active = 'food';
         $scope.food = Food.create();
+        $scope.food_details = FoodDetails.create();
         $scope.addFood = function() {
-            $scope.food.buy_unit_value = 1;
+            $scope.food_details.unit_value = 1;
             var qty = $scope.food.qty/$scope.food.unit_value
             $scope.food.qty = 0;
             $scope.food.unit_value = 1/$scope.food.unit_value;
-            $scope.food.bar = 'avironjone'; // [TODO]Adapter bars-django
-            $scope.food.$save().then(function(newFood) {
-                APIAction.appro({
-                    items: [{item: newFood.id, qty: qty}]
+            $scope.food.bar = $scope.bar.id;
+            $scope.food_details.$save().then(function(newFoodDetails) {
+                $scope.food.details = newFoodDetails.id;
+                $scope.food_details.$save().then(function(newFood) {
+                    APIAction.appro({
+                        items: [{item: newFood.id, qty: qty}]
+                    });
+                    $scope.food = Food.create();
+                    $scope.food_details = FoodDetails.create();
+                }, function(errors) {
+                    // TODO: display form errors
                 });
-                $scope.food = Food.create();
             }, function(errors) {
                 // TODO: display form errors
             });
