@@ -44,7 +44,7 @@
                 <div class="col-sm-7">
                     <input type="text" class="form-control" id="funit_value" placeholder="1000" ng-model="food.unit_value">
                 </div>
-                <label class="col-sm-3 control-label">{{ food.unit_name || food.name }}</label>
+                <label class="col-sm-3 control-label">{{ (food.unit_name_plural && food.unit_value > 1) && food.unit_name_plural || (food.unit_name || ((food.name_plural && food.unit_value > 1) && food.name_plural || food.name)) }}</label>
             </div>
             <div class="form-group">
                 <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
@@ -60,7 +60,7 @@
                 <label class="col-sm-3 control-label">{{ food.unit_name || food.name }}</label>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
+                <div class="col-sm-offset-2 col-sm-10">
                     <input type="submit" class="btn btn-primary" value="Ajouter" ng-if="!food.qty" />
                     <input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ food.qty/food.unit_value*food.price|currency }}" ng-if="food.qty" />
                 </div>
