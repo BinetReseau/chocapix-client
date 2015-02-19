@@ -109,10 +109,6 @@ angular.module('bars.api.food', [
             $scope.food_item.deleted = !$scope.food_item.deleted;
             $scope.food_item.$save();
         };
-        $scope.toggleHidden = function() {
-            $scope.food_item.unavailable = !$scope.food_item.unavailable;
-            $scope.food_item.$save();
-        };
 
         var initPrice = food_item.price * food_item.unit_value;
         $scope.computeNewPrice = function() {
