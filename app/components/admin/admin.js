@@ -200,7 +200,6 @@ angular.module('bars.admin', [
             }
         });
         $scope.$watch('food.unit_name', function (newv, oldv) {
-            console.log('ici');
             if ($scope.food.unit_name_plural == oldv) {
                 $scope.food.unit_name_plural = newv;
             }

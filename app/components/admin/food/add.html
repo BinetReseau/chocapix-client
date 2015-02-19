@@ -3,6 +3,12 @@
     <div>
         <form class="form-horizontal" ng-submit="addFood()">
             <div class="form-group">
+                <label for="fbarcode" class="col-sm-2 control-label">Code bar</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="fbarcode" placeholder="" ng-model="food_details.barcode">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="fname" class="col-sm-2 control-label">Nom</label>
                 <div class="col-sm-4">
                   <input type="text" class="form-control" id="fname" placeholder="Pates" ng-model="food_details.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">

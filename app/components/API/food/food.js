@@ -31,7 +31,8 @@ angular.module('bars.api.food', [
                 methods: {
                     'filter': function(s) {
                         return (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                            s == this.barcode);
                     }
                 }
             });
