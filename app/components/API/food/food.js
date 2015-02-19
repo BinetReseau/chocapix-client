@@ -134,9 +134,12 @@ angular.module('bars.api.food', [
         };
         $scope.editFood = function() {
             food_item.name = $scope.newFood_item.name;
+            food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.keywords = $scope.newFood_item.keywords;
+            food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
             food_item.unit_name = $scope.newFood_item.unit_name;
             food_item.buy_unit_name = $scope.newFood_item.buy_unit_name;
+            food_item.buy_unit_name_plural = $scope.newFood_item.buy_unit_name_plural;
             food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
             food_item.buy_unit_value = $scope.newFood_item.new_buy_unit_value * food_item.buy_unit_value;
             food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;

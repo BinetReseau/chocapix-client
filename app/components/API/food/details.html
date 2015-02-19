@@ -79,71 +79,83 @@
                         <div class="col-sm-9">
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label for="name" class="col-sm-4 control-label">Nom</label>
-                                    <div class="col-sm-8">
+                                    <label for="name" class="col-sm-3 control-label">Nom</label>
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control" id="name" ng-model="newFood_item.name">
+                                    </div>
+                                    <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
+                                    <div class="col-sm-3">
+                                      <input type="text" class="form-control" id="fname_plural" placeholder="" ng-model="newFood_item.name_plural">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="keywords" class="col-sm-4 control-label">Mots clés</label>
-                                    <div class="col-sm-8">
+                                    <label for="keywords" class="col-sm-3 control-label">Mots clés</label>
+                                    <div class="col-sm-9">
                                         <input type="text" class="form-control" id="keywords" ng-model="newFood_item.keywords">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="buy_unit" class="col-sm-4 control-label">Unité d'achat</label>
-                                    <div class="col-sm-8">
+                                    <label for="buy_unit" class="col-sm-3 control-label">Unité d'achat</label>
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control" id="buy_unit" ng-model="newFood_item.buy_unit_name" placeholder="Lorsque le bar achète l'aliment">
+                                    </div>
+                                    <label for="fbuy_unit_plural" class="col-sm-2 control-label">Pluriel</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="fbuy_unit_plural" placeholder="" ng-model="newFood_item.buy_unit_name_plural" >
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="unit" class="col-sm-4 control-label">Unité de vente</label>
-                                    <div class="col-sm-8">
+                                    <label for="unit" class="col-sm-3 control-label">Unité de vente</label>
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control" id="unit" ng-model="newFood_item.unit_name" ng-change="computeNewPrice()" placeholder="Lorsque qu'un élève achète l'aliment au bar">
+                                    </div>
+                                    <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="funit_plural" placeholder="" ng-model="newFood_item.unit_name_plural">
                                     </div>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.buy_unit_name != food_item.buy_unit_name">
-                                    <label for="ratioNewBuyUnit" class="col-sm-4 control-label">1 {{ newFood_item.buy_unit_name || newFood_item.name }} = </label>
+                                    <label for="ratioNewBuyUnit" class="col-sm-3 control-label">1 {{ newFood_item.buy_unit_name || newFood_item.name }} = </label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" id="ratioNewBuyUnit" ng-model="newFood_item.new_buy_unit_value">
                                     </div>
                                     <label class="col-sm-2 control-label">{{ food_item.buy_unit_name || food_item.name }}</label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.unit_name != food_item.unit_name">
-                                    <label for="ratioNewUnit" class="col-sm-4 control-label">1 {{ newFood_item.unit_name || newFood_item.name }} = </label>
+                                    <label for="ratioNewUnit" class="col-sm-3 control-label">1 {{ newFood_item.unit_name || newFood_item.name }} = </label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" id="ratioNewUnit" ng-model="newFood_item.new_unit_value" ng-change="computeNewPrice()">
                                     </div>
                                     <label class="col-sm-2 control-label">{{ food_item.unit_name || food_item.name }}</label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price" class="col-sm-4 control-label">Prix de vente</label>
-                                    <div class="col-sm-6">
+                                    <label for="price" class="col-sm-3 control-label">Prix de vente</label>
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control" id="price" ng-model="newFood_item.price">
                                     </div>
-                                    <label class="col-sm-2 control-label">€ / {{ newFood_item.unit_name || newFood_item.name }}</label>
+                                    <label class="col-sm-4 control-label">€ / {{ newFood_item.unit_name || newFood_item.name }}</label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.price != (food_item.price*food_item.unit_value)">
-                                    <label class="col-sm-6 control-label">Ancienne valeur présente dans le bar</label>
-                                    <label class="col-sm-6 control-label">
+                                    <label class="col-sm-8 control-label">Ancienne valeur présente dans le bar</label>
+                                    <label class="col-sm-4 control-label">
                                         <span class="label label-info">{{ food_item.qty*food_item.price | currency }}</span>
                                     </label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.price != (food_item.price*food_item.unit_value)">
-                                    <label class="col-sm-6 control-label">Nouvelle valeur présente dans le bar</label>
-                                    <label class="col-sm-6 control-label">
+                                    <label class="col-sm-8 control-label">Nouvelle valeur présente dans le bar</label>
+                                    <label class="col-sm-4 control-label">
                                         <span class="label label-info">{{ food_item.qty/food_item.unit_value*newFood_item.price/newFood_item.new_unit_value | currency }}</span>
                                     </label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.unit_name != food_item.unit_name">
-                                    <label class="col-sm-6 control-label">Ancienne quantité présente dans le bar</label>
-                                    <label class="col-sm-6 control-label">
+                                    <label class="col-sm-8 control-label">Ancienne quantité présente dans le bar</label>
+                                    <label class="col-sm-4 control-label">
                                         <span class="label label-info">{{ food_item.qty/food_item.unit_value | number }} {{ food_item.unit_name }}</span>
                                     </label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.unit_name != food_item.unit_name">
-                                    <label class="col-sm-6 control-label">Nouvelle quantité présente dans le bar</label>
-                                    <label class="col-sm-6 control-label">
+                                    <label class="col-sm-8 control-label">Nouvelle quantité présente dans le bar</label>
+                                    <label class="col-sm-4 control-label">
                                         <span class="label label-info">{{ food_item.qty/newFood_item.new_unit_value/food_item.unit_value | number }} {{ newFood_item.unit_name }}</span>
                                     </label>
                                 </div>
@@ -170,6 +182,6 @@
             </tabset>
         </div>
     </div>
-    
+
     <bars:history filter="{item: food_item.id}"></bars:history>
 </div>
