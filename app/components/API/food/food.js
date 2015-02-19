@@ -159,14 +159,14 @@ angular.module('bars.api.food', [
         function refresh() {
             $scope.ratio = 1;
             if ($scope.in == 'buy') {
-                $scope.ratio *= $scope.food.buy_unit_value;
+                $scope.ratio *= $scope.food.details.unit_value;
             } else if ($scope.in == 'sell') {
                 $scope.ratio *= $scope.food.unit_value;
             }
             if ($scope.out == 'buy') {
-                $scope.ratio *= 1/$scope.food.buy_unit_value;
-                $scope.unit_name = $scope.food.buy_unit_name;
-                $scope.unit_name_plural = $scope.food.buy_unit_name_plural;
+                $scope.ratio *= 1/$scope.food.details.unit_value;
+                $scope.unit_name = $scope.food.details.unit_name;
+                $scope.unit_name_plural = $scope.food.details.unit_name_plural;
             } else if ($scope.out == 'sell') {
                 $scope.ratio *= 1/$scope.food.unit_value;
                 $scope.unit_name = $scope.food.unit_name;

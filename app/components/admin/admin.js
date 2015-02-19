@@ -447,19 +447,19 @@ function($scope, account_list) {
             },
             addItem: function(item, qty) {
                 if (!qty) {
-                    qty = item.buy_unit_value;
+                    qty = item.details.unit_value;
                 }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.qty += qty/item.buy_unit_value;
+                    other.qty += qty/item.details.unit_value;
                 } else {
                     this.itemsList.push({
                         item: item,
-                        qty: qty/item.buy_unit_value,
-                        old_qty: qty/item.buy_unit_value,
-                        unit_value: item.buy_unit_value,
-                        old_unit_value: item.buy_unit_value,
-                        price: item.buy_price * qty * item.buy_unit_value});
+                        qty: qty/item.details.unit_value,
+                        old_qty: qty/item.details.unit_value,
+                        unit_value: item.details.unit_value,
+                        old_unit_value: item.details.unit_value,
+                        price: item.buy_price * qty * item.details.unit_value});
                 }
                 this.recomputeAmount();
                 this.itemToAdd = "";
@@ -506,7 +506,7 @@ function (Food, APIAction) {
             if (other) {
                 other.qty += qty/item.unit_value;
             } else {
-                this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.buy_unit_value });
+                this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.details.unit_value });
             }
             this.itemToAdd = "";
         },
