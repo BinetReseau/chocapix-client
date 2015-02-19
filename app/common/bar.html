@@ -37,7 +37,7 @@
                             <span class="glyphicon glyphicon-dashboard"></span><span class="hidden-xs"> Administration</span>
                         </a>
                     </li>
-                    <li ng-class="bar.active == 'settings' && 'active'">
+                    <li ng-class="bar.active == 'settings' && 'active'" ng-if="user.isAuthenticated()">
                         <a title="Réglages" ui-sref="bar.settings.credentials({ bar: bar.id })">
                             <span class="glyphicon glyphicon-wrench"></span><span class="hidden-xs"> Préférences</span>
                         </a>
