@@ -20,6 +20,11 @@ angular.module('bars.main', [
                     Food.reload();
                     return Food.all();
                 }],
+                foodsg: ['api.models.fooddetails', function(FoodDetails) {
+                    FoodDetails.clear();
+                    FoodDetails.reload();
+                    return FoodDetails.all();
+                }],
                 accounts: ['api.models.account', function(Account) {
                     Account.clear();
                     Account.reload();

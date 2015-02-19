@@ -10,11 +10,28 @@ angular.module('bars.api.food', [
                 url: 'item',
                 type: "Item",
                 structure: {
-                    'bar': 'Bar'
+                    'bar': 'Bar',
+                    'details': "ItemDetails"
                 },
                 methods: {
                     'filter': function(s) {
                         return !this.deleted && (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                    }
+                }
+            });
+    }])
+.factory('api.models.fooddetails', ['APIModel',
+    function(APIModel) {
+        return new APIModel({
+                url: 'itemdetails',
+                type: "ItemDetails",
+                structure: {
+
+                },
+                methods: {
+                    'filter': function(s) {
+                        return (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
                             _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
