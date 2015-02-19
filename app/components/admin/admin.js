@@ -22,6 +22,12 @@ angular.module('bars.admin', [
                         }],
                         food_list: ['api.models.food', function(Food) {
                             return Food.all();
+                        }],
+                        bar_account: ['api.models.account', function(Account) {
+                            return Account.ofUser(6);
+                        }],
+                        bar: ['api.models.bar', '$stateParams', function(Bar, $stateParams) {
+                            return Bar.get($stateParams.bar);
                         }]
                     }
                 }
@@ -136,8 +142,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.home',
-    ['$scope', 'account_list', 'food_list',
-    function($scope, account_list, food_list) {
+    ['$scope', 'account_list', 'food_list', 'bar_account', 'bar'
+    function($scope, account_list, food_list, bar_account, bar) {
         $scope.admin.active = 'dashboard';
         new Morris.Line({
             // ID of the element in which to draw the chart.
@@ -188,6 +194,32 @@ angular.module('bars.admin', [
             return total;
         }, 0);
         $scope.money = foodValue + accountsValue;
+
+        if (bar_account.length == 1) {
+            $scope.bar_account = bar_account[0];
+        }
+
+        function dateDiff(date1, date2){
+            var diff = {}                           // Initialisation du retour
+            var tmp = date2 - date1;
+         
+            tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
+            diff.sec = tmp % 60;                    // Extraction du nombre de secondes
+         
+            tmp = Math.floor((tmp-diff.sec)/60);    // Nombre de minutes (partie entière)
+            diff.min = tmp % 60;                    // Extraction du nombre de minutes
+         
+            tmp = Math.floor((tmp-diff.min)/60);    // Nombre d'heures (entières)
+            diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+             
+            tmp = Math.floor((tmp-diff.hour)/24);   // Nombre de jours restants
+            diff.day = tmp;
+             
+            return diff.day;
+        }
+        var now = new Date();
+        var approDate = new Date(bar.next_scheduled_appro);
+        $scope.nbDaysBeforeAppro = (now.getHours() >= approDate.getHours()) ? dateDiff(approDate, now) + 1 : dateDiff(approDate, now);
     }
 ])
 // Admin food
