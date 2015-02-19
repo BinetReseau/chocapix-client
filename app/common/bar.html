@@ -32,7 +32,7 @@
                             <span class="glyphicon glyphicon-cutlery"></span><span class="hidden-xs"> Aliments</span>
                         </a>
                     </li>
-                    <li ng-class="bar.active == 'admin' && 'active'" ng-if="user.can('add_news') || user.can('add_approtransaction') || user.can('add_item') || user.can('add_inventorytransaction') || user.can('add_account') || user.can('change_news')">
+                    <li ng-class="bar.active == 'admin' && 'active'" ng-iff="user.can('add_news') || user.can('add_approtransaction') || user.can('add_item') || user.can('add_inventorytransaction') || user.can('add_account') || user.can('change_news')">
                         <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
                             <span class="glyphicon glyphicon-dashboard"></span><span class="hidden-xs"> Administration</span>
                         </a>

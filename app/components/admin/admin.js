@@ -181,7 +181,7 @@ angular.module('bars.admin', [
             $scope.food.bar = $scope.bar.id;
             $scope.food_details.$save().then(function(newFoodDetails) {
                 $scope.food.details = newFoodDetails.id;
-                $scope.food_details.$save().then(function(newFood) {
+                $scope.food.$save().then(function(newFood) {
                     APIAction.appro({
                         items: [{item: newFood.id, qty: qty}]
                     });
@@ -194,9 +194,9 @@ angular.module('bars.admin', [
                 // TODO: display form errors
             });
         };
-        $scope.$watch('food.name', function (newv, oldv) {
-            if ($scope.food.name_plural == oldv) {
-                $scope.food.name_plural = newv;
+        $scope.$watch('food_details.name', function (newv, oldv) {
+            if ($scope.food_details.name_plural == oldv) {
+                $scope.food_details.name_plural = newv;
             }
         });
         $scope.$watch('food.unit_name', function (newv, oldv) {
@@ -205,9 +205,9 @@ angular.module('bars.admin', [
                 $scope.food.unit_name_plural = newv;
             }
         });
-        $scope.$watch('food.buy_unit_name', function (newv, oldv) {
-            if ($scope.food.buy_unit_name_plural == oldv) {
-                $scope.food.buy_unit_name_plural = newv;
+        $scope.$watch('food_details.unit_name', function (newv, oldv) {
+            if ($scope.food_details.unit_name_plural == oldv) {
+                $scope.food_details.unit_name_plural = newv;
             }
         });
     }

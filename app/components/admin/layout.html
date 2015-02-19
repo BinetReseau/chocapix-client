@@ -8,9 +8,9 @@
                 <span class="glyphicon glyphicon-cutlery"></span> <span class="hidden-xs">Aliments</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_item')">Ajouter un aliment</a></li>
-                <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a></li>
-                <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
+                <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-iff="user.can('add_item')">Ajouter un aliment</a></li>
+                <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-iff="user.can('add_approtransaction')">Faire une appro</a></li>
+                <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-iff="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                 <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })">Graphiques</a></li>
             </ul>
         </li>
