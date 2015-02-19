@@ -150,13 +150,13 @@
                                 <div class="form-group" ng-show="newFood_item.unit_name != food_item.unit_name">
                                     <label class="col-sm-8 control-label">Ancienne quantité présente dans le bar</label>
                                     <label class="col-sm-4 control-label">
-                                        <span class="label label-info">{{ food_item.qty/food_item.unit_value | number }} {{ food_item.unit_name }}</span>
+                                        <span class="label label-info"><bars:food:qty food="food_item" qty="food_item.qty" out="'sell'"></bars:food:qty></span>
                                     </label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.unit_name != food_item.unit_name">
                                     <label class="col-sm-8 control-label">Nouvelle quantité présente dans le bar</label>
                                     <label class="col-sm-4 control-label">
-                                        <span class="label label-info">{{ food_item.qty/newFood_item.new_unit_value/food_item.unit_value | number }} {{ newFood_item.unit_name }}</span>
+                                        <span class="label label-info">{{ food_item.qty/food_item.unit_value/newFood_item.new_unit_value | number:2 }} {{ (food_item.qty/newFood_item.new_unit_value/food_item.unit_value > 1 && newFood_item.unit_name_plural) && newFood_item.unit_name_plural || newFood_item.unit_name }}</span>
                                     </label>
                                 </div>
                             </form>
