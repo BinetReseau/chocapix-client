@@ -23,12 +23,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-group-item">
+                <div class="list-group-item" ng-if="user.account.money < bar.infos.money_warning_threshold">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Prochain chèque</span></div>
                         <div class="col-sm-5 text-right">
                             <span class="h4">
-                                <span class="label label-success">2 semaines</span>
+                                <span class="label animated" ng-class="user.account.money > 0 && 'label-warning shake' || 'label-danger tada'">Très vite !</span>
                             </span>
                         </div>
                     </div>

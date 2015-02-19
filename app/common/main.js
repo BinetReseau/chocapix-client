@@ -97,6 +97,7 @@ angular.module('bars.main', [
             search: '',
             foods: foods,
             active: 'index',
+            infos: bar
         };
 
         $scope.user = AuthUser;
@@ -104,8 +105,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news',
-    function($scope, news) {
+    ['$scope','news', 'account', 
+    function($scope, news, bar, account) {
         $scope.bar.active = 'index';
         $scope.last_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified').pop();
@@ -114,8 +115,8 @@ angular.module('bars.main', [
         document.getElementById("q_alim").focus();
     }])
 .controller(
-    'main.ctrl.header',
-    ['$scope','auth.user',
+    'main.ctrl.header', 
+    ['$scope','auth.user', 
     function($scope, AuthUser) {
         $scope.login = {
             username: '',
@@ -141,7 +142,7 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'roles',
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'roles',  
     function($scope, AuthUser, Account, User, Role, Meal, user, account, roles) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
