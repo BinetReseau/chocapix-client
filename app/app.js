@@ -37,17 +37,25 @@ angular.module('barsApp', [
         $httpProvider.interceptors.push('auth.interceptor');
 }])
 
-.run(function(amMoment) {
-    moment.locale('fr', {
-        calendar : {
-            lastDay : '[Hier]',
-            sameDay : "[Aujourd'hui]",
-            nextDay : '[Demain]',
-            lastWeek : 'dddd [dernier]',
-            nextWeek : 'dddd [prochain]',
-            sameElse : 'L'
-        }
-    });
-    amMoment.changeLocale('fr');
-})
+.run(['amMoment', 'auth.user', '$rootScope',
+    function(amMoment, AuthUser, $rootScope) {
+        moment.locale('fr', {
+            calendar : {
+                lastDay : '[Hier]',
+                sameDay : "[Aujourd'hui]",
+                nextDay : '[Demain]',
+                lastWeek : 'dddd [dernier]',
+                nextWeek : 'dddd [prochain]',
+                sameElse : 'L'
+            }
+        });
+        amMoment.changeLocale('fr');
+
+        $(document).keyup(function(e) {
+            if (e.keyCode == 27) {
+                AuthUser.logout();
+                $rootScope.$apply();
+            }
+        });
+}])
 ;
