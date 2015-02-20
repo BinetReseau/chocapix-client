@@ -14,7 +14,7 @@
                 </select>
                 <input type="number" class="form-control number" step="any" ng-model="query_qty" select-on-click />
                 <div class="checkbox unit">
-                    {{ food_item.unit_name == '' && (food_item.details.name|affs:query_qty) || food_item.unit_name }}
+                    {{ (food_item.unit_name_plural && query_qty > 1) && food_item.unit_name_plural || (food_item.unit_name || ((food_item.details.name_plural && query_qty > 1) && food_item.details.name_plural || food_item.details.name)) }}
                 </div>
                 <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price*food_item.unit_value) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
             </form>

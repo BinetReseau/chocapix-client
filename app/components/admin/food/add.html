@@ -63,7 +63,7 @@
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="fqty" placeholder="Quantité initiale" value="0" ng-model="food.qty">
                 </div>
-                <label class="col-sm-3 control-label">{{ food.unit_name || food_details.name }}</label>
+                <label class="col-sm-3 control-label">{{ (food.unit_name_plural && food.qty > 1) && food.unit_name_plural || (food.unit_name || ((food_details.name_plural && food.qty > 1) && food_details.name_plural || food_details.name)) }}</label>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
