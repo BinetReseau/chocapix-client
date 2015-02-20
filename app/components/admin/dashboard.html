@@ -1,7 +1,8 @@
 <div class="col-sm-12 col-md-6 col-lg-4">
     <h1 class="text-center">
-        <span class="label label-success">+ 837.45€</span><br />
-        <small>Félicitations, le bar est en positif</small>
+        <span class="label" ng-class="bar_account.money >= 0 && 'label-success' || 'label-danger'">{{ bar_account.money >= 0 && '+' || '' }} {{ bar_account.money | currency }}</span><br />
+        <small ng-if="bar_account.money >= 0">Félicitations, le bar est en positif</small>
+        <small ng-if="bar_account.money < 0">Le bar est en déficit !</small>
     </h1>
     <br />
     <div class="row">

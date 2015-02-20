@@ -22,6 +22,9 @@ angular.module('bars.admin', [
                         }],
                         food_list: ['api.models.food', function(Food) {
                             return Food.all();
+                        }],
+                        bar_account: ['api.models.account', function(Account) {
+                            return Account.ofUser(6);
                         }]
                     }
                 }
@@ -135,8 +138,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.home',
-    ['$scope', 'account_list', 'food_list',
-    function($scope, account_list, food_list) {
+    ['$scope', 'account_list', 'food_list', 'bar_account',
+    function($scope, account_list, food_list, bar_account) {
         $scope.admin.active = 'dashboard';
         new Morris.Line({
             // ID of the element in which to draw the chart.
@@ -169,6 +172,10 @@ angular.module('bars.admin', [
             return o.qty <= 0;
         }).length;
         $scope.ratioFoodNegativ = $scope.nbFoodNegativ/food_list.length;
+
+        if (bar_account.length == 1) {
+            $scope.bar_account = bar_account[0];
+        }
     }
 ])
 // Admin food
@@ -402,7 +409,7 @@ function($scope, account_list) {
 )
 // Admin settings
 .controller('admin.ctrl.settings',
-    ['$scope', 'api.models.bar', 'bar', 
+    ['$scope', 'api.models.bar', 'bar',
     function($scope, APIBar, bar) {
         $scope.admin.active = 'settings';
         // Seuil d'alerte
