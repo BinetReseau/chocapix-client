@@ -27,8 +27,7 @@ angular.module('barsApp', [
 ])
 
 .config(['APIURLProvider', function(APIURL) {
-    // APIURL.url = "http://bars.nadrieril.fr/api";
-    APIURL.url = "http://129.104.201.62:8010/api";
+    APIURL.url = "http://bars.nadrieril.fr/api";
     // APIURL.url = "http://127.0.0.1:8000";
 }])
 
