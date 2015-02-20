@@ -23,9 +23,9 @@ angular.module('bars.meal', [
     return $tooltip('popoverMeal', 'popover', 'click');
 }])
 .factory('bars.meal',
-    ['api.models.food', 'api.models.account', 'api.services.action',
-    function (Food, Account, APIAction) {
-        return {
+    ['$rootScope', 'api.models.food', 'api.models.account', 'api.services.action', 'auth.user',
+    function ($rootScope, Food, Account, APIAction, AuthUser) {
+        var meal = {
             customersList: [],
             itemsList: [],
             totalPrice: 0,
@@ -110,6 +110,15 @@ angular.module('bars.meal', [
                 return this.customersList.length > 1 || this.itemsList.length > 0;
             }
         };
+
+        $rootScope.$on('auth.hasLoggedIn', function () {
+            meal.account = AuthUser.account;
+            meal.init();
+        });
+        $rootScope.$on('auth.hasLoggedOut', function () {
+            meal.init();
+        });
+        return meal;
     }]
 )
 ;
