@@ -34,6 +34,7 @@ angular.module('bars.admin', [
         .state('bar.admin.food', {
             abstract: true,
             url: "/food",
+            controller: 'admin.ctrl.food',
             template: '<ui-view />'
         })
             .state('bar.admin.food.add', {
@@ -179,27 +180,97 @@ angular.module('bars.admin', [
     }
 ])
 // Admin food
+.controller('admin.ctrl.food',
+    ['$scope', function ($scope) {
+        $scope.admin.active = 'food';
+    }]
+)
 .controller('admin.ctrl.food.add',
     ['$scope', 'api.models.food', 'api.models.fooddetails', 'api.services.action',
     function($scope, Food, FoodDetails, APIAction) {
-        $scope.admin.active = 'food';
         $scope.food = Food.create();
         $scope.food_details = FoodDetails.create();
+        $scope.food.bar = $scope.bar.id;
+        var add = {};
+        $scope.add = add;
         $scope.addFood = function() {
+            var qty = $scope.food.qty/$scope.food.unit_value;
+            add.go().then(function(newFood) {
+                APIAction.appro({
+                    items: [{item: newFood.id, qty: qty}]
+                });
+            }, function(errors) {
+                // TODO: display form errors
+            });
+        };
+    }
+])
+.controller('admin.ctrl.food.appro',
+    ['$scope', '$modal', 'api.models.food', 'admin.appro',
+    function($scope, $modal, Food, Appro) {
+        $scope.appro = Appro;
+
+        $scope.newItem = function (e) {
+            if (e.which === 13) {
+                if (!isNaN(Appro.itemToAdd)) {
+                    var modalNewFood = $modal.open({
+                        templateUrl: 'components/admin/food/modalAdd.html',
+                        controller: 'admin.ctrl.food.addModal',
+                        size: 'lg',
+                        resolve: {
+                            bar: function () {
+                                return $scope.bar.id;
+                            },
+                            barcode: function () {
+                                return Appro.itemToAdd;
+                            }
+                        }
+                    });
+                    modalNewFood.result.then(function (newFood) {
+                            Appro.addItem(newFood);
+                        }, function () {
+                            
+                    });
+                }
+            }
+        };
+    }
+])
+.controller('admin.ctrl.food.addModal',
+    ['$scope', '$modalInstance', 'api.models.food', 'api.models.fooddetails', 'bar', 'barcode',
+    function($scope, $modalInstance, Food, FoodDetails, bar, barcode) {
+        $scope.food = Food.create();
+        $scope.food_details = FoodDetails.create();
+        $scope.food.bar = bar;
+        $scope.food_details.barcode = barcode;
+        var add = {};
+        $scope.add = add;
+        $scope.addFood = function() {
+            add.go().then(function(newFood) {
+                $modalInstance.close(newFood);
+            }, function(errors) {
+                // TODO: display form errors
+            });
+        };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }
+])
+.controller('admin.ctrl.dir.barsadminfoodadd',
+    ['$scope', 'api.models.food', 'api.models.fooddetails', 'api.services.action',
+    function($scope, Food, FoodDetails, APIAction) {
+        $scope.add.go = function() {
             $scope.food_details.unit_value = 1;
-            var qty = $scope.food.qty/$scope.food.unit_value
             $scope.food.qty = 0;
             $scope.food.unit_value = 1/$scope.food.unit_value;
-            $scope.food.bar = $scope.bar.id;
-            $scope.food_details.$save().then(function(newFoodDetails) {
+            return $scope.food_details.$save().then(function(newFoodDetails) {
                 $scope.food.details = newFoodDetails.id;
                 $scope.food.buy_price = $scope.food.price;
-                $scope.food.$save().then(function(newFood) {
-                    APIAction.appro({
-                        items: [{item: newFood.id, qty: qty}]
-                    });
+                return $scope.food.$save().then(function(newFood) {
                     $scope.food = Food.create();
                     $scope.food_details = FoodDetails.create();
+                    return newFood;
                 }, function(errors) {
                     // TODO: display form errors
                 });
@@ -224,13 +295,18 @@ angular.module('bars.admin', [
         });
     }
 ])
-.controller('admin.ctrl.food.appro',
-    ['$scope', 'api.models.food', 'admin.appro',
-    function($scope, Food, Appro) {
-        $scope.admin.active = 'food';
-        $scope.appro = Appro;
-    }
-])
+.directive('barsAdminFoodAdd', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            food: '=food',
+            food_details: '=foodDetails',
+            add: '=add'
+        },
+        templateUrl: 'components/admin/food/formFood.html',
+        controller: 'admin.ctrl.dir.barsadminfoodadd'
+    };
+})
 .controller('admin.ctrl.food.inventory',
     ['$scope', 'api.models.food', 'admin.inventory',
     function($scope, Food, Inventory) {

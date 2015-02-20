@@ -1,0 +1,56 @@
+<div class="form-group">
+    <label for="fbarcode" class="col-sm-2 control-label">Code bar</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="fbarcode" placeholder="" ng-model="food_details.barcode">
+    </div>
+</div>
+<div class="form-group">
+    <label for="fname" class="col-sm-2 control-label">Nom</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="fname" placeholder="Pates" ng-model="food_details.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
+    </div>
+    <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="fname_plural" placeholder="" ng-model="food_details.name_plural" tooltip="Uniquement si l'aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
+    </div>
+</div>
+<div class="form-group">
+    <label for="fbuy_unit" class="col-sm-2 control-label">Unité d'achat</label>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="fbuy_unit" placeholder="kg" ng-model="food_details.unit_name" tooltip="L'unité des appros" tooltip-trigger="focus" tooltip-placement="bottom">
+    </div>
+    <label for="fbuy_unit_plural" class="col-sm-2 control-label">Pluriel</label>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="fbuy_unit_plural" placeholder="" ng-model="food_details.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom">
+    </div>
+</div>
+<div class="form-group">
+    <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="funit" placeholder="g" ng-model="food.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom">
+    </div>
+    <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="funit_plural" placeholder="" ng-model="food.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom">
+    </div>
+</div>
+<div class="form-group">
+    <label for="fprice" class="col-sm-2 control-label">Prix</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="food.price">
+    </div>
+    <label class="col-sm-3 control-label">€ / {{ food_details.unit_name }}</label>
+</div>
+<div class="form-group">
+    <label for="funit_value" class="col-sm-2 control-label">1 {{ food_details.unit_name || food_details.name }} = </label>
+    <div class="col-sm-7">
+        <input type="text" class="form-control" id="funit_value" placeholder="1000" ng-model="food.unit_value">
+    </div>
+    <label class="col-sm-3 control-label">{{ (food.unit_name_plural && food.unit_value > 1) && food.unit_name_plural || (food.unit_name || ((food_details.name_plural && food.unit_value > 1) && food_details.name_plural || food_details.name)) }}</label>
+</div>
+<div class="form-group">
+    <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-model="food_details.keywords">
+    </div>
+</div>
