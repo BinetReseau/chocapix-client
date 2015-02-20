@@ -38,8 +38,8 @@ angular.module('bars.auth', [
 }])
 
 .factory('auth.user',
-    ['auth.service', '$rootScope', '$q', 'api.models.account', 'api.models.user', 'api.models.role',
-    function (AuthService, $rootScope, $q, Account, User, Role) {
+    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role',
+    function (AuthService, $rootScope, $q, $timeout, Account, User, Role) {
         return {
             user: null,
             account: null,
@@ -60,6 +60,9 @@ angular.module('bars.auth', [
 
                                 self.account = account;
                                 $rootScope.$broadcast('auth.hasLoggedIn');
+                                $timeout(function() {
+                                    document.getElementById("q_alim").focus();
+                                }, 300);
                             }, function (error) {
                                 self.account = null;
                             });
@@ -83,6 +86,10 @@ angular.module('bars.auth', [
                 this.roles = [];
                 this.perms = [];
                 $rootScope.$broadcast('auth.hasLoggedOut');
+
+                $timeout(function() {
+                    document.getElementById("floginc").focus();
+                }, 300);
             },
             isAuthenticated: function() {
                 return AuthService.isAuthenticated();

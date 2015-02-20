@@ -110,18 +110,22 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news', 'account', 
-    function($scope, news, bar, account) {
+    ['$scope','news', 'auth.user',
+    function($scope, news, AuthUser) {
         $scope.bar.active = 'index';
         $scope.last_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified').pop();
         };
 
-        document.getElementById("q_alim").focus();
+        if (AuthUser.isAuthenticated()) {
+            document.getElementById("q_alim").focus();
+        } else {
+            document.getElementById("floginc").focus();
+        }
     }])
 .controller(
-    'main.ctrl.header', 
-    ['$scope','auth.user', 
+    'main.ctrl.header',
+    ['$scope','auth.user',
     function($scope, AuthUser) {
         $scope.login = {
             username: '',
@@ -135,7 +139,6 @@ angular.module('bars.main', [
                 function(user) {
                     $scope.login = {username: '', password: ''};
                     $scope.inLogin = false;
-                    document.getElementById("q_alim").focus();
                 }, function(error) {
                     $scope.loginError = true;
                     $scope.login.password = '';
@@ -147,7 +150,7 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'roles',  
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'roles',
     function($scope, AuthUser, Account, User, Role, Meal, user, account, roles) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
