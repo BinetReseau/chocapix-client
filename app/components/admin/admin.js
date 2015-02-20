@@ -193,6 +193,7 @@ angular.module('bars.admin', [
             $scope.food.bar = $scope.bar.id;
             $scope.food_details.$save().then(function(newFoodDetails) {
                 $scope.food.details = newFoodDetails.id;
+                $scope.food.buy_price = $scope.food.price;
                 $scope.food.$save().then(function(newFood) {
                     APIAction.appro({
                         items: [{item: newFood.id, qty: qty}]
@@ -227,7 +228,6 @@ angular.module('bars.admin', [
     ['$scope', 'api.models.food', 'admin.appro',
     function($scope, Food, Appro) {
         $scope.admin.active = 'food';
-
         $scope.appro = Appro;
     }
 ])
@@ -437,6 +437,7 @@ function($scope, account_list) {
 .factory('admin.appro',
     ['api.models.food', 'api.services.action',
     function (Food, APIAction) {
+        var nb = 0;
         return {
             itemsList: [],
             totalPrice: 0,
@@ -470,6 +471,7 @@ function($scope, account_list) {
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
                     other.qty += qty/item.details.unit_value;
+                    other.nb = nb++;
                 } else {
                     this.itemsList.push({
                         item: item,
@@ -477,7 +479,8 @@ function($scope, account_list) {
                         old_qty: qty/item.details.unit_value,
                         unit_value: item.details.unit_value,
                         old_unit_value: item.details.unit_value,
-                        price: item.buy_price * qty * item.details.unit_value});
+                        price: item.buy_price * qty * item.details.unit_value,
+                        nb: nb++});
                 }
                 this.recomputeAmount();
                 this.itemToAdd = "";
@@ -508,6 +511,7 @@ function($scope, account_list) {
 .factory('admin.inventory',
 ['api.models.food', 'api.services.action',
 function (Food, APIAction) {
+    var nb = 0;
     return {
         itemsList: [],
         inRequest: false,
@@ -523,8 +527,9 @@ function (Food, APIAction) {
             var other = _.find(this.itemsList, {'item': item});
             if (other) {
                 other.qty += qty/item.unit_value;
+                other.nb = nb++;
             } else {
-                this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.details.unit_value });
+                this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.details.unit_value, nb: nb++ });
             }
             this.itemToAdd = "";
         },

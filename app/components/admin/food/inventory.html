@@ -26,7 +26,7 @@
                     <th>Quantité théorique</th>
                     <th> </th>
                 </tr>
-                <tr ng-repeat="item in inventory.itemsList | orderBy:'':'true' | filter:searchi" ng-class="item.item.deleted && 'del'">
+                <tr ng-repeat="item in inventory.itemsList | orderBy:'nb':'true' | filter:searchi" ng-class="item.item.deleted && 'del'">
                     <td class="vmiddle"><bars:food food="item.item"></bars:food></td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" />

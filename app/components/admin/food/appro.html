@@ -34,7 +34,7 @@
                     <th>Total</th>
                     <th> </th>
                 </tr>
-                <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'':'true' | filter:searchl" ng-class="item.item.deleted && 'del'">
+                <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'nb':true | filter:searchl" ng-class="item.item.deleted && 'del'">
                     <td class="vmiddle"><bars:food food="item.item"></bars:food></td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" />
