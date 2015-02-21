@@ -70,7 +70,7 @@ angular.module('bars.api.account', [
     }])
 .controller('api.ctrl.account_list',
     ['$scope', 'account_list', function($scope, account_list) {
-        $scope.account_list = account_list;
+        $scope.account_list = _.filter(account_list, function(a) { var u = a.owner; return u.full_name != 'Bar' || u.username != 'bar'; });
         $scope.list_order = 'owner.full_name';
         $scope.reverse = false;
         $scope.searchl = "";
