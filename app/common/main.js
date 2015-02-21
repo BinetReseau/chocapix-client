@@ -122,6 +122,9 @@ angular.module('bars.main', [
         } else {
             document.getElementById("floginc").focus();
         }
+        var now = new Date();
+        var dateAppro = new Date($scope.bar.infos.next_scheduled_appro);
+        $scope.thereIsAnAppro = dateAppro >= now;
     }])
 .controller(
     'main.ctrl.header',

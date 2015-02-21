@@ -1,0 +1,20 @@
+<div class="col-sm-12">
+    <h3>Définir la date de la prochaine appro</h3>
+    <div>
+        <form class="form-inline" ng-submit="saveNextAppro()">
+            La prochaine appro aura lieu le 
+            <div class="datetimepicker-wrapper input-group">
+                <input type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-click="open($event)" is-open="opened" min-date="now" starting-day="1" ng-model="nextAppro" date-format="EEEE-dd-MMMM" datepicker-options="" date-disabled="disabled(date, mode)" show-button-bar="false" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+            <div class="datetimepicker-wrapper" style="display: inline-block;">
+                <timepicker hour-step="1" minute-step="1" ng-model="nextAppro" ng-change="change_time()" show-meridian="false" readonly-time="false"></timepicker>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="Valider">
+            </div>
+        </form>
+    </div>
+</div>

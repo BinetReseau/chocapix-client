@@ -13,12 +13,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-group-item">
+                <div class="list-group-item" ng-if="thereIsAnAppro">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Prochaine appro</span></div>
                         <div class="col-sm-5 text-right">
                             <span class="h4">
-                                <span class="label label-info">Mardi 18h</span>
+                                <span class="label label-info">{{ bar.infos.next_scheduled_appro | date:'EEEE dd/MM à HH:mm' }}</span>
                             </span>
                         </div>
                     </div>

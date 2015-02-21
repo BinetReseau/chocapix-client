@@ -81,77 +81,35 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <fieldset>
-                                <h3>Modifier le login</h3>
-                                <div class="alert alert-success alert-dismissible" role="alert" ng-if="usernameSuccess == 1">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                                    Le login a été changé avec succès.
-                                </div>
-                                <div class="alert alert-danger alert-dismissible" role="alert" ng-if="usernameSuccess == -1">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                                    Une erreur est survenue : le login n'a pas été modifié...
-                                </div>
-                                <div>
-                                    <form class="form-horizontal" ng-submit="changeUsername()">
-                                        <div class="form-group">
-                                            <label for="ousername" class="col-sm-3 control-label">Login actuel</label>
-                                            <div class="col-sm-9">
-                                                <p class="form-control-static">{{ account.owner.username }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" ng-class="!checkUsername() && 'has-error' || ''">
-                                            <label for="nusername" class="col-sm-3 control-label">Nouveau login</label>
-                                            <div class="col-sm-9">
-                                              <input type="text" class="form-control" id="nusername" ng-model="account.owner.nusername">
-                                              <span class="help-block" ng-if="!checkUsername()">Ce login existe déjà.</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-3 col-sm-9">
-                                                <input type="submit" class="btn btn-success" ng-class="!checkUsername() && 'disabled' || ''" value="Valider" />
-                                            </div>
-                                          </div>
-                                    </form>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <h3>Modifier le mot de passe</h3>
+                                <h3>Réinitialiser le mot de passe</h3>
                                 <div class="alert alert-success alert-dismissible" role="alert" ng-if="pwdSuccess == 1">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                                    Le mot de passe a bien été modifié.
+                                    Le mot de passe a bien été réinitialisé.
                                 </div>
                                 <div class="alert alert-danger alert-dismissible" role="alert" ng-if="pwdSuccess == -1">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-                                    Une erreur est survenue : le mot de passe n'a pas été modifié...
+                                    Une erreur est survenue : le mot de passe n'a pas été réinitialisé...
                                 </div>
                                 <div>
-                                    <form class="form-horizontal" ng-submit="changePwd()">
-                                        <div class="form-group" ng-class="(newPwd != newPwdBis) && 'has-error' || ''">
-                                            <label for="newPwd" class="col-sm-3 control-label">Nouveau mot de passe</label>
-                                            <div class="col-sm-9">
-                                              <input type="password" class="form-control" id="newPwd" ng-model="newPwd">
-                                            </div>
+                                    <div class="form-group">
+                                        <div class="checkbox col-sm-offset-2 col-sm-10">
+                                            <label>
+                                                <input type="checkbox" ng-model="jaiCompris">
+                                                J'ai bien compris que le mot de passe de <b>{{ account.owner.full_name }}</b> sera réinitialisé (génération aléatoire d'un nouveau mot de passe, transmis par mail).
+                                            </label>
                                         </div>
-                                        <div class="form-group" ng-class="(newPwd != newPwdBis) && 'has-error' || ''">
-                                            <label for="newPwdBis" class="col-sm-3 control-label">Confirmation</label>
-                                            <div class="col-sm-9">
-                                              <input type="password" class="form-control" id="newPwdBis" ng-model="newPwdBis">
-                                              <span class="help-block" ng-if="(newPwd != newPwdBis)">Les mots de passe sont différents.</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-3 col-sm-9">
-                                                <input type="submit" class="btn btn-success" ng-class="(newPwd != newPwdBis) && 'disabled' || ''" value="Valider" />
-                                            </div>
-                                          </div>
-                                    </form>
+                                    </div>
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <a class="btn btn-warning" ng-click="resetPwd()" ng-class="!jaiCompris && 'disabled' || ''"><span class="glyphicon glyphicon-random"></span> Réinitialiser</a>
+                                    </div>
                                 </div>
                             </fieldset>
                             <fieldset>
                                 <h3>Supprimer le compte</h3>
-                                <div class="col-sm-9 col-sm-offset-3">
+                                <div class="col-sm-10 col-sm-offset-2">
                                     <p>Un compte n'apparaîtra plus dans le bar, sauf pour les personnes possédant les droits de modifier les comptes.</p>
                                     <a class="btn btn-danger" ng-class="account.deleted && 'active'" ng-click="toggleDeleted()">
-                                        <span class="glyphicon glyphicon-trash"> Supprimer</span>
+                                        <span class="glyphicon glyphicon-trash"></span> Supprimer
                                     </a>
                                 </div>
                             </fieldset>

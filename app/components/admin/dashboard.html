@@ -28,8 +28,8 @@
         </div>
         <div class="col-sm-6">
             <h2 class="text-center">
-                <span class="label label-primary">1</span>
-                <br /><small>jour avant la livraison</small>
+                <span class="label label-primary">{{ nbDaysBeforeAppro }}</span>
+                <br /><small>jour{{ nbDaysBeforeAppro > 1 && 's' || '' }} avant la livraison</small>
             </h2>
         </div>
     </div>

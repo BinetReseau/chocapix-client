@@ -29,7 +29,7 @@
                 <span class="glyphicon glyphicon-bullhorn"></span> <span class="hidden-xs">Actualités</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li><a>Annoncer la prochaine appro</a></li>
+                <li><a ui-sref="bar.admin.news.next-appro({ bar: bar.id })">Annoncer la prochaine appro</a></li>
                 <li><a ui-sref="bar.admin.news.add({ bar: bar.id })" ng-if="user.can('add_news')">Ajouter une news</a></li>
                 <li><a ui-sref="bar.admin.news.list({ bar: bar.id })" ng-if="user.can('change_news') || user.can('delete_news')">Liste des news</a></li>
             </ul>
