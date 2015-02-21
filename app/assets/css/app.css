@@ -1,6 +1,13 @@
 /* app css stylesheet */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
 body {
     padding-top: 70px;
+    -webkit-overflow-scrolling: touch;
 }
 .logo.petit {
     width: 64px;
