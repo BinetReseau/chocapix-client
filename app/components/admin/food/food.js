@@ -160,7 +160,7 @@ angular.module('bars.admin.food', [
             }
         };
         function searchOff() {
-            OFF.get($scope.food_details.barcode).then(function (infos) {
+            OFF.get($scope.barcode).then(function (infos) {
                 if (infos) {
                     $scope.food_details.name = infos.name;
                     $scope.food_details.name_plural = infos.name_plural;
@@ -171,6 +171,7 @@ angular.module('bars.admin.food', [
         };
         $scope.searchOff = function (e) {
             if (e.which === 13) {
+                e.preventDefault();
                 searchOff();
             }
         };
