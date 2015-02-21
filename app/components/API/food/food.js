@@ -149,6 +149,7 @@ angular.module('bars.api.food', [
             food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
             food_item.unit_name = $scope.newFood_item.unit_name;
             food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
+            food_item.buy_price = $scope.newFood_item.buy_price / $scope.food_item.details.unit_value;
             food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
             food_item.$save();
         };
