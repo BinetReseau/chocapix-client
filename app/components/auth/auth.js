@@ -117,7 +117,7 @@ angular.module('bars.auth', [
         return {
             request: function(config) {
                 config.headers = config.headers || {};
-                if (AuthService.isAuthenticated()) {
+                if (AuthService.isAuthenticated() && !/\/off\//.test(config.url) && !/fr\.openfoodfacts\.org/.test(config.url)) {
                     config.headers.Authorization = 'JWT ' + AuthService.getToken();
                 }
 
