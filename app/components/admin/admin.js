@@ -22,9 +22,6 @@ angular.module('bars.admin', [
                         }],
                         food_list: ['api.models.food', function(Food) {
                             return Food.all();
-                        }],
-                        bar_account: ['api.models.account', function(Account) {
-                            return Account.ofUser(6);
                         }]
                     }
                 }
@@ -139,8 +136,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.home',
-    ['$scope', 'account_list', 'food_list', 'bar_account',
-    function($scope, account_list, food_list, bar_account) {
+    ['$scope', 'account_list', 'food_list',
+    function($scope, account_list, food_list) {
         $scope.admin.active = 'dashboard';
         new Morris.Line({
             // ID of the element in which to draw the chart.
@@ -174,9 +171,23 @@ angular.module('bars.admin', [
         }).length;
         $scope.ratioFoodNegativ = $scope.nbFoodNegativ/food_list.length;
 
-        if (bar_account.length == 1) {
-            $scope.bar_account = bar_account[0];
-        }
+        var foodValue = _.reduce(food_list, function (total, f) {
+            if (!f.deleted) {
+                total += f.qty * f.price;
+            }
+            return total;
+        }, 0);
+        var accountsValue = _.reduce(account_list, function (total, a) {
+            if (!a.deleted) {
+                if (a.owner.username == 'bar') {
+                    total += a.money;
+                } else {
+                    total -= a.money;
+                }
+            }
+            return total;
+        }, 0);
+        $scope.money = foodValue + accountsValue;
     }
 ])
 // Admin food
@@ -229,7 +240,7 @@ angular.module('bars.admin', [
                     modalNewFood.result.then(function (newFood) {
                             Appro.addItem(newFood);
                         }, function () {
-                            
+
                     });
                 }
             }
