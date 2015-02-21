@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="fbarcode" class="col-sm-2 control-label">Code-barre</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="fbarcode" placeholder="" ng-disabled="!new_details" ng-model="food_details.barcode">
+      <input type="text" class="form-control" id="fbarcode" placeholder="" ng-disabled="(!new_details && !allow_barcode_edit)" ng-change="searchDetails(barcode)" ng-model="barcode">
     </div>
 </div>
 <div class="form-group">

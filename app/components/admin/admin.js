@@ -284,6 +284,9 @@ angular.module('bars.admin', [
 .controller('admin.ctrl.dir.barsadminfoodadd',
     ['$scope', 'api.models.food', 'api.models.fooddetails', 'api.services.action',
     function($scope, Food, FoodDetails, APIAction) {
+        var initDetails = $scope.food_details;
+        $scope.barcode = $scope.food_details.barcode;
+
         $scope.add.go = function() {
             $scope.food_details.unit_value = 1;
             $scope.food.qty = 0;
@@ -301,6 +304,7 @@ angular.module('bars.admin', [
             }
 
             if ($scope.new_details) {
+                $scope.food_details.barcode = $scope.barcode;
                 return $scope.food_details.$save().then(saveFood, function(errors) {
                     // TODO: display form errors
                 });
@@ -308,6 +312,21 @@ angular.module('bars.admin', [
                 return saveFood($scope.food_details);
             }
         };
+        $scope.searchDetails = function (barcode) {
+            $scope.allow_barcode_edit = true;
+            var food_details = _.filter(FoodDetails.all(), function (f) {
+                return f.barcode == barcode;
+            });
+            if (food_details.length == 1) {
+                $scope.food_details = food_details[food_details.length - 1];
+                $scope.new_details = false;
+            } else {
+                $scope.food_details = initDetails;
+                $scope.new_details = true;
+                // Add OpenFoodFacts here to fill $scope.food_details
+            }
+        };
+
         $scope.$watch('food_details.name', function (newv, oldv) {
             if ($scope.food_details.name_plural == oldv) {
                 $scope.food_details.name_plural = newv;
