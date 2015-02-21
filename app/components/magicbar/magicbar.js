@@ -28,7 +28,7 @@ angular.module('bars.magicbar', [
             }
             var type = $item.type;
 
-            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory', 'deposit'], type)) {
+            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory', 'deposit', 'refund', 'withdraw'], type)) {
                 var req;
                 if(_.contains(['buy', 'throw'], type)) {
                     req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
@@ -84,13 +84,15 @@ angular.module('bars.magicbar', [
 	            'punish': 'amende',
 	            'appro': 'appro',
 				'inventory': 'reste',
-				'deposit': 'credit'
+				'deposit': 'credit',
+				'refund': 'rembourser',
+				'withdraw': 'retirer'
 	        };
-			_.map(humanTypes, function (o, k) {
-				if (!AuthUser.can('add_' + k + 'transaction')) {
-					delete humanTypes[k];
-				}
-			});
+			// _.map(humanTypes, function (o, k) {
+			// 	if (!AuthUser.can('add_' + k + 'transaction')) {
+			// 		delete humanTypes[k];
+			// 	}
+			// });
 			humanTypes['add'] = 'ajouter';
 
 	        var units = [
@@ -265,7 +267,7 @@ angular.module('bars.magicbar', [
 					if(_.find(suggestion, {type:'account'})) {
 						res.otype = 'account';
 						res.type = res.type || 'give';
-						if(res.type !== 'give' && res.type !== 'punish' && res.type !== 'deposit') {
+						if(res.type !== 'give' && res.type !== 'punish' && res.type !== 'deposit' && res.type !== 'refund' && res.type !== 'withdraw') {
 							return []; // Discard
 						}
 					} else {

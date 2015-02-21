@@ -91,24 +91,36 @@ angular.module('bars.api.account', [
     ['$scope', 'account', 'api.services.action', 'api.models.user', 
     function($scope, account, APIAction, User) {
         $scope.account = account;
-        $scope.query_type = 'give';
-        $scope.query_motive = '';
-        $scope.query_qty = '';
-        $scope.query = function(qty, type, motive) {
-            if (type == 'give') {
-                APIAction.give({account: account.id, amount: qty}).then(function() {
-                    $scope.query_qty = '';
+        $scope.query = {
+            type: 'give',
+            motive: '',
+            qty: ''
+        };
+        $scope.queryProcess = function(query) {
+            if (query.type == 'give') {
+                APIAction.give({account: account.id, amount: query.qty}).then(function() {
+                    $scope.query.qty = '';
                 });
             }
-            if (type == 'deposit') {
-                APIAction.deposit({account: account.id, amount: qty}).then(function() {
-                    $scope.query_qty = '';
+            if (query.type == 'deposit') {
+                APIAction.deposit({account: account.id, amount: query.qty}).then(function() {
+                    $scope.query.qty = '';
                 });
             }
-            if (type == 'punish') {
-                APIAction.punish({account: account.id, amount: qty, motive: motive}).then(function() {
-                    $scope.query_qty = '';
-                    $scope.query_motive = '';
+            if (query.type == 'punish') {
+                APIAction.punish({account: account.id, amount: query.qty, motive: query.motive}).then(function() {
+                    $scope.query.qty = '';
+                    $scope.query.motive = '';
+                });
+            }
+            if (query.type == 'refund') {
+                APIAction.refund({account: account.id, amount: query.qty}).then(function() {
+                    $scope.query.qty = '';
+                });
+            }
+            if (query.type == 'withdraw') {
+                APIAction.withdraw({account: account.id, amount: query.qty}).then(function() {
+                    $scope.query.qty = '';
                 });
             }
         };

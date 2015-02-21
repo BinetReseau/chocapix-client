@@ -8,6 +8,8 @@
 		<span ng-switch-when="add">Ajouter</span>
 		<span ng-switch-when="inventory">Indiquer qu'il reste</span>
 		<span ng-switch-when="deposit">Créditer</span>
+        <span ng-switch-when="refund">Rembourser</span>
+        <span ng-switch-when="withdraw">Retirer</span>
         <span ng-switch-default>{{ match.model.type }}</span>
     </ng:switch>
     <span ng-switch on="match.model.type">
@@ -26,6 +28,12 @@
 		<span ng-switch-when="inventory">
 			<bars:food food="match.model.food" qty="match.model.qty" in="'sell'" out="'sell'"></bars:food>
 		</span>
+        <span ng-switch-when="refund">
+            {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>
+        </span>
+        <span ng-switch-when="withdraw">
+            {{ match.model.qty | currency }} du compte de <bars:account account="match.model.account"></bars:account>
+        </span>
         <span ng-switch-default>
             <bars:food food="match.model.food" qty="match.model.qty" in="'sell'" out="'sell'"></bars:food>
 			pour
