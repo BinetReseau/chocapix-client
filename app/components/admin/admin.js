@@ -251,20 +251,11 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.food.addModal',
-    ['$scope', '$modalInstance', 'api.models.food', 'api.models.fooddetails', 'bar', 'barcode', 'fooddetails_list',
-    function($scope, $modalInstance, Food, FoodDetails, bar, barcode, fooddetails_list) {
+    ['$scope', '$modalInstance', 'api.models.food', 'api.models.fooddetails', 'bar', 'barcode',
+    function($scope, $modalInstance, Food, FoodDetails, bar, barcode) {
         $scope.food = Food.create();
-        var food_details = _.filter(fooddetails_list, function (f) {
-            return f.barcode == barcode;
-        });
-        if (food_details.length > 0) {
-            $scope.food_details = food_details[food_details.length - 1];
-            $scope.new_details = false;
-        } else {
-            $scope.food_details = FoodDetails.create();
-            $scope.new_details = true;
-            // Add OpenFoodFacts here to fill $scope.food_details
-        }
+        $scope.food_details = FoodDetails.create();
+
         $scope.food.bar = bar;
         $scope.food_details.barcode = barcode;
         var add = {};
@@ -297,6 +288,7 @@ angular.module('bars.admin', [
                 return $scope.food.$save().then(function(newFood) {
                     $scope.food = Food.create();
                     $scope.food_details = FoodDetails.create();
+                    $scope.barcode = "";
                     return newFood;
                 }, function(errors) {
                     // TODO: display form errors
@@ -326,6 +318,10 @@ angular.module('bars.admin', [
                 // Add OpenFoodFacts here to fill $scope.food_details
             }
         };
+
+        if ($scope.barcode && !initDetails.id) {
+            $scope.searchDetails($scope.barcode);
+        }
 
         $scope.$watch('food_details.name', function (newv, oldv) {
             if ($scope.food_details.name_plural == oldv) {
