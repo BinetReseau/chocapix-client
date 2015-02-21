@@ -98,6 +98,11 @@ angular.module('bars.admin', [
             url: "/news",
             template: '<ui-view />'
         })
+            .state('bar.admin.news.next-appro', {
+                url: '/next-appro',
+                templateUrl: "components/admin/news/next-appro.html",
+                controller: 'admin.ctrl.news.next-appro'
+            })
             .state('bar.admin.news.add', {
                 url: '/add',
                 templateUrl: "components/admin/news/form.html",
@@ -142,7 +147,7 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.home',
-    ['$scope', 'account_list', 'food_list', 'bar_account', 'bar'
+    ['$scope', 'account_list', 'food_list', 'bar_account', 'bar',
     function($scope, account_list, food_list, bar_account, bar) {
         $scope.admin.active = 'dashboard';
         new Morris.Line({
@@ -219,7 +224,7 @@ angular.module('bars.admin', [
         }
         var now = new Date();
         var approDate = new Date(bar.next_scheduled_appro);
-        $scope.nbDaysBeforeAppro = (now.getHours() >= approDate.getHours()) ? dateDiff(approDate, now) + 1 : dateDiff(approDate, now);
+        $scope.nbDaysBeforeAppro = (now.getHours() >= approDate.getHours()) ? dateDiff(now, approDate) + 1 : dateDiff(now, approDate);
     }
 ])
 // Admin food
@@ -493,6 +498,34 @@ function($scope, account_list) {
 }
 ])
 // Admin news
+.controller('admin.ctrl.news.next-appro', 
+    ['$scope', 'api.models.bar', 'bar', '$state', 
+    function($scope, APIBar, bar, $state){
+        $scope.admin.active = 'news';
+        $scope.now = new Date();
+        $scope.nextAppro = new Date(bar.next_scheduled_appro);
+        $scope.saveNextAppro = function() {
+            bar.next_scheduled_appro = $scope.nextAppro.toISOString();
+            bar.$save().then(function(b) {
+                $state.go('bar.admin');
+            }, function(errors) {
+                console.log('Something went wrong...');
+            });
+        };
+        // Utils functions for datetimepicker
+        $scope.time_change = function() {
+            if ($scope.ngModel && $scope.time) {
+                $scope.ngModel.setHours($scope.time.getHours(), $scope.time.getMinutes());
+                $scope.ngModel = new Date($scope.ngModel);
+            }
+        };
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+    }
+])
 .controller('admin.ctrl.news.add',
     ['$scope', 'api.models.news', 'api.models.user', '$state',
     function($scope, News, User, $state) {

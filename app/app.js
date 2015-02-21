@@ -7,6 +7,7 @@ angular.module('barsApp', [
   'angularMoment',
   'ngAnimate',
   'ngSanitize',
+  'ui.bootstrap.datetimepicker', 
 
   'bars.auth',
   'bars.main',
