@@ -58,9 +58,7 @@ angular.module('bars.admin.account', [
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
         $scope.isValidUser = function() {
-            console.log("");
             var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
-            console.log($scope.nuser.lastname);
             var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
             var usernameTest = $scope.nuser.username.length > 0;
             var pseudoTest = $scope.nuser.pseudo.length > 0;
