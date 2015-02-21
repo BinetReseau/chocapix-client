@@ -234,7 +234,10 @@ angular.module('bars.admin', [
                             },
                             barcode: function () {
                                 return Appro.itemToAdd;
-                            }
+                            },
+                            fooddetails_list: ['api.models.fooddetails', function(FoodDetails) {
+                                return FoodDetails.all();
+                            }]
                         }
                     });
                     modalNewFood.result.then(function (newFood) {
@@ -248,10 +251,20 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.food.addModal',
-    ['$scope', '$modalInstance', 'api.models.food', 'api.models.fooddetails', 'bar', 'barcode',
-    function($scope, $modalInstance, Food, FoodDetails, bar, barcode) {
+    ['$scope', '$modalInstance', 'api.models.food', 'api.models.fooddetails', 'bar', 'barcode', 'fooddetails_list',
+    function($scope, $modalInstance, Food, FoodDetails, bar, barcode, fooddetails_list) {
         $scope.food = Food.create();
-        $scope.food_details = FoodDetails.create();
+        var food_details = _.filter(fooddetails_list, function (f) {
+            return f.barcode == barcode;
+        });
+        if (food_details.length > 0) {
+            $scope.food_details = food_details[food_details.length - 1];
+            $scope.new_details = false;
+        } else {
+            $scope.food_details = FoodDetails.create();
+            $scope.new_details = true;
+            // Add OpenFoodFacts here to fill $scope.food_details
+        }
         $scope.food.bar = bar;
         $scope.food_details.barcode = barcode;
         var add = {};
@@ -275,8 +288,8 @@ angular.module('bars.admin', [
             $scope.food_details.unit_value = 1;
             $scope.food.qty = 0;
             $scope.food.unit_value = 1/$scope.food.unit_value;
-            return $scope.food_details.$save().then(function(newFoodDetails) {
-                $scope.food.details = newFoodDetails.id;
+            function saveFood(foodDetails) {
+                $scope.food.details = foodDetails.id;
                 $scope.food.buy_price = $scope.food.price;
                 return $scope.food.$save().then(function(newFood) {
                     $scope.food = Food.create();
@@ -285,9 +298,15 @@ angular.module('bars.admin', [
                 }, function(errors) {
                     // TODO: display form errors
                 });
-            }, function(errors) {
-                // TODO: display form errors
-            });
+            }
+
+            if ($scope.new_details) {
+                return $scope.food_details.$save().then(saveFood, function(errors) {
+                    // TODO: display form errors
+                });
+            } else {
+                return saveFood($scope.food_details);
+            }
         };
         $scope.$watch('food_details.name', function (newv, oldv) {
             if ($scope.food_details.name_plural == oldv) {
@@ -312,7 +331,8 @@ angular.module('bars.admin', [
         scope: {
             food: '=food',
             food_details: '=foodDetails',
-            add: '=add'
+            add: '=add',
+            new_details: '=?newDetails'
         },
         templateUrl: 'components/admin/food/formFood.html',
         controller: 'admin.ctrl.dir.barsadminfoodadd'
