@@ -7,7 +7,7 @@ angular.module('barsApp', [
   'angularMoment',
   'ngAnimate',
   'ngSanitize',
-  'ui.bootstrap.datetimepicker', 
+  'ui.bootstrap.datetimepicker',
 
   'bars.auth',
   'bars.main',
@@ -33,6 +33,7 @@ angular.module('barsApp', [
     OFFURL.url = "http://bars.nadrieril.fr/off";
     // APIURL.url = "http://127.0.0.1:8000";
     // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
+    // OFFURL.url = "http://x.ntag.fr/off.php?c=";
 }])
 
 .config(['$httpProvider',

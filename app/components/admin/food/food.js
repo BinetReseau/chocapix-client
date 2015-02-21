@@ -115,8 +115,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.dir.barsadminfoodadd',
-    ['$scope', 'api.models.food', 'api.models.fooddetails', 'api.services.action',
-    function($scope, Food, FoodDetails, APIAction) {
+    ['$scope', 'api.models.food', 'api.models.fooddetails', 'api.services.action', 'OFF',
+    function($scope, Food, FoodDetails, APIAction, OFF) {
         var initDetails = $scope.food_details;
         $scope.barcode = $scope.food_details.barcode;
 
@@ -157,12 +157,27 @@ angular.module('bars.admin.food', [
             } else {
                 $scope.food_details = initDetails;
                 $scope.new_details = true;
-                // Add OpenFoodFacts here to fill $scope.food_details
+            }
+        };
+        function searchOff() {
+            OFF.get($scope.food_details.barcode).then(function (infos) {
+                if (infos) {
+                    $scope.food_details.name = infos.name;
+                    $scope.food_details.name_plural = infos.name_plural;
+                    $scope.food_details.unit_name = infos.unit;
+                    $scope.food_details.unit_name_plural = infos.unit_plural;
+                }
+            });
+        };
+        $scope.searchOff = function (e) {
+            if (e.which === 13) {
+                searchOff();
             }
         };
 
         if ($scope.barcode && !initDetails.id) {
             $scope.searchDetails($scope.barcode);
+            searchOff();
         }
 
         $scope.$watch('food_details.name', function (newv, oldv) {
