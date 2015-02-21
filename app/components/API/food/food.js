@@ -174,6 +174,7 @@ angular.module('bars.api.food', [
                 $scope.unit_name_plural = $scope.food.unit_name_plural;
             }
         }
+        $scope.abs = Math.abs;
         $scope.$watch('food.buy_unit_value', refresh);
         $scope.$watch('food.unit_value', refresh);
         refresh();

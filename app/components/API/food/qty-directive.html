@@ -1,1 +1,1 @@
-{{ qty * ratio | qty }} {{ ((qty * ratio) > 1 && unit_name_plural) && unit_name_plural || unit_name }}
+{{ qty * ratio | qty }} {{ (abs(qty * ratio) > 1 && unit_name_plural) && unit_name_plural || unit_name }}
