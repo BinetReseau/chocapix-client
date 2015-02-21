@@ -275,6 +275,7 @@ angular.module('bars.admin.food', [
                         nb: nb++});
                 }
                 this.recomputeAmount();
+                console.log(item);
                 this.itemToAdd = "";
             },
             removeItem: function(item) {
@@ -285,6 +286,7 @@ angular.module('bars.admin.food', [
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
                     item.qty = item.qty * item.unit_value;
+                    item.buy_price = item.price / (item.qty);
                 });
                 var refThis = this;
                 APIAction.appro({
