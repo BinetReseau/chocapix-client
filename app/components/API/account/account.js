@@ -59,9 +59,6 @@ angular.module('bars.api.account', [
             resolve:{
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
                     return Account.getSync($stateParams.id);
-                }],
-                user_list: ['api.models.user', function(User) {
-                    return User.all();
                 }]
             }
         });
@@ -91,8 +88,8 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user', 'user_list',
-    function($scope, account, APIAction, User, user_list) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 
+    function($scope, account, APIAction, User) {
         $scope.account = account;
         $scope.query_type = 'give';
         $scope.query_motive = '';
@@ -116,45 +113,10 @@ angular.module('bars.api.account', [
             }
         };
         // Onglet "Modifier"
-        $scope.account.owner.nusername = '';
-        $scope.newPwd = null;
-        $scope.newPwdBis = null;
-        $scope.usernameSuccess = 0;
         $scope.pwdSuccess = 0;
-        $scope.checkUsername = function() {
-            return _.filter(user_list, {username: $scope.account.owner.nusername}).length == 0;
-        };
-        $scope.changeUsername = function() {
-            if (_.filter(user_list, {username: $scope.account.owner.nusername}).length == 0) {
-                var oldUsername = $scope.account.owner.username;
-                $scope.account.owner.username = $scope.account.owner.nusername;
-                delete $scope.account.owner.nusername;
-                $scope.account.owner.$save().then(function(u) {
-                    $scope.usernameSuccess = 1;
-                    $scope.account.owner.nusername = '';
-                }, function(errors) {
-                    $scope.account.owner.username = oldUsername;
-                    $scope.usernameSuccess = -1;
-                    $scope.account.owner.nusername = '';
-                    console.log("Changement de username échoué.");
-                });
-            }
-        };
-        $scope.changePwd = function() {
-            // [TODO] Vérifier le mot de passe actuel via le serveur. Droits pour modifier un mot de passe ?
-            // if ($scope.newPwd == $scope.newPwdBis) {
-            //     $scope.account.owner.password = $scope.newPwd;
-            //     $scope.account.owner.$save().then(function() {
-            //         $scope.pwdSuccess = 1;
-            //     }, function() {
-            //         $scope.newPwd = '';
-            //         $scope.newPwdBis = '';
-            //         $scope.pwdSuccess = -1;
-            //     });
-            // } else {
-            //     $scope.pwdSuccess = -1;
-            //     console.log('Mots de passe différents.');
-            // }
+        $scope.jaiCompris = false;
+        $scope.resetPwd = function() {
+            // [TODO]
         };
         $scope.toggleDeleted = function() {
             $scope.account.deleted = !$scope.account.deleted;
