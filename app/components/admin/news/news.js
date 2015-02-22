@@ -44,7 +44,7 @@ angular.module('bars.admin.news', [
         $scope.now = new Date();
         $scope.nextAppro = new Date(bar.next_scheduled_appro);
         $scope.saveNextAppro = function() {
-            bar.next_scheduled_appro = $scope.nextAppro.toISOString();
+            bar.next_scheduled_appro = $scope.nextAppro.toJSON();
             bar.$save().then(function(b) {
                 $state.go('bar.admin');
             }, function(errors) {
