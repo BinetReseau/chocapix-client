@@ -28,11 +28,89 @@ function($http, OFFURL) {
                 });
         },
         parse: function (o) {
+            var name = o.product.product_name;
+            var quantity = o.product.quantity.toLocaleLowerCase();
+            var unit_value = 1;
+
+            // On remplace les unités mal formatées
+            var runits = {
+                'litres': 'l',
+                'litre': 'l',
+                'kilo-grammes': 'kg',
+                'kilo grammes': 'kg',
+                'kilo-gramme': 'kg',
+                'kilo gramme': 'kg',
+                'grammes': 'g',
+                'gramme': 'g'
+            };
+            var ru;
+            _.forEach(runits, function (r, o) {
+                ru = new RegExp(o, "i");
+                quantity = quantity.replace(ru, r);
+            });
+
+            // On s'occupe d'abord du cas ou c'est un pack
+            // auquel cas la quantity est souvent 6 x 33cl ou 6 * 330 ml
+            if (/^[0-9]+ ?x/i.test(quantity)) {
+                unit_value = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$1");
+                unit = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$2").trim();
+            } else if (/\*/i.test(quantity)) {
+                unit_value = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$1");
+                unit = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$2").trim();
+            } else {
+                // Maintenant on va essayer de détecter l'unité
+                // parmis la liste suivante
+                var units = ['l', 'cl', 'ml', 'kg', 'g', 'mg'];
+                var rem, ree, renm, rene;
+                var unit = _.find(units, function (u) {
+                    rem = new RegExp(" " + u + " ", "i");
+                    ree = new RegExp(" " + u + "\$", "i");
+                    renm = new RegExp("[0-9]" + u + " ", "i");
+                    rene = new RegExp("[0-9]" + u + "\$", "i");
+                    return rem.test(quantity) || ree.test(quantity) || renm.test(quantity) || rene.test(quantity);
+                });
+                var unit_plural = unit;
+                // unit contient maintenant l'unité si on en a trouvée une
+
+                // On va essayer de trouver le rapport entre achat et vente
+                if (unit) {
+                    var rq = new RegExp("^([0-9,.]+) ?" + unit + "$");
+                    unit_value = quantity.replace(rq, "$1");
+
+                    // Cas particulier pour 33 cl (= canette)
+                    if ((unit_value == "33" && unit == "cl") || (unit_value == "330" && unit == "ml")) {
+                        unit_value = "1";
+                        unit = "canette";
+                        unit_plural = "canettes";
+                    }
+
+                }
+
+                var sell_unit = {
+                    'kg': {
+                        n: 'g',
+                        v: '1000'
+                    }
+                };
+                // On se débarasse du 1 dans le cas "1kg" par exemple ou "1 l"
+                if (/^1 ?[^0-9]/.test(quantity)) {
+                    quantity = quantity.replace(/^1 ?([^0-9])/, '$1');
+                    if (sell_unit[unit]) {
+                        unit_value = sell_unit[unit].v;
+                        unit = sell_unit[unit].n;
+                        unit_plural = unit;
+                    }
+                }
+            }
+
             return {
-                name: o.product.product_name,
-                name_plural: o.product.product_name,
-                unit: o.product.quantity,
-                unit_plural: o.product.quantity
+                name: name,
+                name_plural: name,
+                buy_unit_name: quantity,
+                buy_unit_name_plural: quantity,
+                unit_name: unit,
+                unit_name_plural: unit_plural,
+                unit_value: unit_value
             };
         },
         get: function (barcode) {

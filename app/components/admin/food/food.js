@@ -165,8 +165,11 @@ angular.module('bars.admin.food', [
                 if (infos) {
                     $scope.food_details.name = infos.name;
                     $scope.food_details.name_plural = infos.name_plural;
-                    $scope.food_details.unit_name = infos.unit;
-                    $scope.food_details.unit_name_plural = infos.unit_plural;
+                    $scope.food_details.unit_name = infos.buy_unit_name;
+                    $scope.food_details.unit_name_plural = infos.buy_unit_name_plural;
+                    $scope.food.unit_name = infos.unit_name;
+                    $scope.food.unit_name_plural = infos.unit_name_plural;
+                    $scope.food.unit_value = infos.unit_value;
                 }
             });
         };
