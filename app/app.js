@@ -10,6 +10,7 @@ angular.module('barsApp', [
   'ui.bootstrap.datetimepicker',
 
   'bars.auth',
+  'bars.root',
   'bars.main',
   'bars.bars',
   'bars.admin',

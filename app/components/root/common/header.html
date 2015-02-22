@@ -1,0 +1,34 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2 col-xs-4">
+                <div class="navbar-header">
+                    <a class="navbar-brand hidden-xs" ui-sref="index">
+                        <img alt="Chocapix" src="assets/img/logo.png" style="height: 100%;">
+                    </a>
+                </div>
+            </div>
+
+            <!-- When auth -->
+            <div ng-show="user.isAuthenticated()">
+                <div class="col-sm-5 col-lg-6 hidden-xs">
+                    <a class="navbar-brand" ui-sref="root" title="Administration générale">
+                        Espace d'administration générale
+                    </a>
+                </div>
+                <div class="col-xs-8 col-sm-5 col-lg-4" ui-view="user-infos"></div>
+            </div>
+
+            <!-- Else -->
+            <div class="col-sm-10 col-xs-10" ng-hide="user.isAuthenticated()">
+                <div class="row">
+                    <form class="navbar-form" role="form" ng-submit="connexion(login)">
+                        <input type="text" class="form-control" placeholder="Login" ng-model="login.username" id="floginc">
+                        <input type="password" class="form-control" placeholder="Mot de passe" ng-model="login.password" ng-class="loginError && 'animated shake'">
+                        <button type="submit" class="btn btn-default" ng-class="inLogin && 'disabled'">Connexion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

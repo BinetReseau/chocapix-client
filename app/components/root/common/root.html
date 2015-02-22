@@ -1,0 +1,46 @@
+<div class="container-fluid">
+    <div class="row">
+        <div ui-view="header"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 col-sm-3" id="bar-menu">
+            <div class="row">
+                <div class="col-md-2 col-sm-3" style="position: fixed;">
+                    <ul class="nav nav-pills nav-stacked-sm">
+                        <li ng-class="root.active == 'index' && 'active'">
+                            <a title="Accueil" ui-sref="root">
+                                <span class="glyphicon glyphicon-home"></span><span class="hidden-xs"> Accueil</span>
+                            </a>
+                        </li>
+                        <li ng-class="root.active == 'bars' && 'active'">
+                            <a title="Historique" ui-sref="root.bars.all">
+                                <span class="glyphicon glyphicon-th"></span><span class="hidden-xs"> Bars</span>
+                            </a>
+                        </li>
+                        <li ng-class="root.active == 'users' && 'active'">
+                            <a title="Utilisateurs du bar" ui-sref="root.users.list">
+                                <span class="glyphicon glyphicon-user"></span><span class="hidden-xs"> Utilisateurs</span>
+                            </a>
+                        </li>
+                        <li ng-class="root.active == 'food' && 'active'">
+                            <a title="Aliments du bar" ui-sref="root.food.list">
+                                <span class="glyphicon glyphicon-cutlery"></span><span class="hidden-xs"> Aliments</span>
+                            </a>
+                        </li>
+                        <li class="hidden-xs">
+                            <a title="Déconnexion" ui-sref="root" ng-show="user.isAuthenticated()" ng-click="user.logout()">
+                                <span class="glyphicon glyphicon-off"></span><span class="hidden-xs"> Déconnexion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 col-sm-9">
+            <div class="row">
+                <div ui-view=""></div>
+            </div>
+        </div>
+    </div>
+</div>
