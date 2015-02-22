@@ -110,8 +110,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news', 'auth.user',
-    function($scope, news, AuthUser) {
+    ['$scope','news', 'auth.user', '$timeout',
+    function($scope, news, AuthUser, $timeout) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
@@ -149,6 +149,16 @@ angular.module('bars.main', [
         var now = new Date();
         var dateAppro = new Date($scope.bar.infos.next_scheduled_appro);
         $scope.thereIsAnAppro = dateAppro >= now;
+
+        $timeout(function() {
+            var $div = $('#lnews');
+            $div.on('mousewheel DOMMouseScroll', function(e) {
+                var d = e.originalEvent.wheelDelta || -e.originalEvent.detail,
+                    dir = d > 0 ? 'up' : 'down',
+                    stop = (dir == 'up' && this.scrollTop == 0) || (dir == 'down' && this.scrollTop == this.scrollHeight-this.offsetHeight);
+                stop && e.preventDefault();
+            });
+        }, 500);
     }])
 .controller(
     'main.ctrl.header',
