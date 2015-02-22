@@ -138,7 +138,7 @@ angular.module('bars.main', [
         $scope.news_recente = function(news) {
             var now = new Date();
             var newsDate = new Date(news.last_modified);
-            return dateDiff(newsDate, now) <= 1;
+            return dateDiff(newsDate, now) == 0;
         };
 
         if (AuthUser.isAuthenticated()) {
