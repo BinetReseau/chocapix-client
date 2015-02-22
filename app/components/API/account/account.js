@@ -18,7 +18,7 @@ angular.module('bars.api.account', [
                         if(!this.owner.full_name) {
                             return false;
                         } else {
-                            return _.deburr(this.owner.full_name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                            return !this.deleted && this.owner.is_active && _.deburr(this.owner.full_name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
                                 _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
                         }
                     }
@@ -70,7 +70,7 @@ angular.module('bars.api.account', [
     }])
 .controller('api.ctrl.account_list',
     ['$scope', 'account_list', function($scope, account_list) {
-        $scope.account_list = _.filter(account_list, function(a) { var u = a.owner; return u.full_name != 'Bar' || u.username != 'bar'; });
+        $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active; });
         $scope.list_order = 'owner.full_name';
         $scope.reverse = false;
         $scope.searchl = "";
@@ -88,7 +88,7 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user', 
+    ['$scope', 'account', 'api.services.action', 'api.models.user',
     function($scope, account, APIAction, User) {
         $scope.account = account;
         $scope.query = {
