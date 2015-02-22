@@ -124,6 +124,7 @@ angular.module('bars.admin.food', [
             $scope.food_details.unit_value = 1;
             $scope.food.qty = 0;
             $scope.food.unit_value = 1/$scope.food.unit_value;
+            $scope.food.tax *= 0.01;
             function saveFood(foodDetails) {
                 $scope.food.details = foodDetails.id;
                 $scope.food.buy_price = $scope.food.price;

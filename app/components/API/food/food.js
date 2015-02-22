@@ -144,6 +144,7 @@ angular.module('bars.api.food', [
             $scope.newFood_item.price = initPrice;
             $scope.newFood_item.new_unit_value = 1;
             $scope.newFood_item.new_buy_unit_value = 1;
+            $scope.newFood_item.tax *= 100;
         };
         $scope.editFood = function() {
             food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
@@ -151,6 +152,7 @@ angular.module('bars.api.food', [
             food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
             food_item.buy_price = $scope.newFood_item.buy_price / $scope.food_item.details.unit_value;
             food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
+            food_item.tax = $scope.newFood_item.tax/100;
             food_item.$save();
         };
         $scope.resetFood();
@@ -213,7 +215,8 @@ angular.module('bars.api.food', [
         scope: {
             food: '=food',
             in: '=?in',
-            qty: '=?qty'
+            qty: '=?qty',
+            tax: '=?tax'
         },
         templateUrl: 'components/API/food/price-directive.html',
         controller: ['$scope', function($scope) {
@@ -222,6 +225,9 @@ angular.module('bars.api.food', [
                     $scope.price = $scope.food.price * $scope.food.buy_unit_value;
                 } else if ($scope.in == 'sell') {
                     $scope.price = $scope.food.price * $scope.food.unit_value;
+                    if ($scope.tax) {
+                        $scope.price *= (1+$scope.food.tax);
+                    }
                 } else {
                     $scope.price = $scope.food.price;
                 }

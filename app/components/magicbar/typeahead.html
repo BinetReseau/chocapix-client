@@ -37,7 +37,7 @@
         <span ng-switch-default>
             <bars:food food="match.model.food" qty="match.model.qty" in="'sell'" out="'sell'"></bars:food>
 			pour
-			<bars:food:price food="match.model.food" qty="match.model.qty" in="'sell'"></bars:food:price>
+			<bars:food:price food="match.model.food" qty="match.model.qty" in="'sell'" tax="true"></bars:food:price>
         </span>
     </span>
 	<span ng-if="match.model.type == 'add'"> à la bouffe à plusieurs</span>

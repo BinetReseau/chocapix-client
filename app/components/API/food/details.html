@@ -16,7 +16,7 @@
                 <div class="checkbox unit">
                     {{ (food_item.unit_name_plural && query_qty > 1) && food_item.unit_name_plural || (food_item.unit_name || ((food_item.details.name_plural && query_qty > 1) && food_item.details.name_plural || food_item.details.name)) }}
                 </div>
-                <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price*food_item.unit_value) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
+                <input type="submit" class="btn btn-success" value="Valider{{ query_qty > 0 && ' pour ' + ((query_qty*food_item.price*food_item.unit_value*(1+food_item.tax)) | currency) || '' }}" ng-class="query_qty <= 0 && 'disabled' || ''" />
             </form>
         </div>
     </div>
@@ -34,7 +34,7 @@
                                     <td class="h4 title">Prix</td>
                                     <td class="end-of-column text-right value">
                                         <span class="h4"><span class="label label-info">
-                                            <bars:food:price food="food_item" in="'sell'" qty="1"></bars:food:price>
+                                            <bars:food:price food="food_item" in="'sell'" qty="1" tax="true"></bars:food:price>
                                         </span></span>
                                     </td>
                                     <td class="h4 title">Vols</td>
@@ -108,6 +108,13 @@
                                         <input type="text" class="form-control" id="buy_price" ng-model="newFood_item.buy_price">
                                     </div>
                                     <label class="col-sm-4 control-label">€ / {{ newFood_item.details.unit_name || food_item.details.name }}</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tax" class="col-sm-3 control-label">Taxe</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="tax" ng-model="newFood_item.tax">
+                                    </div>
+                                    <label class="col-sm-1 control-label">%</label>
                                 </div>
                                 <div class="form-group" ng-show="newFood_item.price != (food_item.price*food_item.unit_value)">
                                     <label class="col-sm-8 control-label">Ancienne valeur présente dans le bar</label>
