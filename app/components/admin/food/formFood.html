@@ -39,7 +39,7 @@
     <div class="col-sm-7">
       <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="food.price">
     </div>
-    <label class="col-sm-3 control-label">€ / {{ food_details.unit_name }}</label>
+    <label class="col-sm-3 control-label">€ / {{ food.unit_name || food_details.name }}</label>
 </div>
 <div class="form-group">
     <label for="funit_value" class="col-sm-2 control-label">1 {{ food_details.unit_name || food_details.name }} = </label>
