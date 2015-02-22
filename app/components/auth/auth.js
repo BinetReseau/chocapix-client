@@ -61,7 +61,9 @@ angular.module('bars.auth', [
                                 self.account = account;
                                 $rootScope.$broadcast('auth.hasLoggedIn');
                                 $timeout(function() {
-                                    document.getElementById("q_alim").focus();
+                                    if(document.getElementById("q_alim")) {
+                                        document.getElementById("q_alim").focus();
+                                    }
                                 }, 300);
                             }, function (error) {
                                 self.account = null;
