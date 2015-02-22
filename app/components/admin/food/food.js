@@ -59,8 +59,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.appro',
-    ['$scope', '$modal', 'api.models.food', 'admin.appro',
-    function($scope, $modal, Food, Appro) {
+    ['$scope', '$modal', 'api.models.food', 'admin.appro', '$timeout',
+    function($scope, $modal, Food, Appro, $timeout) {
         $scope.appro = Appro;
 
         $scope.newItem = function (e) {
@@ -84,6 +84,9 @@ angular.module('bars.admin.food', [
                     });
                     modalNewFood.result.then(function (newFood) {
                             Appro.addItem(newFood);
+                            $timeout(function () {
+                                document.getElementById("addApproItemInput").focus();
+                            }, 300);
                         }, function () {
 
                     });
