@@ -31,6 +31,8 @@ function($http, OFFURL) {
             var name = o.product.product_name;
             var quantity = o.product.quantity.toLocaleLowerCase();
             var unit_value = 1;
+            var is_pack = false;
+            var itemqty;
 
             // On remplace les unités mal formatées
             var runits = {
@@ -53,10 +55,14 @@ function($http, OFFURL) {
             // auquel cas la quantity est souvent 6 x 33cl ou 6 * 330 ml
             if (/^[0-9]+ ?x/i.test(quantity)) {
                 unit_value = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$1");
+                itemqty = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$1");
                 unit = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$2").trim();
+                is_pack = true;
             } else if (/\*/i.test(quantity)) {
                 unit_value = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$1");
+                itemqty = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$1");
                 unit = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$2").trim();
+                is_pack = true;
             } else {
                 // Maintenant on va essayer de détecter l'unité
                 // parmis la liste suivante
@@ -110,7 +116,9 @@ function($http, OFFURL) {
                 buy_unit_name_plural: quantity,
                 unit_name: unit,
                 unit_name_plural: unit_plural,
-                unit_value: unit_value
+                unit_value: unit_value,
+                is_pack: is_pack,
+                itemqty: itemqty
             };
         },
         get: function (barcode) {
