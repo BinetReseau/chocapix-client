@@ -9,7 +9,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <form class="form-inline" role="form" ng-submit="query(query.qty, query.type)" ng-if="user.can('add_transaction')">
+            <form class="form-inline" role="form" ng-submit="queryProcess(query.qty, query.type)" ng-if="user.can('add_transaction')">
                 <select class="form-control" ng-model="query.type" ng-options="option.name as option.value for option in actions">
                 </select>
                 <input type="number" class="form-control number" step="any" ng-model="query.qty" select-on-click />
