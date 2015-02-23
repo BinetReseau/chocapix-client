@@ -363,4 +363,81 @@ angular.module('bars.api.food', [
         }]
     };
 })
+.controller('api.ctrl.dir.barsstockitem',
+    ['$scope', function($scope) {
+        function refresh() {
+            $scope.ratio = 1;
+            if ($scope.in == 'buy') {
+                $scope.ratio *= $scope.item.details.unit_value;
+            } else if ($scope.in == 'sell') {
+                $scope.ratio *= $scope.item.sellitem.unit_value;
+            }
+            if ($scope.out == 'buy') {
+                $scope.ratio *= 1/$scope.item.details.unit_value;
+                $scope.unit_name = $scope.item.details.unit_name;
+                $scope.unit_name_plural = $scope.item.details.unit_name_plural;
+            } else if ($scope.out == 'sell') {
+                $scope.ratio *= 1/$scope.item.sellitem.unit_value;
+                $scope.unit_name = $scope.item.sellitem.unit_name;
+                $scope.unit_name_plural = $scope.item.sellitem.unit_name_plural;
+            }
+        }
+        $scope.abs = Math.abs;
+        $scope.$watch('item.details.unit_value', refresh);
+        $scope.$watch('item.sellitem.unit_value', refresh);
+        refresh();
+    }])
+.directive('barsStockitem', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            //unit: '=?unit',
+            qty: '=?qty',
+            in: '=?in',
+            out: '=?out'
+        },
+        templateUrl: 'components/API/food/directives/stockitem.html',
+        controller: 'api.ctrl.dir.barsstockitem'
+    };
+})
+.directive('barsStockitemQty', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            qty: '=qty',
+            in: '=?in',
+            out: '=?out'
+        },
+        templateUrl: 'components/API/food/directives/stockitem-qty-directive.html',
+        controller: 'api.ctrl.dir.barsstockitem'
+    };
+})
+.directive('barsStockitemPrice', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            in: '=?in',
+            qty: '=?qty',
+            tax: '=?tax'
+        },
+        templateUrl: 'components/API/food/directives/stockitem-price-directive.html',
+        controller: ['$scope', function($scope) {
+            function refresh() {
+                if ($scope.in == 'buy') {
+                    $scope.price = $scope.item.price * $scope.item.details.unit_value;
+                } else if ($scope.in == 'sell') {
+                    $scope.price = $scope.item.price * $scope.item.sellitem.unit_value;
+                } else {
+                    $scope.price = $scope.item.price;
+                }
+            }
+            $scope.$watch('item.details.unit_value', refresh);
+            $scope.$watch('item.sellitem.unit_value', refresh);
+            refresh();
+        }]
+    };
+})
 ;
