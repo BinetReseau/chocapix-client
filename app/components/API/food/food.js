@@ -75,7 +75,10 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                        var all_keywords = "";
+                        _.forEach(this.stockitems, function(n, i) { all_keywords = all_keywords + " " + n.details.keywords; });
+                        var searchable = this.name + " " + all_keywords;
+                        return (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
             });
@@ -121,7 +124,12 @@ angular.module('bars.api.food', [
     ['$scope', 'food_list', 
     function($scope, food_list) {
         $scope.food_list = food_list;
+        console.log(food_list);
+        $scope.searchl = "";
         $scope.reverse = false;
+        $scope.filterItems = function(o) {
+            return o.filter($scope.searchl);
+        }
         $scope.filterHidden = function() {
             if ($scope.showHidden) {
                 return '';
