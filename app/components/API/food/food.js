@@ -229,7 +229,7 @@ angular.module('bars.api.food', [
         $scope.$watch('food.unit_value', refresh);
         refresh();
     }])
-.directive('barsFood', function() {
+.directive('barsFood', function() { // TO BE REMOVED
     return {
         restrict: 'E',
         scope: {
@@ -243,7 +243,7 @@ angular.module('bars.api.food', [
         controller: 'api.ctrl.dir.barsfood'
     };
 })
-.directive('barsFoodQty', function() {
+.directive('barsFoodQty', function() { // TO BE REMOVED
     return {
         restrict: 'E',
         scope: {
@@ -256,7 +256,7 @@ angular.module('bars.api.food', [
         controller: 'api.ctrl.dir.barsfood'
     };
 })
-.directive('barsFoodPrice', function() {
+.directive('barsFoodPrice', function() { // TO BE REMOVED
     return {
         restrict: 'E',
         scope: {
@@ -281,6 +281,76 @@ angular.module('bars.api.food', [
             }
             $scope.$watch('food.buy_unit_value', refresh);
             $scope.$watch('food.unit_value', refresh);
+            refresh();
+        }]
+    };
+})
+.controller('api.ctrl.dir.barssellitem',
+    ['$scope', function($scope) {
+        function refresh() {
+            $scope.ratio = 1;
+            if ($scope.in == 'sell') {
+                $scope.ratio *= $scope.item.unit_value;
+            }
+            if ($scope.out == 'sell') {
+                $scope.ratio *= 1/$scope.item.unit_value;
+                $scope.unit_name = $scope.item.unit_name;
+                $scope.unit_name_plural = $scope.item.unit_name_plural;
+            }
+        }
+        $scope.abs = Math.abs;
+        $scope.$watch('item.unit_value', refresh);
+        refresh();
+    }])
+.directive('barsSellitem', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            //unit: '=?unit',
+            qty: '=?qty',
+            in: '=?in',
+            out: '=?out'
+        },
+        templateUrl: 'components/API/food/directives/sellitem.html',
+        controller: 'api.ctrl.dir.barssellitem'
+    };
+})
+.directive('barsSellitemQty', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            qty: '=qty',
+            in: '=?in',
+            out: '=?out'
+        },
+        templateUrl: 'components/API/food/directives/qty-directive.html',
+        controller: 'api.ctrl.dir.barssellitem'
+    };
+})
+.directive('barsSellitemPrice', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            in: '=?in',
+            qty: '=?qty',
+            tax: '=?tax'
+        },
+        templateUrl: 'components/API/food/directives/price-directive.html',
+        controller: ['$scope', function($scope) {
+            function refresh() {
+                if ($scope.in == 'sell') {
+                    $scope.price = $scope.item.price * $scope.item.unit_value;
+                    if ($scope.tax) {
+                        $scope.price *= (1+$scope.item.tax);
+                    }
+                } else {
+                    $scope.price = $scope.item.price;
+                }
+            }
+            $scope.$watch('item.unit_value', refresh);
             refresh();
         }]
     };

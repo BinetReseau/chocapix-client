@@ -11,12 +11,12 @@
             <tr>
                 <th>Nom &ensp;<a href="" ng-click="reverse = !reverse"><span class="glyphicon glyphicon-sort"></span></a></th>
                 <th>Quantité totale</th>
-                <th>Prix (moyen)</th>
+                <th>Prix</th>
             </tr>
             <tr ng-repeat="f in food_list | filter:filterHidden() | filter:searchl | orderBy:'name':reverse" ng-class="f.deleted && 'del'">
-                <td><bars:food food="f"></bars:food></td>
-                <td><bars:food:qty food="f" qty="f.qty" out="'sell'"></bars:food:qty></td>
-                <td><bars:food:price food="f" qty="1" in="'sell'"></bars:food:price> <span ng-if="f.unit_name">/ {{ f.unit_name }}</span></td>
+                <td><bars:sellitem item="f"></bars:sellitem></td>
+                <td><bars:sellitem:qty item="f" qty="f.qty" out="'sell'"></bars:sellitem:qty></td>
+                <td><bars:sellitem:price item="f" qty="1" in="'sell'"></bars:sellitem:price> <span ng-if="f.unit_name">/ {{ f.unit_name }}</span></td>
             </tr>
         </table>
         <div class="panel-body" ng-if="(food_list | filter:filterDeleted() | filter:searchl).length == 0">
