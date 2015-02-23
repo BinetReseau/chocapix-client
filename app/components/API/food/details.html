@@ -9,18 +9,16 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <form class="form-inline" role="form" ng-submit="query(query.qty, query.type)" ng-if="user.can('add_transaction')">
+            <form class="form-inline" role="form" ng-submit="query(query.qty, query.type)" ng-if="user.can('add_transaction')" ng-init="refresh()">
                 <select class="form-control" ng-model="query.type" ng-options="option.name as option.value for option in actions">
                 </select>
                 <input type="number" class="form-control number" step="any" ng-model="query.qty" select-on-click />
-                <div class="checkbox unit" ng-if="query.type == 'buy'">
+                <div class="checkbox unit" ng-if="query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1">
                     {{ (food_item.unit_name_plural && query.qty > 1) && food_item.unit_name_plural || (food_item.unit_name || ((food_item.name_plural && query.qty > 1) && food_item.name_plural || food_item.name)) }}
                 </div>
-                <select class="form-control" ng-model="query.stockitem" ng-options="article.details.name for article in food_item.stockitems" ng-if="query.type != 'buy'">
-                    <option value="">Choisir un article</option>
-                </select>
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*food_item.price*food_item.unit_value*(1+food_item.tax)) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'buy'" />
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.stockitem.price*query.stockitem.details.unit_value) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type != 'buy'" />
+                <select class="form-control" ng-model="query.stockitem" ng-options="article.details.name for article in food_item.stockitems" ng-if="query.type != 'buy' && query.type != 'add' && food_item.stockitems.length > 1"></select>
+                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*food_item.price*food_item.unit_value*(1+food_item.tax)) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1" />
+                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.stockitem.price*query.stockitem.details.unit_value) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type != 'buy' && query.type != 'add' && food_item.stockitems.length > 1" />
             </form>
         </div>
     </div>
