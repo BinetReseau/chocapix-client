@@ -142,22 +142,22 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', //'api.services.action', 'bars.meal',
-    function($scope, $stateParams, food_item, AuthUser) {//, APIAction, Meal) {
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',// 'bars.meal',
+    function($scope, $stateParams, food_item, AuthUser, APIAction) {//, Meal) {
         $scope.food_item = food_item;
         $scope.actions = [];
         if (AuthUser.can('add_buytransaction')) {
             $scope.actions.push({ name: "buy", value: "Acheter" });
         }
-        // if (AuthUser.can('add_throwtransaction')) {
-        //     $scope.actions.push({ name: "throw", value: "Jeter" });
-        // }
+        if (AuthUser.can('add_throwtransaction')) {
+            $scope.actions.push({ name: "throw", value: "Jeter" });
+        }
         // if (AuthUser.can('add_mealtransaction')) {
         //     $scope.actions.push({ name: "add", value: "Ajouter à la bouffe" });
         // }
-        // if (AuthUser.can('add_approtransaction')) {
-        //     $scope.actions.push({ name: "appro", value: "Approvisionner" });
-        // }
+        if (AuthUser.can('add_approtransaction')) {
+            $scope.actions.push({ name: "appro", value: "Approvisionner" });
+        }
 
         $scope.query_qty = 1;
         // $scope.query_type = Meal.in() && 'add' || 'buy';

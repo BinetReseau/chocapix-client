@@ -2,5 +2,5 @@
 {{ (qty && unit_name) && ' de ' }}
 <a title="Voir la fiche de cet aliment" ui-sref="bar.food.details({ bar: item.bar.id, id:item.id })">
     <span ng-if="!(qty && unit_name == '')">{{ item.name }}</span>
-    <span ng-if="qty && unit_name == ''">{{ (qty * ratio > 1 && item.name_plural) && item.name_plural || item.name }}</span>
+    <span ng-if="qty && unit_name == ''">{{ (qty * ratio > 1 && name_plural) && name_plural || item.name }}</span>
 </a>
