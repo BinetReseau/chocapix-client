@@ -88,11 +88,11 @@ angular.module('bars.magicbar', [
 				'refund': 'rembourser',
 				'withdraw': 'retirer'
 	        };
-			// _.map(humanTypes, function (o, k) {
-			// 	if (!AuthUser.can('add_' + k + 'transaction')) {
-			// 		delete humanTypes[k];
-			// 	}
-			// });
+			_.map(humanTypes, function (o, k) {
+				if (!AuthUser.can('add_' + k + 'transaction')) {
+					delete humanTypes[k];
+				}
+			});
 			humanTypes['add'] = 'ajouter';
 
 	        var units = [
