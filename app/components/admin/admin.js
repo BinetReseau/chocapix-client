@@ -22,8 +22,8 @@ angular.module('bars.admin', [
                     account_list: ['api.models.account', function(Account) {
                         return Account.all();
                     }],
-                    food_list: ['api.models.food', function(Food) {
-                        return Food.all();
+                    stockitem_list: ['api.models.stockitem', function(StockItem) {
+                        return StockItem.all();
                     }],
                     bar_account: ['api.models.account', function(Account) {
                         return Account.ofUser(6);
@@ -47,8 +47,8 @@ angular.module('bars.admin', [
     }
 ])
 .controller('admin.ctrl.home',
-    ['$scope', 'account_list', 'food_list', 'bar_account', 'bar',
-    function($scope, account_list, food_list, bar_account, bar) {
+    ['$scope', 'account_list', 'stockitem_list', 'bar_account', 'bar',
+    function($scope, account_list, stockitem_list, bar_account, bar) {
         $scope.admin.active = 'dashboard';
         new Morris.Line({
             // ID of the element in which to draw the chart.
@@ -77,12 +77,12 @@ angular.module('bars.admin', [
         }).length;
         $scope.ratioAccountNegativ = $scope.nbAccountNegativ/account_list.length;
 
-        $scope.nbFoodNegativ = _.filter(food_list, function (o) {
+        $scope.nbFoodNegativ = _.filter(stockitem_list, function (o) {
             return o.qty <= 0;
         }).length;
-        $scope.ratioFoodNegativ = $scope.nbFoodNegativ/food_list.length;
+        $scope.ratioFoodNegativ = $scope.nbFoodNegativ/stockitem_list.length;
 
-        var foodValue = _.reduce(food_list, function (total, f) {
+        var foodValue = _.reduce(stockitem_list, function (total, f) {
             if (!f.deleted) {
                 total += f.qty * f.price;
             }
