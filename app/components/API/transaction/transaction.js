@@ -152,6 +152,7 @@ angular.module('bars.api.transaction', [
         restrict: 'E',
         scope: {
             filter: '&filter',
+            sellitem: "=?sellitem"
             // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
@@ -166,6 +167,9 @@ angular.module('bars.api.transaction', [
                     var req = $scope.filter();
                     req.page = page++;
                     req.page_size = 30;
+                    if ($scope.sellitem) {
+                        req.sellitem = $scope.sellitem;
+                    }
                     Transaction.request(req).then(function(history) {
                         allHistory = allHistory.concat(history);
                         calculateHistory();
