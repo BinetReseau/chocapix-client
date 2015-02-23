@@ -94,8 +94,8 @@ angular.module('bars.api.food', [
             templateUrl: "components/API/food/list.html",
             controller: 'api.ctrl.food_list',
             resolve: {
-                food_list: ['api.models.food', function(Food) {
-                    return Food.all();
+                food_list: ['api.models.sellitem', function(SellItem) {
+                    return SellItem.all();
                 }]
             }
         })
@@ -104,19 +104,22 @@ angular.module('bars.api.food', [
             templateUrl: "components/API/food/details.html",
             controller: 'api.ctrl.food_details',
             resolve: {
-                food_item: ['$stateParams', 'api.models.food', function($stateParams, Food) {
-                    return Food.getSync($stateParams.id);
+                food_item: ['$stateParams', 'api.models.sellitem', function($stateParams, SellItem) {
+                    return SellItem.getSync($stateParams.id);
                 }]
             }
         });
 }])
 
 .controller('api.ctrl.food',
-    ['$scope', function($scope) {
+    ['$scope', 
+    function($scope) {
         $scope.bar.active = 'food';
-    }])
+    }]
+)
 .controller('api.ctrl.food_list',
-    ['$scope', 'food_list', function($scope, food_list) {
+    ['$scope', 'food_list', 
+    function($scope, food_list) {
         $scope.food_list = food_list;
         $scope.reverse = false;
         $scope.filterHidden = function() {
@@ -128,77 +131,78 @@ angular.module('bars.api.food', [
                 };
             }
         };
-    }])
+    }]
+)
 .controller('api.ctrl.food_details',
-    ['$scope', '$stateParams', 'food_item', 'api.services.action', 'bars.meal', 'auth.user',
-    function($scope, $stateParams, food_item, APIAction, Meal, AuthUser) {
+    ['$scope', '$stateParams', 'food_item', 'auth.user', //'api.services.action', 'bars.meal',
+    function($scope, $stateParams, food_item, AuthUser) {//, APIAction, Meal) {
         $scope.food_item = food_item;
         $scope.actions = [];
         if (AuthUser.can('add_buytransaction')) {
             $scope.actions.push({ name: "buy", value: "Acheter" });
         }
-        if (AuthUser.can('add_throwtransaction')) {
-            $scope.actions.push({ name: "throw", value: "Jeter" });
-        }
-        if (AuthUser.can('add_mealtransaction')) {
-            $scope.actions.push({ name: "add", value: "Ajouter à la bouffe" });
-        }
-        if (AuthUser.can('add_approtransaction')) {
-            $scope.actions.push({ name: "appro", value: "Approvisionner" });
-        }
+        // if (AuthUser.can('add_throwtransaction')) {
+        //     $scope.actions.push({ name: "throw", value: "Jeter" });
+        // }
+        // if (AuthUser.can('add_mealtransaction')) {
+        //     $scope.actions.push({ name: "add", value: "Ajouter à la bouffe" });
+        // }
+        // if (AuthUser.can('add_approtransaction')) {
+        //     $scope.actions.push({ name: "appro", value: "Approvisionner" });
+        // }
 
         $scope.query_qty = 1;
-        $scope.query_type = Meal.in() && 'add' || 'buy';
-        $scope.inMeal = function () {
-            return Meal.in();
-        };
-        $scope.query = function(qty, type) {
-            if (type == 'buy' || type == 'throw') {
-                APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
-                    $scope.query_qty = 1;
-                });
-            } else if (type == 'appro') {
-                APIAction[type]({items: [{item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}]}).then(function() {
-                    $scope.query_qty = 1;
-                });
-            } else if (type == 'add') {
-                Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
-            }
-        };
-        $scope.toggleDeleted = function() {
-            $scope.food_item.deleted = !$scope.food_item.deleted;
-            $scope.food_item.$save();
-        };
+        // $scope.query_type = Meal.in() && 'add' || 'buy';
+        // $scope.inMeal = function () {
+        //     return Meal.in();
+        // };
+        // $scope.query = function(qty, type) {
+        //     if (type == 'buy' || type == 'throw') {
+        //         APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
+        //             $scope.query_qty = 1;
+        //         });
+        //     } else if (type == 'appro') {
+        //         APIAction[type]({items: [{item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}]}).then(function() {
+        //             $scope.query_qty = 1;
+        //         });
+        //     } else if (type == 'add') {
+        //         Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
+        //     }
+        // };
+        // $scope.toggleDeleted = function() {
+        //     $scope.food_item.deleted = !$scope.food_item.deleted;
+        //     $scope.food_item.$save();
+        // };
 
-        var initPrice = food_item.price * food_item.unit_value;
-        $scope.computeNewPrice = function() {
-            if ($scope.newFood_item.unit_name == food_item.unit_name) {
-                $scope.newFood_item.price = initPrice;
-            } else {
-                if ($scope.newFood_item.new_unit_value) {
-                    $scope.newFood_item.price = initPrice * $scope.newFood_item.new_unit_value;
-                } else {
-                    $scope.newFood_item.price = initPrice;
-                }
-            }
-        };
-        $scope.resetFood = function() {
-            $scope.newFood_item = _.clone(food_item);
-            $scope.newFood_item.price = initPrice;
-            $scope.newFood_item.new_unit_value = 1;
-            $scope.newFood_item.new_buy_unit_value = 1;
-            $scope.newFood_item.tax *= 100;
-        };
-        $scope.editFood = function() {
-            food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
-            food_item.unit_name = $scope.newFood_item.unit_name;
-            food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
-            food_item.buy_price = $scope.newFood_item.buy_price / $scope.food_item.details.unit_value;
-            food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
-            food_item.tax = $scope.newFood_item.tax/100;
-            food_item.$save();
-        };
-        $scope.resetFood();
+        // var initPrice = food_item.price * food_item.unit_value;
+        // $scope.computeNewPrice = function() {
+        //     if ($scope.newFood_item.unit_name == food_item.unit_name) {
+        //         $scope.newFood_item.price = initPrice;
+        //     } else {
+        //         if ($scope.newFood_item.new_unit_value) {
+        //             $scope.newFood_item.price = initPrice * $scope.newFood_item.new_unit_value;
+        //         } else {
+        //             $scope.newFood_item.price = initPrice;
+        //         }
+        //     }
+        // };
+        // $scope.resetFood = function() {
+        //     $scope.newFood_item = _.clone(food_item);
+        //     $scope.newFood_item.price = initPrice;
+        //     $scope.newFood_item.new_unit_value = 1;
+        //     $scope.newFood_item.new_buy_unit_value = 1;
+        //     $scope.newFood_item.tax *= 100;
+        // };
+        // $scope.editFood = function() {
+        //     food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
+        //     food_item.unit_name = $scope.newFood_item.unit_name;
+        //     food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
+        //     food_item.buy_price = $scope.newFood_item.buy_price / $scope.food_item.details.unit_value;
+        //     food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
+        //     food_item.tax = $scope.newFood_item.tax/100;
+        //     food_item.$save();
+        // };
+        // $scope.resetFood();
     }])
 
 .controller('api.ctrl.dir.barsfood',
