@@ -4,23 +4,34 @@ angular.module('bars.api.food', [
     'APIModel'
     ])
 
-.factory('api.models.food', ['APIModel',
+.factory('api.models.buyitem', ['APIModel',
     function(APIModel) {
         return new APIModel({
-                url: 'item',
-                type: "Item",
+                url: 'buyitem',
+                type: 'BuyItem',
                 structure: {
-                    'bar': 'Bar',
-                    'details': "ItemDetails"
+                    'item': 'ItemDetails'
                 },
                 methods: {
-                    'filter': function(s) {
-                        return !this.deleted && this.details.filter(s);
-                    }
+
                 }
             });
     }])
-.factory('api.models.fooddetails', ['APIModel',
+.factory('api.models.buyitemprice', ['APIModel',
+    function(APIModel) {
+        return new APIModel({
+                url: 'buyitemprice',
+                type: 'BuyItemPrice',
+                structure: {
+                    'bar': 'Bar',
+                    'buyitem': 'BuyItem'
+                },
+                methods: {
+
+                }
+            });
+    }])
+.factory('api.models.itemdetails', ['APIModel',
     function(APIModel) {
         return new APIModel({
                 url: 'itemdetails',
@@ -31,8 +42,40 @@ angular.module('bars.api.food', [
                 methods: {
                     'filter': function(s) {
                         return (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                            s == this.barcode);
+                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                    }
+                }
+            });
+    }])
+.factory('api.models.stockitem', ['APIModel',
+    function(APIModel) {
+        return new APIModel({
+                url: 'stockitem',
+                type: 'StockItem',
+                structure: {
+                    'bar': 'Bar',
+                    'details': 'ItemDetails',
+                    'sellitem': 'SellItem'
+                },
+                methods: {
+                    'filter': function(s) {
+                        return !this.deleted && this.details.filter(s);
+                    }
+                }
+            });
+    }])
+.factory('api.models.sellitem', ['APIModel',
+    function(APIModel) {
+        return new APIModel({
+                url: 'sellitem',
+                type: 'SellItem',
+                structure: {
+                    'bar': 'Bar',
+                    'stockitems.*': 'StockItem'
+                },
+                methods: {
+                    'filter': function(s) {
+                        return (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
             });
