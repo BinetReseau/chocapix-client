@@ -61,9 +61,17 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.appro',
-    ['$scope', '$modal', 'api.models.food', 'admin.appro', '$timeout',
-    function($scope, $modal, Food, Appro, $timeout) {
+    ['$scope', '$modal', 'api.models.stockitem', 'admin.appro', '$timeout',
+    function($scope, $modal, StockItem, Appro, $timeout) {
         $scope.appro = Appro;
+        $scope.stock_items = StockItem.all();
+        $scope.searchl = "";
+        $scope.filterItems = function(o) {
+            return o.filter(Appro.itemToAdd);
+        }
+        $scope.filterItemsl = function(o) {
+            return o.item.filter($scope.searchl);
+        }
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
@@ -132,13 +140,12 @@ angular.module('bars.admin.food', [
             return o.filter($scope.itemInPack);
         };
         $scope.choiceBuyItemItem = function(item, model, label) {
-            $scope.buy_item.item = item.id;
+            $scope.buy_item.details = item.id;
         };
 
         $scope.add.go = function() {
             function saveFood() {
                 return $scope.sell_item.$save().then(function (sellItem) {
-                    $scope.stock_item.details = $scope.item_details.id;
                     $scope.stock_item.sellitem = sellItem.id;
                     return $scope.stock_item.$save().then(function (stockItem) {
                         return stockItem;
@@ -175,10 +182,11 @@ angular.module('bars.admin.food', [
 
                 if ($scope.new_details) {
                     return $scope.item_details.$save().then(function (itemDetails) {
-                        $scope.buy_item.item = itemDetails.id;
+                        $scope.buy_item.details = itemDetails.id;
+                        $scope.stock_item.details = itemDetails.id;
                         return $scope.buy_item.$save().then(function (buyItem) {
                             $scope.buy_item_price.buyitem = buyItem.id;
-                            return $scope.buy_item_price.$save(saveFood);
+                            return $scope.buy_item_price.$save().then(saveFood);
                         })
                     }, function(errors) {
                         // TODO: display form errors
@@ -263,8 +271,8 @@ angular.module('bars.admin.food', [
     };
 })
 .controller('admin.ctrl.food.inventory',
-    ['$scope', 'api.models.food', 'admin.inventory',
-    function($scope, Food, Inventory) {
+    ['$scope', 'api.models.stockitem', 'admin.inventory',
+    function($scope, StockItem, Inventory) {
         $scope.admin.active = 'food';
 
         $scope.inventory = Inventory;
@@ -278,8 +286,8 @@ angular.module('bars.admin.food', [
 ])
 
 .factory('admin.appro',
-    ['api.models.food', 'api.services.action',
-    function (Food, APIAction) {
+    ['api.models.stockitem', 'api.services.action',
+    function (StockItem, APIAction) {
         var nb = 0;
         return {
             itemsList: [],
@@ -354,8 +362,8 @@ angular.module('bars.admin.food', [
     }]
 )
 .factory('admin.inventory',
-    ['api.models.food', 'api.services.action',
-    function (Food, APIAction) {
+    ['api.models.stockitem', 'api.services.action',
+    function (StockItem, APIAction) {
         var nb = 0;
         return {
             itemsList: [],
