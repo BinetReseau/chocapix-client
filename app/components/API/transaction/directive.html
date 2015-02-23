@@ -59,26 +59,26 @@
                                 </a>
                                 <div collapse="transaction.items.length == 1 || !detailsFood">
                                     <div ng-repeat="x in transaction.items">
-                                        <bars:food food="x.item"></bars:food>
+                                        <bars:stockitem item="x.item"></bars:stockitem>
                                         <div class="pull-right">
                                             <span ng-if="x.qty >= 0" class="label label-success">
-                                                +<bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
+                                                +<bars:stockitem:qty item="x.item" qty="x.qty" out="'sell'"></bars:stockitem:qty>
                                             </span>
                                             <span ng-if="x.qty < 0" class="label label-danger">
-                                                <bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
+                                                <bars:stockitem:qty item="x.item" qty="x.qty" out="'sell'"></bars:stockitem:qty>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <span ng-if="transaction.items.length == 1" ng-init="x = transaction.items[0]">
                                     <span ng-if="x.qty >= 0" class="label label-success">
-                                        +<bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
+                                        +<bars:stockitem:qty item="x.item" qty="x.qty" out="'sell'"></bars:stockitem:qty>
                                     </span>
                                     <span ng-if="x.qty < 0" class="label label-danger">
-                                        <bars:food:qty food="x.item" qty="x.qty" out="'sell'"></bars:food:qty>
+                                        <bars:stockitem:qty item="x.item" qty="x.qty" out="'sell'"></bars:stockitem:qty>
                                     </span>
                                     &nbsp;&nbsp;
-                                    <bars:food food="x.item"></bars:food>
+                                    <bars:stockitem item="x.item"></bars:stockitem>
                                 </span>
                             </div>
                         </td>
