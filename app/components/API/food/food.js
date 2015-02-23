@@ -159,58 +159,68 @@ angular.module('bars.api.food', [
             $scope.actions.push({ name: "appro", value: "Approvisionner" });
         }
 
-        $scope.query_qty = 1;
-        // $scope.query_type = Meal.in() && 'add' || 'buy';
+        $scope.query = {
+            qty: 1,
+            type: 'buy', // Meal.in() && 'add' || 'buy';
+            stockitem: $scope.food_item.stockitems[0]
+        };
+        $scope.check = function() {
+            console.log($scope.query.stockitem);
+        }
         // $scope.inMeal = function () {
         //     return Meal.in();
         // };
-        // $scope.query = function(qty, type) {
-        //     if (type == 'buy' || type == 'throw') {
-        //         APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
-        //             $scope.query_qty = 1;
-        //         });
-        //     } else if (type == 'appro') {
-        //         APIAction[type]({items: [{item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}]}).then(function() {
-        //             $scope.query_qty = 1;
-        //         });
-        //     } else if (type == 'add') {
-        //         Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
-        //     }
-        // };
-        // $scope.toggleDeleted = function() {
-        //     $scope.food_item.deleted = !$scope.food_item.deleted;
-        //     $scope.food_item.$save();
-        // };
+        $scope.query = function(qty, type) {
+            if (type == 'buy') {
+                APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
+                    $scope.query.qty = 1;
+                });
+            } else if (type == 'throw') {
+                APIAction[type]({item: $scope.query.stockitem, qty: qty*$scope.query.stockitem.details.unit_value}).then(function() {
+                    $scope.query.qty = 1;
+                })
+            } else if (type == 'appro') {
+                APIAction[type]({items: [{item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}]}).then(function() {
+                    $scope.query.qty = 1;
+                });
+            } else if (type == 'add') {
+                Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
+            }
+        };
+        $scope.toggleDeleted = function() {
+            $scope.food_item.deleted = !$scope.food_item.deleted;
+            $scope.food_item.$save();
+        };
 
-        // var initPrice = food_item.price * food_item.unit_value;
-        // $scope.computeNewPrice = function() {
-        //     if ($scope.newFood_item.unit_name == food_item.unit_name) {
-        //         $scope.newFood_item.price = initPrice;
-        //     } else {
-        //         if ($scope.newFood_item.new_unit_value) {
-        //             $scope.newFood_item.price = initPrice * $scope.newFood_item.new_unit_value;
-        //         } else {
-        //             $scope.newFood_item.price = initPrice;
-        //         }
-        //     }
-        // };
-        // $scope.resetFood = function() {
-        //     $scope.newFood_item = _.clone(food_item);
-        //     $scope.newFood_item.price = initPrice;
-        //     $scope.newFood_item.new_unit_value = 1;
-        //     $scope.newFood_item.new_buy_unit_value = 1;
-        //     $scope.newFood_item.tax *= 100;
-        // };
-        // $scope.editFood = function() {
-        //     food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
-        //     food_item.unit_name = $scope.newFood_item.unit_name;
-        //     food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
-        //     food_item.buy_price = $scope.newFood_item.buy_price / $scope.food_item.details.unit_value;
-        //     food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
-        //     food_item.tax = $scope.newFood_item.tax/100;
-        //     food_item.$save();
-        // };
-        // $scope.resetFood();
+        var initPrice = food_item.price * food_item.unit_value;
+        $scope.computeNewPrice = function() {
+            if ($scope.newFood_item.unit_name == food_item.unit_name) {
+                $scope.newFood_item.price = initPrice;
+            } else {
+                if ($scope.newFood_item.new_unit_value) {
+                    $scope.newFood_item.price = initPrice * $scope.newFood_item.new_unit_value;
+                } else {
+                    $scope.newFood_item.price = initPrice;
+                }
+            }
+        };
+        $scope.resetFood = function() {
+            $scope.newFood_item = _.clone(food_item);
+            $scope.newFood_item.price = initPrice;
+            $scope.newFood_item.new_unit_value = 1;
+            $scope.newFood_item.new_buy_unit_value = 1;
+            $scope.newFood_item.tax *= 100;
+        };
+        $scope.editFood = function() {
+            food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
+            food_item.unit_name = $scope.newFood_item.unit_name;
+            food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
+            food_item.buy_price = $scope.newFood_item.buy_price / $scope.food_item.details.unit_value;
+            food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
+            food_item.tax = $scope.newFood_item.tax/100;
+            food_item.$save();
+        };
+        $scope.resetFood();
     }])
 
 .controller('api.ctrl.dir.barsfood',
