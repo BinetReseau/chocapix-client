@@ -164,13 +164,6 @@ angular.module('bars.api.food', [
             type: Meal.in() && 'add' || 'buy',
             stockitem: $scope.food_item.stockitems[0]
         };
-        $scope.refresh = function() {
-            $scope.query = {
-                qty: 1,
-                type: Meal.in() && 'add' || 'buy',
-                stockitem: $scope.food_item.stockitems[0]
-            };
-        }
         $scope.inMeal = function () {
             return Meal.in();
         };
