@@ -5,8 +5,8 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', 'api.models.sellitem', 'api.models.buyitem', 'api.services.action', 'magicbar.analyse', 'bars.meal',
-    function($scope, $filter, SellItem, BuyItem, APIAction, analyse, Meal) {
+    ['$scope', '$filter', 'api.services.action', 'magicbar.analyse', 'bars.meal',
+    function($scope, $filter, APIAction, analyse, Meal) {
         $scope.query = {
             type: 'buy',
             qty: 1,
@@ -52,8 +52,8 @@ angular.module('bars.magicbar', [
     }])
 
 .factory('magicbar.analyse',
-	['$filter', 'bars.meal', 'auth.user',
-	function($filter, Meal, AuthUser) {
+	['$filter',  'api.models.sellitem', 'api.models.buyitem', 'bars.meal', 'auth.user',
+	function($filter, SellItem, BuyItem, Meal, AuthUser) {
 	    var analyse = function(qo, $scope) {
 	        $scope.query = {
 	            type: '',
@@ -179,11 +179,11 @@ angular.module('bars.magicbar', [
 	            }
 
 	            // Food
-	            var foods = _.filter($scope.bar.foods, function (o) {
+	            var foods = _.filter(SellItem.all(), function (o) {
 					return o.filter(term);
 	            });
 	            if (foods.length === 0) {
-	                foods = _.filter($scope.bar.foods, function (o) {
+	                foods = _.filter(SellItem.all(), function (o) {
 						return o.filter(term.replace(/s$/, ''));
 	                });
 	            }
