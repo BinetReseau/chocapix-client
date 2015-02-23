@@ -213,6 +213,15 @@ td.qty {
 td.remove {
     width: 20px;
 }
+
+hr.derrierebtn {
+    position: relative;
+    top: -1.1em;
+    z-index: -1;
+    margin: 0;
+    border-color: #ccc;
+}
+
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {
     color: rgb(51, 122, 183);
