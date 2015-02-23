@@ -5,8 +5,8 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', 'api.models.food', 'api.services.action', 'magicbar.analyse', 'bars.meal',
-    function($scope, $filter, Food, APIAction, analyse, Meal) {
+    ['$scope', '$filter', 'api.models.sellitem', 'api.models.buyitem', 'api.services.action', 'magicbar.analyse', 'bars.meal',
+    function($scope, $filter, SellItem, BuyItem, APIAction, analyse, Meal) {
         $scope.query = {
             type: 'buy',
             qty: 1,

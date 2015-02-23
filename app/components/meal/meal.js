@@ -23,8 +23,8 @@ angular.module('bars.meal', [
     return $tooltip('popoverMeal', 'popover', 'click');
 }])
 .factory('bars.meal',
-    ['$rootScope', 'api.models.food', 'api.models.account', 'api.services.action', 'auth.user',
-    function ($rootScope, Food, Account, APIAction, AuthUser) {
+    ['$rootScope', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
+    function ($rootScope, SellItem, Account, APIAction, AuthUser) {
         var meal = {
             customersList: [],
             itemsList: [],
