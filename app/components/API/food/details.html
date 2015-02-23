@@ -69,13 +69,15 @@
                 </tab>
                 <tab heading="Stocks" ng-if="food_item.stockitems.length > 1">
                     <div class="row">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover table-tab">
                             <thead>
                                 <tr>
                                     <th>Article</th>
                                     <th>Stock</th>
                                     <th>Prix HT</th>
-                                    <th></th>
+                                    <th>
+                                        <a class="btn btn-xs btn-success">Ajouter un article</a> <!-- TODO -->
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -83,7 +85,9 @@
                                     <td>{{ si.details.name }}</td>
                                     <td><bars:stockitem:qty item="si" qty="si.qty" out="'sell'"></bars:stockitem:qty></td>
                                     <td><bars:stockitem:price item="si" in="'sell'" qty="1" tax="true"></bars:stockitem:price></td>
-                                    <td>Actions</td>
+                                    <td>
+                                        Supprimer ? <!-- TODO -->
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
