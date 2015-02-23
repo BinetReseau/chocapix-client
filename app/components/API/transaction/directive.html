@@ -30,7 +30,7 @@
                                     <bars:sellitem item="transaction.item.sellitem" qty="transaction.qty" out="'sell'"></bars:sellitem>
                                 </span>
                                 <span ng-switch-when="throw">
-                                    <bars:stockitem food="transaction.item" qty="transaction.qty" out="'sell'"></bars:stockitem>
+                                    <bars:stockitem item="transaction.item" qty="transaction.qty" out="'sell'"></bars:stockitem>
                                 </span>
 
                                 <span ng-switch-when="give">
