@@ -39,20 +39,26 @@ angular.module('bars.admin.food', [
     }]
 )
 .controller('admin.ctrl.food.add',
-    ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.stockitem', 'api.services.action',
-    function($scope, SellItem, ItemDetails, BuyItem, StockItem, APIAction) {
+    ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.buyitemprice', 'api.models.stockitem', 'api.services.action',
+    function($scope, SellItem, ItemDetails, BuyItem, BuyItemPrice, StockItem, APIAction) {
         $scope.buy_item = BuyItem.create();
         $scope.item_details = ItemDetails.create();
         $scope.sell_item = SellItem.create();
         $scope.stock_item = StockItem.create();
+        $scope.buy_item_price = BuyItemPrice.create();
 
         var add = {};
         $scope.add = add;
         $scope.addFood = function() {
-            //var qty = $scope.food.qty/$scope.food.unit_value;
+            if ($scope.stock_item.id) {
+                var qty = $scope.sell_item.qty/$scope.sell_item.unit_value;
+            } else {
+                var qty = $scope.sell_item.qty;
+            }
             add.go().then(function(newFood) {
+                console.log($scope.buy_item);
                 APIAction.appro({
-                    items: [{item: newFood.id, qty: qty}]
+                    items: [{buyitem: $scope.buy_item.id, qty: qty}]
                 });
             }, function(errors) {
                 // TODO: display form errors
@@ -133,14 +139,14 @@ angular.module('bars.admin.food', [
         var initDetails = $scope.item_details;
         $scope.barcode = $scope.buy_item.barcode;
         $scope.is_pack = false;
-        $scope.buy_item_price = BuyItemPrice.create();
 
         $scope.stockitems = StockItem.all();
+        $scope.itemInPack = "";
         $scope.itemFilter = function(o) {
             return o.filter($scope.itemInPack);
         };
         $scope.choiceBuyItemItem = function(item, model, label) {
-            $scope.buy_item.details = item.id;
+            $scope.buy_item.details = item.details.id;
         };
 
         $scope.add.go = function() {
@@ -157,8 +163,9 @@ angular.module('bars.admin.food', [
 
             if ($scope.is_pack) {
                 $scope.buy_item.barcode = $scope.barcode;
-                return $scope.buy_item.$save().then(function (newBuyItem) {
-                    $scope.buy_item_price.buyitem = newBuyItem.id;
+                return $scope.buy_item.$save().then(function (buyItem) {
+                    $scope.buy_item_price.buyitem = buyItem.id;
+                    $scope.buy_item.id = buyItem.id;
                     return $scope.buy_item_price.$save();
                 });
             } else {
@@ -185,6 +192,7 @@ angular.module('bars.admin.food', [
                         $scope.buy_item.details = itemDetails.id;
                         $scope.stock_item.details = itemDetails.id;
                         return $scope.buy_item.$save().then(function (buyItem) {
+                            $scope.buy_item.id = buyItem.id;
                             $scope.buy_item_price.buyitem = buyItem.id;
                             return $scope.buy_item_price.$save().then(saveFood);
                         })
@@ -262,6 +270,7 @@ angular.module('bars.admin.food', [
             sell_item: '=sellItem',
             item_details: '=itemDetails',
             buy_item: '=buyItem',
+            buy_item_price: '=buyItemPrice',
             stock_item: '=stockItem',
             add: '=add',
             new_details: '=?newDetails'
