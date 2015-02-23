@@ -164,9 +164,6 @@ angular.module('bars.api.food', [
             type: 'buy', // Meal.in() && 'add' || 'buy';
             stockitem: $scope.food_item.stockitems[0]
         };
-        $scope.check = function() {
-            console.log($scope.query.stockitem);
-        }
         // $scope.inMeal = function () {
         //     return Meal.in();
         // };
@@ -176,11 +173,11 @@ angular.module('bars.api.food', [
                     $scope.query.qty = 1;
                 });
             } else if (type == 'throw') {
-                APIAction[type]({item: $scope.query.stockitem, qty: qty*$scope.query.stockitem.details.unit_value}).then(function() {
+                APIAction[type]({item: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}).then(function() {
                     $scope.query.qty = 1;
                 })
             } else if (type == 'appro') {
-                APIAction[type]({items: [{item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}]}).then(function() {
+                APIAction[type]({items: [{item: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}]}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'add') {
