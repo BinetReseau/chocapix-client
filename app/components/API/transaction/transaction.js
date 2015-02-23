@@ -15,8 +15,8 @@ angular.module('bars.api.transaction', [
                     'author_account': 'Account',
                     'account': 'Account',
                     'accounts.*.account': 'Account',
-                    'item': 'Item',
-                    'items.*.item': 'Item'
+                    'item': 'StockItem',
+                    'items.*.item': 'StockItem'
                 },
                 methods: {
                     'parseTimestamp':  function() {
