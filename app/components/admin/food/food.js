@@ -51,11 +51,14 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.add',
     ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.buyitemprice', 'api.models.stockitem', 'api.services.action',
     function($scope, SellItem, ItemDetails, BuyItem, BuyItemPrice, StockItem, APIAction) {
-        $scope.buy_item = BuyItem.create();
-        $scope.item_details = ItemDetails.create();
-        $scope.sell_item = SellItem.create();
-        $scope.stock_item = StockItem.create();
-        $scope.buy_item_price = BuyItemPrice.create();
+        function init() {
+            $scope.buy_item = BuyItem.create();
+            $scope.item_details = ItemDetails.create();
+            $scope.sell_item = SellItem.create();
+            $scope.stock_item = StockItem.create();
+            $scope.buy_item_price = BuyItemPrice.create();
+        }
+        init();
 
         var add = {};
         $scope.add = add;
@@ -66,10 +69,9 @@ angular.module('bars.admin.food', [
                 var qty = $scope.sell_item.qty;
             }
             add.go().then(function(newFood) {
-                console.log($scope.buy_item);
                 APIAction.appro({
                     items: [{buyitem: $scope.buy_item.id, qty: qty}]
-                });
+                }).then(init);
             }, function(errors) {
                 // TODO: display form errors
             });
