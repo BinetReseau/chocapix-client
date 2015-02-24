@@ -231,7 +231,7 @@ angular.module('bars.admin.food', [
             } else {
                 $scope.item_details.unit_value = 1;
                 $scope.stock_item.qty = 0;
-                $scope.sell_item.unit_value = 1/$scope.sell_item.unit_value;
+                //$scope.sell_item.unit_value = 1/$scope.sell_item.unit_value;
                 $scope.sell_item.tax *= 0.01;
                 $scope.sell_item.name = $scope.item_details.name;
                 $scope.sell_item.name_plural = $scope.item_details.name_plural;
