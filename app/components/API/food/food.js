@@ -409,6 +409,7 @@ angular.module('bars.api.food', [
         controller: ['$scope', function($scope) {
             function refresh() {
                 $scope.price = $scope.item.price;
+                $scope.unit_name = $scope.item.sellitem.unit_name;
             }
             refresh();
         }]
