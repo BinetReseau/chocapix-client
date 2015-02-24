@@ -340,8 +340,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.graphs',
-    ['$scope', 'api.models.food',
-    function($scope, Food) {
+    ['$scope', 
+    function($scope) {
         $scope.admin.active = 'food;'
     }
 ])
