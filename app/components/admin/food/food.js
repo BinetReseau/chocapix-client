@@ -15,6 +15,16 @@ angular.module('bars.admin.food', [
             templateUrl: "components/admin/food/add.html",
             controller: 'admin.ctrl.food.add'
         })
+        .state('bar.admin.food.regroup', {
+            url: "/regroup",
+            templateUrl: "components/admin/food/regroup.html",
+            controller: 'admin.ctrl.food.regroup',
+            resolve: {
+                sellitem_list: ['api.models.sellitem', function(SellItem) {
+                    return SellItem.all();
+                }]
+            }
+        })
         .state('bar.admin.food.appro', {
             url: "/appro",
             templateUrl: "components/admin/food/appro.html",
@@ -66,6 +76,52 @@ angular.module('bars.admin.food', [
         };
     }
 ])
+.controller('admin.ctrl.food.regroup', 
+    ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list', 
+    function($scope, SellItem, ItemDetails, BuyItem, StockItem, APIAction, sellitem_list) {
+        document.getElementById("sellitemNameInput").focus();
+        $scope.sell_item = SellItem.create();
+        $scope.sellitem_list = sellitem_list;
+        $scope.sellitems_grp = [];
+        $scope.searchl = "";
+        $scope.searchll = "";
+        $scope.filterItems = function(o) {
+            return o.filter($scope.searchl);
+        };
+        $scope.filterItemsl = function(o) {
+            return o.filter($scope.searchll);
+        };
+        $scope.addItem = function(item) {
+            var other = _.find($scope.sellitems_grp, item);
+            if (!other) {
+                $scope.sellitems_grp.push(item);
+                $scope.sellitem_list.splice($scope.sellitem_list.indexOf(item), 1);
+                $scope.searchl = "";
+                $scope.sameUnits();
+            }
+        };
+        $scope.removeItem = function(item) {
+            var index = $scope.sellitems_grp.indexOf(item);
+            $scope.sellitems_grp.splice(index, 1);
+            $scope.sellitem_list.push(item);
+            $scope.sameUnits();
+        };
+        $scope.sameUnits = function() {
+            if ($scope.sellitems_grp[0]) {
+                var p = $scope.sellitems_grp[0];
+                if(p.unit_name) {
+                    return !_.every($scope.sellitems_grp, function(n) {
+                        return (n.unit_name == p.unit_name && n.unit_name_plural == p.unit_name_plural);
+                    });
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        };
+    }
+])
 .controller('admin.ctrl.food.appro',
     ['$scope', '$modal', 'api.models.buyitemprice', 'admin.appro', '$timeout',
     function($scope, $modal, BuyItemPrice, Appro, $timeout) {
@@ -74,7 +130,10 @@ angular.module('bars.admin.food', [
         $scope.searchl = "";
         $scope.filterItemsl = function(o) {
             return o.buyitemprice.filter($scope.searchl);
-        }
+        };
+        $scope.filterItems = function(o) {
+            return o.filter(Appro.itemToAdd);
+        };
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
