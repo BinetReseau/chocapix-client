@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addApproItemInput">Ajouter</label>
                 <div class="col-sm-10">
-                    <input type="text" tabindex="1" id="addApproItemInput" class="form-control" ng-keypress="newItem($event)" placeholder="Aliment à ajouter à l'appro" typeahead="item.buyitem.details.name for item in buy_item_prices | filter:filterItems | limitTo:5" ng-model="appro.itemToAdd" autocomplete="off" typeahead-on-select="appro.addItem($item)" typeahead-template-url="components/admin/food/typehead.html" />
+                    <input type="text" tabindex="1" id="addApproItemInput" class="form-control" ng-keypress="newItem($event)" placeholder="Aliment à ajouter à l'appro" typeahead="item.buyitem.details.name for item in buy_item_prices | filter:$viewValue | limitTo:5" ng-model="appro.itemToAdd" autocomplete="off" typeahead-on-select="appro.addItem($item)" typeahead-template-url="components/admin/food/typehead.html" />
                 </div>
             </div>
             <div class="form-group">

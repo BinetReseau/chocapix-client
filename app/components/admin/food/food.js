@@ -72,9 +72,6 @@ angular.module('bars.admin.food', [
         $scope.appro = Appro;
         $scope.buy_item_prices = BuyItemPrice.all();
         $scope.searchl = "";
-        $scope.filterItems = function(o) {
-            return o.filter(Appro.itemToAdd);
-        }
         $scope.filterItemsl = function(o) {
             return o.buyitemprice.filter($scope.searchl);
         }

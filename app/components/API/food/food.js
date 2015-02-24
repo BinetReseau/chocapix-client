@@ -13,7 +13,9 @@ angular.module('bars.api.food', [
                     'details': 'ItemDetails'
                 },
                 methods: {
-
+                    'filter': function(s) {
+                        return s == this.barcode || this.details.filter(s);
+                    }
                 }
             });
     }])
@@ -28,7 +30,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return this.buyitem.details.filter(s);
+                        return this.buyitem.filter(s);
                     }
                 }
             });
