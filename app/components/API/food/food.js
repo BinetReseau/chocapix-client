@@ -306,13 +306,10 @@ angular.module('bars.api.food', [
 .controller('api.ctrl.dir.barssellitem',
     ['$scope', function($scope) {
         function refresh() {
-            if ($scope.out == 'sell') {
-                $scope.unit_name = $scope.item.unit_name;
-                $scope.unit_name_plural = $scope.item.unit_name_plural;
-            }
+            $scope.unit_name = $scope.item.unit_name;
+            $scope.unit_name_plural = $scope.item.unit_name_plural;
         }
         $scope.abs = Math.abs;
-        //$scope.$watch('item.unit_value', refresh);
         refresh();
     }])
 .directive('barsSellitem', function() {
@@ -321,9 +318,7 @@ angular.module('bars.api.food', [
         scope: {
             item: '=item',
             //unit: '=?unit',
-            qty: '=?qty',
-            in: '=?in',
-            out: '=?out'
+            qty: '=?qty'
         },
         templateUrl: 'components/API/food/directives/sellitem-directive.html',
         controller: 'api.ctrl.dir.barssellitem'
@@ -334,9 +329,7 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            qty: '=qty',
-            in: '=?in',
-            out: '=?out'
+            qty: '=qty'
         },
         templateUrl: 'components/API/food/directives/sellitem-qty-directive.html',
         controller: 'api.ctrl.dir.barssellitem'
@@ -347,23 +340,17 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            in: '=?in',
             qty: '=?qty',
             tax: '=?tax'
         },
         templateUrl: 'components/API/food/directives/sellitem-price-directive.html',
         controller: ['$scope', function($scope) {
             function refresh() {
-                if ($scope.in == 'sell') {
-                    $scope.price = $scope.item.fuzzy_price;
-                    if ($scope.tax) {
-                        $scope.price *= (1 + $scope.item.tax);
-                    }
-                } else {
-                    $scope.price = $scope.item.fuzzy_price;
+                $scope.price = $scope.item.fuzzy_price;
+                if ($scope.tax) {
+                    $scope.price *= (1 + $scope.item.tax);
                 }
             }
-            //$scope.$watch('item.unit_value', refresh);
             refresh();
         }]
     };
