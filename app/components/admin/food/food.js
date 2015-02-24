@@ -89,14 +89,11 @@ angular.module('bars.admin.food', [
                             },
                             barcode: function () {
                                 return Appro.itemToAdd;
-                            },
-                            fooddetails_list: ['api.models.fooddetails', function(FoodDetails) {
-                                return FoodDetails.all();
-                            }]
+                            }
                         }
                     });
-                    modalNewFood.result.then(function (newFood) {
-                            Appro.addItem(newFood);
+                    modalNewFood.result.then(function (buyItemPrice) {
+                            Appro.addItem(buyItemPrice);
                             $timeout(function () {
                                 document.getElementById("addApproItemInput").focus();
                             }, 300);
@@ -109,18 +106,20 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.addModal',
-    ['$scope', '$modalInstance', 'api.models.food', 'api.models.fooddetails', 'bar', 'barcode', 'fooddetails_list',
-    function($scope, $modalInstance, Food, FoodDetails, bar, barcode, fooddetails_list) {
-        $scope.food = Food.create();
-        $scope.food_details = FoodDetails.create();
+    ['$scope', '$modalInstance', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.buyitemprice', 'api.models.stockitem', 'bar', 'barcode',
+    function($scope, $modalInstance, SellItem, ItemDetails, BuyItem, BuyItemPrice, StockItem, bar, barcode) {
+        $scope.buy_item = BuyItem.create();
+        $scope.item_details = ItemDetails.create();
+        $scope.sell_item = SellItem.create();
+        $scope.stock_item = StockItem.create();
+        $scope.buy_item_price = BuyItemPrice.create();
 
-        $scope.food.bar = bar;
-        $scope.food_details.barcode = barcode;
+        $scope.buy_item.barcode = barcode;
         var add = {};
         $scope.add = add;
         $scope.addFood = function() {
             add.go().then(function(newFood) {
-                $modalInstance.close(newFood);
+                $modalInstance.close($scope.buy_item_price);
             }, function(errors) {
                 // TODO: display form errors
             });
@@ -137,19 +136,24 @@ angular.module('bars.admin.food', [
         $scope.barcode = $scope.buy_item.barcode;
         $scope.is_pack = false;
 
-        $scope.stockitems = StockItem.all();
+        $scope.buyitemprices = BuyItemPrice.all();
+        $scope.buyitempricesf = function (v) {
+            return _.filter($scope.buyitemprices, function (o) {
+                return o.filter(v);
+            });
+        };
         $scope.itemInPack = "";
         $scope.itemFilter = function(o) {
             return o.filter($scope.itemInPack);
         };
         $scope.choiceBuyItemItem = function(item, model, label) {
-            $scope.buy_item.details = item.details.id;
+            $scope.buy_item.details = item.buyitem.details.id;
         };
 
         $scope.add.go = function() {
             function saveFood() {
                 return $scope.sell_item.$save().then(function (sellItem) {
-                    $scope.stock_item.sellitem = sellItem.id;
+                    $scope.stock_item.sellitem = sellItem;
                     return $scope.stock_item.$save().then(function (stockItem) {
                         return stockItem;
                     });
@@ -161,7 +165,7 @@ angular.module('bars.admin.food', [
             if ($scope.is_pack) {
                 $scope.buy_item.barcode = $scope.barcode;
                 return $scope.buy_item.$save().then(function (buyItem) {
-                    $scope.buy_item_price.buyitem = buyItem.id;
+                    $scope.buy_item_price.buyitem = buyItem;
                     $scope.buy_item.id = buyItem.id;
                     return $scope.buy_item_price.$save();
                 });
@@ -178,11 +182,11 @@ angular.module('bars.admin.food', [
 
                 if ($scope.new_details) {
                     return $scope.item_details.$save().then(function (itemDetails) {
-                        $scope.buy_item.details = itemDetails.id;
-                        $scope.stock_item.details = itemDetails.id;
+                        $scope.buy_item.details = itemDetails;
+                        $scope.stock_item.details = itemDetails;
                         return $scope.buy_item.$save().then(function (buyItem) {
                             $scope.buy_item.id = buyItem.id;
-                            $scope.buy_item_price.buyitem = buyItem.id;
+                            $scope.buy_item_price.buyitem = buyItem;
                             return $scope.buy_item_price.$save().then(saveFood);
                         })
                     }, function(errors) {
