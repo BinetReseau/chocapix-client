@@ -373,23 +373,23 @@ angular.module('bars.api.food', [
         function refresh() {
             $scope.ratio = 1;
             if ($scope.in == 'buy') {
-                $scope.ratio *= $scope.item.details.unit_value;
+                $scope.ratio *= 1/$scope.item.sell_to_buy;
             } else if ($scope.in == 'sell') {
-                $scope.ratio *= $scope.item.sellitem.unit_value;
+                $scope.ratio *= $scope.item.sell_to_buy;
             }
             if ($scope.out == 'buy') {
-                $scope.ratio *= 1/$scope.item.details.unit_value;
-                $scope.unit_name = $scope.item.details.unit_name;
-                $scope.unit_name_plural = $scope.item.details.unit_name_plural;
+                $scope.ratio *= $scope.item.sell_to_buy;
+                $scope.unit_name = $scope.item.details.name;
+                $scope.unit_name_plural = $scope.item.details.name_plural;
             } else if ($scope.out == 'sell') {
-                $scope.ratio *= 1/$scope.item.sellitem.unit_value;
+                $scope.ratio *= 1/$scope.item.sell_to_buy;
                 $scope.unit_name = $scope.item.sellitem.unit_name;
                 $scope.unit_name_plural = $scope.item.sellitem.unit_name_plural;
             }
         }
         $scope.abs = Math.abs;
-        $scope.$watch('item.details.unit_value', refresh);
-        $scope.$watch('item.sellitem.unit_value', refresh);
+        $scope.$watch('item.sell_to_buy', refresh);
+        //$scope.$watch('item.sellitem.unit_value', refresh);
         refresh();
     }])
 .directive('barsStockitem', function() {
@@ -432,15 +432,15 @@ angular.module('bars.api.food', [
         controller: ['$scope', function($scope) {
             function refresh() {
                 if ($scope.in == 'buy') {
-                    $scope.price = $scope.item.price * $scope.item.details.unit_value;
+                    $scope.price = $scope.item.price * $scope.item.sell_to_buy;
                 } else if ($scope.in == 'sell') {
-                    $scope.price = $scope.item.price * $scope.item.sellitem.unit_value;
+                    $scope.price = $scope.item.price;
                 } else {
                     $scope.price = $scope.item.price;
                 }
             }
-            $scope.$watch('item.details.unit_value', refresh);
-            $scope.$watch('item.sellitem.unit_value', refresh);
+            $scope.$watch('item.sell_to_buy', refresh);
+            //$scope.$watch('item.sellitem.unit_value', refresh);
             refresh();
         }]
     };
