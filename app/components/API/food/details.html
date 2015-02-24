@@ -17,8 +17,8 @@
                     {{ (food_item.unit_name_plural && query.qty > 1) && food_item.unit_name_plural || (food_item.unit_name || ((food_item.name_plural && query.qty > 1) && food_item.name_plural || food_item.name)) }}
                 </div>
                 <select class="form-control" ng-model="query.stockitem" ng-options="article.details.name for article in food_item.stockitems" ng-if="query.type != 'buy' && query.type != 'add' && food_item.stockitems.length > 1"></select>
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*food_item.price*food_item.unit_value*(1+food_item.tax)) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1" />
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.stockitem.price*query.stockitem.details.unit_value) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type != 'buy' && query.type != 'add' && food_item.stockitems.length > 1" />
+                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*food_item.fuzzy_price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1" />
+                <!-- <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.stockitem.price*query.stockitem.details.unit_value) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type != 'buy' && query.type != 'add' && food_item.stockitems.length > 1" /> -->
             </form>
         </div>
     </div>
@@ -51,7 +51,7 @@
                                     <td class="end-of-column text-right" ng-mouseenter="in = true" ng-mouseleave="in = false">
                                         <span class="h4" ng-hide="in">
                                             <span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
-                                                <bars:sellitem:qty item="food_item" qty="food_item.qty" out="'sell'"></bars:sellitem:qty>
+                                                <bars:sellitem:qty item="food_item" qty="food_item.fuzzy_qty" out="'sell'"></bars:sellitem:qty>
                                             </span>
                                         </span>
                                         <span class="h4" ng-show="in">
@@ -86,7 +86,7 @@
                                 <tr ng-repeat="si in food_item.stockitems">
                                     <td>{{ si.details.name }}</td>
                                     <td><bars:stockitem:qty item="si" qty="si.qty" out="'sell'"></bars:stockitem:qty></td>
-                                    <td><bars:stockitem:price item="si" in="'sell'" qty="1" tax="true"></bars:stockitem:price></td>
+                                    <td><bars:stockitem:price item="si" in="'sell'" out="'sell'" qty="1" tax="true"></bars:stockitem:price></td>
                                     <td>
                                         Supprimer ? <!-- TODO -->
                                     </td>

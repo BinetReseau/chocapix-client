@@ -173,19 +173,19 @@ angular.module('bars.api.food', [
         };
         $scope.queryProcess = function(qty, type) {
             if (type == 'buy') {
-                APIAction[type]({sellitem: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
+                APIAction[type]({sellitem: $scope.food_item.id, qty: qty}).then(function() {
                     $scope.query.qty = 1;
                 });
-            } else if (type == 'throw') {
+            } else if (type == 'throw') { // TODO : gérer la qty
                 APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}).then(function() {
                     $scope.query.qty = 1;
                 })
-            } else if (type == 'appro') {
+            } else if (type == 'appro') { // TODO : gérer la qty
                 APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}]}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'add') {
-                Meal.addItem($scope.food_item, qty*$scope.food_item.unit_value);
+                Meal.addItem($scope.food_item, qty);
             }
         };
         $scope.toggleDeleted = function() {
