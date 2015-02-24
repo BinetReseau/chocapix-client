@@ -10,7 +10,7 @@ angular.module('bars.api.food', [
                 url: 'buyitem',
                 type: 'BuyItem',
                 structure: {
-                    'item': 'ItemDetails'
+                    'details': 'ItemDetails'
                 },
                 methods: {
 
@@ -27,7 +27,9 @@ angular.module('bars.api.food', [
                     'buyitem': 'BuyItem'
                 },
                 methods: {
-
+                    'filter': function(s) {
+                        return this.buyitem.details.filter(s);
+                    }
                 }
             });
     }])
@@ -115,13 +117,13 @@ angular.module('bars.api.food', [
 }])
 
 .controller('api.ctrl.food',
-    ['$scope', 
+    ['$scope',
     function($scope) {
         $scope.bar.active = 'food';
     }]
 )
 .controller('api.ctrl.food_list',
-    ['$scope', 'food_list', 
+    ['$scope', 'food_list',
     function($scope, food_list) {
         $scope.food_list = food_list;
         console.log(food_list);
