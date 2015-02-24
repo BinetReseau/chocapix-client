@@ -26,11 +26,23 @@
                         </td>
                         <td class="item">
                             <ng:switch on="transaction.type">
-                                <span ng-switch-when="buy">
-                                    <bars:sellitem item="transaction.item.sellitem" qty="transaction.qty" out="'sell'"></bars:sellitem>
-                                </span>
+                                <div ng-switch-when="buy">
+                                    <a ng-show="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
+                                        {{ transaction.items.length | filter:sellOrStock }} aliments
+                                    </a>
+                                    <div collapse="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood">
+                                        <div ng-repeat="x in (transaction.items | filter:sellOrStock)">
+                                            <span ng-if="x.stockitem">
+                                                <bars:stockitem item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem>
+                                            </span>
+                                            <span ng-if="x.sellitem">
+                                                <bars:sellitem item="x.sellitem" qty="-x.qty" out="'sell'"></bars:sellitem>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <span ng-switch-when="throw">
-                                    <bars:stockitem item="transaction.item" qty="transaction.qty" out="'sell'"></bars:stockitem>
+                                    <bars:stockitem item="transaction.stockitem" qty="transaction.qty" out="'sell'"></bars:stockitem>
                                 </span>
 
                                 <span ng-switch-when="give">
@@ -49,7 +61,7 @@
                                 </a>
                                 <div collapse="transaction.items.length > 1 && !detailsFood">
                                     <div ng-repeat="x in transaction.items">
-                                        <bars:stockitem item="x.item" qty="x.qty" out="'sell'"></bars:stockitem>
+                                        <bars:stockitem item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem>
                                     </div>
                                 </div>
                             </div>

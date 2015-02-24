@@ -173,15 +173,15 @@ angular.module('bars.api.food', [
         };
         $scope.queryProcess = function(qty, type) {
             if (type == 'buy') {
-                APIAction[type]({item: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
+                APIAction[type]({sellitem: $scope.food_item.id, qty: qty*$scope.food_item.unit_value}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'throw') {
-                APIAction[type]({item: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}).then(function() {
+                APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}).then(function() {
                     $scope.query.qty = 1;
                 })
             } else if (type == 'appro') {
-                APIAction[type]({items: [{item: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}]}).then(function() {
+                APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}]}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'add') {

@@ -15,8 +15,9 @@ angular.module('bars.api.transaction', [
                     'author_account': 'Account',
                     'account': 'Account',
                     'accounts.*.account': 'Account',
-                    'item': 'StockItem',
-                    'items.*.item': 'StockItem'
+                    'items.*.stockitem': 'StockItem',
+                    'items.*.sellitem': 'SellItem',
+                    'stockitem': 'StockItem'
                 },
                 methods: {
                     'parseTimestamp':  function() {
@@ -68,12 +69,14 @@ angular.module('bars.api.transaction', [
                                 x.account.$reload();
                             });
                         }
-                        if(this.item) {
-                            this.item.$reload();
-                        }
                         if(this.items) {
                             _.forEach(this.items, function(x) {
-                                x.item.$reload();
+                                if (x.sellitem) {
+                                    x.sellitem.$reload();
+                                }
+                                if (x.stockitem) {
+                                    x.stockitem.$reload();
+                                }
                             });
                         }
                         this.parseTimestamp();
@@ -152,7 +155,8 @@ angular.module('bars.api.transaction', [
         restrict: 'E',
         scope: {
             filter: '&filter',
-            sellitem: "=?sellitem"
+            sellitem: "=?sellitem",
+            buyInStock: '=?buyInStock' // false: display buytransaction with sellitems ; true: display buytransaction with stockitem
             // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
@@ -195,6 +199,13 @@ angular.module('bars.api.transaction', [
                 $scope.history = history_dates;
                 inRequest = false;
             }
+
+            if ($scope.buyInStock) {
+                $scope.sellOrStock = {sellitem: undefined};
+            } else {
+                $scope.sellOrStock = {stockitem: undefined};
+            }
+            //$scope.sellOrStock = {};
 
             $scope.safe = $sanitize;
             $scope.loadMore = loadMore;

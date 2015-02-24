@@ -95,6 +95,8 @@ angular.module('bars.meal', [
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
                     item.qty = item.buy_qty * item.item.unit_value;
+                    item.sellitem = item.item;
+                    delete item.item;
                 });
                 var refThis = this;
                 APIAction.meal({
