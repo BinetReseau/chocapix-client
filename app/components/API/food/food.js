@@ -306,18 +306,13 @@ angular.module('bars.api.food', [
 .controller('api.ctrl.dir.barssellitem',
     ['$scope', function($scope) {
         function refresh() {
-            $scope.ratio = 1;
-            if ($scope.in == 'sell') {
-                $scope.ratio *= $scope.item.unit_value;
-            }
             if ($scope.out == 'sell') {
-                $scope.ratio *= 1/$scope.item.unit_value;
                 $scope.unit_name = $scope.item.unit_name;
                 $scope.unit_name_plural = $scope.item.unit_name_plural;
             }
         }
         $scope.abs = Math.abs;
-        $scope.$watch('item.unit_value', refresh);
+        //$scope.$watch('item.unit_value', refresh);
         refresh();
     }])
 .directive('barsSellitem', function() {
@@ -330,7 +325,7 @@ angular.module('bars.api.food', [
             in: '=?in',
             out: '=?out'
         },
-        templateUrl: 'components/API/food/directives/sellitem.html',
+        templateUrl: 'components/API/food/directives/sellitem-directive.html',
         controller: 'api.ctrl.dir.barssellitem'
     };
 })
@@ -360,15 +355,15 @@ angular.module('bars.api.food', [
         controller: ['$scope', function($scope) {
             function refresh() {
                 if ($scope.in == 'sell') {
-                    $scope.price = $scope.item.price * $scope.item.unit_value;
+                    $scope.price = $scope.item.fuzzy_price;
                     if ($scope.tax) {
-                        $scope.price *= (1+$scope.item.tax);
+                        $scope.price *= (1 + $scope.item.tax);
                     }
                 } else {
-                    $scope.price = $scope.item.price;
+                    $scope.price = $scope.item.fuzzy_price;
                 }
             }
-            $scope.$watch('item.unit_value', refresh);
+            //$scope.$watch('item.unit_value', refresh);
             refresh();
         }]
     };
@@ -407,7 +402,7 @@ angular.module('bars.api.food', [
             in: '=?in',
             out: '=?out'
         },
-        templateUrl: 'components/API/food/directives/stockitem.html',
+        templateUrl: 'components/API/food/directives/stockitem-directive.html',
         controller: 'api.ctrl.dir.barsstockitem'
     };
 })
