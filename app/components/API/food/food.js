@@ -338,7 +338,7 @@ angular.module('bars.api.food', [
             in: '=?in',
             out: '=?out'
         },
-        templateUrl: 'components/API/food/directives/qty-directive.html',
+        templateUrl: 'components/API/food/directives/sellitem-qty-directive.html',
         controller: 'api.ctrl.dir.barssellitem'
     };
 })
@@ -351,7 +351,7 @@ angular.module('bars.api.food', [
             qty: '=?qty',
             tax: '=?tax'
         },
-        templateUrl: 'components/API/food/directives/price-directive.html',
+        templateUrl: 'components/API/food/directives/sellitem-price-directive.html',
         controller: ['$scope', function($scope) {
             function refresh() {
                 if ($scope.in == 'sell') {
