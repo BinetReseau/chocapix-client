@@ -76,8 +76,8 @@ angular.module('bars.admin.food', [
         };
     }
 ])
-.controller('admin.ctrl.food.regroup', 
-    ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list', 
+.controller('admin.ctrl.food.regroup',
+    ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list',
     function($scope, SellItem, ItemDetails, BuyItem, StockItem, APIAction, sellitem_list) {
         document.getElementById("sellitemNameInput").focus();
         $scope.sell_item = SellItem.create();
@@ -194,7 +194,9 @@ angular.module('bars.admin.food', [
         var initDetails = $scope.item_details;
         $scope.barcode = $scope.buy_item.barcode;
         $scope.is_pack = false;
+        $scope.new_sell = true;
 
+        // Typehead for StockItem choice
         $scope.buyitemprices = BuyItemPrice.all();
         $scope.buyitempricesf = function (v) {
             return _.filter($scope.buyitemprices, function (o) {
@@ -202,23 +204,39 @@ angular.module('bars.admin.food', [
             });
         };
         $scope.itemInPack = "";
-        $scope.itemFilter = function(o) {
-            return o.filter($scope.itemInPack);
-        };
         $scope.choiceBuyItemItem = function(item, model, label) {
             $scope.buy_item.details = item.buyitem.details.id;
+        };
+        // Typehead for SellItem choice
+        $scope.sellitems = SellItem.all();
+        $scope.sellitemsf = function (v) {
+            return _.filter($scope.sellitems, function (o) {
+                return o.filter(v);
+            });
+        };
+        $scope.oldSellItem = "";
+        $scope.choiceSellItem = function(item, model, label) {
+            $scope.stock_item.sellitem = item;
+            $scope.sell_item = item;
         };
 
         $scope.add.go = function() {
             function saveFood() {
-                return $scope.sell_item.$save().then(function (sellItem) {
-                    $scope.stock_item.sellitem = sellItem;
+                if ($scope.new_sell) {
+                    $scope.sell_item.tax *= 0.01;
+                    return $scope.sell_item.$save().then(function (sellItem) {
+                        $scope.stock_item.sellitem = sellItem;
+                        return $scope.stock_item.$save().then(function (stockItem) {
+                            return stockItem;
+                        });
+                    }, function(errors) {
+                        // TODO: display form errors
+                    });
+                } else {
                     return $scope.stock_item.$save().then(function (stockItem) {
                         return stockItem;
                     });
-                }, function(errors) {
-                    // TODO: display form errors
-                });
+                }
             }
 
             if ($scope.is_pack) {
@@ -229,14 +247,10 @@ angular.module('bars.admin.food', [
                     return $scope.buy_item_price.$save();
                 });
             } else {
-                $scope.item_details.unit_value = 1;
                 $scope.stock_item.qty = 0;
-                //$scope.sell_item.unit_value = 1/$scope.sell_item.unit_value;
-                $scope.sell_item.tax *= 0.01;
-                $scope.sell_item.name = $scope.item_details.name;
-                $scope.sell_item.name_plural = $scope.item_details.name_plural;
+                $scope.stock_item.sell_to_buy = 1/$scope.stock_item.sell_to_buy;
                 $scope.buy_item.itemqty = 1;
-                $scope.stock_item.price = $scope.buy_item_price.price*$scope.sell_item.unit_value;
+                $scope.stock_item.price = $scope.buy_item_price.price;
                 $scope.buy_item.barcode = $scope.barcode;
 
                 if ($scope.new_details) {
@@ -303,14 +317,14 @@ angular.module('bars.admin.food', [
                 $scope.item_details.name_plural = newv;
             }
         });
+        $scope.$watch('sell_item.name', function (newv, oldv) {
+            if ($scope.sell_item.name_plural == oldv) {
+                $scope.sell_item.name_plural = newv;
+            }
+        });
         $scope.$watch('sell_item.unit_name', function (newv, oldv) {
             if ($scope.sell_item.unit_name_plural == oldv) {
                 $scope.sell_item.unit_name_plural = newv;
-            }
-        });
-        $scope.$watch('item_details.unit_name', function (newv, oldv) {
-            if ($scope.item_details.unit_name_plural == oldv) {
-                $scope.item_details.unit_name_plural = newv;
             }
         });
     }
@@ -340,7 +354,7 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.graphs',
-    ['$scope', 
+    ['$scope',
     function($scope) {
         $scope.admin.active = 'food;'
     }

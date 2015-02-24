@@ -32,34 +32,59 @@
 </div>
 <div ng-show="!is_pack">
     <div class="form-group">
-        <label for="fname" class="col-sm-2 control-label">Nom</label>
+        <label for="fname" class="col-sm-2 control-label">Nom d'achat</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" id="fname" placeholder="Pates" ng-disabled="!new_details" ng-model="item_details.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
+          <input type="text" class="form-control" id="fname" placeholder="Pot de 830g de Nutella" ng-disabled="!new_details" ng-model="item_details.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
         </div>
         <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" id="fname_plural" placeholder="" ng-disabled="!new_details" ng-model="item_details.name_plural" tooltip="Uniquement si l'aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
+          <input type="text" class="form-control" id="fname_plural" placeholder="Pots de 830g de Nutella" ng-disabled="!new_details" ng-model="item_details.name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="btn-group btn-group-sm">
+            <a class="btn btn-primary" ng-class="new_sell && 'active'" ng-click="new_sell = true">Le bar ne vend pas encore cet aliment</a>
+            <a class="btn btn-primary" ng-class="!new_sell && 'active'" ng-click="new_sell = false">Rattacher à un aliment déjà vendu</a>
+        </div>
+        <hr class="derrierebtn" />
+        <br />
+    </div>
+    <div ng-show="new_sell">
+        <div class="form-group">
+            <label for="fsname" class="col-sm-2 control-label">Nom de vente</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-disabled="!new_details" ng-model="sell_item.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+            <label for="fsname_plural" class="col-sm-2 control-label">Pluriel</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-disabled="!new_details" ng-model="sell_item.name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="funit" placeholder="g" ng-model="sell_item.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+            <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="sell_item.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+        </div>
+    </div>
+    <div ng-show="!new_sell">
+        <div class="form-group">
+            <label for="funit" class="col-sm-2 control-label">Aliment</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" placeholder="Nutella" ng-model="oldSellItem" tooltip="Produit déjà vendu par le bar" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.name for item in sellitemsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceSellItem($item, $model, $label)">
+            </div>
         </div>
     </div>
     <div class="form-group">
-        <label for="fbuy_unit" class="col-sm-2 control-label">Unité d'achat</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" id="fbuy_unit" placeholder="kg" ng-disabled="!new_details" ng-model="item_details.unit_name" tooltip="L'unité des appros" tooltip-trigger="focus" tooltip-placement="bottom">
+        <label for="funit_value" class="col-sm-2 control-label">1 {{ item_details.unit_name || item_details.name }} = </label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" id="funit_value" placeholder="1000" ng-model="stock_item.sell_to_buy">
         </div>
-        <label for="fbuy_unit_plural" class="col-sm-2 control-label">Pluriel</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" id="fbuy_unit_plural" placeholder="" ng-disabled="!new_details" ng-model="item_details.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" id="funit" placeholder="g" ng-model="sell_item.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom">
-        </div>
-        <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" id="funit_plural" placeholder="" ng-model="sell_item.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom">
-        </div>
+        <label class="col-sm-3 control-label">{{ (sell_item.unit_name_plural && stock_item.sell_to_buy > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((sell_item.name_plural && stock_item.sell_to_buy > 1) && sell_item.name_plural || sell_item.name)) }}</label>
     </div>
     <div class="form-group">
         <label for="fprice" class="col-sm-2 control-label">Prix</label>
@@ -68,19 +93,14 @@
         </div>
         <label class="col-sm-3 control-label">€ / {{ item_details.unit_name || item_details.name }}</label>
     </div>
-    <div class="form-group">
-        <label for="funit_value" class="col-sm-2 control-label">1 {{ item_details.unit_name || item_details.name }} = </label>
-        <div class="col-sm-7">
-            <input type="text" class="form-control" id="funit_value" placeholder="1000" ng-model="sell_item.unit_value">
-        </div>
-        <label class="col-sm-3 control-label">{{ (sell_item.unit_name_plural && sell_item.unit_value > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((item_details.name_plural && sell_item.unit_value > 1) && item_details.name_plural || item_details.name)) }}</label>
-    </div>
-    <div class="form-group">
+    <div class="form-group" ng-if="new_sell">
         <label for="tax" class="col-sm-2 control-label">Taxe</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="tax" ng-model="sell_item.tax">
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="text" class="form-control" id="tax" ng-model="sell_item.tax">
+                <span class="input-group-addon">%</span>
+            </div>
         </div>
-        <label class="col-sm-1 control-label">%</label>
     </div>
     <div class="form-group">
         <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
