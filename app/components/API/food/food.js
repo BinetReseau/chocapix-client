@@ -359,17 +359,11 @@ angular.module('bars.api.food', [
     ['$scope', function($scope) {
         function refresh() {
             $scope.ratio = 1;
-            if ($scope.in == 'buy') {
-                $scope.ratio *= 1/$scope.item.sell_to_buy;
-            } else if ($scope.in == 'sell') {
-                $scope.ratio *= $scope.item.sell_to_buy;
-            }
             if ($scope.out == 'buy') {
                 $scope.ratio *= $scope.item.sell_to_buy;
                 $scope.unit_name = $scope.item.details.name;
                 $scope.unit_name_plural = $scope.item.details.name_plural;
-            } else if ($scope.out == 'sell') {
-                $scope.ratio *= 1/$scope.item.sell_to_buy;
+            } else {
                 $scope.unit_name = $scope.item.sellitem.unit_name;
                 $scope.unit_name_plural = $scope.item.sellitem.unit_name_plural;
             }
@@ -386,7 +380,6 @@ angular.module('bars.api.food', [
             item: '=item',
             //unit: '=?unit',
             qty: '=?qty',
-            in: '=?in',
             out: '=?out'
         },
         templateUrl: 'components/API/food/directives/stockitem-directive.html',
@@ -399,7 +392,6 @@ angular.module('bars.api.food', [
         scope: {
             item: '=item',
             qty: '=qty',
-            in: '=?in',
             out: '=?out'
         },
         templateUrl: 'components/API/food/directives/stockitem-qty-directive.html',
@@ -411,23 +403,13 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            in: '=?in',
-            qty: '=?qty',
-            tax: '=?tax'
+            qty: '=?qty'
         },
         templateUrl: 'components/API/food/directives/stockitem-price-directive.html',
         controller: ['$scope', function($scope) {
             function refresh() {
-                if ($scope.in == 'buy') {
-                    $scope.price = $scope.item.price * $scope.item.sell_to_buy;
-                } else if ($scope.in == 'sell') {
-                    $scope.price = $scope.item.price;
-                } else {
-                    $scope.price = $scope.item.price;
-                }
+                $scope.price = $scope.item.price;
             }
-            $scope.$watch('item.sell_to_buy', refresh);
-            //$scope.$watch('item.sellitem.unit_value', refresh);
             refresh();
         }]
     };
