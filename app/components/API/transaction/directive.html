@@ -26,21 +26,6 @@
                         </td>
                         <td class="item">
                             <ng:switch on="transaction.type">
-                                <div ng-switch-when="buy">
-                                    <a ng-show="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
-                                        {{ transaction.items.length | filter:sellOrStock }} aliments
-                                    </a>
-                                    <div collapse="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood">
-                                        <div ng-repeat="x in (transaction.items | filter:sellOrStock)">
-                                            <span ng-if="x.stockitem">
-                                                <bars:stockitem item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem>
-                                            </span>
-                                            <span ng-if="x.sellitem">
-                                                <bars:sellitem item="x.sellitem" qty="-x.qty" out="'sell'"></bars:sellitem>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
                                 <span ng-switch-when="throw">
                                     <bars:stockitem item="transaction.stockitem" qty="transaction.qty" out="'sell'"></bars:stockitem>
                                 </span>
@@ -55,7 +40,22 @@
                                     {{ transaction.amount | abs | currency }} mise à <bars:account account="transaction.account"></bars:account>
                                 </span>
                             </ng:switch>
-                            <div ng-if="transaction.type == 'meal' || transaction.type == 'appro'">
+                            <div ng-if="transaction.type == 'buy' || transaction.type == 'meal'">
+                                <a ng-show="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
+                                    {{ transaction.items.length | filter:sellOrStock }} aliments
+                                </a>
+                                <div collapse="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood">
+                                    <div ng-repeat="x in (transaction.items | filter:sellOrStock)">
+                                        <span ng-if="x.stockitem">
+                                            <bars:stockitem item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem>
+                                        </span>
+                                        <span ng-if="x.sellitem">
+                                            <bars:sellitem item="x.sellitem" qty="-x.qty" out="'sell'"></bars:sellitem>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="transaction.type == 'appro'">
                                 <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
                                     {{ transaction.items.length }} aliments
                                 </a>
