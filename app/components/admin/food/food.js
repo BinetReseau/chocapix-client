@@ -67,16 +67,16 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.appro',
-    ['$scope', '$modal', 'api.models.stockitem', 'admin.appro', '$timeout',
-    function($scope, $modal, StockItem, Appro, $timeout) {
+    ['$scope', '$modal', 'api.models.buyitemprice', 'admin.appro', '$timeout',
+    function($scope, $modal, BuyItemPrice, Appro, $timeout) {
         $scope.appro = Appro;
-        $scope.stock_items = StockItem.all();
+        $scope.buy_item_prices = BuyItemPrice.all();
         $scope.searchl = "";
         $scope.filterItems = function(o) {
             return o.filter(Appro.itemToAdd);
         }
         $scope.filterItemsl = function(o) {
-            return o.item.filter($scope.searchl);
+            return o.buyitemprice.filter($scope.searchl);
         }
 
         $scope.newItem = function (e) {
@@ -178,14 +178,6 @@ angular.module('bars.admin.food', [
                 $scope.buy_item.itemqty = 1;
                 $scope.stock_item.price = $scope.buy_item_price.price*$scope.sell_item.unit_value;
                 $scope.buy_item.barcode = $scope.barcode;
-                $scope.buy_item_price.bar = 'avironjone';
-                $scope.sell_item.bar = 'avironjone';
-                $scope.stock_item.bar = 'avironjone';
-                console.log($scope.item_details);
-                console.log($scope.buy_item);
-                console.log($scope.buy_item_price);
-                console.log($scope.stock_item);
-                console.log($scope.sell_item);
 
                 if ($scope.new_details) {
                     return $scope.item_details.$save().then(function (itemDetails) {
@@ -313,37 +305,32 @@ angular.module('bars.admin.food', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    // totalPrice += item.item.price * item.qty * item.unit_value;
-                    if (item.qty && item.qty > 0 && item.price && item.unit_value) {
-                        item.price = item.price * item.qty * item.unit_value/(item.old_qty * item.old_unit_value);
+                    if (item.qty && item.qty > 0 && item.price) {
+                        item.price = item.price * item.qty/(item.old_qty);
                         item.old_qty = item.qty;
-                        item.old_unit_value = item.unit_value;
                     }
                     totalPrice += item.price;
                 });
 
                 this.totalPrice = totalPrice;
             },
-            addItem: function(item, qty) {
+            addItem: function(buyitemprice, qty) {
                 if (!qty) {
-                    qty = item.details.unit_value;
+                    qty = 1;
                 }
-                var other = _.find(this.itemsList, {'item': item});
+                var other = _.find(this.itemsList, {'buyitemprice': buyitemprice});
                 if (other) {
-                    other.qty += qty/item.details.unit_value;
+                    other.qty += qty;
                     other.nb = nb++;
                 } else {
                     this.itemsList.push({
-                        item: item,
-                        qty: qty/item.details.unit_value,
-                        old_qty: qty/item.details.unit_value,
-                        unit_value: item.details.unit_value,
-                        old_unit_value: item.details.unit_value,
-                        price: item.buy_price * qty * item.details.unit_value,
+                        buyitemprice: buyitemprice,
+                        qty: qty,
+                        old_qty: qty,
+                        price: buyitemprice.price * qty,
                         nb: nb++});
                 }
                 this.recomputeAmount();
-                console.log(item);
                 this.itemToAdd = "";
             },
             removeItem: function(item) {
@@ -353,8 +340,9 @@ angular.module('bars.admin.food', [
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.qty * item.unit_value;
+                    item.qty = item.qty;
                     item.buy_price = item.price / (item.qty);
+                    item.buyitem = item.buyitemprice.buyitem;
                 });
                 var refThis = this;
                 APIAction.appro({

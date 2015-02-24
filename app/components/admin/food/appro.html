@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addApproItemInput">Ajouter</label>
                 <div class="col-sm-10">
-                    <input type="text" tabindex="1" id="addApproItemInput" class="form-control" ng-keypress="newItem($event)" placeholder="Aliment à ajouter à l'appro" typeahead="item.details.name for item in bar.foods | filter:{deleted: false} | filter:$viewValue | limitTo:5" ng-model="appro.itemToAdd" autocomplete="off" typeahead-on-select="appro.addItem($item)" />
+                    <input type="text" tabindex="1" id="addApproItemInput" class="form-control" ng-keypress="newItem($event)" placeholder="Aliment à ajouter à l'appro" typeahead="item.buyitem.details.name for item in buy_item_prices | filter:filterItems | limitTo:5" ng-model="appro.itemToAdd" autocomplete="off" typeahead-on-select="appro.addItem($item)" typeahead-template-url="components/admin/food/typehead.html" />
                 </div>
             </div>
             <div class="form-group">
@@ -27,21 +27,17 @@
                 <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">Aliments</h4>
                 <input type="text" class="form-control right small" ng-model="searchl" placeholder="Rechercher parmi l'appro">
             </div>
-            <table class="table table-striped table-hover" ng-show="(appro.itemsList | filter:searchl).length > 0">
+            <table class="table table-striped table-hover" ng-show="(appro.itemsList | filter:filterItemsl).length > 0">
                 <tr>
                     <th>Nom</th>
                     <th>Quantité</th>
                     <th>Total</th>
                     <th> </th>
                 </tr>
-                <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'nb':true | filter:searchl" ng-class="item.item.deleted && 'del'">
-                    <td class="vmiddle"><bars:food food="item.item"></bars:food></td>
+                <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl">
+                    <td class="vmiddle">{{ item.buyitemprice.buyitem.details.name }} ({{ item.buyitemprice.buyitem.itemqty }} {{ item.buyitemprice.buyitem.details.unit_name || item.buyitemprice.buyitem.details.name }})</td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" />
-                        <select ng-model="item.unit_value" ng-change="appro.recomputeAmount()">
-                            <option value="{{ item.item.details.unit_value }}">{{ item.item.details.unit_name || item.item.details.name }}</option>
-                            <option value="{{ item.item.unit_value }}" ng-if="item.item.details.unit_name != item.item.unit_name">{{ item.item.unit_name || item.item.details.name }}</option>
-                        </select>
                     </td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.price" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}2" />&nbsp;€
@@ -53,7 +49,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="panel-body" ng-show="(appro.itemsList | filter:filterDeleted() | filter:searchl).length == 0 && searchl">
+            <div class="panel-body" ng-show="(appro.itemsList | filter:filterItemsl).length == 0 && searchl">
                 <em>Aucun aliment correspondant à cette recherche ne fait partie de l'appro.</em>
             </div>
         </div>
