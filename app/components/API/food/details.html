@@ -85,7 +85,7 @@
                             <tbody>
                                 <tr ng-repeat="si in food_item.stockitems">
                                     <td>{{ si.details.name }}</td>
-                                    <td><bars:stockitem:qty item="si" qty="si.qty" out="'sell'"></bars:stockitem:qty></td>
+                                    <td><bars:stockitem:qty item="si" qty="si.qty" in="'sell'" out="'sell'"></bars:stockitem:qty></td>
                                     <td><bars:stockitem:price item="si" in="'sell'" out="'sell'" qty="1" tax="true"></bars:stockitem:price></td>
                                     <td>
                                         Supprimer ? <!-- TODO -->
