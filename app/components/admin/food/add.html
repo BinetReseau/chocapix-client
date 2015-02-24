@@ -14,7 +14,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <input type="submit" class="btn btn-primary" value="Ajouter" ng-if="!sell_item.qty" />
-                    <input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ sell_item.qty/sell_item.unit_value*buy_item_price.price|currency }}" ng-if="sell_item.qty && buy_item.itemqty == 1" />
+                    <input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ sell_item.qty*buy_item_price.price|currency }}" ng-if="sell_item.qty && buy_item.itemqty == 1" />
                     <input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ sell_item.qty*buy_item_price.price|currency }}" ng-if="sell_item.qty && buy_item.itemqty != 1" />
                 </div>
               </div>

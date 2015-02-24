@@ -192,6 +192,7 @@ angular.module('bars.admin.food', [
     ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF',
     function($scope, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF) {
         var initDetails = $scope.item_details;
+        var initBuy = $scope.buy_item;
         $scope.barcode = $scope.buy_item.barcode;
         $scope.is_pack = false;
         $scope.new_sell = true;
@@ -266,20 +267,24 @@ angular.module('bars.admin.food', [
                         // TODO: display form errors
                     });
                 } else {
-                    return saveFood();
+                    $scope.stock_item.details = $scope.item_details;
+                    $scope.buy_item_price.buyitem = $scope.buy_item;
+                    return $scope.buy_item_price.$save().then(saveFood);
                 }
             }
         };
         $scope.searchDetails = function (barcode) {
             $scope.allow_barcode_edit = true;
-            var food_details = _.filter(BuyItem.all(), function (f) {
+            var buy_items = _.filter(BuyItem.all(), function (f) {
                 return f.barcode == barcode;
             });
-            if (food_details.length == 1) {
-                $scope.food_details = food_details[food_details.length - 1];
+            if (buy_items.length == 1) {
+                $scope.item_details = buy_items[0].details;
+                $scope.buy_item = buy_items[0];
                 $scope.new_details = false;
             } else {
-                $scope.food_details = initDetails;
+                $scope.item_details = initDetails;
+                $scope.buy_item = initBuy;
                 $scope.new_details = true;
             }
         };
