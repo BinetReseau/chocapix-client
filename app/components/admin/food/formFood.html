@@ -5,12 +5,12 @@
     </div>
 </div>
 <div class="text-center">
-    <div class="btn-group btn-group-sm">
+    <hr class="derrierebtn" />
+    <div class="btn-group btn-group-sm derrierebtn">
         <a class="btn btn-primary" ng-class="!is_pack && 'active'" ng-click="is_pack = false">Il s'agit d'un aliment normal</a>
         <a class="btn btn-primary" ng-class="is_pack && 'active'" ng-click="is_pack = true">Il s'agit d'un pack</a>
     </div>
-    <hr class="derrierebtn" />
-    <br />
+    <br /><br />
 </div>
 <div ng-show="is_pack">
     <div class="form-group">
@@ -42,12 +42,12 @@
         </div>
     </div>
     <div class="text-center">
-        <div class="btn-group btn-group-sm">
+        <hr class="derrierebtn" />
+        <div class="btn-group btn-group-sm derrierebtn">
             <a class="btn btn-primary" ng-class="new_sell && 'active'" ng-click="new_sell = true">Le bar ne vend pas encore cet aliment</a>
             <a class="btn btn-primary" ng-class="!new_sell && 'active'" ng-click="new_sell = false">Rattacher à un aliment déjà vendu</a>
         </div>
-        <hr class="derrierebtn" />
-        <br />
+        <br /><br />
     </div>
     <div ng-show="new_sell">
         <div class="form-group">

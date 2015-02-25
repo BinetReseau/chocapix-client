@@ -216,8 +216,7 @@ td.remove {
 
 hr.derrierebtn {
     position: relative;
-    top: -1.1em;
-    z-index: -1;
+    bottom: -1.1em;
     margin: 0;
     border-color: #ccc;
 }
