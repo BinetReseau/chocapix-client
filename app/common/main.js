@@ -4,7 +4,8 @@ angular.module('bars.main', [
     'bars.filters'
     ])
 
-.config(['$stateProvider', function($stateProvider) {
+.config(['$stateProvider', '$urlMatcherFactoryProvider', function($stateProvider, $urlMatcherFactoryProvider) {
+    $urlMatcherFactoryProvider.strictMode(false);
     $stateProvider
         .state('bar', {
             url: "/{bar:[^/]+}",
