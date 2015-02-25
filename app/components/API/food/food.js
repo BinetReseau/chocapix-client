@@ -181,7 +181,7 @@ angular.module('bars.api.food', [
                     $scope.query.qty = 1;
                 })
             } else if (type == 'appro') { // TODO : gérer la qty
-                APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty*$scope.query.stockitem.details.unit_value}]}).then(function() {
+                APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty}]}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'add') {
