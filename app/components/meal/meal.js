@@ -52,7 +52,7 @@ angular.module('bars.meal', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    totalPrice += item.item.price * item.buy_qty * item.item.unit_value;
+                    totalPrice += item.item.fuzzy_price * item.buy_qty;
                 });
 
                 _.forEach(this.customersList, function(customer) {
@@ -74,13 +74,13 @@ angular.module('bars.meal', [
             },
             addItem: function(item, qty) {
                 if (!qty) {
-                    qty = item.unit_value;
+                    qty = 1;
                 }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.buy_qty += qty/item.unit_value;
+                    other.buy_qty += qty;
                 } else {
-                    this.itemsList.push({ item: item, buy_qty: qty/item.unit_value });
+                    this.itemsList.push({ item: item, buy_qty: qty });
                 }
                 this.recomputeAmount();
             },
@@ -94,7 +94,7 @@ angular.module('bars.meal', [
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.buy_qty * item.item.unit_value;
+                    item.qty = item.buy_qty;
                     item.sellitem = item.item;
                     delete item.item;
                 });

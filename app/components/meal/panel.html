@@ -41,7 +41,7 @@
                         <table class="table table-condensed no-border">
                             <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
                                 <td class="vmiddle qty"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm pqty" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit_name }}</td>
-                                <td class="vmiddle"><span class="form-control-static"><bars:food food="item.item"></bars:food></span></td>
+                                <td class="vmiddle"><span class="form-control-static"><bars:sellitem item="item.item"></bars:sellitem></span></td>
                                 <td class="vmiddle text-right remove">
                                     <a class="text-muted" ng-click="meal.removeItem(item)"><span class="glyphicon glyphicon-remove"></span></a>
                                 </td>
