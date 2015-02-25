@@ -31,12 +31,12 @@ angular.module('bars.magicbar', [
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory', 'deposit', 'refund', 'withdraw'], type)) {
                 var req;
                 if(_.contains(['buy', 'throw'], type)) {
-                    req = {sellitem: $item.food.id, qty: $item.qty*$item.food.unit_value};
+                    req = {sellitem: $item.food.id, qty: $item.qty/**$item.food.unit_value*/};
                 } else if(_.contains(['inventory', 'appro'], type)) {
 					req = {items:
 						[{
 							item: $item.food.id,
-							qty: $item.qty*$item.food.unit_value
+							qty: $item.qty/**$item.food.unit_value*/
 						}]
 					};
 				} else {
@@ -46,7 +46,7 @@ angular.module('bars.magicbar', [
                     $scope.bar.search = '';
                 });
             } else if (type == 'add') {
-				Meal.addItem($item.food, $item.qty*$item.food.unit_value);
+				Meal.addItem($item.food, $item.qty/**$item.food.unit_value*/);
 			}
         };
     }])
