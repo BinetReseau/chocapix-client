@@ -7,7 +7,10 @@ angular.module('bars.meal', [
     ['$scope', 'api.models.account', 'bars.meal',
     function($scope,Account, Meal) {
         $scope.meal = Meal;
-        $scope.accounts = Account.all();
+        var accounts = Account.all();
+        $scope.accounts = _.reject(accounts, function(n) {
+            return n.owner.full_name == 'Bar' && n.owner.username == 'bar'
+        });
     }]
 )
 .directive('popoverMealPopup', [function() {
