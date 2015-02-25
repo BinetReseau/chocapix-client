@@ -80,9 +80,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="funit_value" class="col-sm-2 control-label">1 {{ item_details.unit_name || item_details.name }} = </label>
+        <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ item_details.name }} = </label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" id="funit_value" placeholder="1000" ng-model="stock_item.sell_to_buy">
+            <input type="text" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy">
         </div>
         <label class="col-sm-3 control-label">{{ (sell_item.unit_name_plural && stock_item.sell_to_buy > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((sell_item.name_plural && stock_item.sell_to_buy > 1) && sell_item.name_plural || sell_item.name)) }}</label>
     </div>
@@ -91,7 +91,7 @@
         <div class="col-sm-7">
           <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price">
         </div>
-        <label class="col-sm-3 control-label">€ / {{ item_details.unit_name || item_details.name }}</label>
+        <label class="col-sm-3 control-label">€ / {{ item_details.name }}</label>
     </div>
     <div class="form-group" ng-if="new_sell">
         <label for="tax" class="col-sm-2 control-label">Taxe</label>

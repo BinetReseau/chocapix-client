@@ -299,11 +299,11 @@ angular.module('bars.admin.food', [
                     }
                     $scope.item_details.name = infos.name;
                     $scope.item_details.name_plural = infos.name_plural;
-                    $scope.item_details.unit_name = infos.buy_unit_name;
-                    $scope.item_details.unit_name_plural = infos.buy_unit_name_plural;
+                    $scope.sell_item.name = infos.sell_name;
+                    $scope.sell_item.name_plural = infos.sell_name_plural;
                     $scope.sell_item.unit_name = infos.unit_name;
                     $scope.sell_item.unit_name_plural = infos.unit_name_plural;
-                    $scope.sell_item.unit_value = infos.unit_value;
+                    $scope.stock_item.sell_to_buy = infos.sell_to_buy;
                 }
             });
         };
