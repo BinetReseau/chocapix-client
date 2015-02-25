@@ -108,12 +108,30 @@ angular.module('bars.api.food', [
         })
         .state('bar.food.details', {
             url: "/:id",
-            templateUrl: "components/API/food/details.html",
+            //templateUrl: "components/API/food/details.html",
             controller: 'api.ctrl.food_details',
             resolve: {
                 food_item: ['$stateParams', 'api.models.sellitem', function($stateParams, SellItem) {
                     return SellItem.getSync($stateParams.id);
                 }]
+            },
+            views: {
+                '@bar.food': {
+                    templateUrl: "components/API/food/views/details.html",
+                    controller: 'api.ctrl.food_details'
+                },
+                'infos@bar.food.details': {
+                    templateUrl: "components/API/food/views/details-infos.html",
+                    controller: 'api.ctrl.food_details'
+                },
+                'stocks@bar.food.details': {
+                    templateUrl: "components/API/food/views/details-stocks.html",
+                    controller: 'api.ctrl.food_details'
+                },
+                'edit@bar.food.details': {
+                    templateUrl: "components/API/food/views/details-edit.html",
+                    controller: 'api.ctrl.food_details.edit'
+                }
             }
         });
 }])
@@ -149,6 +167,8 @@ angular.module('bars.api.food', [
     ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'bars.meal',
     function($scope, $stateParams, food_item, AuthUser, APIAction, Meal) {
         $scope.food_item = food_item;
+        console.log('Couc');
+        console.log(food_item);
         $scope.actions = [];
         if (AuthUser.can('add_buytransaction')) {
             $scope.actions.push({ name: "buy", value: "Acheter" });
@@ -188,6 +208,12 @@ angular.module('bars.api.food', [
                 Meal.addItem($scope.food_item, qty);
             }
         };
+        
+    }])
+.controller('api.ctrl.food_details.edit',
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 
+    function($scope, $stateParams, food_item, AuthUser, APIAction) {
+        $scope.food_item = food_item;
         $scope.toggleDeleted = function() {
             $scope.food_item.deleted = !$scope.food_item.deleted;
             $scope.food_item.$save();
@@ -221,7 +247,8 @@ angular.module('bars.api.food', [
             food_item.$save();
         };
         $scope.resetFood();
-    }])
+    }]
+)
 
 .controller('api.ctrl.dir.barsfood',
     ['$scope', function($scope) {
@@ -247,7 +274,7 @@ angular.module('bars.api.food', [
         $scope.$watch('food.unit_value', refresh);
         refresh();
     }])
-.directive('barsFood', function() { // TO BE REMOVED
+/*.directive('barsFood', function() { // TO BE REMOVED
     return {
         restrict: 'E',
         scope: {
@@ -302,7 +329,7 @@ angular.module('bars.api.food', [
             refresh();
         }]
     };
-})
+})*/
 .controller('api.ctrl.dir.barssellitem',
     ['$scope', function($scope) {
         function refresh() {
