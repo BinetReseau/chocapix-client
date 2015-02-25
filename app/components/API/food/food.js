@@ -126,7 +126,7 @@ angular.module('bars.api.food', [
                 },
                 'stocks@bar.food.details': {
                     templateUrl: "components/API/food/views/details-stocks.html",
-                    controller: 'api.ctrl.food_details'
+                    controller: 'api.ctrl.food_details.stocks'
                 },
                 'edit@bar.food.details': {
                     templateUrl: "components/API/food/views/details-edit.html",
@@ -167,8 +167,6 @@ angular.module('bars.api.food', [
     ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'bars.meal',
     function($scope, $stateParams, food_item, AuthUser, APIAction, Meal) {
         $scope.food_item = food_item;
-        console.log('Couc');
-        console.log(food_item);
         $scope.actions = [];
         if (AuthUser.can('add_buytransaction')) {
             $scope.actions.push({ name: "buy", value: "Acheter" });
@@ -209,48 +207,56 @@ angular.module('bars.api.food', [
             }
         };
         
-    }])
+    }]
+)
+.controller('api.ctrl.food_details.stocks', 
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 
+    function($scope, $stateParams, food_item, AuthUser, APIAction){
+        //
+    }]
+)
 .controller('api.ctrl.food_details.edit',
     ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 
     function($scope, $stateParams, food_item, AuthUser, APIAction) {
-        $scope.food_item = food_item;
         $scope.toggleDeleted = function() {
             $scope.food_item.deleted = !$scope.food_item.deleted;
             $scope.food_item.$save();
         };
 
-        var initPrice = food_item.price * food_item.unit_value;
+        var initPrice = food_item.fuzzy_price;
         $scope.computeNewPrice = function() {
+            var tempPrice = food_item.fuzzy_price * (1 + $scope.newFood_item.tax/100) / (1 + food_item.tax);
             if ($scope.newFood_item.unit_name == food_item.unit_name) {
-                $scope.newFood_item.price = initPrice;
+                $scope.newFood_item.fuzzy_price = tempPrice;
             } else {
-                if ($scope.newFood_item.new_unit_value) {
-                    $scope.newFood_item.price = initPrice * $scope.newFood_item.new_unit_value;
+                if ($scope.newFood_item.unit_factor) {
+                    $scope.newFood_item.fuzzy_price = tempPrice * $scope.newFood_item.unit_factor;
+                    $scope.newFood_item.fuzzy_qty = food_item.fuzzy_qty / $scope.newFood_item.unit_factor;
                 } else {
-                    $scope.newFood_item.price = initPrice;
+                    $scope.newFood_item.fuzzy_price = tempPrice;
                 }
             }
         };
         $scope.resetFood = function() {
             $scope.newFood_item = _.clone(food_item);
-            $scope.newFood_item.price = initPrice;
-            $scope.newFood_item.new_unit_value = 1;
-            $scope.newFood_item.new_buy_unit_value = 1;
+            $scope.newFood_item.fuzzy_price = initPrice;
+            $scope.newFood_item.unit_factor = 1;
             $scope.newFood_item.tax *= 100;
         };
         $scope.editFood = function() {
             food_item.unit_name_plural = $scope.newFood_item.unit_name_plural;
             food_item.unit_name = $scope.newFood_item.unit_name;
-            food_item.price = $scope.newFood_item.price / $scope.newFood_item.new_unit_value / food_item.unit_value;
-            food_item.unit_value = $scope.newFood_item.new_unit_value * food_item.unit_value;
+            food_item.name = $scope.newFood_item.name;
+            food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
+            food_item.unit_factor = $scope.newFood_item.unit_factor;
             food_item.$save();
         };
         $scope.resetFood();
     }]
 )
 
-.controller('api.ctrl.dir.barsfood',
+/*.controller('api.ctrl.dir.barsfood',
     ['$scope', function($scope) {
         function refresh() {
             $scope.ratio = 1;
@@ -274,7 +280,7 @@ angular.module('bars.api.food', [
         $scope.$watch('food.unit_value', refresh);
         refresh();
     }])
-/*.directive('barsFood', function() { // TO BE REMOVED
+.directive('barsFood', function() { // TO BE REMOVED
     return {
         restrict: 'E',
         scope: {
@@ -377,7 +383,10 @@ angular.module('bars.api.food', [
                 if ($scope.tax) {
                     $scope.price *= (1 + $scope.item.tax);
                 }
+                $scope.unit_name = $scope.item.unit_name;
             }
+            $scope.$watch('item.unit_name', refresh);
+            $scope.$watch('item.fuzzy_price', refresh);
             refresh();
         }]
     };
