@@ -200,15 +200,15 @@ angular.module('bars.admin.food', [
         $scope.new_sell = true;
 
         // Typehead for StockItem choice
-        $scope.buyitemprices = BuyItemPrice.all();
-        $scope.buyitempricesf = function (v) {
-            return _.filter($scope.buyitemprices, function (o) {
+        $scope.stockitems = StockItem.all();
+        $scope.stockitemsf = function (v) {
+            return _.filter($scope.stockitems, function (o) {
                 return o.filter(v);
             });
         };
         $scope.itemInPack = "";
-        $scope.choiceBuyItemItem = function(item, model, label) {
-            $scope.buy_item.details = item.buyitem.details.id;
+        $scope.choiceStockItem = function(item, model, label) {
+            $scope.buy_item.details = item.details.id;
         };
         // Typehead for SellItem choice
         $scope.sellitems = SellItem.all();

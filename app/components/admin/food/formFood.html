@@ -19,7 +19,7 @@
           <input type="number" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom">
         </div>
         <div class="col-sm-7">
-          <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buyitempricesf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceBuyItemItem($item, $model, $label)">
+          <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.details.name for item in stockitemsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceStockItem($item, $model, $label)">
         </div>
     </div>
     <div class="form-group">
