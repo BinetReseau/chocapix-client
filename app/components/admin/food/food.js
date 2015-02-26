@@ -326,6 +326,34 @@ angular.module('bars.admin.food', [
             }
         };
 
+        // Si on est en train d'ajouter un pack, on scanne un item, et il n'existe pas
+        $scope.createItemPack = function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                if (!isNaN($scope.itemInPack)) {
+                    var modalNewFood = $modal.open({
+                        templateUrl: 'components/admin/food/modalAdd.html',
+                        controller: 'admin.ctrl.food.addModal',
+                        size: 'lg',
+                        resolve: {
+                            barcode: function () {
+                                return $scope.itemInPack;
+                            },
+                            buy_item_price: function () {
+                                return undefined;
+                            }
+                        }
+                    });
+                    modalNewFood.result.then(function (buyItemPrice) {
+                            $scope.choiceItemDetail(buyItemPrice);
+                            $scope.itemInPack = buyItemPrice.buyitem.details.name;
+                        }, function () {
+
+                    });
+                }
+            }
+        };
+
         // Typehead for BuyItemPrices choice
         $scope.buy_item_prices = BuyItemPrice.all();
         $scope.buy_item_pricesf = function (v) {
