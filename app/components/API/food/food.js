@@ -249,7 +249,7 @@ angular.module('bars.api.food', [
             food_item.name = $scope.newFood_item.name;
             food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
-            food_item.unit_factor = $scope.newFood_item.unit_factor;
+            food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
             food_item.$save();
         };
         $scope.resetFood();
@@ -345,6 +345,7 @@ angular.module('bars.api.food', [
         $scope.abs = Math.abs;
         refresh();
         $scope.$watch('item.unit_name', refresh);
+        $scope.$watch('item.unit_name_plural', refresh);
     }])
 .directive('barsSellitem', function() {
     return {
