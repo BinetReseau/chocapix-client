@@ -206,17 +206,17 @@ angular.module('bars.api.food', [
                 Meal.addItem($scope.food_item, qty);
             }
         };
-        
+
     }]
 )
-.controller('api.ctrl.food_details.stocks', 
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 
+.controller('api.ctrl.food_details.stocks',
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
     function($scope, $stateParams, food_item, AuthUser, APIAction){
         //
     }]
 )
 .controller('api.ctrl.food_details.edit',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
     function($scope, $stateParams, food_item, AuthUser, APIAction) {
         $scope.toggleDeleted = function() {
             $scope.food_item.deleted = !$scope.food_item.deleted;
@@ -344,6 +344,7 @@ angular.module('bars.api.food', [
         }
         $scope.abs = Math.abs;
         refresh();
+        $scope.$watch('item.unit_name', refresh);
     }])
 .directive('barsSellitem', function() {
     return {
