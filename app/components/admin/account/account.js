@@ -101,7 +101,10 @@ angular.module('bars.admin.account', [
     ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'user_list', '$state',
     function($scope, Account, User, APIAction, user_list, $state) {
         $scope.admin.active = 'account';
-        $scope.users_list = user_list;
+        var users_list = _.filter(user_list, function(n) {
+            return n.username != 'bar';
+        });
+        $scope.users_list = users_list;
         $scope.user = null;
         $scope.findUser = function(usr) {
             $scope.user = usr;
