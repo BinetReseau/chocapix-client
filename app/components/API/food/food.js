@@ -113,6 +113,9 @@ angular.module('bars.api.food', [
             resolve: {
                 food_item: ['$stateParams', 'api.models.sellitem', function($stateParams, SellItem) {
                     return SellItem.getSync($stateParams.id);
+                }],
+                sellitem_list: ['api.models.sellitem', function(SellItem) {
+                    return SellItem.all();
                 }]
             },
             views: {
@@ -126,7 +129,7 @@ angular.module('bars.api.food', [
                 },
                 'stocks@bar.food.details': {
                     templateUrl: "components/API/food/views/details-stocks.html",
-                    controller: 'api.ctrl.food_details.stocks'
+                    controller: 'api.ctrl.food_details.stocks',
                 },
                 'edit@bar.food.details': {
                     templateUrl: "components/API/food/views/details-edit.html",
@@ -217,9 +220,29 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.stocks',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
-    function($scope, $stateParams, food_item, AuthUser, APIAction){
-        //
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface', 
+    function($scope, $stateParams, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
+        sellitem_list = _.without(sellitem_list, food_item);
+        $scope.searchl = "";
+        $scope.itemToAttach = null;
+        $scope.filterItems = function(o) {
+            return o.filter($scope.searchl);
+        };
+        $scope.rattachInit = function() {
+            $scope.sellitem_list = sellitem_list;
+        };
+        $scope.addItem = function(item) {
+            $scope.itemToAttach = item;
+            $scope.itemToAttach.unit_factor = 1;
+        };
+        $scope.validate = function() {
+            APIInterface.request({
+                'url': 'sellitem/' + food_item.id + '/merge',
+                'method': 'PUT',
+                'data': {'sellitem': $scope.itemToAttach.id, 'unit_factor': 1/$scope.itemToAttach.unit_factor}
+            });
+            $('#attachModal').modal('hide');
+        }
     }]
 )
 .controller('api.ctrl.food_details.edit',

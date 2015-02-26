@@ -122,7 +122,7 @@ angular.module('bars.admin.food', [
             $scope.sell_item_ref.unit_name_plural = $scope.sell_item.unit_name_plural;
             $scope.sell_item_ref.tax = $scope.sell_item.tax;
             var refId = $scope.sell_item_ref.id;
-            var unit_factor = $scope.sell_item_ref.unit_factor;
+            var unit_factor = 1/$scope.sell_item_ref.unit_factor;
             $scope.sell_item_ref.$save().then(function(newSellItem) {
                 while ($scope.sellitems_grp.length > 0) {
                     var itemToMerge = $scope.sellitems_grp.shift();
