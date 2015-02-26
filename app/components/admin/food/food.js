@@ -177,6 +177,9 @@ angular.module('bars.admin.food', [
                 }
             }
         };
+        $timeout(function () {
+            document.getElementById("addApproItemInput").focus();
+        }, 300);
     }
 ])
 .controller('admin.ctrl.food.addModal',
@@ -210,8 +213,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.dir.barsadminfoodadd',
-    ['$scope', '$modal', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF',
-    function($scope, $modal, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF) {
+    ['$scope', '$modal', '$timeout', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF',
+    function($scope, $modal, $timeout, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF) {
         var initDetails = $scope.item_details;
         var initBuy = $scope.buy_item;
         $scope.barcode = $scope.buy_item.barcode;
@@ -421,6 +424,10 @@ angular.module('bars.admin.food', [
                 $scope.sell_item.unit_name_plural = newv;
             }
         });
+
+        $timeout(function () {
+            document.getElementById("fbarcode").focus();
+        }, 300);
     }
 ])
 .directive('barsAdminFoodAdd', function() {
