@@ -164,8 +164,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'bars.meal',
-    function($scope, $stateParams, food_item, AuthUser, APIAction, Meal) {
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.models.buyitemprice', 'api.services.action', 'bars.meal',
+    function($scope, $stateParams, food_item, AuthUser, BuyItemPrice, APIAction, Meal) {
         $scope.food_item = food_item;
         $scope.actions = [];
         if (AuthUser.can('add_buytransaction')) {
@@ -180,11 +180,18 @@ angular.module('bars.api.food', [
         if (AuthUser.can('add_approtransaction')) {
             $scope.actions.push({ name: "appro", value: "Approvisionner" });
         }
+        var item_details = _.map(food_item.stockitems, function (si) {
+            return si.details.id;
+        });
+        $scope.buy_item_prices = _.filter(BuyItemPrice.all(), function (bip) {
+            return item_details.indexOf(bip.buyitem.details.id) > -1;
+        });
 
         $scope.query = {
             qty: 1,
             type: Meal.in() && 'add' || 'buy',
-            stockitem: $scope.food_item.stockitems[0]
+            stockitem: $scope.food_item.stockitems[0],
+            buyitemprice: $scope.buy_item_prices[0]
         };
         $scope.inMeal = function () {
             return Meal.in();
@@ -199,7 +206,7 @@ angular.module('bars.api.food', [
                     $scope.query.qty = 1;
                 })
             } else if (type == 'appro') { // TODO : gérer la qty
-                APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty}]}).then(function() {
+                APIAction[type]({items: [{buyitem: $scope.query.buyitemprice.buyitem.id, qty: qty}]}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'add') {
