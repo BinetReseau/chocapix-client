@@ -10,7 +10,8 @@ angular.module('bars.api.food', [
                 url: 'buyitem',
                 type: 'BuyItem',
                 structure: {
-                    'details': 'ItemDetails'
+                    'details': 'ItemDetails',
+                    'buyitemprice': 'BuyItemPrice'
                 },
                 methods: {
                     'filter': function(s) {
@@ -41,12 +42,14 @@ angular.module('bars.api.food', [
                 url: 'itemdetails',
                 type: "ItemDetails",
                 structure: {
-
+                    'stockitem': 'StockItem'
                 },
                 methods: {
                     'filter': function(s) {
-                        return (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                        return (
+                            _.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1
+                            );
                     }
                 }
             });

@@ -476,9 +476,21 @@ angular.module('bars.admin.food', [
     };
 })
 .controller('admin.ctrl.food.inventory',
-    ['$scope', 'api.models.stockitem', 'admin.inventory',
-    function($scope, StockItem, Inventory) {
+    ['$scope', 'api.models.buyitemprice', 'admin.inventory',
+    function($scope, BuyItemPrice, Inventory) {
         $scope.admin.active = 'food';
+
+        var buy_item_prices = BuyItemPrice.all();
+        $scope.buy_item_pricesf = function (v) {
+            return _.filter(buy_item_prices, function (bip) {
+                return bip.filter(v);
+            });
+        };
+
+        $scope.searchi = '';
+        $scope.filterl = function (o) {
+            return o.stockitem.filter($scope.searchi);
+        };
 
         $scope.inventory = Inventory;
     }
@@ -576,14 +588,15 @@ angular.module('bars.admin.food', [
             },
             addItem: function(item, qty) {
                 if (!qty) {
-                    qty = item.unit_value;
+                    qty = item.buyitem.itemqty;
                 }
-                var other = _.find(this.itemsList, {'item': item});
+                var stockitem = item.buyitem.details.stockitem;
+                var other = _.find(this.itemsList, {'stockitem': stockitem});
                 if (other) {
-                    other.qty += qty/item.unit_value;
+                    other.qty += qty;
                     other.nb = nb++;
                 } else {
-                    this.itemsList.push({ item: item, qty: qty/item.unit_value, unit_value: item.details.unit_value, nb: nb++ });
+                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++ });
                 }
                 this.itemToAdd = "";
             },
@@ -593,7 +606,9 @@ angular.module('bars.admin.food', [
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.qty * item.unit_value;
+                    item.qty = item.qty / item.stockitem.sell_to_buy * item.sell_to_buy;
+                    delete item.sell_to_buy;
+                    delete item.nb;
                 });
                 var refThis = this;
                 APIAction.inventory({
