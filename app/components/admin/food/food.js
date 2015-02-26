@@ -69,9 +69,13 @@ angular.module('bars.admin.food', [
                 var qty = $scope.sell_item.qty;
             }
             add.go().then(function(newFood) {
-                APIAction.appro({
-                    items: [{buyitem: $scope.buy_item.id, qty: qty}]
-                }).then(init);
+                if (qty > 0) {
+                    APIAction.appro({
+                        items: [{buyitem: $scope.buy_item.id, qty: qty}]
+                    }).then(init);
+                } else {
+                    init();
+                }
             }, function(errors) {
                 // TODO: display form errors
             });
@@ -79,7 +83,7 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.regroup',
-    ['$scope', 'api.models.sellitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list', 'APIInterface', 
+    ['$scope', 'api.models.sellitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list', 'APIInterface',
     function($scope, SellItem, StockItem, APIAction, sellitem_list, APIInterface) {
         document.getElementById("sellitemNameInput").focus();
         $scope.sell_item = SellItem.create();
