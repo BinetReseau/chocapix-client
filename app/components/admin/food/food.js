@@ -235,7 +235,6 @@ angular.module('bars.admin.food', [
                     // Le BuyItem existe déjà (et l'ItemDetails associé)
                     $scope.buy_item_price = nbip;
                     $scope.buy_item = nbip.buyitem;
-                    console.log($scope.buy_item);
                     $scope.item_details = nbip.buyitem.details;
                     $scope.new_details = false;
                     $scope.itemInPack = $scope.item_details.name;
@@ -327,16 +326,18 @@ angular.module('bars.admin.food', [
             }
         };
 
-        // Typehead for StockItem choice
-        $scope.stockitems = StockItem.all();
-        $scope.stockitemsf = function (v) {
-            return _.filter($scope.stockitems, function (o) {
+        // Typehead for BuyItemPrices choice
+        $scope.buy_item_prices = BuyItemPrice.all();
+        $scope.buy_item_pricesf = function (v) {
+            return _.uniq(_.filter($scope.buy_item_prices, function (o) {
                 return o.filter(v);
+            }), false, function (bip) {
+                return bip.buyitem.details;
             });
         };
         $scope.itemInPack = "";
-        $scope.choiceStockItem = function(item, model, label) {
-            $scope.buy_item.details = item.details.id;
+        $scope.choiceItemDetail = function(item, model, label) {
+            $scope.buy_item.details = item.buyitem.details.id;
         };
         // Typehead for SellItem choice
         $scope.sellitems = SellItem.all();
