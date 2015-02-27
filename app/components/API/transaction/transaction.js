@@ -82,6 +82,7 @@ angular.module('bars.api.transaction', [
                                 }
                                 if (x.stockitem) {
                                     x.stockitem.$reload();
+                                    x.stockitem.sellitem.$reload();
                                 }
                             });
                         }
