@@ -1,7 +1,12 @@
 <div class="form-group">
     <label for="fbarcode" class="col-sm-2 control-label">Code-barre</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="(!new_details && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-barcode"></span>
+            </div>
+            <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="(!new_details && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)">
+        </div>
     </div>
 </div>
 <div class="text-center">
@@ -21,16 +26,21 @@
     <div class="form-group">
         <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
         <div class="col-sm-3">
-          <input type="number" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom">
+            <input type="number" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom">
         </div>
         <div class="col-sm-7">
-          <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buy_item_pricesf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceItemDetail($item, $model, $label)" ng-keypress="createItemPack($event)">
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-barcode"></span>
+                </div>
+                <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buy_item_pricesf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceItemDetail($item, $model, $label)" ng-keypress="createItemPack($event)">
+            </div>
         </div>
     </div>
     <div class="form-group">
         <label for="fpprice" class="col-sm-2 control-label">Prix</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" id="fpprice" placeholder="2.34" ng-model="buy_item_price.price">
+            <input type="text" class="form-control" id="fpprice" placeholder="2.34" ng-model="buy_item_price.price">
         </div>
         <label class="col-sm-3 control-label">€ / pack</label>
     </div>
@@ -94,17 +104,25 @@
     </div>
     <div class="form-group">
         <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ item_details.name }} = </label>
-        <div class="col-sm-7">
-            <input type="text" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy">
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="text" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy">
+                <div class="input-group-addon">
+                    {{ (sell_item.unit_name_plural && stock_item.sell_to_buy > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((sell_item.name_plural && stock_item.sell_to_buy > 1) && sell_item.name_plural || sell_item.name)) }}
+                </div>
+            </div>
         </div>
-        <label class="col-sm-3 control-label">{{ (sell_item.unit_name_plural && stock_item.sell_to_buy > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((sell_item.name_plural && stock_item.sell_to_buy > 1) && sell_item.name_plural || sell_item.name)) }}</label>
     </div>
     <div class="form-group">
         <label for="fprice" class="col-sm-2 control-label">Prix</label>
-        <div class="col-sm-7">
-          <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price">
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price">
+                <div class="input-group-addon">
+                    € / {{ item_details.name }}
+                </div>
+            </div>
         </div>
-        <label class="col-sm-3 control-label">€ / {{ item_details.name }}</label>
     </div>
     <div class="form-group" ng-if="new_sell">
         <label for="tax" class="col-sm-2 control-label">Taxe</label>
