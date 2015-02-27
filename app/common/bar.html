@@ -69,33 +69,3 @@
     </div>
 </div>
 </div>
-
-<div class="modal fade" id="bugModal" role="dialog" aria-labelledby="bugModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Signaler un bug</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <form class="form-horiontal" ng-if="!bugSignaled">
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Description du bug</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" rows="3" placeholder="Décris ce qui te semble dysfonctionner de la façon la plus précise possible." ng-model="bug.description"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="text-center col-sm-12" ng-if="bugSignaled">
-                        <h4>C'est noté. Merci de ton aide !</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-primary" ng-click="submitBug()">Envoyer</button>
-            </div>
-        </div>
-    </div>
-</div>

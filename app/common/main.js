@@ -109,8 +109,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', '$state',
-    function($scope, $rootScope, $stateParams, AuthUser, sellitem, buyitem, bar, accounts, $timeout, $state) {
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', '$state',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, buyitem, bar, accounts, $timeout, $state) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -124,25 +124,31 @@ angular.module('bars.main', [
         $scope.user = AuthUser;
 
         $scope.signalBug = function() {
-            $('#bugModal').modal('show');
-            $scope.bugSignaled = false;
-            var now = new Date();
-            $scope.bug = {
-                description: '',
-                user: AuthUser,
-                date: now.toJSON(),
-                state: $state.current,
-                params: $state.params
-            };
+            var modalBug = $modal.open({
+                templateUrl: 'common/modal-bug.html',
+                controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+                    $scope.bugSignaled = false;
+                    var now = new Date();
+                    $scope.bug = {
+                        description: '',
+                        user: AuthUser,
+                        date: now.toJSON(),
+                        state: $state.current,
+                        params: $state.params
+                    };
+                    $scope.submitBug = function() {
+                        // envoi du bug...
+                        $scope.bugSignaled = true;
+                        $timeout(function() {
+                            $modalInstance.close();
+                            return true;
+                        }, 1000);
+                    };
+                }],
+                size: 'lg'
+            });
         };
-        $scope.submitBug = function() {
-            // envoi du bug...
-            $scope.bugSignaled = true;
-            $timeout(function() {
-                $('#bugModal').modal('hide');
-                return true;
-            }, 1000);
-        }
+
     }])
 
 .controller(
