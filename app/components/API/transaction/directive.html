@@ -22,6 +22,7 @@
                                 <span ng-switch-when="give">Don de</span>
                                 <span ng-switch-when="deposit">Ajout de</span>
                                 <a ng-switch-when="punish" tooltip="{{ transaction.motive }}" class="atooltip">Amende de</a>
+                                <a ng-switch-when="collectivePayment" tooltip="{{ transaction.motive }}" class="atooltip">Paiment de</a>
                             </ng:switch>
                         </td>
                         <td class="item">
@@ -92,6 +93,20 @@
                                     &nbsp;&nbsp;
                                     <bars:stockitem item="x.stockitem"></bars:stockitem>
                                 </span>
+                            </div>
+                            <div ng-if="transaction.type == 'collectivePayment'">
+                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true">
+                                    {{ transaction.accounts.length }} personnes
+                                </a>
+                                <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
+                                    <div ng-repeat="x in transaction.accounts">
+                                        <bars:account account="x.account"></bars:account>
+                                        <div class="pull-right" ng-if="transaction.accounts.length > 1">
+                                            <span class="label" ng-class="transaction.canceled && 'label-default' || 'label-info'">{{ transaction.moneyflow*x.ratio | abs | currency }}</span>
+                                        </div>
+                                        <br />
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td class="par">par</td>

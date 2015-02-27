@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bars.admin.account', [
-    
+
 ])
 .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('bar.admin.account', {
@@ -127,8 +127,8 @@ angular.module('bars.admin.account', [
     }
 ])
 .controller('admin.ctrl.account.collectivePayment',
-    ['$scope', 'account_list',
-    function($scope, account_list) {
+    ['$scope', 'api.services.action', 'account_list',
+    function($scope, APIAction, account_list) {
         $scope.admin.active = 'account';
         $scope.account_list = _.filter(account_list, function(a) { var u = a.owner; return u.full_name != 'Bar' || u.username != 'bar'; });
         $scope.list_order = 'owner.full_name';
@@ -143,6 +143,19 @@ angular.module('bars.admin.account', [
             _.map($scope.account_list, function (o) {
                 o.pay = $scope.allSelected;
             });
+        };
+        $scope.collectivePay = function () {
+            var accounts = _.map(_.filter($scope.account_list, function (a) {
+                return a.pay;
+            }), function (a) {
+                return {account: a, ratio: 1};
+            });
+            APIAction.collectivePayment({accounts: accounts, amount: $scope.amount, motive: $scope.motive}).then(function () {
+                $scope.amount = 0;
+                $scope.motive = "";
+                $scope.allSelected = false;
+                $scope.toggleAll();
+            })
         };
     }
 ])

@@ -99,7 +99,7 @@ angular.module('bars.api.transaction', [
     }])
 .factory('api.services.action', ['api.models.transaction',
     function(Transaction) {
-        var actions = ["buy", "throw", "give", "punish", "meal", "appro", "inventory", "deposit"];
+        var actions = ["buy", "throw", "give", "punish", "meal", "appro", "inventory", "deposit", "collectivePayment"];
         var Action = {};
         actions.forEach(function(action) {
             Action[action] = function(params) {
