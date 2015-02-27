@@ -96,6 +96,7 @@ angular.module('bars.api.account', [
             motive: '',
             qty: ''
         };
+        console.log($scope.user);
         $scope.queryProcess = function(query) {
             if (query.type == 'give') {
                 APIAction.give({account: account.id, amount: query.qty}).then(function() {
@@ -123,6 +124,10 @@ angular.module('bars.api.account', [
                     $scope.query.qty = '';
                 });
             }
+        };
+        $scope.in = {
+            pseudo: false,
+            username: false
         };
         // Onglet "Modifier"
         $scope.pwdSuccess = 0;
