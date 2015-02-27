@@ -12,7 +12,7 @@
                 <li><a ui-sref="bar.admin.food.regroup({ bar: bar.id })" ng-if="user.can('add_item')">Regrouper des articles</a></li>
                 <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a></li>
                 <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
-                <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })">Graphiques</a></li>
+                <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })" ng-if="false">Graphiques</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'account' && 'active'" class="dropdown dropdownli" dropdown>
