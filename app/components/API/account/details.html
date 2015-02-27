@@ -41,15 +41,15 @@
                         <table class="table table-tab">
                             <tbody>
                                 <tr>
-                                    <td class="h4">Pseudo</td>
-                                    <td class="end-of-column text-right" ng-mouseenter="in.pseudo = true" ng-mouseleave="in.pseudo = false">
+                                    <td class="h4 title">Pseudo</td>
+                                    <td class="end-of-column text-right value" ng-mouseenter="in.pseudo = true" ng-mouseleave="in.pseudo = false">
                                         <span class="h4" ng-hide="account.owner.id == user.user.id && in.pseudo"><span class="label label-default">{{ account.owner.pseudo }}</span></span>
                                         <span class="h4" ng-show="account.owner.id == user.user.id && in.pseudo">
                                             <a class="btn btn-xs btn-success" ui-sref="bar.settings.credentials({bar: bar.id})">Modifier mon pseudo</a>
                                         </span>
                                     </td>
-                                    <td class="h4">Respo bar</td>
-                                    <td class="text-right">
+                                    <td class="h4 title">Respo bar</td>
+                                    <td class="text-right value">
                                         <span class="h4"><span class="label label-default">
                                             -
                                         </span></span>
