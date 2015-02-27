@@ -109,8 +109,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', 
-    function($scope, $rootScope, $stateParams, AuthUser, sellitem, buyitem, bar, accounts, $timeout) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', '$state',
+    function($scope, $rootScope, $stateParams, AuthUser, sellitem, buyitem, bar, accounts, $timeout, $state) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -131,7 +131,9 @@ angular.module('bars.main', [
                 description: '',
                 user: AuthUser,
                 date: now.toJSON(),
-            }
+                state: $state.current,
+                params: $state.params
+            };
         };
         $scope.submitBug = function() {
             // envoi du bug...
