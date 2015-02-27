@@ -14,7 +14,7 @@
     "angular-messages": "^1.3.0",
     "angular-sanitize": "~1.3.8",
     "angular-touch": "^1.3.0",
-    "angular-bootstrap": "*",
+    "angular-bootstrap": "^0.12.1",
     "angular-loader": "*",
     "angular-moment": "*",
     "angular-ui-router": "*",
@@ -34,6 +34,7 @@
   },
   "appPath": "app",
   "resolutions": {
-    "angular": "^1.3.0"
+    "angular": "^1.3.0",
+    "angular-bootstrap": "^0.12.1"
   }
 }
