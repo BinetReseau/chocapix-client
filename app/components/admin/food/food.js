@@ -149,6 +149,11 @@ angular.module('bars.admin.food', [
         $scope.filterItems = function(o) {
             return o.filter(Appro.itemToAdd);
         };
+        $scope.buy_item_pricesf = function(v) {
+            return _.filter($scope.buy_item_prices, function (bip) {
+                return bip.filter(v);
+            });
+        };
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
