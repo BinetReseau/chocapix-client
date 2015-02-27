@@ -96,7 +96,6 @@ angular.module('bars.api.account', [
             motive: '',
             qty: ''
         };
-        console.log($scope.user);
         $scope.queryProcess = function(query) {
             if (query.type == 'give') {
                 APIAction.give({account: account.id, amount: query.qty}).then(function() {
