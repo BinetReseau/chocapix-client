@@ -16,7 +16,9 @@
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
                 <td>
-                    Supprimer ? <!-- TODO -->
+                    <a title="Retirer cet aliment du groupe" ng-click="removeStockItem(si)" class="btn btn-xs btn-danger link">
+                        <span class="glyphicon glyphicon-trash"></span> Retirer
+                    </a>
                 </td>
             </tr>
         </tbody>

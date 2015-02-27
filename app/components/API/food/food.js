@@ -223,7 +223,7 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.stocks',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface', 
+    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
     function($scope, $stateParams, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
         sellitem_list = _.without(sellitem_list, food_item);
         $scope.searchl = "";
@@ -238,11 +238,22 @@ angular.module('bars.api.food', [
             $scope.itemToAttach = item;
             $scope.itemToAttach.unit_factor = 1;
         };
+        $scope.removeStockItem = function(si) {
+            APIInterface.request({
+                'url': 'sellitem/' + food_item.id + '/remove',
+                'method': 'PUT',
+                'data': {'stockitem': si.id}
+            }).then(function(si) {
+                food_item.$reload();
+            });
+        };
         $scope.validate = function() {
             APIInterface.request({
                 'url': 'sellitem/' + food_item.id + '/merge',
                 'method': 'PUT',
                 'data': {'sellitem': $scope.itemToAttach.id, 'unit_factor': 1/$scope.itemToAttach.unit_factor}
+            }).then(function(si) {
+                food_item.$reload();
             });
             $('#attachModal').modal('hide');
         }
