@@ -6,7 +6,7 @@
                 <th>Stock</th>
                 <th>Prix</th>
                 <th>
-                    <a class="btn btn-xs btn-success" data-toggle="modal" data-target="#attachModal" ng-click="rattachInit()">Ajouter un article</a>
+                    <a class="btn btn-xs btn-success" ng-click="rattachInit()">Ajouter un article</a>
                 </th>
             </tr>
         </thead>
@@ -23,40 +23,4 @@
             </tr>
         </tbody>
     </table>
-</div>
-
-<div class="modal fade" id="attachModal" tabindex="-1" role="dialog" aria-labelledby="attachModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="attachModalLabel">Attacher un article à cet aliment</h4>
-            </div>
-            <div class="modal-body">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="itemToAttachInput">Aliment à attacher</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="itemToAttachInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list | filter:{deleted: false} | filter:filterItems | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" />
-                            </div>
-                        </div>
-                        <div class="form-group" ng-if="itemToAttach != null">
-                            <label class="col-sm-3 control-label" for="unitFactorInput">1 {{ food_item.unit_name && food_item.unit_name + ' de ' }}{{ food_item.name }} = </label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <input type="number" ng-model="itemToAttach.unit_factor" class="form-control input-sm pqty" />
-                                    <span class="input-group-addon">{{ (itemToAttach.unit_factor > 1 && itemToAttach.unit_name_plural) && itemToAttach.unit_name_plural || itemToAttach.unit_name }} de {{ itemToAttach.name }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary" ng-click="validate()">Valider</button>
-            </div>
-        </div>
-    </div>
 </div>

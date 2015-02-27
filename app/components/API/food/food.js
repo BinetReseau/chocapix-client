@@ -223,21 +223,9 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.stocks',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
-    function($scope, $stateParams, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
+    ['$scope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
+    function($scope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
         sellitem_list = _.without(sellitem_list, food_item);
-        $scope.searchl = "";
-        $scope.itemToAttach = null;
-        $scope.filterItems = function(o) {
-            return o.filter($scope.searchl);
-        };
-        $scope.rattachInit = function() {
-            $scope.sellitem_list = sellitem_list;
-        };
-        $scope.addItem = function(item) {
-            $scope.itemToAttach = item;
-            $scope.itemToAttach.unit_factor = 1;
-        };
         $scope.removeStockItem = function(si) {
             APIInterface.request({
                 'url': 'sellitem/' + food_item.id + '/remove',
@@ -247,16 +235,44 @@ angular.module('bars.api.food', [
                 food_item.$reload();
             });
         };
-        $scope.validate = function() {
-            APIInterface.request({
-                'url': 'sellitem/' + food_item.id + '/merge',
-                'method': 'PUT',
-                'data': {'sellitem': $scope.itemToAttach.id, 'unit_factor': 1/$scope.itemToAttach.unit_factor}
-            }).then(function(si) {
-                food_item.$reload();
+        $scope.rattachInit = function() {
+            var modalAttach = $modal.open({
+                templateUrl: 'components/API/food/views/modal-add-sellitem.html',
+                resolve: {
+                    food_item: function() {
+                        return food_item;
+                    },
+                    sellitem_list: function() {
+                        return sellitem_list;
+                    }
+                },
+                controller: ['$scope', '$modalInstance', 'food_item', 'sellitem_list', function ($scope, $modalInstance, food_item, sellitem_list) {
+                    $scope.sellitem_list = sellitem_list;
+                    $scope.food_item = food_item;
+                    $scope.searchl = "";
+                    $scope.itemToAttach = null;
+                    $scope.filterItems = function(o) {
+                        return o.filter($scope.searchl);
+                    };
+                    $scope.addItem = function(item) {
+                        $scope.itemToAttach = item;
+                        $scope.itemToAttach.unit_factor = 1;
+                    };
+                    $scope.validate = function() {
+                        APIInterface.request({
+                            'url': 'sellitem/' + food_item.id + '/merge',
+                            'method': 'PUT',
+                            'data': {'sellitem': $scope.itemToAttach.id, 'unit_factor': 1/$scope.itemToAttach.unit_factor}
+                        }).then(function(si) {
+                            food_item.$reload();
+                        });
+                        $modalInstance.close();
+                    };
+                }],
+                size: 'lg'
             });
-            $('#attachModal').modal('hide');
-        }
+        };
+
     }]
 )
 .controller('api.ctrl.food_details.edit',
