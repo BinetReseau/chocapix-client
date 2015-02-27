@@ -4,6 +4,7 @@ angular.module('bars.admin', [
     'bars.admin.food',
     'bars.admin.account',
     'bars.admin.news',
+    'bars.admin.compta',
     'bars.admin.settings'
 ])
 

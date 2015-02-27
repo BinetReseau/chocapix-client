@@ -35,6 +35,14 @@
                 <li><a ui-sref="bar.admin.news.list({ bar: bar.id })" ng-if="user.can('change_news') || user.can('delete_news')">Liste des news</a></li>
             </ul>
         </li>
+        <li ng-class="admin.active == 'compta' && 'active'" class="dropdown dropdownli" dropdown>
+            <a title="Comptabilité" class="dropdown-toggle" dropdown-toggle role="button" aria-expanded="false">
+                <span class="glyphicon glyphicon-piggy-bank"></span> <span class="hidden-xs">Comptabilité</span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a ui-sref="bar.admin.compta.investment({ bar: bar.id })">Loguer du matériel</a></li>
+            </ul>
+        </li>
         <li ng-class="admin.active == 'settings' && 'active'">
             <a ui-sref="bar.admin.settings({ bar: bar.id })"><span class="glyphicon glyphicon-wrench"></span> <span class="hidden-xs">Paramètres</span></a>
         </li>
