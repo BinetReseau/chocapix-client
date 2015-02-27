@@ -39,7 +39,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addSellitemInput">Ajouter</label>
                 <div class="col-sm-10">
-                    <input type="text" tabindex="6" id="addSellitemInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list | filter:{deleted: false} | filter:filterItems | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" />
+                    <input type="text" tabindex="6" id="addSellitemInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list | filter:{deleted: false} | filter:filterItems | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" typeahead-template-url="components/admin/food/typehead-sell-item.html" />
                 </div>
             </div>
             <div class="form-group">
