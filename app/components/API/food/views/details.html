@@ -21,7 +21,7 @@
                 <select class="form-control" ng-model="query.buyitemprice" ng-options="(bip.buyitem.itemqty + ' ' + bip.buyitem.details.name) for bip in buy_item_prices" ng-if="(query.type == 'appro') && buy_item_prices.length > 1"></select>
                 <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*food_item.fuzzy_price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="(query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1) && query.type != 'throw' && query.type != 'appro'" />
                 <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'throw'" />
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.buyitemprice.price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'appro' && buy_item_prices.length > 1" />
+                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.buyitemprice.price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'appro' && buy_item_prices.length > 0" />
             </form>
         </div>
     </div>
