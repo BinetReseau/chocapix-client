@@ -75,7 +75,7 @@
         <div class="form-group">
             <label for="funit" class="col-sm-2 control-label">Aliment</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" placeholder="Nutella" ng-model="oldSellItem" tooltip="Produit déjà vendu par le bar" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.name for item in sellitemsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceSellItem($item, $model, $label)">
+              <input type="text" class="form-control" placeholder="Nutella" ng-model="oldSellItem" tooltip="Produit déjà vendu par le bar" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.name for item in sellitemsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="choiceSellItem($item, $model, $label)" typeahead-template-url="components/admin/food/typehead-sell-item.html" />
             </div>
         </div>
     </div>
