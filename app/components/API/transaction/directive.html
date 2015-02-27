@@ -21,6 +21,8 @@
 
                                 <span ng-switch-when="give">Don de</span>
                                 <span ng-switch-when="deposit">Ajout de</span>
+                                <span ng-switch-when="withdraw">Retrait d'argent de</span>
+                                <a ng-switch-when="refund" tooltip="{{ transaction.motive }}" class="atooltip">Remboursement de</a>
                                 <a ng-switch-when="punish" tooltip="{{ transaction.motive }}" class="atooltip">Amende de</a>
                                 <a ng-switch-when="collectivePayment" tooltip="{{ transaction.motive }}" class="atooltip">Paiement de</a>
                             </ng:switch>
@@ -39,6 +41,12 @@
                                 </span>
                                 <span ng-switch-when="punish">
                                     {{ transaction.amount | abs | currency }} mise à <bars:account account="transaction.account"></bars:account>
+                                </span>
+                                <span ng-switch-when="withdraw">
+                                    {{ transaction.amount | abs | currency }} par <bars:account account="transaction.account"></bars:account>
+                                </span>
+                                <span ng-switch-when="refund">
+                                    {{ transaction.amount | abs | currency }} à <bars:account account="transaction.account"></bars:account>
                                 </span>
                             </ng:switch>
                             <div ng-if="transaction.type == 'buy' || transaction.type == 'meal'">

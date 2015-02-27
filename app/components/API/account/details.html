@@ -17,9 +17,10 @@
                     <option value="refund"> <!-- ng-if="user.can('add_refundtransaction')"> -->Rembourser une appro</option>
                     <option value="withdraw"> <!-- ng-if="user.can('add_withdrawtransaction')"> -->Retirer de l'argent</option>
                 </select>
-                <input type="number" class="form-control number" ng-model="query.qty" select-on-click />
+                <input type="number" step="any" class="form-control number" ng-model="query.qty" select-on-click />
                 <span ng-switch on="query.type">
                     <input ng-switch-when="punish" type="text" class="form-control large" ng-model="query.motive" placeholder="Motif de l'amende" />
+                    <input ng-switch-when="refund" type="text" class="form-control large" ng-model="query.motive" placeholder="Motif du remboursement" />
                     <input ng-switch-when="punish" type="submit" class="btn btn-warning" value="Mettre une amende{{ query.qty > 0 && ' de ' + (query.qty | currency) || '' }}" ng-class="(query.qty <= 0 || !query.motive) && 'disabled' || ''" />
                     <input ng-switch-when="give" type="submit" class="btn btn-success" value="Donner {{ query.qty > 0 && ' ' + (query.qty | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" />
                     <input ng-switch-when="deposit" type="submit" class="btn btn-success" value="Créditer {{ query.qty > 0 && ' de ' + (query.qty | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" />
