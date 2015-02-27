@@ -1,10 +1,15 @@
 <div class="form-group">
     <label for="fbarcode" class="col-sm-2 control-label">Code-barre</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="fbarcode" placeholder="" ng-disabled="(!new_details && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)">
+      <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="(!new_details && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)">
     </div>
 </div>
 <div class="text-center">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            <p><small>Si votre aliment est un paquet, et si les éléments du paquet ont leur propre code-barre (typiquement un pack de canettes de coca) choisissez <strong>pack</strong>.</small></p>
+        </div>
+    </div>
     <hr class="derrierebtn" />
     <div class="btn-group btn-group-sm derrierebtn">
         <a class="btn btn-primary" ng-class="!is_pack && 'active'" ng-click="is_pack = false">Il s'agit d'un aliment normal</a>
@@ -34,7 +39,7 @@
     <div class="form-group">
         <label for="fname" class="col-sm-2 control-label">Nom d'achat</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" id="fname" placeholder="Pot de 830g de Nutella" ng-disabled="!new_details" ng-model="item_details.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom">
+          <input type="text" class="form-control" id="fname" placeholder="Pot de 830g de Nutella" ng-disabled="!new_details" ng-model="item_details.name" tooltip="Nomination exacte du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
         </div>
         <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
         <div class="col-sm-4">
@@ -42,6 +47,14 @@
         </div>
     </div>
     <div class="text-center">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <p>
+                    <small>Vous pouvez choisir de vendre sous un même nom des aliments aux codes-barres différents.<br />
+                    Par exemple, vous achetez des pots de Nutella de 720g, 800g et 1kg et vous souhaitez simplement vendre du "Nutella".</small>
+                </p>
+            </div>
+        </div>
         <hr class="derrierebtn" />
         <div class="btn-group btn-group-sm derrierebtn">
             <a class="btn btn-primary" ng-class="new_sell && 'active'" ng-click="new_sell = true">Le bar ne vend pas encore cet aliment</a>
