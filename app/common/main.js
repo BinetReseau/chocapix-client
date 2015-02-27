@@ -109,8 +109,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts',
-    function($scope, $rootScope, $stateParams, AuthUser, sellitem, buyitem, bar, accounts) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', 
+    function($scope, $rootScope, $stateParams, AuthUser, sellitem, buyitem, bar, accounts, $timeout) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -122,6 +122,25 @@ angular.module('bars.main', [
         };
 
         $scope.user = AuthUser;
+
+        $scope.signalBug = function() {
+            $('#bugModal').modal('show');
+            $scope.bugSignaled = false;
+            var now = new Date();
+            $scope.bug = {
+                description: '',
+                user: AuthUser,
+                date: now.toJSON(),
+            }
+        };
+        $scope.submitBug = function() {
+            // envoi du bug...
+            $scope.bugSignaled = true;
+            $timeout(function() {
+                $('#bugModal').modal('hide');
+                return true;
+            }, 1000);
+        }
     }])
 
 .controller(
