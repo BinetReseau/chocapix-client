@@ -79,6 +79,9 @@ angular.module('bars.api.transaction', [
                             _.forEach(this.items, function(x) {
                                 if (x.sellitem) {
                                     x.sellitem.$reload();
+                                    _.forEach(x.sellitem.stockitems, function (s) {
+                                        s.$reload();
+                                    });
                                 }
                                 if (x.stockitem) {
                                     x.stockitem.$reload();
