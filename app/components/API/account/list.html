@@ -14,7 +14,11 @@
                 <th>Solde &ensp;<a href="" ng-click="reverse = list_order == 'money' ? !reverse : false; list_order = 'money'"><span class="glyphicon glyphicon-sort"></span></a></th>
             </tr>
             <tr ng-repeat="a in account_list | filter:filterHidden() | filter:filterAccounts | orderBy:list_order:reverse" ng-class="a.deleted && 'del' || (a.money < 0 && 'danger' || '')">
-                <td>{{ a.owner.full_name }}</td>
+                <td>
+                    <a title="En savoir plus sur {{ a.owner.full_name }}" tooltip="{{ a.owner.full_name }}" ui-sref="bar.account.details({ bar: a.bar.id, id: a.id })">
+                        {{ a.owner.full_name }}
+                    </a>
+                </td>
                 <td>{{ a.owner.pseudo }}</td>
                 <td>{{ a.money | currency }}</td>
             </tr>
