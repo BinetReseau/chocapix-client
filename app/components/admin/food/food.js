@@ -481,8 +481,8 @@ angular.module('bars.admin.food', [
     };
 })
 .controller('admin.ctrl.food.inventory',
-    ['$scope', 'api.models.buyitemprice', 'admin.inventory',
-    function($scope, BuyItemPrice, Inventory) {
+    ['$scope', '$timeout', 'api.models.buyitemprice', 'admin.inventory',
+    function($scope, $timeout, BuyItemPrice, Inventory) {
         $scope.admin.active = 'food';
 
         var buy_item_prices = BuyItemPrice.all();
@@ -496,6 +496,10 @@ angular.module('bars.admin.food', [
         $scope.filterl = function (o) {
             return o.stockitem.filter($scope.searchi);
         };
+
+        $timeout(function () {
+            document.getElementById("addInventoryItemInput").focus();
+        }, 300);
 
         $scope.inventory = Inventory;
     }
