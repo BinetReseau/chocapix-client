@@ -5,8 +5,8 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', 'api.services.action', 'magicbar.analyse', 'bars.meal',
-    function($scope, $filter, APIAction, analyse, Meal) {
+    ['$scope', '$filter', 'api.services.action', 'api.models.buyitem', 'magicbar.analyse', 'bars.meal',
+    function($scope, $filter, APIAction, BuyItem, analyse, Meal) {
         $scope.query = {
             type: 'buy',
             qty: 1,
@@ -21,6 +21,21 @@ angular.module('bars.magicbar', [
         $scope.$watch('bar.search', function(qo) {
             analyse(qo, $scope);
         });
+
+		$scope.convertBarcode = function (e) {
+			if (e.which === 13) {
+				var barcode = $scope.bar.search;
+				if (!isNaN(barcode)) {
+					var buy_item = _.find(BuyItem.all(), function (bi) {
+						return bi.filter(barcode);
+					});
+					if (buy_item) {
+						$scope.bar.search = buy_item.details.stockitem.sellitem.name;
+						$('#q_alim').eq(0).val(buy_item.details.stockitem.sellitem.name + " ").trigger("input");
+					}
+				}
+			}
+		};
 
         $scope.executeQuery = function($item, $model, $label) {
             if ($item.food === null && $item.account === null) {
