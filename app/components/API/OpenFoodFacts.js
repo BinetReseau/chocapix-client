@@ -30,7 +30,9 @@ function($http, OFFURL) {
         parse: function (o) {
             var name = o.product.product_name;
             var quantity = o.product.quantity.toLocaleLowerCase();
-            var unit_value = 1;
+            var sell_to_buy = 1;
+            var is_pack = false;
+            var itemqty;
 
             // On remplace les unités mal formatées
             var runits = {
@@ -52,11 +54,15 @@ function($http, OFFURL) {
             // On s'occupe d'abord du cas ou c'est un pack
             // auquel cas la quantity est souvent 6 x 33cl ou 6 * 330 ml
             if (/^[0-9]+ ?x/i.test(quantity)) {
-                unit_value = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$1");
+                sell_to_buy = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$1");
+                itemqty = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$1");
                 unit = quantity.replace(/^([0-9]+) ?x(.+)$/i, "$2").trim();
+                is_pack = true;
             } else if (/\*/i.test(quantity)) {
-                unit_value = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$1");
+                sell_to_buy = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$1");
+                itemqty = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$1");
                 unit = quantity.replace(/^([0-9]+) ?\*(.+)$/i, "$2").trim();
+                is_pack = true;
             } else {
                 // Maintenant on va essayer de détecter l'unité
                 // parmis la liste suivante
@@ -75,11 +81,11 @@ function($http, OFFURL) {
                 // On va essayer de trouver le rapport entre achat et vente
                 if (unit) {
                     var rq = new RegExp("^([0-9,.]+) ?" + unit + "$");
-                    unit_value = quantity.replace(rq, "$1");
+                    sell_to_buy = quantity.replace(rq, "$1");
 
                     // Cas particulier pour 33 cl (= canette)
-                    if ((unit_value == "33" && unit == "cl") || (unit_value == "330" && unit == "ml")) {
-                        unit_value = "1";
+                    if ((sell_to_buy == "33" && unit == "cl") || (sell_to_buy == "330" && unit == "ml")) {
+                        sell_to_buy = "1";
                         unit = "canette";
                         unit_plural = "canettes";
                     }
@@ -94,23 +100,25 @@ function($http, OFFURL) {
                 };
                 // On se débarasse du 1 dans le cas "1kg" par exemple ou "1 l"
                 if (/^1 ?[^0-9]/.test(quantity)) {
-                    quantity = quantity.replace(/^1 ?([^0-9])/, '$1');
+                    quantity = quantity.replace(/^1 ?([^0-9,.])/, '$1');
                     if (sell_unit[unit]) {
-                        unit_value = sell_unit[unit].v;
+                        sell_to_buy = sell_unit[unit].v;
                         unit = sell_unit[unit].n;
                         unit_plural = unit;
                     }
                 }
             }
-
+            console.log(quantity);
             return {
-                name: name,
-                name_plural: name,
-                buy_unit_name: quantity,
-                buy_unit_name_plural: quantity,
+                sell_name: name,
+                sell_name_plural: name,
+                name: name + " " + quantity,
+                name_plural: name + " " + quantity,
                 unit_name: unit,
                 unit_name_plural: unit_plural,
-                unit_value: unit_value
+                sell_to_buy: sell_to_buy,
+                is_pack: is_pack,
+                itemqty: itemqty
             };
         },
         get: function (barcode) {

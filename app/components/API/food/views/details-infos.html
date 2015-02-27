@@ -1,0 +1,37 @@
+<table class="table table-tab">
+    <tbody>
+        <tr>
+            <td class="h4 title">Prix</td>
+            <td class="end-of-column text-right value">
+                <span class="h4"><span class="label label-info">
+                    <bars:sellitem:price item="food_item" in="'sell'" qty="1" tax="true"></bars:sellitem:price>
+                </span></span>
+            </td>
+            <td class="h4 title">Vols</td>
+            <td class="text-right value">
+                <span class="h4"><span class="label label-warning">
+                    - %
+                </span></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="h4">Stock<span ng-if="food_item.stockitems.length > 1"> total</span></td>
+            <td class="end-of-column text-right" ng-mouseenter="in = true" ng-mouseleave="in = false">
+                <span class="h4" ng-hide="in">
+                    <span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
+                        <bars:sellitem:qty item="food_item" qty="food_item.fuzzy_qty" out="'sell'"></bars:sellitem:qty>
+                    </span>
+                </span>
+                <span class="h4" ng-show="in">
+                    <a class="btn btn-xs btn-warning" tooltip="Signaler aux respos bar que ce produit n'est plus disponible">Signaler qu'il n'y en a plus</a>
+                </span>
+            </td>
+            <td class="h4">Rang</td>
+            <td class="text-right">
+                <span class="h4"><span class="badge">
+                    -
+                </span></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -5,8 +5,8 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', 'api.models.food', 'api.services.action', 'magicbar.analyse', 'bars.meal',
-    function($scope, $filter, Food, APIAction, analyse, Meal) {
+    ['$scope', '$filter', 'api.services.action', 'api.models.buyitem', 'magicbar.analyse', 'bars.meal',
+    function($scope, $filter, APIAction, BuyItem, analyse, Meal) {
         $scope.query = {
             type: 'buy',
             qty: 1,
@@ -22,6 +22,21 @@ angular.module('bars.magicbar', [
             analyse(qo, $scope);
         });
 
+		$scope.convertBarcode = function (e) {
+			if (e.which === 13) {
+				var barcode = $scope.bar.search;
+				if (!isNaN(barcode)) {
+					var buy_item = _.find(BuyItem.all(), function (bi) {
+						return bi.filter(barcode);
+					});
+					if (buy_item) {
+						$scope.bar.search = buy_item.details.stockitem.sellitem.name;
+						$('#q_alim').eq(0).val(buy_item.details.stockitem.sellitem.name + " ").trigger("input");
+					}
+				}
+			}
+		};
+
         $scope.executeQuery = function($item, $model, $label) {
             if ($item.food === null && $item.account === null) {
                 return;
@@ -31,12 +46,12 @@ angular.module('bars.magicbar', [
             if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory', 'deposit', 'refund', 'withdraw'], type)) {
                 var req;
                 if(_.contains(['buy', 'throw'], type)) {
-                    req = {item: $item.food.id, qty: $item.qty*$item.food.unit_value};
+                    req = {sellitem: $item.food.id, qty: $item.qty/**$item.food.unit_value*/};
                 } else if(_.contains(['inventory', 'appro'], type)) {
 					req = {items:
 						[{
 							item: $item.food.id,
-							qty: $item.qty*$item.food.unit_value
+							qty: $item.qty/**$item.food.unit_value*/
 						}]
 					};
 				} else {
@@ -46,14 +61,14 @@ angular.module('bars.magicbar', [
                     $scope.bar.search = '';
                 });
             } else if (type == 'add') {
-				Meal.addItem($item.food, $item.qty*$item.food.unit_value);
+				Meal.addItem($item.food, $item.qty/**$item.food.unit_value*/);
 			}
         };
     }])
 
 .factory('magicbar.analyse',
-	['$filter', 'bars.meal', 'auth.user',
-	function($filter, Meal, AuthUser) {
+	['$filter',  'api.models.sellitem', 'api.models.buyitem', 'bars.meal', 'auth.user',
+	function($filter, SellItem, BuyItem, Meal, AuthUser) {
 	    var analyse = function(qo, $scope) {
 	        $scope.query = {
 	            type: '',
@@ -88,11 +103,11 @@ angular.module('bars.magicbar', [
 				'refund': 'rembourser',
 				'withdraw': 'retirer'
 	        };
-			// _.map(humanTypes, function (o, k) {
-			// 	if (!AuthUser.can('add_' + k + 'transaction')) {
-			// 		delete humanTypes[k];
-			// 	}
-			// });
+			_.map(humanTypes, function (o, k) {
+				if (!AuthUser.can('add_' + k + 'transaction')) {
+					delete humanTypes[k];
+				}
+			});
 			humanTypes['add'] = 'ajouter';
 
 	        var units = [
@@ -179,11 +194,11 @@ angular.module('bars.magicbar', [
 	            }
 
 	            // Food
-	            var foods = _.filter($scope.bar.foods, function (o) {
+	            var foods = _.filter(SellItem.all(), function (o) {
 					return o.filter(term);
 	            });
 	            if (foods.length === 0) {
-	                foods = _.filter($scope.bar.foods, function (o) {
+	                foods = _.filter(SellItem.all(), function (o) {
 						return o.filter(term.replace(/s$/, ''));
 	                });
 	            }

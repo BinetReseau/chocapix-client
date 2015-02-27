@@ -114,15 +114,19 @@ angular.module('bars.api.account', [
                 });
             }
             if (query.type == 'refund') {
-                APIAction.refund({account: account.id, amount: query.qty}).then(function() {
+                APIAction.refund({account: account, amount: query.qty, motive: query.motive}).then(function() {
                     $scope.query.qty = '';
                 });
             }
             if (query.type == 'withdraw') {
-                APIAction.withdraw({account: account.id, amount: query.qty}).then(function() {
+                APIAction.withdraw({account: account, amount: query.qty}).then(function() {
                     $scope.query.qty = '';
                 });
             }
+        };
+        $scope.in = {
+            pseudo: false,
+            username: false
         };
         // Onglet "Modifier"
         $scope.pwdSuccess = 0;

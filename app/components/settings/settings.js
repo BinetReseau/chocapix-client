@@ -26,6 +26,9 @@ angular.module('bars.settings', [
                 }],
                 user_list: ['api.models.user', function(User) {
                     return User.all();
+                }],
+                account_list: ['api.models.account', function(Account) {
+                    return Account.all();
                 }]
             }
         })
@@ -42,8 +45,8 @@ angular.module('bars.settings', [
     }
 ])
 .controller('settings.ctrl.credentials',
-    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list',
-    function($scope, me, Auth, User, user_list) {
+    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list', 'account_list', 
+    function($scope, me, Auth, User, user_list, account_list) {
         $scope.settings.active = 'credentials';
         $scope.pwdSuccess = 0;
         $scope.usernameSuccess = 0;
@@ -51,6 +54,31 @@ angular.module('bars.settings', [
         $scope.newPwd = null;
         $scope.newPwdBis = null;
         $scope.myUser = me;
+        $scope.npseudo = '';
+        $scope.nusername = '';
+        $scope.checkPseudo = function() {
+            return _.filter(account_list, function(a) {
+                return $scope.npseudo != '' && a.owner.pseudo == $scope.npseudo;
+            }).length == 0;
+        };
+        $scope.changePseudo = function() {
+            if (_.filter(account_list, function(a) { return a.owner.pseudo == $scope.npseudo; }).length == 0) {
+                var tempPseudo = $scope.npseudo;
+                $scope.npseudo = '';
+                $scope.myUser.pseudo = tempPseudo;
+                $scope.myUser.$save().then(function(u) {
+                    $scope.pseudoSuccess = 1;
+                    $scope.myUser = u;
+                }, function(errors) {
+                    $scope.pseudoSuccess = -1;
+                    User.me().then(function(u) {
+                        $scope.myUser = u;
+                    });
+                    $scope.npseudo = '';
+                    console.log("Changement de pseudo échoué.");
+                });
+            }
+        };
         $scope.checkUsername = function() {
             return _.filter(user_list, {username: $scope.nusername}).length == 0;
         };

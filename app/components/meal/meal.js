@@ -7,7 +7,10 @@ angular.module('bars.meal', [
     ['$scope', 'api.models.account', 'bars.meal',
     function($scope,Account, Meal) {
         $scope.meal = Meal;
-        $scope.accounts = Account.all();
+        var accounts = Account.all();
+        $scope.accounts = _.reject(accounts, function(n) {
+            return n.owner.full_name == 'Bar' && n.owner.username == 'bar'
+        });
     }]
 )
 .directive('popoverMealPopup', [function() {
@@ -23,8 +26,8 @@ angular.module('bars.meal', [
     return $tooltip('popoverMeal', 'popover', 'click');
 }])
 .factory('bars.meal',
-    ['$rootScope', 'api.models.food', 'api.models.account', 'api.services.action', 'auth.user',
-    function ($rootScope, Food, Account, APIAction, AuthUser) {
+    ['$rootScope', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
+    function ($rootScope, SellItem, Account, APIAction, AuthUser) {
         var meal = {
             customersList: [],
             itemsList: [],
@@ -52,7 +55,7 @@ angular.module('bars.meal', [
 
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    totalPrice += item.item.price * item.buy_qty * item.item.unit_value;
+                    totalPrice += item.item.fuzzy_price * item.buy_qty;
                 });
 
                 _.forEach(this.customersList, function(customer) {
@@ -74,13 +77,13 @@ angular.module('bars.meal', [
             },
             addItem: function(item, qty) {
                 if (!qty) {
-                    qty = item.unit_value;
+                    qty = 1;
                 }
                 var other = _.find(this.itemsList, {'item': item});
                 if (other) {
-                    other.buy_qty += qty/item.unit_value;
+                    other.buy_qty += qty;
                 } else {
-                    this.itemsList.push({ item: item, buy_qty: qty/item.unit_value });
+                    this.itemsList.push({ item: item, buy_qty: qty });
                 }
                 this.recomputeAmount();
             },
@@ -94,7 +97,9 @@ angular.module('bars.meal', [
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.buy_qty * item.item.unit_value;
+                    item.qty = item.buy_qty;
+                    item.sellitem = item.item;
+                    delete item.item;
                 });
                 var refThis = this;
                 APIAction.meal({

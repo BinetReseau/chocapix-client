@@ -17,10 +17,11 @@
                     <option value="refund"> <!-- ng-if="user.can('add_refundtransaction')"> -->Rembourser une appro</option>
                     <option value="withdraw"> <!-- ng-if="user.can('add_withdrawtransaction')"> -->Retirer de l'argent</option>
                 </select>
-                <input type="number" class="form-control number" ng-model="query.qty" select-on-click />
+                <input type="number" step="any" class="form-control number" ng-model="query.qty" select-on-click />
                 <span ng-switch on="query.type">
                     <input ng-switch-when="punish" type="text" class="form-control large" ng-model="query.motive" placeholder="Motif de l'amende" />
-                    <input ng-switch-when="punish" type="submit" class="btn btn-warning" value="Mettre une amende{{ query.qty > 0 && ' de ' + (query.qty | currency) || '' }}" ng-class="(query.qty <= 0) && 'disabled' || ''" />
+                    <input ng-switch-when="refund" type="text" class="form-control large" ng-model="query.motive" placeholder="Motif du remboursement" />
+                    <input ng-switch-when="punish" type="submit" class="btn btn-warning" value="Mettre une amende{{ query.qty > 0 && ' de ' + (query.qty | currency) || '' }}" ng-class="(query.qty <= 0 || !query.motive) && 'disabled' || ''" />
                     <input ng-switch-when="give" type="submit" class="btn btn-success" value="Donner {{ query.qty > 0 && ' ' + (query.qty | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" />
                     <input ng-switch-when="deposit" type="submit" class="btn btn-success" value="Créditer {{ query.qty > 0 && ' de ' + (query.qty | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" />
                     <input ng-switch-when="refund" type="submit" class="btn btn-success" value="Rembourser {{ query.qty > 0 && ' ' + (query.qty | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" />
@@ -40,6 +41,21 @@
                         <table class="table table-tab">
                             <tbody>
                                 <tr>
+                                    <td class="h4">Pseudo</td>
+                                    <td class="end-of-column text-right" ng-mouseenter="in.pseudo = true" ng-mouseleave="in.pseudo = false">
+                                        <span class="h4" ng-hide="account.owner.id == user.user.id && in.pseudo"><span class="label label-default">{{ account.owner.pseudo }}</span></span>
+                                        <span class="h4" ng-show="account.owner.id == user.user.id && in.pseudo">
+                                            <a class="btn btn-xs btn-success" ui-sref="bar.settings.credentials({bar: bar.id})">Modifier mon pseudo</a>
+                                        </span>
+                                    </td>
+                                    <td class="h4">Respo bar</td>
+                                    <td class="text-right">
+                                        <span class="h4"><span class="label label-default">
+                                            -
+                                        </span></span>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="h4">Solde</td>
                                     <td class="end-of-column text-right">
                                         <span class="h4"><span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
@@ -49,7 +65,7 @@
                                     <td class="h4 row">Rang</td>
                                     <td class="text-right">
                                         <span class="h4"><span class="badge">
-                                            4
+                                            -
                                         </span></span>
                                     </td>
                                 </tr>
@@ -57,13 +73,13 @@
                                     <td class="h4">Total dépensé</td>
                                     <td class="end-of-column text-right">
                                         <span class="h4"><span class="label label-default">
-                                            {{ 1000 | currency}}
+                                            - €
                                         </span></span>
                                     </td>
                                     <td class="h4 row">Amendes</td>
                                     <td class="text-right">
                                         <span class="h4"><span class="label label-danger">
-                                            {{ 13 | currency }}
+                                            - €
                                         </span></span>
                                     </td>
                                 </tr>
@@ -71,7 +87,7 @@
                         </table>
                     </div>
                 </tab>
-                <tab heading="Graphiques">
+                <tab heading="Graphiques" ng-if="false">
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <div class="list-group">

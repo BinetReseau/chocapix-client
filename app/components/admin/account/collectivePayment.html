@@ -2,11 +2,11 @@
     <h3>Paiement collectif</h3>
 
     <div>
-        <form class="form-horizontal" ng-submit="createAccount()">
+        <form class="form-horizontal" ng-submit="collectivePay()">
             <div class="form-group">
-                <label for="amoney" class="col-sm-3 control-label">Montant</label>
+                <label for="aamount" class="col-sm-3 control-label">Montant</label>
                 <div class="col-sm-9">
-                    <input type="number" class="form-control" id="amoney" placeholder="Montant par personne" ng-model="money" />
+                    <input type="number" class="form-control" id="aamount" placeholder="Montant total" ng-model="amount" />
                 </div>
             </div>
             <div class="form-group">

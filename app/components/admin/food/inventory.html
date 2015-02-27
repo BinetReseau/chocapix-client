@@ -5,7 +5,12 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addInventoryItemInput">Ajouter</label>
                 <div class="col-sm-10">
-                    <input type="text" tabindex="40" id="addInventoryItemInput" class="form-control" placeholder="Aliment à ajouter à l'inventaire" typeahead="item.details.name for item in bar.foods | filter:{deleted: false} | filter:$viewValue | limitTo:5" ng-model="inventory.itemToAdd" autocomplete="off" typeahead-on-select="inventory.addItem($item)" />
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-barcode"></span>
+                        </div>
+                        <input type="text" tabindex="40" id="addInventoryItemInput" class="form-control" placeholder="Aliment à ajouter à l'inventaire" typeahead="(bip.buyitem.itemqty + ' ' + bip.buyitem.details.name) for bip in buy_item_pricesf($viewValue) | limitTo:5" ng-model="inventory.itemToAdd" autocomplete="off" typeahead-on-select="inventory.addItem($item)" typeahead-template-url="components/admin/food/typehead-buy-item-price.html" />
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -19,23 +24,23 @@
                 <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">Aliments</h4>
                 <input type="text" class="form-control right small" ng-model="searchi" placeholder="Rechercher dans l'inventaire">
             </div>
-            <table class="table table-striped table-hover" ng-show="(inventory.itemsList | filter:searchi).length > 0">
+            <table class="table table-striped table-hover" ng-show="(inventory.itemsList | filter:filterl).length > 0">
                 <tr>
                     <th>Nom</th>
                     <th>Quantité présente</th>
                     <th>Quantité théorique</th>
                     <th> </th>
                 </tr>
-                <tr ng-repeat="item in inventory.itemsList | orderBy:'nb':'true' | filter:searchi" ng-class="item.item.deleted && 'del'">
-                    <td class="vmiddle"><bars:food food="item.item"></bars:food></td>
+                <tr ng-repeat="item in inventory.itemsList | orderBy:'nb':'true' | filter:filterl">
+                    <td class="vmiddle"><bars:stockitem item="item.stockitem"></bars:stockitem></td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" />
-                        <select ng-model="item.unit_value">
-                            <option value="{{ item.item.details.unit_value }}">{{ item.item.details.unit_name || item.item.details.name }}</option>
-                            <option value="{{ item.item.unit_value }}" ng-if="item.item.details.unit_name != item.item.unit_name">{{ item.item.unit_name || item.item.details.name }}</option>
+                        <select ng-model="item.sell_to_buy">
+                            <option value="{{ item.stockitem.sell_to_buy }}">{{ item.stockitem.sellitem.unit_name || item.stockitem.sellitem.name }}</option>
+                            <option value="1">{{ item.stockitem.details.name }}</option>
                         </select>
                     </td>
-                    <td class="vmiddle"><span class="label label-info"><bars:food:qty food="item.item" qty="item.item.qty" out="'buy'"></bars:food:qty></span></td>
+                    <td class="vmiddle"><span class="label label-info"><bars:stockitem:qty item="item.stockitem" qty="item.stockitem.qty" out="'sell'"></bars:stockitem:qty></span></td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="inventory.removeItem(item)" class="link">
                             <span class="glyphicon glyphicon-remove"></span>
@@ -43,7 +48,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="panel-body" ng-show="(inventory.itemsList | filter:filterDeleted() | filter:searchi).length == 0 && searchi">
+            <div class="panel-body" ng-show="(inventory.itemsList | filter:filterl).length == 0 && searchi">
                 <em>Aucun aliment correspondant à cette recherche ne fait partie de l'inventaire.</em>
             </div>
         </div>

@@ -4,7 +4,8 @@ angular.module('bars.main', [
     'bars.filters'
     ])
 
-.config(['$stateProvider', function($stateProvider) {
+.config(['$stateProvider', '$urlMatcherFactoryProvider', function($stateProvider, $urlMatcherFactoryProvider) {
+    $urlMatcherFactoryProvider.strictMode(false);
     $stateProvider
         .state('bar', {
             url: "/{bar:[^/]+}",
@@ -15,15 +16,30 @@ angular.module('bars.main', [
                 bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
                     return Bar.get($stateParams.bar);
                 }],
-                foods: ['api.models.food', function(Food) {
-                    Food.clear();
-                    Food.reload();
-                    return Food.all();
+                itemdetails: ['api.models.itemdetails', function(ItemDetails) {
+                    ItemDetails.clear();
+                    ItemDetails.reload();
+                    return ItemDetails.all();
                 }],
-                foodsg: ['api.models.fooddetails', function(FoodDetails) {
-                    FoodDetails.clear();
-                    FoodDetails.reload();
-                    return FoodDetails.all();
+                buyitem: ['api.models.buyitem', function(BuyItem) {
+                    BuyItem.clear();
+                    BuyItem.reload();
+                    return BuyItem.all();
+                }],
+                buyitemprice: ['api.models.buyitemprice', function(BuyItemPrice) {
+                    BuyItemPrice.clear();
+                    BuyItemPrice.reload();
+                    return BuyItemPrice.all();
+                }],
+                stockitem: ['api.models.stockitem', function(StockItem) {
+                    StockItem.clear();
+                    StockItem.reload();
+                    return StockItem.all();
+                }],
+                sellitem: ['api.models.sellitem', function(SellItem) {
+                    SellItem.clear();
+                    SellItem.reload();
+                    return SellItem.all();
                 }],
                 accounts: ['api.models.account', function(Account) {
                     Account.clear();
@@ -93,19 +109,40 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'foods', 'bar', 'accounts',
-    function($scope, $rootScope, $stateParams, AuthUser, foods, bar, accounts) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', '$state',
+    function($scope, $rootScope, $stateParams, AuthUser, sellitem, buyitem, bar, accounts, $timeout, $state) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
             accounts: accounts,
             search: '',
-            foods: foods,
+            sellitems: sellitem,
             active: 'index',
             infos: bar
         };
 
         $scope.user = AuthUser;
+
+        $scope.signalBug = function() {
+            $('#bugModal').modal('show');
+            $scope.bugSignaled = false;
+            var now = new Date();
+            $scope.bug = {
+                description: '',
+                user: AuthUser,
+                date: now.toJSON(),
+                state: $state.current,
+                params: $state.params
+            };
+        };
+        $scope.submitBug = function() {
+            // envoi du bug...
+            $scope.bugSignaled = true;
+            $timeout(function() {
+                $('#bugModal').modal('hide');
+                return true;
+            }, 1000);
+        }
     }])
 
 .controller(

@@ -15,8 +15,9 @@ angular.module('bars.api.transaction', [
                     'author_account': 'Account',
                     'account': 'Account',
                     'accounts.*.account': 'Account',
-                    'item': 'Item',
-                    'items.*.item': 'Item'
+                    'items.*.stockitem': 'StockItem',
+                    'items.*.sellitem': 'SellItem',
+                    'stockitem': 'StockItem'
                 },
                 methods: {
                     'parseTimestamp':  function() {
@@ -68,12 +69,24 @@ angular.module('bars.api.transaction', [
                                 x.account.$reload();
                             });
                         }
-                        if(this.item) {
-                            this.item.$reload();
+                        if(this.stockitem) {
+                            this.stockitem.$reload();
+                        }
+                        if(this.sellitem) {
+                            this.sellitem.$reload();
                         }
                         if(this.items) {
                             _.forEach(this.items, function(x) {
-                                x.item.$reload();
+                                if (x.sellitem) {
+                                    x.sellitem.$reload();
+                                    _.forEach(x.sellitem.stockitems, function (s) {
+                                        s.$reload();
+                                    });
+                                }
+                                if (x.stockitem) {
+                                    x.stockitem.$reload();
+                                    x.stockitem.sellitem.$reload();
+                                }
                             });
                         }
                         this.parseTimestamp();
@@ -90,7 +103,7 @@ angular.module('bars.api.transaction', [
     }])
 .factory('api.services.action', ['api.models.transaction',
     function(Transaction) {
-        var actions = ["buy", "throw", "give", "punish", "meal", "appro", "inventory", "deposit"];
+        var actions = ["buy", "throw", "give", "punish", "meal", "appro", "inventory", "deposit", "collectivePayment", "refund", "withdraw", "barInvestment"];
         var Action = {};
         actions.forEach(function(action) {
             Action[action] = function(params) {
@@ -152,6 +165,8 @@ angular.module('bars.api.transaction', [
         restrict: 'E',
         scope: {
             filter: '&filter',
+            sellitem: "=?sellitem",
+            buyInStock: '=?buyInStock' // false: display buytransaction with sellitems ; true: display buytransaction with stockitem
             // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
@@ -166,6 +181,9 @@ angular.module('bars.api.transaction', [
                     var req = $scope.filter();
                     req.page = page++;
                     req.page_size = 30;
+                    if ($scope.sellitem) {
+                        req.sellitem = $scope.sellitem;
+                    }
                     Transaction.request(req).then(function(history) {
                         allHistory = allHistory.concat(history);
                         calculateHistory();
@@ -191,6 +209,13 @@ angular.module('bars.api.transaction', [
                 $scope.history = history_dates;
                 inRequest = false;
             }
+
+            if ($scope.buyInStock) {
+                $scope.sellOrStock = {sellitem: undefined};
+            } else {
+                $scope.sellOrStock = {stockitem: undefined};
+            }
+            //$scope.sellOrStock = {};
 
             $scope.safe = $sanitize;
             $scope.loadMore = loadMore;
