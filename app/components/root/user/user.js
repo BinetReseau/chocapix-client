@@ -36,9 +36,14 @@ angular.module('bars.root.user', [
 }])
 
 .controller('root.ctrl.user.base', 
-    ['$scope', 'user_list', 
-    function($scope, user_list){
+    ['$scope', 'user_list', '$state', 
+    function($scope, user_list, $state){
         $scope.root.active = 'user';
+        $scope.user_list = user_list;
+        $scope.searchl = '';
+        $scope.findUser = function(usr) {
+            $state.go('root.user.details', {id: usr.id});
+        };
     }]
 )
 
