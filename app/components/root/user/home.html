@@ -2,14 +2,16 @@
     <h2>Gestion des utilisateurs</h2>
 
     <div class="row">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="searchUserInput">Rechercher</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="searchUserInput" placeholder="Tape un nom ou un pseudo" typeahead="usr.full_name for usr in user_list | filter:$viewValue | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="findUser($item)">
+        <div class="col-sm-12">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="searchUserInput">Rechercher</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="searchUserInput" placeholder="Tape un nom ou un pseudo" typeahead="usr.full_name for usr in user_list | filter:$viewValue | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="findUser($item)">
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <p>À faire ici</p>
