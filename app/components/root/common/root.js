@@ -44,10 +44,10 @@ angular.module('bars.root', [
                         templateUrl: "components/root/common/user-infos.html",
                         controller: 'root.ctrl.userInfos'
                     },
-                    // '@home': {
-                    //     templateUrl: "common/home.html",
-                    //     controller: 'main.ctrl.bar'
-                    // }
+                    '@root': {
+                        templateUrl: "components/root/common/home.html",
+                        controller: 'root.ctrl.home'
+                    }
                 }
             });
 }])
@@ -69,7 +69,8 @@ angular.module('bars.root', [
         // };
 
         $scope.user = AuthUser;
-    }])
+    }]
+)
 
 .controller('root.ctrl.header',
     ['$scope','auth.user',
@@ -93,7 +94,8 @@ angular.module('bars.root', [
                 }
             );
         };
-    }])
+    }]
+)
 
 .controller(
     'root.ctrl.userInfos',
@@ -102,5 +104,13 @@ angular.module('bars.root', [
         if (user) {
             AuthUser.user = user;
         }
-    }])
+    }]
+)
+
+.controller('root.ctrl.home', 
+    ['$scope', 
+    function($scope){
+        $scope.root.active = 'index';
+    }]
+)
 ;
