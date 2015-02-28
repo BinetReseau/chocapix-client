@@ -3,7 +3,8 @@
 angular.module('bars.root', [
     'bars.filters',
 
-    'bars.root.user'
+    'bars.root.user',
+    'bars.root.food'
     ])
 
 .config(['$stateProvider', '$urlRouterProvider',
