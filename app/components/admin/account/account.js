@@ -113,6 +113,26 @@ angular.module('bars.admin.account', [
                 $scope.oa = JSON.parse($scope.lista);
             }
         });
+        $scope.importAccounts = function() {
+            _.forEach($scope.oa, function (ouser) {
+                var nuser = User.create();
+                nuser.full_name = _.capitalize(_.trim(ouser.firstname)) + " " + _.capitalize(_.trim(ouser.lastname));
+                nuser.email = ouser.email;
+                nuser.username = ouser.login;
+                nuser.$save().then(function(u) {
+                    var naccount = Account.create();
+                    naccount.owner = u.id;
+                    //naccount.money = ouser.money;
+                    naccount.$save().then(function(a) {
+                        if (ouser.money > 0) {
+                            APIAction.deposit({account: a.id, amount: ouser.money});
+                        } else if (ouser.money < 0) {
+                            APIAction.punish({account: a.id, amount: -ouser.money, motive: "Création du compte"});
+                        }
+                    });
+                });
+            });
+        };
         // $scope.nuser = User.create();
         // $scope.nuser.lastname = "";
         // $scope.nuser.firstname = "";
