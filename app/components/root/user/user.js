@@ -51,6 +51,15 @@ angular.module('bars.root.user', [
     ['$scope', 'api.models.user', 'api.models.role', 'user_req', 
     function($scope, User, Role, user){
         $scope.user = user;
+        $scope.userBis = _.clone($scope.user);
+
+        $scope.saveUser = function() {
+            $scope.user.full_name = $scope.userBis.full_name;
+            $scope.user.$save().then(function(u) {
+                $scope.user = u;
+                $scope.userBis = _.clone(u);
+            });
+        };
     }
 ])
 ;
