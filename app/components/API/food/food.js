@@ -503,7 +503,7 @@ angular.module('bars.api.food', [
         templateUrl: 'components/API/food/directives/stockitem-price-directive.html',
         controller: ['$scope', function($scope) {
             function refresh() {
-                $scope.price = $scope.item.price;
+                $scope.price = $scope.item.price * (1 + $scope.item.sellitem.tax);
                 $scope.unit_name = $scope.item.sellitem.unit_name;
             }
             refresh();
