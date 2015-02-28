@@ -462,6 +462,13 @@ angular.module('bars.admin.food', [
         $timeout(function () {
             document.getElementById("fbarcode").focus();
         }, 300);
+
+        $scope.fixTaxes = function (factor) {
+            _.forEach(StockItem.all(), function (si) {
+                si.price = si.price * (1 + factor*si.sellitem.tax);
+                si.$save();
+            });
+        };
     }
 ])
 .directive('barsAdminFoodAdd', function() {
