@@ -26,7 +26,8 @@ angular.module('barsApp', [
   'bars.api.account',
   'bars.api.transaction',
   'bars.api.news',
-  'bars.api.role'
+  'bars.api.role',
+  'bars.api.bug'
 ])
 
 .config(['APIURLProvider', 'OFFURLProvider', function(APIURL, OFFURL) {
