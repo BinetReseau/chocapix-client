@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('bars.root', [
-    'bars.filters'
+    'bars.filters',
+
+    'bars.root.user'
     ])
 
 .config(['$stateProvider', '$urlRouterProvider',
@@ -12,9 +14,6 @@ angular.module('bars.root', [
             .state('root', {
                 url: "/root",
                 resolve: {
-                    api: ['APIInterface' , function(APIInterface) {
-                        APIInterface.setBar('');
-                    }],
                     user: ['api.models.user', 'auth.service', function(User, AuthService) {
                         if (AuthService.isAuthenticated()) {
                             return User.me();
@@ -30,11 +29,6 @@ angular.module('bars.root', [
                         User.clear();
                         User.reload();
                         return User.all();
-                    }],
-                    foodsg: ['api.models.fooddetails', function(FoodDetails) {
-                        FoodDetails.clear();
-                        FoodDetails.reload();
-                        return FoodDetails.all();
                     }]
                 },
                 views: {
@@ -59,8 +53,8 @@ angular.module('bars.root', [
 }])
 
 .controller('root.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', 'auth.user', 'foodsg',
-    function($scope, $rootScope, $stateParams, AuthUser, foodsg) {
+    ['$scope', '$rootScope', '$stateParams', 'auth.user',
+    function($scope, $rootScope, $stateParams, AuthUser) {
         $scope.root = {
             active: 'index'
         };
