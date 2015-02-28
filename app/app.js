@@ -56,10 +56,15 @@ angular.module('barsApp', [
         });
         amMoment.changeLocale('fr');
 
+        var last = (new Date()).getTime();
         $(document).keyup(function(e) {
             if (e.keyCode == 27) {
-                AuthUser.logout();
-                $rootScope.$apply();
+                var current = (new Date()).getTime();
+                if (current - last < 300) {
+                    AuthUser.logout();
+                    $rootScope.$apply();
+                }
+                last = current;
             }
         });
 }])

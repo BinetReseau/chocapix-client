@@ -14,8 +14,8 @@
                     <option value="give" ng-if="user.can('add_givetransaction')">Faire un don</option>
                     <option value="punish" ng-if="user.can('add_punishtransaction')">Mettre une amende</option>
                     <option value="deposit" ng-if="user.can('add_deposittransaction')">Créditer le compte</option>
-                    <option value="refund"> <!-- ng-if="user.can('add_refundtransaction')"> -->Rembourser une appro</option>
-                    <option value="withdraw"> <!-- ng-if="user.can('add_withdrawtransaction')"> -->Retirer de l'argent</option>
+                    <option value="refund" ng-if="user.can('add_refundtransaction')">Rembourser une appro</option>
+                    <option value="withdraw" ng-if="user.can('add_withdrawtransaction')">Retirer de l'argent</option>
                 </select>
                 <input type="number" step="any" class="form-control number" ng-model="query.qty" select-on-click />
                 <span ng-switch on="query.type">

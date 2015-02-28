@@ -74,7 +74,7 @@ angular.module('bars.admin', [
         });
 
         $scope.nbAccountNegativ = _.filter(account_list, function (o) {
-            return o.money <= 0;
+            return o.money <= 0 && !o.deleted && o.owner.is_active;
         }).length;
         $scope.ratioAccountNegativ = $scope.nbAccountNegativ/account_list.length;
 
