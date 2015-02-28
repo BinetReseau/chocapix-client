@@ -28,6 +28,11 @@
                                 <span class="glyphicon glyphicon-cutlery"></span><span class="hidden-xs"> Aliments</span>
                             </a>
                         </li>
+                        <li ng-class="root.active == 'bug' && 'active'">
+                            <a title="Bugs reportés" ui-sref="root.bug.list">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span><span class="hidden-xs"> Bugs</span>
+                            </a>
+                        </li>
                         <li class="hidden-xs">
                             <a title="Déconnexion" ui-sref="root" ng-show="user.isAuthenticated()" ng-click="user.logout()">
                                 <span class="glyphicon glyphicon-off"></span><span class="hidden-xs"> Déconnexion</span>

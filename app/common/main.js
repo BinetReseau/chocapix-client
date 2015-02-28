@@ -126,10 +126,14 @@ angular.module('bars.main', [
         $scope.signalBug = function() {
             var modalBug = $modal.open({
                 templateUrl: 'common/modal-bug.html',
-                controller: ['$scope', '$modalInstance', 'api.models.bug', function ($scope, $modalInstance, Bug) {
+                controller: ['$scope', '$modalInstance', 'api.models.bug', '$filter', function ($scope, $modalInstance, Bug, $filter) {
                     $scope.bugSignaled = false;
                     $scope.bug = Bug.create();
                     $scope.submitBug = function() {
+                        var bugData = {params: $state.params};
+                        bugData.currentState = $state.current.name;
+                        $scope.bug.data = $filter('json')(bugData);
+                        console.log($scope.bug.data);
                         $scope.bug.$save().then(function() {
                             $scope.bugSignaled = true;
                             $timeout(function() {

@@ -4,7 +4,8 @@ angular.module('bars.root', [
     'bars.filters',
 
     'bars.root.user',
-    'bars.root.food'
+    'bars.root.food',
+    'bars.root.bug'
     ])
 
 .config(['$stateProvider', '$urlRouterProvider',
