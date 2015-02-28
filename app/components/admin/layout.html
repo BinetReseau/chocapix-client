@@ -23,6 +23,7 @@
                 <li><a ui-sref="bar.admin.account.add({ bar: bar.id })">Créer un utilisateur</a></li>
                 <li><a ui-sref="bar.admin.account.link({ bar: bar.id })" ng-if="user.can('add_account')">Importer un utilisateur existant</a></li>
                 <li><a ui-sref="bar.admin.account.collectivePayment({ bar: bar.id })">Paiement collectif</a></li>
+                <li><a ui-sref="bar.admin.account.import({ bar: bar.id })">Importer des utilisateurs de bars</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'news' && 'active'" class="dropdown dropdownli" dropdown>
