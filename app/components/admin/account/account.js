@@ -73,7 +73,7 @@ angular.module('bars.admin.account', [
         };
         $scope.createAccount = function() {
             if ($scope.nuser.password == $scope.nuser.passwordBis) {
-                $scope.nuser.full_name = _.capitalize(_.trim($scope.nuser.lastname)) + " " + _.capitalize(_.trim($scope.nuser.firstname));
+                $scope.nuser.full_name = _.capitalize(_.trim($scope.nuser.firstname)) + " " + _.capitalize(_.trim($scope.nuser.lastname));
                 delete $scope.nuser.passwordBis;
                 delete $scope.nuser.lastname;
                 delete $scope.nuser.firstname;
@@ -133,53 +133,6 @@ angular.module('bars.admin.account', [
                 });
             });
         };
-        // $scope.nuser = User.create();
-        // $scope.nuser.lastname = "";
-        // $scope.nuser.firstname = "";
-        // $scope.nuser.password = "";
-        // $scope.nuser.passwordBis = "";
-        // $scope.nuser.username = "";
-        // $scope.nuser.pseudo = "";
-        // $scope.naccount = Account.create();
-        // $scope.naccount.amoney = 0;
-        // $scope.isValidUser = function() {
-        //     var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
-        //     var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
-        //     var usernameTest = $scope.nuser.username.length > 0;
-        //     var pseudoTest = $scope.nuser.pseudo.length > 0;
-        //     var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
-        //     var moneyTest = $scope.naccount.amoney && $scope.naccount.amoney >= 0;
-        //     return lastnameTest && firstnameTest && usernameTest && pseudoTest && pwdTest && moneyTest;
-        // };
-        // $scope.createAccount = function() {
-        //     if ($scope.nuser.password == $scope.nuser.passwordBis) {
-        //         $scope.nuser.full_name = _.capitalize(_.trim($scope.nuser.lastname)) + " " + _.capitalize(_.trim($scope.nuser.firstname));
-        //         delete $scope.nuser.passwordBis;
-        //         delete $scope.nuser.lastname;
-        //         delete $scope.nuser.firstname;
-        //         $scope.nuser.$save().then(function(u) {
-        //             $scope.naccount.owner = u.id;
-        //             $scope.amoney = $scope.naccount.amoney;
-        //             delete $scope.naccount.amoney;
-        //             $scope.naccount.$save().then(function(a) {
-        //                 APIAction.deposit({account: a.id, amount: $scope.amoney}).then(function() {
-        //                     $state.go('bar.account.details', {id: a.id});
-        //                 }, function(errors) {
-        //                     console.log("Erreur dépôt chèque.")
-        //                 });
-        //             }, function(errors) {
-        //                 console.log("Erreur création Account.");
-        //             });
-        //         }, function(errors) {
-        //             console.log("Erreur création User.");
-        //         });
-        //     } else {
-        //         $scope.password = '';
-        //         $scope.passwordBis = '';
-        //         console.log("Mots de passe différents");
-        //     }
-        //
-        // }
     }
 ])
 .controller('admin.ctrl.account.link',
