@@ -94,11 +94,11 @@ angular.module('bars.magicbar', [
 
 	        var humanTypes = {
 	            'buy': 'acheter',
-	            'throw': 'jeter',
+	            //'throw': 'jeter',
 	            'give': 'donner',
 	            'punish': 'amende',
-	            'appro': 'appro',
-				'inventory': 'reste',
+	            //'appro': 'appro',
+				//'inventory': 'reste',
 				'deposit': 'credit',
 				'refund': 'rembourser',
 				'withdraw': 'retirer'
