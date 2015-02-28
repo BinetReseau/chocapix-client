@@ -15,12 +15,7 @@ angular.module('bars.root.user', [
         .state('root.user.base', {
             url: '/home',
             templateUrl: "components/root/user/home.html",
-            controller: 'root.ctrl.user.base',
-            resolve: {
-                user_list: ['api.models.user', function(User) {
-                    return User.all();
-                }]
-            }
+            controller: 'root.ctrl.user.base'
         })
         .state('root.user.details', {
             url: '/:id',
