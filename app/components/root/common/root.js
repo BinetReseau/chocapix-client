@@ -30,6 +30,11 @@ angular.module('bars.root', [
                         User.clear();
                         User.reload();
                         return User.all();
+                    }],
+                    itemdetails_list: ['api.models.itemdetails', function(ItemDetails) {
+                        ItemDetails.clear();
+                        ItemDetails.reload();
+                        return ItemDetails.all();
                     }]
                 },
                 views: {
