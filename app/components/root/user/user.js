@@ -22,6 +22,16 @@ angular.module('bars.root.user', [
                 }]
             }
         })
+        .state('root.user.details', {
+            url: '/:id',
+            templateUrl: "components/root/user/details.html",
+            controller: 'root.ctrl.user.details',
+            resolve: {
+                user_req: ['api.models.user', '$stateParams', function(User, $stateParams) {
+                    return User.getSync($stateParams.id);
+                }]
+            }
+        })
     ;
 }])
 
@@ -31,4 +41,11 @@ angular.module('bars.root.user', [
         $scope.root.active = 'user';
     }]
 )
+
+.controller('root.ctrl.user.details', 
+    ['$scope', 'api.models.user', 'api.models.role', 'user_req', 
+    function($scope, User, Role, user){
+        $scope.user = user;
+    }
+])
 ;
