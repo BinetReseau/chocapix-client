@@ -442,9 +442,6 @@ angular.module('bars.api.food', [
         controller: ['$scope', function($scope) {
             function refresh() {
                 $scope.price = $scope.item.fuzzy_price;
-                if ($scope.tax) {
-                    $scope.price *= (1 + $scope.item.tax);
-                }
                 $scope.unit_name = $scope.item.unit_name;
             }
             $scope.$watch('item.unit_name', refresh);
