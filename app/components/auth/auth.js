@@ -6,7 +6,7 @@ angular.module('bars.auth', [
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
 .factory('auth.service',
-    ['$injector', '$localStorage', '$q', 'APIURL',
+    ['$injector', '$localStorage', '$q', 'APIURL', 
     function ($injector, $localStorage, $q, APIURL) {
         if ($localStorage.auth === undefined) {
             $localStorage.auth = {
@@ -38,8 +38,8 @@ angular.module('bars.auth', [
 }])
 
 .factory('auth.user',
-    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role',
-    function (AuthService, $rootScope, $q, $timeout, Account, User, Role) {
+    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role', '$state', '$stateParams', 
+    function (AuthService, $rootScope, $q, $timeout, Account, User, Role, $state, $stateParams) {
         return {
             user: null,
             account: null,
@@ -89,6 +89,8 @@ angular.module('bars.auth', [
                 this.roles = [];
                 this.perms = [];
                 $rootScope.$broadcast('auth.hasLoggedOut');
+
+                $state.go('bar', {bar: $stateParams.bar});
 
                 $timeout(function() {
                     document.getElementById("floginc").focus();
