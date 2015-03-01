@@ -227,6 +227,16 @@ angular.module('bars.admin.food', [
         $scope.new_sell = !$scope.sell_item.id;
         $scope.new_details = !$scope.item_details.id;
 
+        function resetf() {
+            $scope.barcode = "";
+            $scope.itemInPack = "";
+            $scope.oldSellItem = "";
+            $scope.is_pack = false;
+            $scope.new_sell = true;
+            $scope.new_details = true;
+            document.getElementById("fbarcode").focus();
+        }
+
         function searchDetails (barcode) {
             $scope.allow_barcode_edit = true;
             // On regarde si le bar vend déjà ce code-barre
@@ -392,10 +402,7 @@ angular.module('bars.admin.food', [
                     return $scope.sell_item.$save().then(function (sellItem) {
                         $scope.stock_item.sellitem = sellItem;
                         return $scope.stock_item.$save().then(function (stockItem) {
-                            $scope.barcode = "";
-                            $scope.itemInPack = "";
-                            $scope.oldSellItem = "";
-                            document.getElementById("fbarcode").focus();
+                            resetf();
                             return stockItem;
                         });
                     }, function(errors) {
@@ -403,10 +410,7 @@ angular.module('bars.admin.food', [
                     });
                 } else {
                     return $scope.stock_item.$save().then(function (stockItem) {
-                        $scope.barcode = "";
-                        $scope.itemInPack = "";
-                        $scope.oldSellItem = "";
-                        document.getElementById("fbarcode").focus();
+                        resetf();
                         return stockItem;
                     });
                 }
@@ -420,10 +424,7 @@ angular.module('bars.admin.food', [
                     return $scope.buy_item.$save().then(function (buyItem) {
                         $scope.buy_item_price.buyitem = buyItem;
                         $scope.buy_item.id = buyItem.id;
-                        $scope.barcode = "";
-                        $scope.itemInPack = "";
-                        $scope.oldSellItem = "";
-                        document.getElementById("fbarcode").focus();
+                        resetf();
                         return $scope.buy_item_price.$save();
                     });
                 }
