@@ -49,7 +49,11 @@
                             <option value="1">{{ item.stockitem.details.name }}</option>
                         </select>
                     </td>
-                    <td class="vmiddle"><span class="label label-info"><bars:stockitem:qty item="item.stockitem" qty="item.stockitem.qty" out="'sell'"></bars:stockitem:qty></span></td>
+                    <td class="vmiddle">
+                        <span class="label label-info">
+                            <bars:stockitem:qty item="item.stockitem" qty="item.stockitem.qty" out="'sell'"></bars:stockitem:qty>
+                        </span>
+                    </td>
                     <td class="vmiddle"><span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:price item="item.stockitem" qty="item.qty_diff" out="'sell'"></bars:stockitem:price></span></td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="inventory.removeItem(item)" class="link">
