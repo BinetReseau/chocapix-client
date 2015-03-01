@@ -14,6 +14,14 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">Total</label>
+                <div class="col-sm-10">
+                    <span class="h3">
+                        <span class="label" ng-class="inventory.totalPrice >= 0 && 'label-success' || 'label-danger'">{{ inventory.totalPrice | currency }}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-2">
                     <input type="button" class="btn btn-primary" ng-click="inventory.validate()" value="Valider l'inventaire" />
                 </div>
@@ -29,18 +37,24 @@
                     <th>Nom</th>
                     <th>Quantité présente</th>
                     <th>Quantité théorique</th>
+                    <th>Différence</th>
                     <th> </th>
                 </tr>
                 <tr ng-repeat="item in inventory.itemsList | orderBy:'nb':'true' | filter:filterl">
                     <td class="vmiddle"><bars:stockitem item="item.stockitem"></bars:stockitem></td>
                     <td class="vmiddle">
-                        <input type="number" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" />
-                        <select ng-model="item.sell_to_buy">
+                        <input type="number" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" ng-change="inventory.recomputeAmount()" />
+                        <select ng-model="item.sell_to_buy" ng-change="inventory.recomputeAmount()">
                             <option value="{{ item.stockitem.sell_to_buy }}">{{ item.stockitem.sellitem.unit_name || item.stockitem.sellitem.name }}</option>
                             <option value="1">{{ item.stockitem.details.name }}</option>
                         </select>
                     </td>
-                    <td class="vmiddle"><span class="label label-info"><bars:stockitem:qty item="item.stockitem" qty="item.stockitem.qty" out="'sell'"></bars:stockitem:qty></span></td>
+                    <td class="vmiddle">
+                        <span class="label label-info">
+                            <bars:stockitem:qty item="item.stockitem" qty="item.stockitem.qty" out="'sell'"></bars:stockitem:qty>
+                        </span>
+                    </td>
+                    <td class="vmiddle"><span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:price item="item.stockitem" qty="item.qty_diff" out="'sell'"></bars:stockitem:price></span></td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="inventory.removeItem(item)" class="link">
                             <span class="glyphicon glyphicon-remove"></span>

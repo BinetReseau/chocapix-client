@@ -526,8 +526,6 @@ angular.module('bars.admin.food', [
                 this.inRequest = false;
             },
             recomputeAmount: function() {
-                var nbItems = this.itemsList.length;
-
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
                     if (item.qty && item.qty > 0 && item.price) {
@@ -591,9 +589,11 @@ angular.module('bars.admin.food', [
             itemsList: [],
             inRequest: false,
             itemToAdd: "",
+            totalPrice: 0,
             init: function() {
                 this.itemsList = [];
                 this.inRequest = false;
+                this.totalPrice = 0;
             },
             addItem: function(item, qty) {
                 if (!qty) {
@@ -602,15 +602,27 @@ angular.module('bars.admin.food', [
                 var stockitem = item.buyitem.details.stockitem;
                 var other = _.find(this.itemsList, {'stockitem': stockitem});
                 if (other) {
-                    other.qty += qty;
+                    other.qty += qty / other.sell_to_buy;
                     other.nb = nb++;
                 } else {
-                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++ });
+                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
                 }
                 this.itemToAdd = "";
+                this.recomputeAmount();
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
+            },
+            recomputeAmount: function() {
+                var totalPrice = 0;
+                _.forEach(this.itemsList, function(item, i) {
+                    if (item.qty) {
+                        item.qty_diff = item.qty * item.sell_to_buy / item.stockitem.sell_to_buy - item.stockitem.qty;
+                    }
+                    totalPrice += item.qty_diff * item.stockitem.price;
+                });
+
+                this.totalPrice = totalPrice;
             },
             validate: function() {
                 this.inRequest = true;
