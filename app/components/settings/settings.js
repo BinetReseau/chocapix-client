@@ -56,21 +56,28 @@ angular.module('bars.settings', [
         $scope.myUser = me;
         $scope.npseudo = '';
         $scope.nusername = '';
+        $scope.alerts = [];
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        }
         $scope.checkPseudo = function() {
             return _.filter(account_list, function(a) {
                 return $scope.npseudo != '' && a.owner.pseudo == $scope.npseudo;
             }).length == 0;
         };
         $scope.changePseudo = function() {
+            $scope.alerts = _.filter($scope.alerts, function(a) {
+                return a.context != 'pseudo';
+            });
             if (_.filter(account_list, function(a) { return a.owner.pseudo == $scope.npseudo; }).length == 0) {
                 var tempPseudo = $scope.npseudo;
                 $scope.npseudo = '';
                 $scope.myUser.pseudo = tempPseudo;
                 $scope.myUser.$save().then(function(u) {
-                    $scope.pseudoSuccess = 1;
+                    $scope.alerts.push({context: 'pseudo', type: 'success', msg: 'Ton pseudo a été changé avec succès.'});
                     $scope.myUser = u;
                 }, function(errors) {
-                    $scope.pseudoSuccess = -1;
+                    $scope.alerts.push({context: 'pseudo', type: 'danger', msg: 'Une erreur est survenue : ton pseudo n\'a pas été modifié...'});
                     User.me().then(function(u) {
                         $scope.myUser = u;
                     });
@@ -83,15 +90,18 @@ angular.module('bars.settings', [
             return _.filter(user_list, {username: $scope.nusername}).length == 0;
         };
         $scope.changeUsername = function() {
+            $scope.alerts = _.filter($scope.alerts, function(a) {
+                return a.context != 'username';
+            });
             if (_.filter(user_list, {username: $scope.nusername}).length == 0) {
                 var tempUsername = $scope.nusername;
                 $scope.nusername = '';
                 $scope.myUser.username = tempUsername;
                 $scope.myUser.$save().then(function(u) {
-                    $scope.usernameSuccess = 1;
+                    $scope.alerts.push({context: 'username', type: 'success', msg: 'Ton login a été changé avec succès.'});
                     $scope.myUser = u;
                 }, function(errors) {
-                    $scope.usernameSuccess = -1;
+                    $scope.alerts.push({context: 'username', type: 'danger', msg: 'Une erreur est survenue : ton login n\'a pas été modifié...'});
                     User.me().then(function(u) {
                         $scope.myUser = u;
                     });
@@ -101,26 +111,22 @@ angular.module('bars.settings', [
             }
         };
         $scope.changePwd = function() {
+            $scope.alerts = _.filter($scope.alerts, function(a) {
+                return a.context != 'pwd';
+            });
             if ($scope.newPwd == $scope.newPwdBis) {
                 console.log(me);
                 User.changePwd($scope.oldPwd, $scope.newPwd).then(function() {
-                    $scope.pwdSuccess = 1;
+                    $scope.alerts.push({context: 'pwd', type: 'success', msg: 'Ton mot de passe a été changé avec succès.'});
                     $scope.newPwd = '';
                     $scope.newPwdBis = '';
                     $scope.oldPwd = '';
                 }, function(errors) {
-                    $scope.pwdSuccess = -1;
+                    $scope.alerts.push({context: 'pwd', type: 'danger', msg: 'Une erreur est survenue : ton mot de passe n\'a pas été modifié...'});
                     $scope.oldPwd = '';
                 });
-                /*
-                me.$save().then(function() {
-                    $scope.pwdSuccess = 1;
-                }, function() {
-                    $scope.pwdSuccess = -1;
-                });
-                */
             } else {
-                $scope.pwdSuccess = -1;
+                $scope.alerts.push({context: 'pwd', type: 'warning', msg: 'Les mots de passe sont différents.'});
                 console.log('Mots de passe différents.');
             }
         };
