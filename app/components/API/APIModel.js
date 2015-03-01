@@ -100,7 +100,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         APIInterface.prototype.getBar = function() {
             return this.bar;
         };
-        APIInterface.prototype.request = function(req) {
+        APIInterface.prototype.request = function(req, doNotParse) {
             var self = this;
             req.data = this.unparse(req.data);
             if (this.getBar()) {
@@ -113,7 +113,11 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url;
             req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");
             return $http(req).then(function(data) {
-                return self.parse(data.data);
+                if (doNotParse) {
+                    return data.data;
+                } else {
+                    return self.parse(data.data);
+                }
             });
         };
         return new APIInterface();
@@ -195,8 +199,8 @@ module.factory('RemoteEntityStore', ['APIInterface',
         RemoteEntityStore.prototype.get = function(id) {
             return APIInterface.request({method: "GET", url: this.url + "/" + id});
         };
-        RemoteEntityStore.prototype.all = function() {
-            return APIInterface.request({method: "GET", url: this.url});
+        RemoteEntityStore.prototype.all = function(doNotParse) {
+            return APIInterface.request({method: "GET", url: this.url}, doNotParse);
         };
         RemoteEntityStore.prototype.create = function(obj) {
             return APIInterface.request({method: "POST", url: this.url, data: obj});
@@ -424,6 +428,15 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     return self.memory_store.all();
                 });
             }
+        };
+        APIModel.prototype.allInMemory = function() {
+            var self = this;
+            return this.remote_store.all(true).then(function(array) {
+                _.each(array, function(o) {
+                    self.memory_store.update(o.id, self.create({id: o.id}));
+                });
+                return self.memory_store.all();
+            });
         };
         APIModel.prototype.save = function(obj) {
             var self = this;

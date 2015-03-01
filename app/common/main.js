@@ -18,41 +18,40 @@ angular.module('bars.main', [
                 }],
                 itemdetails: ['api.models.itemdetails', function(ItemDetails) {
                     ItemDetails.clear();
-                    ItemDetails.reload();
+                    ItemDetails.allInMemory();
                     return ItemDetails.all();
                 }],
                 buyitem: ['api.models.buyitem', function(BuyItem) {
                     BuyItem.clear();
-                    BuyItem.reload();
+                    BuyItem.allInMemory();
                     return BuyItem.all();
                 }],
                 buyitemprice: ['api.models.buyitemprice', function(BuyItemPrice) {
                     BuyItemPrice.clear();
-                    BuyItemPrice.reload();
+                    BuyItemPrice.allInMemory();
                     return BuyItemPrice.all();
                 }],
                 stockitem: ['api.models.stockitem', function(StockItem) {
                     StockItem.clear();
-                    StockItem.reload();
+                    StockItem.allInMemory();
                     return StockItem.all();
                 }],
                 sellitem: ['api.models.sellitem', function(SellItem) {
                     SellItem.clear();
-                    SellItem.reload();
+                    SellItem.allInMemory();
                     return SellItem.all();
                 }],
                 accounts: ['api.models.account', function(Account) {
                     Account.clear();
-                    Account.reload();
+                    Account.allInMemory();
                     return Account.all();
                 }],
                 users: ['api.models.user', function(User) {
                     User.clear();
-                    User.reload();
+                    User.allInMemory();
                     return User.all();
                 }],
                 user: ['api.models.user', 'auth.user', function(User, AuthUser) {
-                    User.clear();
                     if (AuthUser.isAuthenticated()) {
                         return User.me();
                     } else {
@@ -75,7 +74,7 @@ angular.module('bars.main', [
                 }],
                 news: ['api.models.news', function(News) {
                     News.clear();
-                    News.reload();
+                    News.allInMemory();
                     return News.all();
                 }]
             },
@@ -109,8 +108,17 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', '$timeout', '$state', 
-    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, buyitem, bar, accounts, $timeout, $state) {
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', 'users', 'itemdetails', 'buyitemprice', 'stockitem', '$timeout', '$state', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.buyitemprice', 'api.models.stockitem', 'api.models.sellitem', 'api.models.account', 'api.models.user', 'api.models.news',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, buyitem, bar, accounts, users, itemdetails, buyitemprice, stockitem, $timeout, $state, ItemDetails, BuyItem, BuyItemPrice, StockItem, SellItem, Account, User, News) {
+        ItemDetails.reload();
+        BuyItem.reload();
+        BuyItemPrice.reload();
+        StockItem.reload();
+        SellItem.reload();
+        Account.reload();
+        User.reload();
+        News.reload();
+        
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
