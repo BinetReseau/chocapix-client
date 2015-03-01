@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">Préciser le motif</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <form class="form-horiontal" ng-submit="submit()">
+            <div class="form-group">
+                <label class="control-label col-sm-3">Motif</label>
+                <div class="col-sm-9">
+                    <input class="form-control" ng-model="req.motive" id="mmotive" />
+                </div>
+            </div>
+            <input type="submit" ng-show="false" />
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">Fermer</button>
+    <button type="submit" class="btn btn-primary" ng-click="submit()">Envoyer</button>
+</div>
