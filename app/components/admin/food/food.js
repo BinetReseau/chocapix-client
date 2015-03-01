@@ -392,6 +392,10 @@ angular.module('bars.admin.food', [
                     return $scope.sell_item.$save().then(function (sellItem) {
                         $scope.stock_item.sellitem = sellItem;
                         return $scope.stock_item.$save().then(function (stockItem) {
+                            $scope.barcode = "";
+                            $scope.itemInPack = "";
+                            $scope.oldSellItem = "";
+                            document.getElementById("fbarcode").focus();
                             return stockItem;
                         });
                     }, function(errors) {
@@ -399,6 +403,10 @@ angular.module('bars.admin.food', [
                     });
                 } else {
                     return $scope.stock_item.$save().then(function (stockItem) {
+                        $scope.barcode = "";
+                        $scope.itemInPack = "";
+                        $scope.oldSellItem = "";
+                        document.getElementById("fbarcode").focus();
                         return stockItem;
                     });
                 }
@@ -412,6 +420,10 @@ angular.module('bars.admin.food', [
                     return $scope.buy_item.$save().then(function (buyItem) {
                         $scope.buy_item_price.buyitem = buyItem;
                         $scope.buy_item.id = buyItem.id;
+                        $scope.barcode = "";
+                        $scope.itemInPack = "";
+                        $scope.oldSellItem = "";
+                        document.getElementById("fbarcode").focus();
                         return $scope.buy_item_price.$save();
                     });
                 }
