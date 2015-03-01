@@ -54,6 +54,8 @@ angular.module('bars.magicbar', [
 							qty: $item.qty/**$item.food.unit_value*/
 						}]
 					};
+				} else {
+					req = {account: $item.account.id, amount: $item.qty};
 				}
                 APIAction[type](req).then(function() {
                     $scope.bar.search = '';
