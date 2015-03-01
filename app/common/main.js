@@ -122,6 +122,9 @@ angular.module('bars.main', [
         };
 
         $scope.user = AuthUser;
+        $scope.user_authenticated = function() {
+            return AuthUser.isAuthenticated();
+        };
 
         $scope.signalBug = function() {
             var modalBug = $modal.open({

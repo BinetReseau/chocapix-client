@@ -70,5 +70,5 @@
         </div>
     </div>
 
-    <bars:history filter="{user: user.user.id}" limit="10"></bars:history>
+    <bars:history filter="{user: user.user.id}" limit="10" ng-if="user_authenticated()"></bars:history>
 </div>
