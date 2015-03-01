@@ -154,6 +154,7 @@ angular.module('bars.api.food', [
         $scope.food_list = food_list;
         console.log(food_list);
         $scope.searchl = "";
+        $scope.list_order = 'name';
         $scope.reverse = false;
         $scope.filterItems = function(o) {
             return o.filter($scope.searchl);
