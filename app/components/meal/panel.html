@@ -17,7 +17,7 @@
                         <form class="form-inline text-center">
                             <div class="form-group">
                                 <label class="sr-only" for="addMealCustomerInput">Ajouter</label>
-                                <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" ng-model="meal.accountToAdd" typeahead="account.owner.full_name for account in accounts | filter:filterAccounts | filter:$viewValue | limitTo:5" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
+                                <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" ng-model="meal.accountToAdd" typeahead="account.owner.full_name for account in accountsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
                             </div>
                         </form>
                         <br />

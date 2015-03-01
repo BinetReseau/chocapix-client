@@ -5,12 +5,14 @@ angular.module('bars.meal', [
 
 .controller('meal.ctrl',
     ['$scope', 'api.models.account', 'bars.meal',
-    function($scope,Account, Meal) {
+    function($scope, Account, Meal) {
         $scope.meal = Meal;
         var accounts = Account.all();
-        $scope.accounts = _.reject(accounts, function(n) {
-            return n.owner.full_name == 'Bar' && n.owner.username == 'bar'
-        });
+        $scope.accountsf = function (v) {
+            return _.filter(Account.all(), function (a) {
+                return a.filter(v);
+            });
+        };
     }]
 )
 .directive('popoverMealPopup', [function() {
