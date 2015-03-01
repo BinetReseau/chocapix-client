@@ -13,7 +13,7 @@
                 <th>Quantité totale &ensp;<a href="" ng-click="reverse = list_order == 'fuzzy_qty' ? !reverse : false; list_order = 'fuzzy_qty'"><span class="glyphicon glyphicon-sort"></span></a></th>
                 <th>Prix</th>
             </tr>
-            <tr ng-repeat="f in food_list | filter:filterItems | filter:filterHidden() | orderBy:list_order:reverse" ng-class="f.deleted && 'del'">
+            <tr ng-repeat="f in food_list | filter:filterItems | filter:filterHidden() | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || '') ">
                 <td><bars:sellitem item="f"></bars:sellitem></td>
                 <td><bars:sellitem:qty item="f" qty="f.fuzzy_qty" out="'sell'"></bars:sellitem:qty></td>
                 <td><bars:sellitem:price item="f" qty="1" in="'sell'"></bars:sellitem:price> <span ng-if="f.unit_name">/ {{ f.unit_name }}</span></td>
