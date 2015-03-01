@@ -5,8 +5,8 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', 'api.services.action', 'api.models.buyitem', 'magicbar.analyse', 'bars.meal',
-    function($scope, $filter, APIAction, BuyItem, analyse, Meal) {
+    ['$scope', '$filter', '$modal', '$timeout', 'api.services.action', 'api.models.buyitem', 'magicbar.analyse', 'bars.meal',
+    function($scope, $filter, $modal, $timeout, APIAction, BuyItem, analyse, Meal) {
         $scope.query = {
             type: 'buy',
             qty: 1,
@@ -43,7 +43,7 @@ angular.module('bars.magicbar', [
             }
             var type = $item.type;
 
-            if(_.contains(['buy', 'throw', 'give', 'punish', 'appro', 'inventory', 'deposit', 'refund', 'withdraw'], type)) {
+            if(_.contains(['buy', 'throw', 'give', 'appro', 'inventory', 'deposit'], type)) {
                 var req;
                 if(_.contains(['buy', 'throw'], type)) {
                     req = {sellitem: $item.food.id, qty: $item.qty/**$item.food.unit_value*/};
@@ -54,13 +54,34 @@ angular.module('bars.magicbar', [
 							qty: $item.qty/**$item.food.unit_value*/
 						}]
 					};
-				} else {
-                    req = {account: $item.account.id, amount: $item.qty};
-                }
+				}
                 APIAction[type](req).then(function() {
                     $scope.bar.search = '';
                 });
-            } else if (type == 'add') {
+            } else if (_.contains(['punish', 'refund', 'withdraw'], type)) {
+				var req = {account: $item.account.id, amount: $item.qty, motive: ''};
+				$timeout(function () {
+					document.getElementById('mmotive').focus();
+				}, 500);
+				var modalMotive = $modal.open({
+	                templateUrl: 'components/magicbar/modal-motive.html',
+	                controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+	                    $scope.req = req;
+	                    $scope.submit = function() {
+							APIAction[type](req).then(function() {
+								$modalInstance.close();
+								$timeout(function () {
+									document.getElementById('q_alim').focus();
+								}, 500);
+			                });
+	                    };
+	                    $scope.cancel = function () {
+	                        $modalInstance.dismiss('cancel');
+	                    };
+	                }],
+	                size: 'lg'
+	            });
+			} else if (type == 'add') {
 				Meal.addItem($item.food, $item.qty/**$item.food.unit_value*/);
 			}
         };
@@ -96,12 +117,12 @@ angular.module('bars.magicbar', [
 	            'buy': 'acheter',
 	            //'throw': 'jeter',
 	            'give': 'donner',
-	            //'punish': 'amende',
+	            'punish': 'amende',
 	            //'appro': 'appro',
 				//'inventory': 'reste',
 				'deposit': 'credit',
-				//'refund': 'rembourser',
-				//'withdraw': 'retirer'
+				'refund': 'rembourser',
+				'withdraw': 'retirer'
 	        };
 			_.map(humanTypes, function (o, k) {
 				if (!AuthUser.can('add_' + k + 'transaction')) {
