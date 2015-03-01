@@ -87,20 +87,20 @@
                                         <bars:stockitem item="x.stockitem"></bars:stockitem>
                                         <div class="pull-right">
                                             <span ng-if="x.qty >= 0" class="label label-success">
-                                                +<bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem:qty>
+                                                +<bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'buy'"></bars:stockitem:qty>
                                             </span>
                                             <span ng-if="x.qty < 0" class="label label-danger">
-                                                <bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem:qty>
+                                                <bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'buy'"></bars:stockitem:qty>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <span ng-if="transaction.items.length == 1" ng-init="x = transaction.items[0]">
                                     <span ng-if="x.qty >= 0" class="label label-success">
-                                        +<bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem:qty>
+                                        +<bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'buy'"></bars:stockitem:qty>
                                     </span>
                                     <span ng-if="x.qty < 0" class="label label-danger">
-                                        <bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'sell'"></bars:stockitem:qty>
+                                        <bars:stockitem:qty item="x.stockitem" qty="x.qty" out="'buy'"></bars:stockitem:qty>
                                     </span>
                                     &nbsp;&nbsp;
                                     <bars:stockitem item="x.stockitem"></bars:stockitem>
