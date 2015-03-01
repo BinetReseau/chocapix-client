@@ -602,7 +602,7 @@ angular.module('bars.admin.food', [
                 var stockitem = item.buyitem.details.stockitem;
                 var other = _.find(this.itemsList, {'stockitem': stockitem});
                 if (other) {
-                    other.qty += qty;
+                    other.qty += qty / other.sell_to_buy;
                     other.nb = nb++;
                 } else {
                     this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++ });
