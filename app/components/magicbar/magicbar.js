@@ -96,12 +96,12 @@ angular.module('bars.magicbar', [
 	            'buy': 'acheter',
 	            //'throw': 'jeter',
 	            'give': 'donner',
-	            'punish': 'amende',
+	            //'punish': 'amende',
 	            //'appro': 'appro',
 				//'inventory': 'reste',
 				'deposit': 'credit',
-				'refund': 'rembourser',
-				'withdraw': 'retirer'
+				//'refund': 'rembourser',
+				//'withdraw': 'retirer'
 	        };
 			_.map(humanTypes, function (o, k) {
 				if (!AuthUser.can('add_' + k + 'transaction')) {
