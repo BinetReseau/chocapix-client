@@ -480,6 +480,7 @@ angular.module('bars.api.food', [
         }
         $scope.abs = Math.abs;
         $scope.$watch('item.sell_to_buy', refresh);
+        $scope.$watch('out', refresh);
         //$scope.$watch('item.sellitem.unit_value', refresh);
         refresh();
     }])
