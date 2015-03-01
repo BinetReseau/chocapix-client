@@ -194,16 +194,30 @@ angular.module('bars.api.food', [
             return item_details.indexOf(bip.buyitem.details.id) > -1;
         });
 
+        function stockItemUnits(sellitem) {
+            var res = true;
+            var ref_factor = sellitem.stockitems[0].sell_to_buy;
+            _.forEach(sellitem.stockitems, function(n, i) {
+                res = res && (n.sell_to_buy == ref_factor);
+            });
+            return res && ref_factor != 1;
+        }
+
         $scope.query = {
             qty: 1,
             type: Meal.in() && 'add' || 'buy',
             stockitem: $scope.food_item.stockitems[0],
-            buyitemprice: $scope.buy_item_prices[0]
+            buyitemprice: $scope.buy_item_prices[0],
+            unit_choice: stockItemUnits(food_item),
+            unit: 'sellitem'
         };
         $scope.inMeal = function () {
             return Meal.in();
         };
-        $scope.queryProcess = function(qty, type) {
+        $scope.queryProcess = function(qty, type, unit_choice, unit) {
+            if (unit_choice) {
+                qty = (unit == 'itemdetails') ? qty/food_item.stockitems[0].sell_to_buy : qty;
+            }
             if (type == 'buy') {
                 APIAction[type]({sellitem: $scope.food_item.id, qty: qty}).then(function() {
                     $scope.query.qty = 1;
