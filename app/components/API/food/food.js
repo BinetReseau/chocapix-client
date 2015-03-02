@@ -287,7 +287,24 @@ angular.module('bars.api.food', [
                 size: 'lg'
             });
         };
-
+        $scope.enterEdit = function(si) {
+            si.edit = true;
+            si.sell_to_buy_inv = 1/si.sell_to_buy;
+            si.buy_price = Math.round(100000 * si.price * si.sell_to_buy_inv)/100000;
+        };
+        $scope.editStockItem = function(si) {
+            si.sell_to_buy = 1/si.sell_to_buy_inv;
+            si.price = si.buy_price / si.sell_to_buy_inv;
+            si.$save().then(function(r) {
+                si = r;
+                si.edit = false;
+            }, function(errors) {
+                console.log('Erreur lors de la modification de ' + si.details.name);
+            });
+        };
+        $scope.quitEdit = function(si) {
+            si.edit = false;
+        };
     }]
 )
 .controller('api.ctrl.food_details.edit',
