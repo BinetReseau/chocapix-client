@@ -168,7 +168,8 @@ angular.module('bars.admin.account', [
     ['$scope', 'api.services.action', 'account_list',
     function($scope, APIAction, account_list) {
         $scope.admin.active = 'account';
-        $scope.account_list = _.filter(account_list, function(a) { var u = a.owner; return u.full_name != 'Bar' || u.username != 'bar'; });
+        $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active && !a.deleted; });
+        $scope.account_list = _.forEach($scope.account_list, function(a) { a.pay = true; });
         $scope.list_order = 'owner.full_name';
         $scope.reverse = false;
         $scope.searchl = "";
