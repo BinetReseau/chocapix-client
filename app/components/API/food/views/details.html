@@ -15,8 +15,8 @@
                 <input type="number" min="0" class="form-control number" step="any" ng-model="query.qty" select-on-click />
 
                 <select class="form-control" ng-model="query.unit" ng-if="query.unit_choice && query.type != 'appro'">
-                    <option value="sellitem">{{ food_item.unit_name }}</option>
-                    <option value="itemdetails"> &times; {{ 1/food_item.stockitems[0].sell_to_buy }} {{ 1/food_item.stockitems[0].sell_to_buy > 1 && food_item.unit_name_plural || food_item.unit_name }}</option>
+                    <option value="sellitem">{{ food_item.unit_name || food_item.name }}</option>
+                    <option value="itemdetails"> &times; {{ 1/food_item.stockitems[0].sell_to_buy }} {{ 1/food_item.stockitems[0].sell_to_buy > 1 && (food_item.unit_name_plural || food_item.name_plural) || (food_item.unit_name || food_item.name) }}</option>
                 </select>
                 <div class="checkbox unit" ng-if="(!query.unit_choice && query.type != 'appro')">
                     {{ (food_item.unit_name_plural && query.qty > 1) && food_item.unit_name_plural || (food_item.unit_name || ((food_item.name_plural && query.qty > 1) && food_item.name_plural || food_item.name)) }}
