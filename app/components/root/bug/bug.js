@@ -19,6 +19,7 @@ angular.module('bars.root.bug', [
                     templateUrl: "components/root/bug/list.html",
                     resolve: {
                         bug_list: ['api.models.bug', function(Bug) {
+                            Bug.clear();
                             Bug.reload();
                             return Bug.all();
                         }]

@@ -16,6 +16,9 @@ angular.module('bars.root', [
             .state('root', {
                 url: "/root",
                 resolve: {
+                    api: ['APIInterface', function(APIInterface) {
+                        APIInterface.setBar();
+                    }],
                     user: ['api.models.user', 'auth.service', function(User, AuthService) {
                         if (AuthService.isAuthenticated()) {
                             return User.me();
