@@ -108,8 +108,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state',
-    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state) {
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -124,6 +124,13 @@ angular.module('bars.main', [
         $scope.user_authenticated = function() {
             return AuthUser.isAuthenticated();
         };
+
+        $rootScope.$on('auth.hasLoggedIn', function () {
+            if (User.all().length == 0 || User.all()[0].full_name === undefined) {
+                User.reload();
+
+            }
+        });
 
         $scope.signalBug = function() {
             var modalBug = $modal.open({
