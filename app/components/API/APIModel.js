@@ -56,7 +56,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             }
         };
 
-        APIInterface.prototype.parse = function(obj) {
+        APIInterface.prototype.parse = function(obj, doNotGetLinked) {
             var self = this;
             if(_.isArray(obj)) {
                 return _.map(obj, _.bind(this.parse, this));
@@ -66,7 +66,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
                         obj[k] = self.parse(v);
                     }
                 });
-                return this.getModel(obj._type).create(obj);
+                return this.getModel(obj._type).create(obj, doNotGetLinked);
             }
             return obj;
         };
@@ -100,7 +100,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         APIInterface.prototype.getBar = function() {
             return this.bar;
         };
-        APIInterface.prototype.request = function(req, doNotParse) {
+        APIInterface.prototype.request = function(req, doNotGetLinked) {
             var self = this;
             req.data = this.unparse(req.data);
             if (this.getBar()) {
@@ -113,11 +113,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url;
             req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");
             return $http(req).then(function(data) {
-                if (doNotParse) {
-                    return data.data;
-                } else {
-                    return self.parse(data.data);
-                }
+                return self.parse(data.data, doNotGetLinked);
             });
         };
         return new APIInterface();
@@ -199,8 +195,8 @@ module.factory('RemoteEntityStore', ['APIInterface',
         RemoteEntityStore.prototype.get = function(id) {
             return APIInterface.request({method: "GET", url: this.url + "/" + id});
         };
-        RemoteEntityStore.prototype.all = function(doNotParse) {
-            return APIInterface.request({method: "GET", url: this.url}, doNotParse);
+        RemoteEntityStore.prototype.all = function() {
+            return APIInterface.request({method: "GET", url: this.url}, true);
         };
         RemoteEntityStore.prototype.create = function(obj) {
             return APIInterface.request({method: "POST", url: this.url, data: obj});
@@ -316,13 +312,13 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         }
         APIModel.createEntityClass = function(structure) {
             var self = this;
-            this.APIEntity = function APIEntity(obj){
+            this.APIEntity = function APIEntity(obj, doNotGetLinked) {
                 obj = obj || {};
                 _.forOwn(structure, function(type, path) {
                     path = path.split(".");
                     var f = function(x) {
                         if(!(x instanceof BaseAPIEntity)) {
-                            return APIInterface.getModel(type).get(x);
+                            return APIInterface.getModel(type).get(x, doNotGetLinked);
                         } else {
                             return x;
                         }
@@ -373,21 +369,25 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
         };
 
 
-        APIModel.prototype.create = function(obj) {
-            return new this.APIEntity(obj);
+        APIModel.prototype.create = function(obj, doNotGetLinked) {
+            return new this.APIEntity(obj, doNotGetLinked);
         };
-        APIModel.prototype.get = function(id) {
+        APIModel.prototype.get = function(id, doNotGetLinked) {
             if(!this.memory_store.get(id)) {
                 var self = this;
-                this.link(this.create({id: id}));
-                this.remote_store.get(id)
-                    .then(function(obj) {
-                        return self.memory_store.update(id, obj);
-                    })
-                    .catch(function(error) {
-                        self.memory_store.delete(id, error); // TODO: always delete on error ?
-                        return error;
-                    });
+                var mem = this.link(this.create({id: id}));
+                if (doNotGetLinked) {
+                    return mem;
+                } else {
+                    this.remote_store.get(id)
+                        .then(function(obj) {
+                            return self.memory_store.update(id, obj);
+                        })
+                        .catch(function(error) {
+                            self.memory_store.delete(id, error); // TODO: always delete on error ?
+                            return error;
+                        });
+                }
             }
             return this.memory_store.get(id);
 
@@ -428,15 +428,6 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                     return self.memory_store.all();
                 });
             }
-        };
-        APIModel.prototype.allInMemory = function() {
-            var self = this;
-            return this.remote_store.all(true).then(function(array) {
-                _.each(array, function(o) {
-                    self.memory_store.update(o.id, self.create({id: o.id}));
-                });
-                return self.memory_store.all();
-            });
         };
         APIModel.prototype.save = function(obj) {
             var self = this;

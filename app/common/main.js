@@ -18,37 +18,37 @@ angular.module('bars.main', [
                 }],
                 itemdetails: ['api.models.itemdetails', function(ItemDetails) {
                     ItemDetails.clear();
-                    ItemDetails.allInMemory();
+                    ItemDetails.reload();
                     return ItemDetails.all();
                 }],
                 buyitem: ['api.models.buyitem', function(BuyItem) {
                     BuyItem.clear();
-                    BuyItem.allInMemory();
+                    BuyItem.reload();
                     return BuyItem.all();
                 }],
                 buyitemprice: ['api.models.buyitemprice', function(BuyItemPrice) {
                     BuyItemPrice.clear();
-                    BuyItemPrice.allInMemory();
+                    BuyItemPrice.reload();
                     return BuyItemPrice.all();
                 }],
                 stockitem: ['api.models.stockitem', function(StockItem) {
                     StockItem.clear();
-                    StockItem.allInMemory();
+                    StockItem.reload();
                     return StockItem.all();
                 }],
                 sellitem: ['api.models.sellitem', function(SellItem) {
                     SellItem.clear();
-                    SellItem.allInMemory();
+                    SellItem.reload();
                     return SellItem.all();
                 }],
                 accounts: ['api.models.account', function(Account) {
                     Account.clear();
-                    Account.allInMemory();
+                    Account.reload();
                     return Account.all();
                 }],
                 users: ['api.models.user', function(User) {
                     User.clear();
-                    User.allInMemory();
+                    User.reload();
                     return User.all();
                 }],
                 user: ['api.models.user', 'auth.user', function(User, AuthUser) {
@@ -74,7 +74,7 @@ angular.module('bars.main', [
                 }],
                 news: ['api.models.news', function(News) {
                     News.clear();
-                    News.allInMemory();
+                    News.reload();
                     return News.all();
                 }]
             },
@@ -108,17 +108,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'buyitem', 'bar', 'accounts', 'users', 'itemdetails', 'buyitemprice', 'stockitem', '$timeout', '$state', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.buyitemprice', 'api.models.stockitem', 'api.models.sellitem', 'api.models.account', 'api.models.user', 'api.models.news',
-    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, buyitem, bar, accounts, users, itemdetails, buyitemprice, stockitem, $timeout, $state, ItemDetails, BuyItem, BuyItemPrice, StockItem, SellItem, Account, User, News) {
-        ItemDetails.reload();
-        BuyItem.reload();
-        BuyItemPrice.reload();
-        StockItem.reload();
-        SellItem.reload();
-        Account.reload();
-        User.reload();
-        News.reload();
-        
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state) {
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
