@@ -90,7 +90,11 @@ angular.module('bars.auth', [
                 this.perms = [];
                 $rootScope.$broadcast('auth.hasLoggedOut');
 
-                $state.go('bar', {bar: $stateParams.bar});
+                if($stateParams.bar) {
+                    $state.go('bar', {bar: $stateParams.bar});
+                } else {
+                    $state.go('index');
+                }
 
                 $timeout(function() {
                     document.getElementById("floginc").focus();
