@@ -25,12 +25,14 @@ angular.module('bars.filters', [])
 })
 .filter('qty', function($locale, numberFilter) {
     var decSep = $locale.NUMBER_FORMATS.DECIMAL_SEP;
-    var trailingZeros = new RegExp("("+decSep+"\\d*?)0+");
+    var trailingZerosMiddle = new RegExp("("+decSep+"\\d*?)0+[^1-9]");
+    var trailingZerosEnd = new RegExp("("+decSep+"\\d*?)0+$");
     var trailingSep = new RegExp(decSep+'$');
 
     return function(n, fractionSize) {
         var s = numberFilter(n, fractionSize);
-        s = s.replace(trailingZeros, "$1");
+        s = s.replace(trailingZerosMiddle, "$1");
+        s = s.replace(trailingZerosEnd, "$1");
         return s.replace(trailingSep, "");
     };
 })
