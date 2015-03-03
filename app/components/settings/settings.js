@@ -45,7 +45,7 @@ angular.module('bars.settings', [
     }
 ])
 .controller('settings.ctrl.credentials',
-    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list', 'account_list', 
+    ['$scope', 'me', 'auth.service', 'api.models.user', 'user_list', 'account_list',
     function($scope, me, Auth, User, user_list, account_list) {
         $scope.settings.active = 'credentials';
         $scope.pwdSuccess = 0;
@@ -69,7 +69,7 @@ angular.module('bars.settings', [
             $scope.alerts = _.filter($scope.alerts, function(a) {
                 return a.context != 'pseudo';
             });
-            if (_.filter(account_list, function(a) { return a.owner.pseudo == $scope.npseudo; }).length == 0) {
+            if ($scope.checkPseudo()) {
                 var tempPseudo = $scope.npseudo;
                 $scope.npseudo = '';
                 $scope.myUser.pseudo = tempPseudo;
