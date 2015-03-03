@@ -75,7 +75,7 @@ angular.module('barsApp', [
         var version;
         $scope.need_update = false;
         function checkVersion() {
-            $http.get('version.json').success(function (v) {
+            $http.get('version.json?uniq=' + (new Date()).toJSON()).success(function (v) {
                 if (!version) {
                     version = v;
                 }
