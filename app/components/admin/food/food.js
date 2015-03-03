@@ -35,6 +35,16 @@ angular.module('bars.admin.food', [
             templateUrl: "components/admin/food/inventory.html",
             controller: 'admin.ctrl.food.inventory'
         })
+        .state('bar.admin.food.stockitems_list', {
+            url: "/stock-list",
+            templateUrl: "components/admin/food/stockitems-list.html",
+            controller: 'admin.ctrl.food.stockitems_list',
+            resolve: {
+                stockitem_list: ['api.models.stockitem', function(StockItem) {
+                    return StockItem.all();
+                }]
+            }
+        })
         .state('bar.admin.food.graphs', {
             url: "/graphs",
             templateUrl: "components/admin/food/graphs.html",
@@ -521,6 +531,27 @@ angular.module('bars.admin.food', [
     ['$scope',
     function($scope) {
         $scope.admin.active = 'food;'
+    }
+])
+.controller('admin.ctrl.food.stockitems_list', 
+    ['$scope', 'stockitem_list', 
+    function($scope, stockitem_list){
+        $scope.stockitem_list = stockitem_list;
+        $scope.searchl = "";
+        $scope.list_order = 'details.name';
+        $scope.reverse = false;
+        $scope.filterItems = function(o) {
+            return o.filter($scope.searchl);
+        }
+        $scope.filterHidden = function() {
+            if ($scope.showHidden) {
+                return '';
+            } else {
+                return {
+                    deleted: false
+                };
+            }
+        };
     }
 ])
 

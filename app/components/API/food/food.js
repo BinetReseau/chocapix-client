@@ -152,7 +152,6 @@ angular.module('bars.api.food', [
     ['$scope', 'food_list',
     function($scope, food_list) {
         $scope.food_list = food_list;
-        console.log(food_list);
         $scope.searchl = "";
         $scope.list_order = 'name';
         $scope.reverse = false;
@@ -531,14 +530,25 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            qty: '=?qty'
+            qty: '=?qty',
+            out: '=?out',
+            unit: '=?unit'
         },
         templateUrl: 'components/API/food/directives/stockitem-price-directive.html',
         controller: ['$scope', function($scope) {
             function refresh() {
-                $scope.price = $scope.item.price * (1 + $scope.item.sellitem.tax);
-                $scope.unit_name = $scope.item.sellitem.unit_name;
+                if ($scope.out === undefined) {
+                    $scope.price = $scope.item.price * (1 + $scope.item.sellitem.tax);
+                    $scope.unit_name = $scope.item.sellitem.unit_name;
+                }
+                if ($scope.out == 'buy') {
+                    if ($scope.unit != false) {
+                        $scope.unit_name = $scope.item.details.unit_name ? $scope.item.details.unit_name : $scope.item.details.name;
+                    }
+                    $scope.price = $scope.item.price / $scope.item.sell_to_buy;
+                }
             }
+            $scope.$watch('item.sell_to_buy', refresh);
             refresh();
         }]
     };
