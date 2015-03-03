@@ -66,10 +66,9 @@ angular.module('bars.admin.account', [
             var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
             var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
             var usernameTest = $scope.nuser.username.length > 0;
-            var pseudoTest = $scope.nuser.pseudo.length > 0;
             var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
-            var moneyTest = $scope.naccount.amoney && $scope.naccount.amoney >= 0;
-            return lastnameTest && firstnameTest && usernameTest && pseudoTest && pwdTest && moneyTest;
+            var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
+            return lastnameTest && firstnameTest && usernameTest && pwdTest && moneyTest;
         };
         $scope.createAccount = function() {
             if ($scope.nuser.password == $scope.nuser.passwordBis) {
