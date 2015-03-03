@@ -5,7 +5,7 @@
             <div class="input-group-addon">
                 <span class="glyphicon glyphicon-barcode"></span>
             </div>
-            <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="(!new_details && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)">
+            <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="(!new_details && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)" ng-change="verifyExistance(barcode)">
         </div>
     </div>
 </div>

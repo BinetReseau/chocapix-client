@@ -351,6 +351,16 @@ angular.module('bars.admin.food', [
             }
         };
 
+        // Appelée par ng-change sur le champ barcode
+        $scope.verifyExistance = function (barcode) {
+            var buy_item_prices = _.filter(BuyItemPrice.all(), function (f) {
+                return f.buyitem.barcode == barcode;
+            });
+            if (buy_item_prices.length > 0) {
+                // afficher erreur et bloquer envoie
+            }
+        };
+
         // Si on est en train d'ajouter un pack, on scanne un item, et il n'existe pas
         $scope.createItemPack = function (e) {
             if (e.which === 13) {
