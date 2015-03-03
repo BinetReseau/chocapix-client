@@ -223,7 +223,6 @@ angular.module('bars.admin.food', [
             $scope.oldSellItem = "";
             $scope.is_pack = false;
             $scope.new_sell = true;
-            $scope.new_details = true;
 
             if ($scope.barcode && $scope.barcode != "") {
                 $scope.allow_barcode_edit = false;
@@ -241,6 +240,10 @@ angular.module('bars.admin.food', [
             init();
         }
 
+        $scope.new_details = function () {
+            return $scope.item_details.id == undefined;
+        };
+
         // Cherche dans la bdd globale
         // Appelée par search() et par ng-change sur barcode
         function searchGlobal (barcode, basic) {
@@ -256,7 +259,6 @@ angular.module('bars.admin.food', [
                     $scope.buy_item_price = nbip;
                     $scope.buy_item = nbip.buyitem;
                     $scope.item_details = nbip.buyitem.details;
-                    $scope.new_details = false;
                     $scope.itemInPack = $scope.item_details.name;
                     // A-t-on besoin de créer le StockItem ?
                     var stockItem = _.find(StockItem.all(), function (i) {
@@ -301,7 +303,6 @@ angular.module('bars.admin.food', [
                 if (stock_item) {
                     $scope.barcodeErrorSI = stock_item;
                     $scope.block = true;
-                    $scope.new_details = true;
                     $scope.buy_item = init_items.buy_item;
                     $scope.buy_item_price = init_items.buy_item_price;
                     $scope.item_details = init_items.item_details;
@@ -310,9 +311,6 @@ angular.module('bars.admin.food', [
                 $scope.buy_item_price = buy_item_price;
                 $scope.buy_item = buy_item_price.buyitem;
                 $scope.item_details = buy_item_price.buyitem.details;
-                $scope.new_details = false;
-            } else if (!buy_item_price) {
-                $scope.new_details = true;
             }
             if (basic) {
                 $scope.block = false;
