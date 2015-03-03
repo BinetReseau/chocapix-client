@@ -8,6 +8,7 @@ body {
 body {
     padding-top: 70px;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: 50px;
 }
 .logo.petit {
     width: 64px;
@@ -264,6 +265,16 @@ hr.derrierebtn {
 
 .badge-info {
     background-color: #5bc0de;
+}
+
+#new-version {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+}
+#new-version .alert {
+    margin: 0px;
 }
 @media screen and (min-width: 768px) {
     .nav-stacked-sm > li {

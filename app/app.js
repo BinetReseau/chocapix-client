@@ -68,4 +68,23 @@ angular.module('barsApp', [
             }
         });
 }])
+
+.controller('index.update',
+    ['$scope', '$http', '$timeout',
+    function ($scope, $http, $timeout) {
+        var version;
+        $scope.need_update = false;
+        function checkVersion() {
+            $http.get('version.json?uniq=' + (new Date()).toJSON()).success(function (v) {
+                if (!version) {
+                    version = v;
+                }
+                if (v.lastcommit != version.lastcommit) {
+                    $scope.need_update = true;
+                }
+            });
+            $timeout(checkVersion, 60000);
+        }
+        checkVersion();
+    }])
 ;

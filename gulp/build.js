@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var fs = require('fs');
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
@@ -33,6 +34,10 @@ gulp.task('html', ['wiredep', 'scripts', 'partials'], function () {
   var jsFilter = $.filter('**/*.js');
   var cssFilter = $.filter('**/*.css');
   var assets;
+
+  $.git.exec({args : 'rev-parse HEAD'}, function (err, stdout) {
+      fs.writeFile('dist/version.json', JSON.stringify({lastcommit: stdout.trim(), builddate: new Date()}));
+  });
 
   return gulp.src('app/*.html')
     .pipe($.inject(gulp.src('.tmp/**/*.js'), {
