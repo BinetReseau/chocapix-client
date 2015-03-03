@@ -34,6 +34,15 @@
 
     <!-- Add your site or application content here -->
     <div ui-view></div>
+    <div ng-controller="index.update" id="new-version">
+        <div ng-if="need_update" class="alert alert-info text-center animated fadeInUp">
+            <strong>
+                <span class="glyphicon glyphicon-refresh"></span>
+                Une mise à jour de Chocapix est disponible.
+            </strong>
+            Actualisez la page dès que possible pour en profiter.
+        </div>
+    </div>
 
     <!-- build:js scripts/oldieshim.js -->
     <!--[if lt IE 9]>
