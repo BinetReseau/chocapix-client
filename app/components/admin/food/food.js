@@ -353,12 +353,21 @@ angular.module('bars.admin.food', [
 
         // Appelée par ng-change sur le champ barcode
         $scope.verifyExistance = function (barcode) {
-            var buy_item_prices = _.filter(BuyItemPrice.all(), function (f) {
+            var buy_item_price = _.find(BuyItemPrice.all(), function (f) {
                 return f.buyitem.barcode == barcode;
             });
-            if (buy_item_prices.length > 0) {
-                // afficher erreur et bloquer envoie
+            if (buy_item_price) {
+                var stock_item = _.find(StockItem.all(), function (si) {
+                    return si.details == buy_item_price.buyitem.details;
+                });
+                if (stock_item) {
+                    $scope.barcodeErrorSI = stock_item;
+                    return false;
+                }
+                $scope.buy_item_price = buy_item_price;
             }
+            delete $scope.barcodeErrorSI;
+            return true;
         };
 
         // Si on est en train d'ajouter un pack, on scanne un item, et il n'existe pas
@@ -543,8 +552,8 @@ angular.module('bars.admin.food', [
         $scope.admin.active = 'food;'
     }
 ])
-.controller('admin.ctrl.food.stockitems_list', 
-    ['$scope', 'stockitem_list', 
+.controller('admin.ctrl.food.stockitems_list',
+    ['$scope', 'stockitem_list',
     function($scope, stockitem_list){
         $scope.stockitem_list = stockitem_list;
         $scope.searchl = "";
