@@ -4,6 +4,7 @@
     <div ng-repeat="bug in bug_list | filter:{'fixed': false} | orderBy:'-timestamp'" ng-if="bug_list.length > 0">
         <div class="panel panel-default">
             <div class="panel-heading">
+                <span class="pull-right"><button class="btn btn-success" ng-click="solve(bug)">Résolu</button></span>
                 Reporté le : {{ bug.timestamp | date:'medium' }}<br />
                 par : {{ bug.author.full_name }} <small>({{ bug.bar.name }})</small>
             </div>
