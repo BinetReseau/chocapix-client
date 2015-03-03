@@ -75,11 +75,11 @@ angular.module('barsApp', [
         var version;
         $scope.need_update = false;
         function checkVersion() {
-            $http.get('version.json?uniq=' + (new Date()).toJSON()).success(function (v) {
+            $http.get('version.json').success(function (v) {
                 if (!version) {
                     version = v;
                 }
-                if (v.lastcommit != version.lastcommit) {
+                if (v.build_date != version.build_date) {
                     $scope.need_update = true;
                 }
             });

@@ -35,9 +35,7 @@ gulp.task('html', ['wiredep', 'scripts', 'partials'], function () {
   var cssFilter = $.filter('**/*.css');
   var assets;
 
-  $.git.exec({args : 'rev-parse HEAD'}, function (err, stdout) {
-      fs.writeFile('dist/version.json', JSON.stringify({lastcommit: stdout.trim(), builddate: new Date()}));
-  });
+  fs.writeFile('dist/version.json', JSON.stringify({build_date: new Date()}));
 
   return gulp.src('app/*.html')
     .pipe($.inject(gulp.src('.tmp/**/*.js'), {
