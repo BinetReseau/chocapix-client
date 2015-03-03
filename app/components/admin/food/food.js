@@ -362,11 +362,13 @@ angular.module('bars.admin.food', [
                 });
                 if (stock_item) {
                     $scope.barcodeErrorSI = stock_item;
+                    $scope.block = true;
                     return false;
                 }
                 $scope.buy_item_price = buy_item_price;
             }
             delete $scope.barcodeErrorSI;
+            $scope.block = false;
             return true;
         };
 
