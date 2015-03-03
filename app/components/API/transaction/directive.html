@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                             <div ng-if="transaction.type == 'appro'">
-                                <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
+                                <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true" class="link">
                                     {{ transaction.items.length }} aliments
                                 </a>
                                 <div collapse="transaction.items.length > 1 && !detailsFood">
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div ng-if="transaction.type == 'inventory'">
-                                <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
+                                <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true" class="link">
                                     {{ transaction.items.length }} aliments
                                 </a>
                                 <div collapse="transaction.items.length == 1 || !detailsFood">
@@ -107,7 +107,7 @@
                                 </span>
                             </div>
                             <div ng-if="transaction.type == 'collectivePayment'">
-                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true">
+                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true" class="link">
                                     {{ transaction.accounts.length }} personnes
                                 </a>
                                 <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
@@ -124,7 +124,7 @@
                         <td class="par">par</td>
                         <td class="user">
                             <div ng-if="transaction.type == 'meal'">
-                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true">
+                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true" class="link">
                                     {{ transaction.accounts.length }} personnes
                                 </a>
                                 <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
