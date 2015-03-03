@@ -1,23 +1,6 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
     <h3>Ajouter un nouvel aliment</h3>
     <div>
-        <form class="form-horizontal" ng-submit="addFood()">
-            <bars:admin:food:add sell-item="sell_item" item-details="item_details" buy-item="buy_item" buy-item-price="buy_item_price" stock-item="stock_item" add="add" new-details="true"></bars:admin:food:add>
-            <div class="form-group">
-                <label for="fqty" class="col-sm-2 control-label">Quantité</label>
-                <div class="col-sm-7">
-                  <input type="text" class="form-control" id="fqty" placeholder="Quantité initiale" value="0" ng-model="sell_item.qty">
-                </div>
-                <label class="col-sm-3 control-label" ng-if="buy_unit.itemqty == 1">{{ (sell_item.unit_name_plural && sell_item.qty > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((item_details.name_plural && sell_item.qty > 1) && item_details.name_plural || item_details.name)) }}</label>
-                <label class="col-sm-3 control-label" ng-if="buy_unit.itemqty != 1">paquet{{ sell_item.qty > 1 && 's' || '' }}</label>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" class="btn btn-primary" value="Ajouter" ng-if="!sell_item.qty" />
-                    <input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ sell_item.qty*buy_item_price.price|currency }}" ng-if="sell_item.qty && buy_item.itemqty == 1" />
-                    <input type="submit" class="btn btn-success" value="Ajouter et approvisionner pour {{ sell_item.qty*buy_item_price.price|currency }}" ng-if="sell_item.qty && buy_item.itemqty != 1" />
-                </div>
-              </div>
-        </form>
+        <bars:admin:food:add callback="callback"></bars:admin:food:add>
     </div>
 </div>

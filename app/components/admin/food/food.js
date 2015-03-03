@@ -59,36 +59,10 @@ angular.module('bars.admin.food', [
     }]
 )
 .controller('admin.ctrl.food.add',
-    ['$scope', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.buyitem', 'api.models.buyitemprice', 'api.models.stockitem', 'api.services.action',
-    function($scope, SellItem, ItemDetails, BuyItem, BuyItemPrice, StockItem, APIAction) {
-        function init() {
-            $scope.buy_item = BuyItem.create();
-            $scope.item_details = ItemDetails.create();
-            $scope.sell_item = SellItem.create();
-            $scope.stock_item = StockItem.create();
-            $scope.buy_item_price = BuyItemPrice.create();
-        }
-        init();
-
-        var add = {};
-        $scope.add = add;
-        $scope.addFood = function() {
-            if ($scope.stock_item.id) {
-                var qty = $scope.sell_item.qty/$scope.sell_item.unit_value;
-            } else {
-                var qty = $scope.sell_item.qty;
-            }
-            add.go().then(function(newFood) {
-                if (qty > 0) {
-                    APIAction.appro({
-                        items: [{buyitem: $scope.buy_item.id, qty: qty}]
-                    }).then(init);
-                } else {
-                    init();
-                }
-            }, function(errors) {
-                // TODO: display form errors
-            });
+    ['$scope',
+    function($scope) {
+        var callback = function (o) {
+            console.log(o);
         };
     }
 ])
@@ -114,7 +88,6 @@ angular.module('bars.admin.food', [
                 $scope.sellitems_grp.push(item);
                 $scope.sellitem_list.splice($scope.sellitem_list.indexOf(item), 1);
                 $scope.searchl = "";
-                console.log($scope.sellitems_grp);
             }
         };
         $scope.removeItem = function(item) {
@@ -230,31 +203,53 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.dir.barsadminfoodadd',
     ['$scope', '$modal', '$timeout', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF',
     function($scope, $modal, $timeout, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF) {
-        var initDetails = $scope.item_details;
-        var initBuy = $scope.buy_item;
-        $scope.barcode = $scope.buy_item.barcode;
-        $scope.is_pack = false;
-        $scope.new_sell = !$scope.sell_item.id;
-        $scope.new_details = !$scope.item_details.id;
+        var init_items;
+        function init() {
+            $scope.buy_item = BuyItem.create();
+            $scope.item_details = ItemDetails.create();
+            $scope.sell_item = SellItem.create();
+            $scope.stock_item = StockItem.create();
+            $scope.buy_item_price = BuyItemPrice.create();
 
-        function resetf() {
-            $scope.barcode = "";
+            init_items = {
+                buy_item: $scope.buy_item,
+                item_details: $scope.item_details,
+                sell_item: $scope.sell_item,
+                stock_item: $scope.stock_item,
+                buy_item_price: $scope.buy_item_price
+            };
+
             $scope.itemInPack = "";
             $scope.oldSellItem = "";
             $scope.is_pack = false;
             $scope.new_sell = true;
             $scope.new_details = true;
-            document.getElementById("fbarcode").focus();
+
+            if ($scope.barcode && $scope.barcode != "") {
+                $scope.allow_barcode_edit = false;
+                search($scope.barcode);
+            }
+
+            $timeout(function () {
+                document.getElementById("fbarcode").focus();
+            }, 300);
+        }
+        init();
+
+        function resetf() {
+            $scope.barcode = "";
+            init();
         }
 
-        function searchDetails (barcode) {
-            $scope.allow_barcode_edit = true;
+        // Cherche dans la bdd globale
+        // Appelée par search() et par ng-change sur barcode
+        function searchGlobal (barcode, basic) {
             // On regarde si le bar vend déjà ce code-barre
-            var buy_item_prices = _.filter(BuyItemPrice.all(), function (f) {
+            var buy_item_price = _.find(BuyItemPrice.all(), function (f) {
                 return f.buyitem.barcode == barcode;
             });
             // Le BuyItemPrice n'existe pas, l'aliment n'a jamais été acheté par le bar
-            if (buy_item_prices.length == 0) {
+            if (!buy_item_price && !basic) {
                 $scope.buy_item_price.barcode = barcode;
                 return $scope.buy_item_price.$save().then(function (nbip) {
                     // Le BuyItem existe déjà (et l'ItemDetails associé)
@@ -299,12 +294,33 @@ angular.module('bars.admin.food', [
                     // On fait rien, tout doit être créé
                     return false;
                 });
-            } else {
-                return true;
+            } else if (buy_item_price) {
+                var stock_item = _.find(StockItem.all(), function (si) {
+                    return si.details == buy_item_price.buyitem.details;
+                });
+                if (stock_item) {
+                    $scope.barcodeErrorSI = stock_item;
+                    $scope.block = true;
+                    $scope.new_details = true;
+                    $scope.buy_item = init_items.buy_item;
+                    $scope.buy_item_price = init_items.buy_item_price;
+                    $scope.item_details = init_items.item_details;
+                    return false;
+                }
+                $scope.buy_item_price = buy_item_price;
+                $scope.buy_item = buy_item_price.buyitem;
+                $scope.item_details = buy_item_price.buyitem.details;
+                $scope.new_details = false;
+            } else if (!buy_item_price) {
+                $scope.new_details = true;
+            }
+            if (basic) {
+                $scope.block = false;
+                delete $scope.barcodeErrorSI;
             }
         };
-        function searchOff() {
-            OFF.get($scope.barcode).then(function (infos) {
+        function searchOff(barcode) {
+            OFF.get(barcode).then(function (infos) {
                 if (infos) {
                     if (infos.is_pack) {
                         $scope.is_pack = true;
@@ -321,56 +337,26 @@ angular.module('bars.admin.food', [
             });
         };
 
-        function search() {
-            var rs = searchDetails($scope.barcode);
+        function search(barcode) {
+            var rs = searchGlobal(barcode);
             if (rs !== true) {
                 rs.then(function (result) {
                     if (!result) {
-                        searchOff();
-                    }
-                    if ($scope.item_details.id) {
-                        $scope.new_details = false;
-                        $scope.allow_barcode_edit = false;
+                        searchOff(barcode);
                     }
                 });
             }
-        }
-
-        // On a un code-barre mais pas l'ItemDetails
-        if ($scope.barcode && !$scope.item_details.id) {
-            // On cherche dans les aliments communs
-            // et si on trouve pas on cherche sur OpenFoodFacts
-            search();
         }
 
         // Lancer une recherche en faisant Entrée
         $scope.searchf = function (e) {
             if (e.which === 13) {
                 e.preventDefault();
-                search();
+                search($scope.barcode);
             }
         };
 
-        // Appelée par ng-change sur le champ barcode
-        $scope.verifyExistance = function (barcode) {
-            var buy_item_price = _.find(BuyItemPrice.all(), function (f) {
-                return f.buyitem.barcode == barcode;
-            });
-            if (buy_item_price) {
-                var stock_item = _.find(StockItem.all(), function (si) {
-                    return si.details == buy_item_price.buyitem.details;
-                });
-                if (stock_item) {
-                    $scope.barcodeErrorSI = stock_item;
-                    $scope.block = true;
-                    return false;
-                }
-                $scope.buy_item_price = buy_item_price;
-            }
-            delete $scope.barcodeErrorSI;
-            $scope.block = false;
-            return true;
-        };
+        $scope.searchGlobal = searchGlobal;
 
         // Si on est en train d'ajouter un pack, on scanne un item, et il n'existe pas
         $scope.createItemPack = function (e) {
@@ -426,7 +412,7 @@ angular.module('bars.admin.food', [
             $scope.sell_item = item;
         };
 
-        $scope.add.go = function() {
+        $scope.go = function() {
             function saveFood() {
                 if ($scope.new_sell) {
                     $scope.sell_item.tax *= 0.01;
@@ -502,23 +488,14 @@ angular.module('bars.admin.food', [
                 $scope.sell_item.unit_name_plural = newv;
             }
         });
-
-        $timeout(function () {
-            document.getElementById("fbarcode").focus();
-        }, 300);
     }
 ])
 .directive('barsAdminFoodAdd', function() {
     return {
         restrict: 'E',
         scope: {
-            sell_item: '=sellItem',
-            item_details: '=itemDetails',
-            buy_item: '=buyItem',
-            buy_item_price: '=buyItemPrice',
-            stock_item: '=stockItem',
-            add: '=add',
-            new_details: '=?newDetails'
+            barcode: '=?barcode',
+            callback: '&?callback'
         },
         templateUrl: 'components/admin/food/formFood.html',
         controller: 'admin.ctrl.dir.barsadminfoodadd'
