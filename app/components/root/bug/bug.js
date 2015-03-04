@@ -35,7 +35,7 @@ angular.module('bars.root.bug', [
     function($scope, $stateParams, APIBar, bug_list) {
         $scope.root.active = 'bug';
         $scope.bug_list = _.filter(bug_list, function(b) {
-            return b.fixed == false;
+            return b.fixed == true;
         });
         console.log($scope.bug_list);
         $scope.solve = function(bug) {
