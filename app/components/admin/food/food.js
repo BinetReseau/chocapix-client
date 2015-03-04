@@ -192,6 +192,11 @@ angular.module('bars.admin.food', [
                 }
             }
         };
+        $(window).bind('beforeunload', function() {
+            if (Appro.in()) {
+                return "Attention, vous allez perdre l'appro en cours !"
+            }
+        });
         $timeout(function () {
             document.getElementById("addApproItemInput").focus();
         }, 300);
@@ -524,6 +529,12 @@ angular.module('bars.admin.food', [
             document.getElementById("addInventoryItemInput").focus();
         }, 300);
 
+        $(window).bind('beforeunload', function() {
+            if (Inventory.in()) {
+                return "Attention, vous allez perdre l'inventaire en cours !"
+            }
+        });
+
         $scope.inventory = Inventory;
     }
 ])
@@ -533,8 +544,8 @@ angular.module('bars.admin.food', [
         $scope.admin.active = 'food;'
     }
 ])
-.controller('admin.ctrl.food.stockitems_list', 
-    ['$scope', 'stockitem_list', 
+.controller('admin.ctrl.food.stockitems_list',
+    ['$scope', 'stockitem_list',
     function($scope, stockitem_list){
         $scope.stockitem_list = stockitem_list;
         $scope.searchl = "";
