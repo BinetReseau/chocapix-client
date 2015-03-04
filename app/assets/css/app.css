@@ -252,6 +252,12 @@ hr.derrierebtn {
     -o-animation: fadeOut .5s;
     animation: fadeOut .5s;
 }
+#splash-screen.ng-leave {
+    -webkit-animation: fadeOut .5s;
+    -moz-animation: fadeOut .5s;
+    -o-animation: fadeOut .5s;
+    animation: fadeOut .5s;
+}
 .navbar-default .navbar-nav > li > a.in-meal {
     color: #337ab7;
 }
@@ -273,6 +279,25 @@ hr.derrierebtn {
 }
 #new-version .alert {
     margin: 0px;
+}
+#splash-screen {
+    background: white;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10000;
+}
+#splash-screen #cont {
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+#splash-screen .progress-bar {
+    transition-duration: 0.2s;
 }
 @media screen and (min-width: 768px) {
     .nav-stacked-sm > li {

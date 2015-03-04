@@ -32,13 +32,11 @@ angular.module('bars.root', [
                     }],
                     user_list: ['api.models.user', function(User) {
                         User.clear();
-                        User.reload();
-                        return User.all();
+                        return User.reload();
                     }],
                     itemdetails_list: ['api.models.itemdetails', function(ItemDetails) {
                         ItemDetails.clear();
-                        ItemDetails.reload();
-                        return ItemDetails.all();
+                        return ItemDetails.reload();
                     }]
                 },
                 views: {
@@ -65,6 +63,8 @@ angular.module('bars.root', [
 .controller('root.ctrl.base',
     ['$scope', '$rootScope', '$stateParams', 'auth.user',
     function($scope, $rootScope, $stateParams, AuthUser) {
+        $rootScope.appLoaded = true;
+
         $scope.root = {
             active: 'index'
         };
@@ -117,8 +117,8 @@ angular.module('bars.root', [
     }]
 )
 
-.controller('root.ctrl.home', 
-    ['$scope', 
+.controller('root.ctrl.home',
+    ['$scope',
     function($scope){
         $scope.root.active = 'index';
     }]
