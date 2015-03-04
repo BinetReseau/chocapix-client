@@ -126,7 +126,7 @@ angular.module('bars.main', [
         };
 
         $rootScope.$on('auth.hasLoggedIn', function () {
-            if (User.all().length == 0 || User.all()[0].full_name === undefined) {
+            if (User.all().length == 0 || User.all()[0].full_name === undefined || User.all()[User.all().length-1].full_name === undefined) {
                 User.reload();
 
             }
