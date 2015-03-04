@@ -5,7 +5,7 @@
                 <div class="panel-heading">
 
                     <h2 class="panel-title text-center text-capitalizefirst">{{ d.date | amCalendar }}
-                        <span class="label label-success pull-right" tooltip="Total dépensé (achats, amendes, dons faits)" tooltip-placement="left">
+                        <span class="label label-success pull-right" tooltip="Total dépensé (achats, amendes, dons faits)" tooltip-placement="left" ng-if="dailyTotal">
                             {{ d.totalMoney | currency }}
                         </span>
                     </h2>
