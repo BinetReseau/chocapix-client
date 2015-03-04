@@ -16,8 +16,7 @@ angular.module('bars.bars', [
                         APIInterface.setBar('');
                     }],
                     bars_list: ['api.models.bar', function(Bar) {
-                        Bar.reload();
-                        return Bar.all();
+                        return Bar.reload();
                     }],
                     user: ['api.models.user', 'auth.service', function(User, AuthService) {
                         if (AuthService.isAuthenticated()) {
@@ -67,7 +66,7 @@ angular.module('bars.bars', [
             }
             return out;
         }
-        
+
         AuthUser.user = user;
         $scope.user = AuthUser;
         $scope.accounts = accounts;

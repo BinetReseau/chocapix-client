@@ -19,8 +19,7 @@ angular.module('bars.root.bar', [
                     templateUrl: "components/root/bar/list.html",
                     resolve: {
                         bars_list: ['api.models.bar', function(Bar) {
-                            Bar.reload();
-                            return Bar.all();
+                            return Bar.reload();
                         }]
                     },
                     controller: 'root.ctrl.bar.list'

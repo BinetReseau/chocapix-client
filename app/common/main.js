@@ -18,38 +18,31 @@ angular.module('bars.main', [
                 }],
                 itemdetails: ['api.models.itemdetails', function(ItemDetails) {
                     ItemDetails.clear();
-                    ItemDetails.reload();
-                    return ItemDetails.all();
+                    return ItemDetails.reload();
                 }],
                 buyitem: ['api.models.buyitem', function(BuyItem) {
                     BuyItem.clear();
-                    BuyItem.reload();
-                    return BuyItem.all();
+                    return BuyItem.reload();
                 }],
                 buyitemprice: ['api.models.buyitemprice', function(BuyItemPrice) {
                     BuyItemPrice.clear();
-                    BuyItemPrice.reload();
-                    return BuyItemPrice.all();
+                    return BuyItemPrice.reload();
                 }],
                 stockitem: ['api.models.stockitem', function(StockItem) {
                     StockItem.clear();
-                    StockItem.reload();
-                    return StockItem.all();
+                    return StockItem.reload();
                 }],
-                sellitem: ['api.models.sellitem', function(SellItem) {
+                sellitem: ['api.models.sellitem', '$timeout', function(SellItem, $timeout) {
                     SellItem.clear();
-                    SellItem.reload();
-                    return SellItem.all();
+                    return SellItem.reload();
                 }],
                 accounts: ['api.models.account', function(Account) {
                     Account.clear();
-                    Account.reload();
-                    return Account.all();
+                    return Account.reload();
                 }],
                 users: ['api.models.user', function(User) {
                     User.clear();
-                    User.reload();
-                    return User.all();
+                    return User.reload();
                 }],
                 user: ['api.models.user', 'auth.user', function(User, AuthUser) {
                     if (AuthUser.isAuthenticated()) {
@@ -74,8 +67,7 @@ angular.module('bars.main', [
                 }],
                 news: ['api.models.news', function(News) {
                     News.clear();
-                    News.reload();
-                    return News.all();
+                    return News.reload();
                 }]
             },
             views: {

@@ -111,7 +111,6 @@ angular.module('bars.api.food', [
         })
         .state('bar.food.details', {
             url: "/:id",
-            //templateUrl: "components/API/food/details.html",
             controller: 'api.ctrl.food_details',
             resolve: {
                 food_item: ['$stateParams', 'api.models.sellitem', function($stateParams, SellItem) {
@@ -346,87 +345,6 @@ angular.module('bars.api.food', [
         $scope.resetFood();
     }]
 )
-
-/*.controller('api.ctrl.dir.barsfood',
-    ['$scope', function($scope) {
-        function refresh() {
-            $scope.ratio = 1;
-            if ($scope.in == 'buy') {
-                $scope.ratio *= $scope.food.details.unit_value;
-            } else if ($scope.in == 'sell') {
-                $scope.ratio *= $scope.food.unit_value;
-            }
-            if ($scope.out == 'buy') {
-                $scope.ratio *= 1/$scope.food.details.unit_value;
-                $scope.unit_name = $scope.food.details.unit_name;
-                $scope.unit_name_plural = $scope.food.details.unit_name_plural;
-            } else if ($scope.out == 'sell') {
-                $scope.ratio *= 1/$scope.food.unit_value;
-                $scope.unit_name = $scope.food.unit_name;
-                $scope.unit_name_plural = $scope.food.unit_name_plural;
-            }
-        }
-        $scope.abs = Math.abs;
-        $scope.$watch('food.buy_unit_value', refresh);
-        $scope.$watch('food.unit_value', refresh);
-        refresh();
-    }])
-.directive('barsFood', function() { // TO BE REMOVED
-    return {
-        restrict: 'E',
-        scope: {
-            food: '=food',
-            //unit: '=?unit',
-            qty: '=?qty',
-            in: '=?in',
-            out: '=?out'
-        },
-        templateUrl: 'components/API/food/directive.html',
-        controller: 'api.ctrl.dir.barsfood'
-    };
-})
-.directive('barsFoodQty', function() { // TO BE REMOVED
-    return {
-        restrict: 'E',
-        scope: {
-            food: '=food',
-            qty: '=qty',
-            in: '=?in',
-            out: '=?out'
-        },
-        templateUrl: 'components/API/food/qty-directive.html',
-        controller: 'api.ctrl.dir.barsfood'
-    };
-})
-.directive('barsFoodPrice', function() { // TO BE REMOVED
-    return {
-        restrict: 'E',
-        scope: {
-            food: '=food',
-            in: '=?in',
-            qty: '=?qty',
-            tax: '=?tax'
-        },
-        templateUrl: 'components/API/food/price-directive.html',
-        controller: ['$scope', function($scope) {
-            function refresh() {
-                if ($scope.in == 'buy') {
-                    $scope.price = $scope.food.price * $scope.food.buy_unit_value;
-                } else if ($scope.in == 'sell') {
-                    $scope.price = $scope.food.price * $scope.food.unit_value;
-                    if ($scope.tax) {
-                        $scope.price *= (1+$scope.food.tax);
-                    }
-                } else {
-                    $scope.price = $scope.food.price;
-                }
-            }
-            $scope.$watch('food.buy_unit_value', refresh);
-            $scope.$watch('food.unit_value', refresh);
-            refresh();
-        }]
-    };
-})*/
 .controller('api.ctrl.dir.barssellitem',
     ['$scope', function($scope) {
         function refresh() {
