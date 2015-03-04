@@ -85,7 +85,7 @@ angular.module('bars.api.food', [
                         var all_keywords = "";
                         _.forEach(this.stockitems, function(n, i) { all_keywords = all_keywords + " " + n.details.keywords; });
                         var searchable = this.name + " " + all_keywords;
-                        return (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                        return !this.deleted && (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
             });
