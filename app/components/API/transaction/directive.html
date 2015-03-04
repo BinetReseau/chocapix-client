@@ -3,7 +3,12 @@
         <div ng-repeat="d in history track by d.date">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h2 class="panel-title text-center text-capitalizefirst">{{ d.date | amCalendar }}</h2>
+
+                    <h2 class="panel-title text-center text-capitalizefirst">{{ d.date | amCalendar }}
+                        <span class="label label-success pull-right" tooltip="Total dépensé (achats, amendes, dons faits)" tooltip-placement="left">
+                            {{ d.totalMoney | currency }}
+                        </span>
+                    </h2>
                 </div>
                 <table class="table table-striped table-hover table-condensed history">
                     <tr ng-repeat="transaction in d.history track by transaction.id" ng-class="transaction.canceled && 'del'" ng-init="details = {show:false}">

@@ -166,7 +166,8 @@ angular.module('bars.api.transaction', [
         scope: {
             filter: '&filter',
             sellitem: "=?sellitem",
-            buyInStock: '=?buyInStock' // false: display buytransaction with sellitems ; true: display buytransaction with stockitem
+            buyInStock: '=?buyInStock', // false: display buytransaction with sellitems ; true: display buytransaction with stockitem
+            dailyTotal: '=?dailyTotal' // true: display total price by day
             // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
@@ -205,6 +206,29 @@ angular.module('bars.api.transaction', [
                 history_dates = _.map(history_dates, function(x){return { date: new Date(x) }; });
                 for (var i = 0; i < history_dates.length; i++) {
                     history_dates[i].history = history_by_date[history_dates[i].date];
+                    if ($scope.dailyTotal) {
+                        history_dates[i].totalMoney = _.reduce(history_dates[i].history, function (sum, t) {
+                            if (t.canceled) {
+                                return sum;
+                            }
+                            if (t.type == 'buy') {
+                                return sum + t.moneyflow;
+                            } else if (t.type == 'punish' && t.account.owner.id == $scope.filter().user) {
+                                return sum - t.moneyflow;
+                            } else if (t.type == 'give') {
+                                if (t.account.owner.id == $scope.filter().user) {
+                                    return sum;
+                                } else {
+                                    return sum + t.moneyflow;
+                                }
+                            } else if (t.type == 'meal' || t.type == 'collectivePayment') {
+                                return sum + (t.moneyflow*_.result(_.find(t.accounts, function (a) {
+                                    return a.account.owner.id == $scope.filter().user;
+                                }), 'ratio') || 0);
+                            }
+                            return sum;
+                        }, 0);
+                    }
                 }
                 $scope.history = history_dates;
                 inRequest = false;
