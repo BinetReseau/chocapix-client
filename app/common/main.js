@@ -16,40 +16,57 @@ angular.module('bars.main', [
                 bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
                     return Bar.get($stateParams.bar);
                 }],
-                itemdetails: ['api.models.itemdetails', function(ItemDetails) {
+                itemdetails: ['api.models.itemdetails', '$rootScope', function(ItemDetails, $rootScope) {
                     ItemDetails.clear();
-                    ItemDetails.reload();
-                    return ItemDetails.all();
+                    return ItemDetails.reload().then(function (o) {
+                        $rootScope.$broadcast('api.ItemDetails.loaded');
+                        return o;
+                    });
                 }],
-                buyitem: ['api.models.buyitem', function(BuyItem) {
+                buyitem: ['api.models.buyitem', '$rootScope', function(BuyItem, $rootScope) {
                     BuyItem.clear();
-                    BuyItem.reload();
-                    return BuyItem.all();
+                    return BuyItem.reload().then(function (o) {
+                        $rootScope.$broadcast('api.BuyItem.loaded');
+                        return o;
+                    });
                 }],
-                buyitemprice: ['api.models.buyitemprice', function(BuyItemPrice) {
+                buyitemprice: ['api.models.buyitemprice', '$rootScope', function(BuyItemPrice, $rootScope) {
                     BuyItemPrice.clear();
-                    BuyItemPrice.reload();
-                    return BuyItemPrice.all();
+                    return BuyItemPrice.reload().then(function (o) {
+                        $rootScope.$broadcast('api.BuyItemPrice.loaded');
+                        return o;
+                    });
                 }],
-                stockitem: ['api.models.stockitem', function(StockItem) {
+                stockitem: ['api.models.stockitem', '$rootScope', function(StockItem, $rootScope) {
                     StockItem.clear();
-                    StockItem.reload();
-                    return StockItem.all();
+                    return StockItem.reload().then(function (o) {
+                        $rootScope.$broadcast('api.StockItem.loaded');
+                        return o;
+                    });
                 }],
-                sellitem: ['api.models.sellitem', function(SellItem) {
+                sellitem: ['api.models.sellitem', '$rootScope', function(SellItem, $rootScope) {
                     SellItem.clear();
-                    SellItem.reload();
-                    return SellItem.all();
+                    return SellItem.reload().then(function (o) {
+                        $rootScope.$broadcast('api.SellItem.loaded');
+                        return o;
+                    });
                 }],
-                accounts: ['api.models.account', function(Account) {
+                accounts: ['api.models.account', '$rootScope', function(Account, $rootScope) {
                     Account.clear();
-                    Account.reload();
-                    return Account.all();
+                    return Account.reload().then(function (o) {
+                        $rootScope.$broadcast('api.Account.loaded');
+                        return o;
+                    });
                 }],
-                users: ['api.models.user', function(User) {
+                users: ['api.models.user', '$rootScope', function(User, $rootScope) {
                     User.clear();
-                    User.reload();
-                    return User.all();
+                    return User.reload().then(function (o) {
+                        $rootScope.$broadcast('api.User.loaded');
+                        return o;
+                    }, function () {
+                        $rootScope.$broadcast('api.User.error');
+                        return [];
+                    });
                 }],
                 user: ['api.models.user', 'auth.user', function(User, AuthUser) {
                     if (AuthUser.isAuthenticated()) {
@@ -72,10 +89,12 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                news: ['api.models.news', function(News) {
+                news: ['api.models.news', '$rootScope', function(News, $rootScope) {
                     News.clear();
-                    News.reload();
-                    return News.all();
+                    return News.reload().then(function (o) {
+                        $rootScope.$broadcast('api.News.loaded');
+                        return o;
+                    });
                 }]
             },
             views: {
@@ -110,6 +129,8 @@ angular.module('bars.main', [
 .controller('main.ctrl.base',
     ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user',
     function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User) {
+        $rootScope.appLoaded = true;
+
         $scope.bar = {
             id: $stateParams.bar,
             name: bar.name,
@@ -126,7 +147,7 @@ angular.module('bars.main', [
         };
 
         $rootScope.$on('auth.hasLoggedIn', function () {
-            if (User.all().length == 0 || User.all()[0].full_name === undefined) {
+            if (User.all().length == 0 || User.all()[0].full_name === undefined || User.all()[User.all().length-1].full_name === undefined) {
                 User.reload();
 
             }

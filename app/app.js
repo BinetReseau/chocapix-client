@@ -75,7 +75,7 @@ angular.module('barsApp', [
         var version;
         $scope.need_update = false;
         function checkVersion() {
-            $http.get('version.json').success(function (v) {
+            $http.get('version.json?uniq=' + (new Date()).toJSON()).success(function (v) {
                 if (!version) {
                     version = v;
                 }
@@ -86,5 +86,52 @@ angular.module('barsApp', [
             $timeout(checkVersion, 60000);
         }
         checkVersion();
+    }])
+.controller('index.splash',
+    ['$rootScope', '$scope', '$timeout',
+    function ($rootScope, $scope, $timeout) {
+        $scope.percent = 0;
+        var step = 100/8;
+        $rootScope.$watch('appLoaded', function () {
+            if ($scope.appLoaded) {
+                $scope.percent = 100;
+            }
+        });
+        $rootScope.$on('api.ItemDetails.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "ItemDetails";
+        });
+        $rootScope.$on('api.StockItem.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "StockItem";
+        });
+        $rootScope.$on('api.SellItem.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "SellItem";
+        });
+        $rootScope.$on('api.BuyItem.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "BuyItem";
+        });
+        $rootScope.$on('api.BuyItemPrice.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "BuyItemPrice";
+        });
+        $rootScope.$on('api.User.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "User";
+        });
+        $rootScope.$on('api.User.error', function () {
+            $scope.percent += step;
+            $scope.mleft = "User : erreur";
+        });
+        $rootScope.$on('api.Account.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "Account";
+        });
+        $rootScope.$on('api.News.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "News";
+        });
     }])
 ;

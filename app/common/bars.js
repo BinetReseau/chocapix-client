@@ -16,8 +16,7 @@ angular.module('bars.bars', [
                         APIInterface.setBar('');
                     }],
                     bars_list: ['api.models.bar', function(Bar) {
-                        Bar.reload();
-                        return Bar.all();
+                        return Bar.reload();
                     }],
                     user: ['api.models.user', 'auth.service', function(User, AuthService) {
                         if (AuthService.isAuthenticated()) {
@@ -40,8 +39,10 @@ angular.module('bars.bars', [
 }])
 
 .controller('bars.ctrl',
-    ['$scope', 'auth.user', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'api.models.bar', 'accounts',
-    function($scope, AuthUser, bars_list, user, User, Account, Bar, accounts) {
+    ['$scope', '$rootScope', 'auth.user', 'bars_list', 'user', 'api.models.user', 'api.models.account', 'api.models.bar', 'accounts',
+    function($scope, $rootScope, AuthUser, bars_list, user, User, Account, Bar, accounts) {
+        $rootScope.appLoaded = true;
+
         function upBars() {
             $scope.gbars = [];
             for (var i = 0; i < bars_list.length; i++) {
@@ -67,7 +68,7 @@ angular.module('bars.bars', [
             }
             return out;
         }
-        
+
         AuthUser.user = user;
         $scope.user = AuthUser;
         $scope.accounts = accounts;

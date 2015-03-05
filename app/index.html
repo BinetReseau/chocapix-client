@@ -43,6 +43,25 @@
             Actualisez la page dès que possible pour en profiter.
         </div>
     </div>
+    <div ng-controller="index.splash">
+        <div id="splash-screen" ng-if="!appLoaded" class="animated">
+            <div id="cont">
+                <img src="assets/img/logo.png" alt="Chocapix" style="height: 30em;" /><br /><br />
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ percent }}%">
+                    </div>
+                </div>
+                <div style="margin-top: -1.5em; color: gray;">
+                    <div class="pull-left">
+                        <small ng-bind="mleft"></small>
+                    </div>
+                    <div class="pull-right">
+                        <small ng-bind="percent + '%'"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- build:js scripts/oldieshim.js -->
     <!--[if lt IE 9]>

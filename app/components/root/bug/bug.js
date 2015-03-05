@@ -36,6 +36,10 @@ angular.module('bars.root.bug', [
         $scope.root.active = 'bug';
         $scope.bug_list = bug_list;
         console.log($scope.bug_list);
+        $scope.solve = function(bug) {
+            bug.fixed = true;
+            bug.$save();
+        }
     }]
 )
 ;

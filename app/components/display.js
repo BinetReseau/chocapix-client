@@ -30,6 +30,9 @@ angular.module('bars.filters', [])
     var trailingSep = new RegExp(decSep+'$');
 
     return function(n, fractionSize) {
+        if (Math.abs(n) < 0.0001) {
+            return 0;
+        }
         var s = numberFilter(n, fractionSize);
         s = s.replace(trailingZerosMiddle, "$1");
         s = s.replace(trailingZerosEnd, "$1");
