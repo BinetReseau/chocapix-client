@@ -325,3 +325,7 @@ hr.derrierebtn {
         margin: 0px;
     }
 }
+
+.clear-par {
+    clear: both;
+}

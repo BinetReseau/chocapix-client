@@ -2,6 +2,6 @@
     {{ news.name }}
     <span class="pull-right small"><em>{{ news.author.full_name }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}</em></span>
 </h5>
-<div class="list-group-item-text">
+<div class="list-group-item-text clear-par">
     <p ng-bind-html="news.text | nl2br"></p>
 </div>
