@@ -4,9 +4,9 @@ angular.module('bars.api.food', [
     'APIModel'
     ])
 
-.factory('api.models.buyitem', ['APIModel',
-    function(APIModel) {
-        return new APIModel({
+.factory('api.models.buyitem', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
+        var model = new APIModel({
                 url: 'buyitem',
                 type: 'BuyItem',
                 structure: {
@@ -19,6 +19,13 @@ angular.module('bars.api.food', [
                     }
                 }
             });
+        model.request = function(params) {
+            return APIInterface.request({
+                'url': 'buyitem',
+                'method': 'GET',
+                'params': params});
+        }
+        return model;
     }])
 .factory('api.models.buyitemprice', ['APIModel',
     function(APIModel) {

@@ -6,7 +6,7 @@
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-barcode"></span>
                 </div>
-                <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="(!new_details() && !allow_barcode_edit)" ng-model="barcode" ng-keypress="searchf($event)" ng-change="searchGlobal(barcode, true)">
+                <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="!allow_barcode_edit" ng-model="barcode" ng-keypress="searchf($event)" ng-change="searchGlobal(barcode, true)">
             </div>
             <span class="help-block" ng-if="barcodeErrorSI">
                 Cet aliment existe déjà dans le bar : <bars:stockitem item="barcodeErrorSI"></bars:stockitem>
@@ -30,7 +30,7 @@
         <div class="form-group">
             <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
             <div class="col-sm-3">
-                <input type="number" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
+                <input type="number" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="buy_item.id">
             </div>
             <div class="col-sm-7">
                 <div class="input-group">
@@ -44,7 +44,7 @@
         <div class="form-group">
             <label for="fpprice" class="col-sm-2 control-label">Prix</label>
             <div class="col-sm-7">
-                <input type="text" class="form-control" id="fpprice" placeholder="2.34" ng-model="buy_item_price.price"  ng-disabled="block">
+                <input type="text" class="form-control" id="fpprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="buy_item_price.id">
             </div>
             <label class="col-sm-3 control-label">€ / pack</label>
         </div>
@@ -53,11 +53,11 @@
         <div class="form-group">
             <label for="fname" class="col-sm-2 control-label">Nom d'achat</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" id="fname" placeholder="Pot de 830g de Nutella" ng-disabled="!new_details() || block" ng-model="item_details.name" tooltip="Nomination exacte du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
+              <input type="text" class="form-control" id="fname" placeholder="Pot de 830g de Nutella" ng-disabled="item_details.id" ng-model="item_details.name" tooltip="Nomination exacte du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
             </div>
             <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" id="fname_plural" placeholder="Pots de 830g de Nutella" ng-disabled="!new_details() || block" ng-model="item_details.name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+              <input type="text" class="form-control" id="fname_plural" placeholder="Pots de 830g de Nutella" ng-disabled="item_details.id" ng-model="item_details.name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
             </div>
         </div>
         <div class="text-center">
@@ -80,21 +80,21 @@
             <div class="form-group">
                 <label for="fsname" class="col-sm-2 control-label">Nom de vente</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-model="sell_item.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
+                  <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-model="sell_item.name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id">
                 </div>
                 <label for="fsname_plural" class="col-sm-2 control-label">Pluriel</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-model="sell_item.name_plural" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
+                  <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-model="sell_item.name_plural" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id">
                 </div>
             </div>
             <div class="form-group">
                 <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="sell_item.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
+                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="sell_item.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id">
                 </div>
                 <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="sell_item.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
+                    <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="sell_item.unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id">
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@
             <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ item_details.name }} = </label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy" ng-disabled="block">
+                    <input type="text" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy" ng-disabled="stock_item.id">
                     <div class="input-group-addon">
                         {{ (sell_item.unit_name_plural && stock_item.sell_to_buy > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((sell_item.name_plural && stock_item.sell_to_buy > 1) && sell_item.name_plural || sell_item.name)) }}
                     </div>
@@ -121,7 +121,7 @@
             <label for="fprice" class="col-sm-2 control-label">Prix</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="block">
+                    <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="buy_item_price.id">
                     <div class="input-group-addon">
                         € / {{ item_details.name }}
                     </div>
@@ -132,7 +132,7 @@
             <label for="tax" class="col-sm-2 control-label">Taxe</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="tax" placeholder="20" ng-model="sell_item.tax" ng-disabled="block">
+                    <input type="text" class="form-control" id="tax" placeholder="20" ng-model="sell_item.tax" ng-disabled="sell_item.tax">
                     <span class="input-group-addon">%</span>
                 </div>
             </div>
@@ -140,13 +140,13 @@
         <div class="form-group">
             <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="!new_details() || block" ng-model="item_details.keywords">
+              <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="item_details.id" ng-model="item_details.keywords">
             </div>
         </div>
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <input type="submit" class="btn btn-primary" value="Ajouter" />
+            <input type="submit" class="btn btn-primary" value="Ajouter" ng-class="!isValid() && 'disabled' || ''" />
         </div>
     </div>
 </form>
