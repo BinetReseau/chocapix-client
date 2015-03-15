@@ -46,10 +46,16 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return (
-                            _.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                            _.deburr(this.keywords.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1
-                            );
+                        s = _.deburr(s.toLocaleLowerCase());
+                        var terms = s.split(' ');
+                        var dn = _.deburr(this.name.toLocaleLowerCase());
+                        var dk = _.deburr(this.keywords.toLocaleLowerCase())
+                        for (var i = 0; i < terms.length; i++) {
+                            if (dn.indexOf(terms[i]) == -1 && dk.indexOf(terms[i]) == -1) {
+                                return false;
+                            }
+                        }
+                        return true;
                     }
                 }
             });
