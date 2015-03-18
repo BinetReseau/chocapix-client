@@ -195,6 +195,8 @@ angular.module('bars.api.transaction', [
                 if ($scope.dailyTotal) {
                     if ($scope.filter().user) {
                         var fuser = $scope.filter().user;
+                    } else {
+                        var sumAll = true;
                     }
                 }
                 if (transaction) {
@@ -232,6 +234,14 @@ angular.module('bars.api.transaction', [
                                 }), 'ratio') || 0);
                             }
                             return sum;
+                        }, 0);
+                    } else if (sumAll) {
+                        history_dates[i].totalMoney = _.reduce(history_dates[i].history, function (sum, t) {
+                            if (t.canceled) {
+                                return sum;
+                            } else {
+                                return sum + t.moneyflow;
+                            }
                         }, 0);
                     }
                 }
