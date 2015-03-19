@@ -490,7 +490,24 @@ angular.module('bars.admin.food', [
         };
 
         $scope.isValid = function () {
-            return $scope.buy_item;
+            return $scope.buy_item_price.price &&
+                (
+                    ($scope.is_pack // C'est un pack
+                        && $scope.buy_item.itemqty && $scope.buy_item.details) ||
+                    (!$scope.is_pack // Ce n'est pas un pack
+                        && (
+                            ($scope.new_sell // C'est un nouvel aliment
+                                && $scope.item_details.name && $scope.item_details.name_plural && $scope.item_details.keywords
+                                && $scope.sell_item.name && $scope.sell_item.name_plural && $scope.sell_item.tax
+                                && $scope.stock_item.sell_to_buy
+                            ) ||
+                            (!$scope.new_sell
+                                && $scope.stock_item.sellitem && $scope.stock_item.sell_to_buy
+                                && $scope.item_details.keywords
+                            )
+                        )
+                    )
+                );
         };
 
         $scope.$watch('item_details.name', function (newv, oldv) {

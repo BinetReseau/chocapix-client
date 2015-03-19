@@ -90,7 +90,7 @@
             <div class="form-group">
                 <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="sell_item.unit_name" tooltip="L'unité utilisée par les utilisateurs" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id">
+                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="sell_item.unit_name" tooltip="L'unité utilisée par les utilisateurs. Laisser vide si l'aliment se vend à l'unité (par exemple les pizzas)." tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id">
                 </div>
                 <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
                 <div class="col-sm-4">
@@ -132,7 +132,7 @@
             <label for="tax" class="col-sm-2 control-label">Taxe</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="tax" placeholder="20" ng-model="sell_item.tax" ng-disabled="sell_item.tax">
+                    <input type="text" class="form-control" id="tax" placeholder="20" ng-model="sell_item.tax" ng-disabled="sell_item.id">
                     <span class="input-group-addon">%</span>
                 </div>
             </div>
@@ -140,7 +140,15 @@
         <div class="form-group">
             <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="item_details.id" ng-model="item_details.keywords">
+                <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="item_details.id" ng-model="item_details.keywords">
+            </div>
+        </div>
+        <div class="form-group" ng-if="buy_item_price.price && sell_item.name && sell_item.tax && stock_item.sell_to_buy">
+            <label class="col-sm-2 control-label">Aperçu</label>
+            <div class="col-sm-10">
+                <p class="form-control-static">
+                    Achat de <bars:sellitem item="sell_item" qty="53"></bars:sellitem> pour {{ buy_item_price.price*(1+sell_item.tax/100)/stock_item.sell_to_buy*53 | currency }}
+                </p>
             </div>
         </div>
     </div>
