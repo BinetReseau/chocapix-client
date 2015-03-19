@@ -33,6 +33,9 @@ angular.module('bars.filters', [])
         if (Math.abs(n) < 0.0001) {
             return 0;
         }
+        if (fractionSize === undefined) {
+            fractionSize = 2;
+        }
         var s = numberFilter(n, fractionSize);
         s = s.replace(trailingZerosMiddle, "$1");
         s = s.replace(trailingZerosEnd, "$1");
