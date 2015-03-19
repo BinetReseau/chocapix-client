@@ -30,7 +30,7 @@
         <div class="form-group">
             <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
             <div class="col-sm-3">
-                <input type="number" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="buy_item.id">
+                <input type="number" step="any" class="form-control" id="fpqty" placeholder="6" ng-model="buy_item.itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="buy_item.id">
             </div>
             <div class="col-sm-7">
                 <div class="input-group">
@@ -44,7 +44,7 @@
         <div class="form-group">
             <label for="fpprice" class="col-sm-2 control-label">Prix</label>
             <div class="col-sm-7">
-                <input type="text" class="form-control" id="fpprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="buy_item_price.id">
+                <input type="number" step="any" class="form-control" id="fpprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="buy_item_price.id">
             </div>
             <label class="col-sm-3 control-label">€ / pack</label>
         </div>
@@ -110,7 +110,7 @@
             <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ item_details.name }} = </label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy" ng-disabled="stock_item.id">
+                    <input type="number" step="any" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="stock_item.sell_to_buy" ng-disabled="stock_item.id">
                     <div class="input-group-addon">
                         {{ (sell_item.unit_name_plural && stock_item.sell_to_buy > 1) && sell_item.unit_name_plural || (sell_item.unit_name || ((sell_item.name_plural && stock_item.sell_to_buy > 1) && sell_item.name_plural || sell_item.name)) }}
                     </div>
@@ -121,7 +121,7 @@
             <label for="fprice" class="col-sm-2 control-label">Prix</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="buy_item_price.id">
+                    <input type="number" step="any" class="form-control" id="fprice" placeholder="2.34" ng-model="buy_item_price.price" ng-disabled="buy_item_price.id">
                     <div class="input-group-addon">
                         € / {{ item_details.name }}
                     </div>
@@ -132,7 +132,7 @@
             <label for="tax" class="col-sm-2 control-label">Taxe</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="tax" placeholder="20" ng-model="sell_item.tax" ng-disabled="sell_item.id">
+                    <input type="number" step="any" class="form-control" id="tax" placeholder="20" ng-model="sell_item.tax" ng-disabled="sell_item.id">
                     <span class="input-group-addon">%</span>
                 </div>
             </div>
