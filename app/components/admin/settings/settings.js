@@ -29,16 +29,27 @@ angular.module('bars.admin.settings', [
                 bar.$save().then(function(b) {
                     //
                 }, function(errors) {
-                    console.log('Erreur...');
+                    console.log('Erreur money_warning_threshold...');
                 });
             }
         };
         // Agios
-        $scope.activateAgio = false;
-        $scope.graceTime = null;
-        $scope.agioFormula = null;
+        $scope.agiosEnabled = bar.agios_enabled;
+        $scope.agiosThreshold = bar.agios_threshold;
+        $scope.agiosFactor = bar.agios_factor;
         $scope.saveAgio = function() {
-            // [TODO]
+            bar.agios_enabled = $scope.agiosEnabled;
+            if ($scope.agiosFactor >= 0) {
+                bar.agios_factor = $scope.agiosFactor;
+                if ($scope.agiosThreshold >= 0) {
+                    bar.agios_threshold = $scope.agiosThreshold;
+                    bar.$save().then(function(b) {
+                        //
+                    }, function(errors) {
+                        console.log('Erreur agios...');
+                    });
+                }
+            } 
         };
     }]
 )
