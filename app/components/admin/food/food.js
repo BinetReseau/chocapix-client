@@ -209,49 +209,71 @@ angular.module('bars.admin.food', [
     ['$scope', '$modal', '$timeout', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF',
     function($scope, $modal, $timeout, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF) {
         var init_items;
+        var data;
         function init() {
-            $scope.buy_item = BuyItem.create();
-            $scope.item_details = ItemDetails.create();
-            $scope.sell_item = SellItem.create();
-            $scope.stock_item = StockItem.create();
-            $scope.buy_item_price = BuyItemPrice.create();
-
-            init_items = {
-                buy_item: $scope.buy_item,
-                item_details: $scope.item_details,
-                sell_item: $scope.sell_item,
-                stock_item: $scope.stock_item,
-                buy_item_price: $scope.buy_item_price
+            data = {
+                barcode: '',
+                is_pack: false,
+                new_sell: true,
+                bi_id: null,
+                bip_id: null,
+                id_id: null,
+                sti_id: null,
+                sei_id: null,
+                bi_itemqty: null,
+                bip_price: '',
+                id_name: '',
+                id_name_plural: '',
+                sti_sell_to_buy: '',
+                sei_name: '',
+                sei_name_plural: '',
+                sei_unit_name: '',
+                sei_unit_name_plural: '',
+                sei_tax: '',
+                keywords: ''
             };
-
-            $scope.itemInPack = "";
-            $scope.oldSellItem = "";
-            $scope.is_pack = false;
-            $scope.new_sell = true;
             $scope.allow_barcode_edit = true;
-
-            if ($scope.barcode && $scope.barcode != "") {
-                $scope.allow_barcode_edit = false;
-                search($scope.barcode);
-            }
-
+            // $scope.buy_item = BuyItem.create();
+            // $scope.item_details = ItemDetails.create();
+            // $scope.sell_item = SellItem.create();
+            // $scope.stock_item = StockItem.create();
+            // $scope.buy_item_price = BuyItemPrice.create();
+            //
+            // init_items = {
+            //     buy_item: $scope.buy_item,
+            //     item_details: $scope.item_details,
+            //     sell_item: $scope.sell_item,
+            //     stock_item: $scope.stock_item,
+            //     buy_item_price: $scope.buy_item_price
+            // };
+            //
+            // $scope.itemInPack = "";
+            // $scope.oldSellItem = "";
+            // $scope.is_pack = false;
+            // $scope.new_sell = true;
+            // $scope.allow_barcode_edit = true;
             $timeout(function () {
                 document.getElementById("fbarcode").focus();
             }, 300);
         }
         init();
+        data.barcode = $scope.barcode;
+        if (data.barcode && data.barcode != "") {
+            $scope.allow_barcode_edit = false;
+            search(data.barcode);
+        }
+        $scope.data = data;
 
         function resetf() {
-            $scope.barcode = "";
             init();
         }
 
         $scope.new_details = function () {
-            return $scope.item_details.id == undefined;
+            return data.bi_details_id == undefined;
         };
 
         // Cherche dans la bdd globale
-        // Appelée par search() et par ng-change sur barcode
+        // Appelée par search() (basic = false) et par ng-change sur barcode (basic = true)
         function searchGlobal (barcode, basic) {
             // On regarde si le bar vend déjà ce code-barre
             var buy_item_price = _.find(BuyItemPrice.all(), function (f) {
@@ -264,22 +286,24 @@ angular.module('bars.admin.food', [
                     if (bis.length > 0) {
                         // Le BuyItem existe déjà (et l'ItemDetails associé)
                         var buy_item = bis[bis.length - 1];
-                        $scope.buy_item_price.buyitem = buy_item;
-                        $scope.buy_item = buy_item;
-                        $scope.item_details = buy_item.details;
+                        data.bi_id = buy_item.id;
+                        data.bi_itemqty = buy_item.itemqty;
+                        data.id_id = buy_item.details.id;
+                        data.id_name = buy_item.details.name;
+                        data.id_name_plural = buy_item.details.name_plural;
                         $scope.itemInPack = $scope.item_details.name;
                         // A-t-on besoin de créer le StockItem ?
                         var stockItem = _.find(StockItem.all(), function (i) {
-                            return i.details.id == $scope.buy_item.details.id;
+                            return i.details.id == data.id_id;
                         });
 
                         if ($scope.buy_item.itemqty != 1) {
-                            $scope.is_pack = true;
+                            data.is_pack = true;
                         } else {
-                            $scope.is_pack = false;
+                            data.is_pack = false;
                         }
 
-                        if ($scope.buy_item.itemqty != 1 && !stockItem) {
+                        if (data.is_pack && !stockItem) {
                             var modalNewFood = $modal.open({
                                 templateUrl: 'components/admin/food/modalAdd.html',
                                 controller: 'admin.ctrl.food.addModal',
@@ -299,33 +323,36 @@ angular.module('bars.admin.food', [
 
                             });
                         } else if (stockItem) {
-                            $scope.stock_item = stockItem;
+                            data.sti_id = stockItem.id;
+                            data.sti_sell_to_buy = stockItem.sell_to_buy;
                         }
                         return true;
                     }
                     return false;
                 });
             } else if (buy_item_price) {
-                $scope.buy_item_price = buy_item_price;
-                $scope.buy_item = buy_item_price.buyitem;
-                $scope.item_details = buy_item_price.buyitem.details;
-
-                var stock_item = _.find(StockItem.all(), function (si) {
-                    return si.details == buy_item_price.buyitem.details;
-                });
-                if (stock_item) {
-                    $scope.barcodeErrorSI = stock_item;
-                    $scope.block = true;
-                    $scope.stock_item = stock_item;
-                    $scope.sell_item = stock_item.sellitem;
-                    return false;
-                }
+                // $scope.buy_item_price = buy_item_price;
+                // $scope.buy_item = buy_item_price.buyitem;
+                // $scope.item_details = buy_item_price.buyitem.details;
+                //
+                // var stock_item = _.find(StockItem.all(), function (si) {
+                //     return si.details == buy_item_price.buyitem.details;
+                // });
+                // if (stock_item) {
+                //     $scope.barcodeErrorSI = stock_item;
+                //     $scope.block = true;
+                //     $scope.stock_item = stock_item;
+                //     $scope.sell_item = stock_item.sellitem;
+                //     return false;
+                // }
+                $scope.barcodeErrorSI = true;
             } else {
-                $scope.buy_item = init_items.buy_item;
-                $scope.buy_item_price = init_items.buy_item_price;
-                $scope.item_details = init_items.item_details;
-                $scope.stock_item = init_items.stock_item;
-                $scope.sell_item = init_items.sell_item;
+                data.bi_id = null;
+                data.bi_itemqty = '';
+                data.id_id = null;
+                data.id_name = '';
+                data.id_name_plural = '';
+                $scope.itemInPack = '';
             }
             if (basic) {
                 $scope.block = false;
@@ -333,20 +360,22 @@ angular.module('bars.admin.food', [
             }
             return false;
         };
+
+        // Recherche sur OpenFoodFacts
         function searchOff(barcode) {
             OFF.get(barcode).then(function (infos) {
                 if (infos) {
                     if (infos.is_pack) {
-                        $scope.is_pack = true;
-                        $scope.buy_item.itemqty = parseInt(infos.itemqty);
+                        data.is_pack = true;
+                        data.bi_itemqty = parseInt(infos.itemqty);
                     }
-                    $scope.item_details.name = infos.name;
-                    $scope.item_details.name_plural = infos.name_plural;
-                    $scope.sell_item.name = infos.sell_name;
-                    $scope.sell_item.name_plural = infos.sell_name_plural;
-                    $scope.sell_item.unit_name = infos.unit_name;
-                    $scope.sell_item.unit_name_plural = infos.unit_name_plural;
-                    $scope.stock_item.sell_to_buy = infos.sell_to_buy;
+                    data.id_name = infos.name;
+                    data.id_name_plural = infos.name_plural;
+                    data.sei_name = infos.sell_name;
+                    data.sei_name_plural = infos.sell_name_plural;
+                    data.sei_unit_name = infos.unit_name;
+                    data.sei_unit_name_plural = infos.unit_name_plural;
+                    data.sti_sell_to_buy = infos.sell_to_buy;
                 }
             });
         };
@@ -368,7 +397,7 @@ angular.module('bars.admin.food', [
         $scope.searchf = function (e) {
             if (e.which === 13) {
                 e.preventDefault();
-                search($scope.barcode);
+                search(data.barcode);
             }
         };
 
@@ -413,7 +442,7 @@ angular.module('bars.admin.food', [
         };
         $scope.itemInPack = "";
         $scope.choiceItemDetail = function(item, model, label) {
-            $scope.buy_item.details = item.buyitem.details.id;
+            data.id_id = item.buyitem.details.id;
         };
         // Typehead for SellItem choice
         $scope.sellitems = SellItem.all();
@@ -424,8 +453,11 @@ angular.module('bars.admin.food', [
         };
         $scope.oldSellItem = "";
         $scope.choiceSellItem = function(item, model, label) {
-            $scope.stock_item.sellitem = item;
-            $scope.sell_item = item;
+            data.sei_id = item.id;
+            data.sei_name = item.name;
+            data.sei_name_plural = item.name_plural;
+            data.sei_unit_name = item.unit_name;
+            data.sei_unit_name_plural = item.unit_name_plural;
         };
 
         $scope.go = function() {
@@ -490,38 +522,38 @@ angular.module('bars.admin.food', [
         };
 
         $scope.isValid = function () {
-            return $scope.buy_item_price.price &&
+            return data.bip_price &&
                 (
-                    ($scope.is_pack // C'est un pack
-                        && $scope.buy_item.itemqty && $scope.buy_item.details) ||
-                    (!$scope.is_pack // Ce n'est pas un pack
+                    (data.is_pack // C'est un pack
+                        && data.bi_itemqty && data.id_id) ||
+                    (!data.is_pack // Ce n'est pas un pack
                         && (
-                            ($scope.new_sell // C'est un nouvel aliment
-                                && $scope.item_details.name && $scope.item_details.name_plural
-                                && $scope.sell_item.name && $scope.sell_item.name_plural && $scope.sell_item.tax
-                                && $scope.stock_item.sell_to_buy
+                            (data.new_sell // C'est un nouvel aliment
+                                && data.id_name && data.id_name_plural
+                                && data.sei_name && data.sei_name_plural && data.sei_tax
+                                && data.sti_sell_to_buy
                             ) ||
-                            (!$scope.new_sell
-                                && $scope.stock_item.sellitem && $scope.stock_item.sell_to_buy
+                            (!data.new_sell
+                                && data.sei_id && data.sti_sell_to_buy
                             )
                         )
                     )
                 );
         };
 
-        $scope.$watch('item_details.name', function (newv, oldv) {
-            if ($scope.item_details.name_plural == oldv) {
-                $scope.item_details.name_plural = newv;
+        $scope.$watch('data.id_name', function (newv, oldv) {
+            if (data.id_name_plural == oldv) {
+                data.id_name_plural = newv;
             }
         });
-        $scope.$watch('sell_item.name', function (newv, oldv) {
-            if ($scope.sell_item.name_plural == oldv) {
-                $scope.sell_item.name_plural = newv;
+        $scope.$watch('data.sei_name', function (newv, oldv) {
+            if (data.sei_name_plural == oldv) {
+                data.sei_name_plural = newv;
             }
         });
-        $scope.$watch('sell_item.unit_name', function (newv, oldv) {
-            if ($scope.sell_item.unit_name_plural == oldv) {
-                $scope.sell_item.unit_name_plural = newv;
+        $scope.$watch('data.sei_unit_name', function (newv, oldv) {
+            if (data.sei_unit_name_plural == oldv) {
+                data.sei_unit_name_plural = newv;
             }
         });
     }
