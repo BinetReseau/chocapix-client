@@ -346,6 +346,8 @@ angular.module('bars.admin.food', [
                 //     return false;
                 // }
                 $scope.barcodeErrorSI = true;
+                $scope.block = false;
+                return true;
             } else {
                 data.bi_id = null;
                 data.bi_itemqty = '';
@@ -383,7 +385,7 @@ angular.module('bars.admin.food', [
         function search(barcode) {
             if (!$scope.block) {
                 var rs = searchGlobal(barcode);
-                if (rs !== true) {
+                if (rs !== true && rs !== false) {
                     rs.then(function (result) {
                         if (!result) {
                             searchOff(barcode);
@@ -458,67 +460,171 @@ angular.module('bars.admin.food', [
             data.sei_name_plural = item.name_plural;
             data.sei_unit_name = item.unit_name;
             data.sei_unit_name_plural = item.unit_name_plural;
+            data.keywords = item.keywords;
         };
 
-        $scope.go = function() {
-            function saveFood() {
-                if ($scope.new_sell) {
-                    $scope.sell_item.tax *= 0.01;
-                    return $scope.sell_item.$save().then(function (sellItem) {
-                        $scope.stock_item.sellitem = sellItem;
-                        return $scope.stock_item.$save().then(function (stockItem) {
-                            resetf();
-                            return stockItem;
-                        });
-                    }, function(errors) {
-                        // TODO: display form errors
-                    });
-                } else {
-                    return $scope.stock_item.$save().then(function (stockItem) {
-                        resetf();
-                        return stockItem;
-                    });
-                }
-            }
+        $scope.addFood = function() {
+            // function saveFood() {
+            //     if ($scope.new_sell) {
+            //         $scope.sell_item.tax *= 0.01;
+            //         return $scope.sell_item.$save().then(function (sellItem) {
+            //             $scope.stock_item.sellitem = sellItem;
+            //             return $scope.stock_item.$save().then(function (stockItem) {
+            //                 resetf();
+            //                 return stockItem;
+            //             });
+            //         }, function(errors) {
+            //             // TODO: display form errors
+            //         });
+            //     } else {
+            //         return $scope.stock_item.$save().then(function (stockItem) {
+            //             resetf();
+            //             return stockItem;
+            //         });
+            //     }
+            // }
+            //
+            // if ($scope.is_pack) {
+            //     if ($scope.buy_item.id) {
+            //         return $scope.buy_item_price.$save();
+            //     } else {
+            //         $scope.buy_item.barcode = $scope.barcode;
+            //         return $scope.buy_item.$save().then(function (buyItem) {
+            //             $scope.buy_item_price.buyitem = buyItem;
+            //             $scope.buy_item.id = buyItem.id;
+            //             resetf();
+            //             return $scope.buy_item_price.$save();
+            //         });
+            //     }
+            // } else {
+            //     $scope.stock_item.qty = 0;
+            //     $scope.stock_item.sell_to_buy = 1/$scope.stock_item.sell_to_buy;
+            //     $scope.stock_item.price = $scope.buy_item_price.price;
+            //
+            //     if ($scope.new_details) {
+            //         $scope.buy_item.itemqty = 1;
+            //         $scope.buy_item.barcode = $scope.barcode;
+            //
+            //         return $scope.item_details.$save().then(function (itemDetails) {
+            //             $scope.buy_item.details = itemDetails;
+            //             $scope.stock_item.details = itemDetails;
+            //             return $scope.buy_item.$save().then(function (buyItem) {
+            //                 $scope.buy_item.id = buyItem.id;
+            //                 $scope.buy_item_price.buyitem = buyItem;
+            //                 return $scope.buy_item_price.$save().then(saveFood);
+            //             })
+            //         }, function(errors) {
+            //             // TODO: display form errors
+            //         });
+            //     } else {
+            //         $scope.stock_item.details = $scope.item_details;
+            //         $scope.buy_item_price.buyitem = $scope.buy_item;
+            //         return $scope.buy_item_price.$save().then(saveFood);
+            //     }
+            // }
 
-            if ($scope.is_pack) {
-                if ($scope.buy_item.id) {
-                    return $scope.buy_item_price.$save();
+            // Création
+            var buy_item = BuyItem.create();
+            var buy_item_price = BuyItemPrice.create();
+            var item_details = ItemDetails.create();
+            var stock_item = StockItem.create();
+            var sell_item = SellItem.create();
+
+            // Préparation
+            buy_item_price.price = data.bip_price;
+            stock_item.sell_to_buy = 1/data.sti_sell_to_buy;
+            stock_item.price = data.bip_price;
+            if (!data.bi_id) {
+                buy_item.barcode = data.barcode;
+                if (data.is_pack) {
+                    buy_item.itemqty = data.bi_itemqty;
                 } else {
-                    $scope.buy_item.barcode = $scope.barcode;
-                    return $scope.buy_item.$save().then(function (buyItem) {
-                        $scope.buy_item_price.buyitem = buyItem;
-                        $scope.buy_item.id = buyItem.id;
-                        resetf();
-                        return $scope.buy_item_price.$save();
-                    });
+                    buy_item.itemqty = 1;
                 }
             } else {
-                $scope.stock_item.qty = 0;
-                $scope.stock_item.sell_to_buy = 1/$scope.stock_item.sell_to_buy;
-                $scope.stock_item.price = $scope.buy_item_price.price;
+                buy_item_price.buyitem = data.bi_id;
+            }
+            if (!data.id_id) {
+                item_details.name = data.id_name;
+                item_details.name_plural = data.id_name_plural;
+                item_details.keywords = data.keywords;
+            } else {
+                buy_item.details = data.id_id;
+                stock_item.details = data.id_id;
+            }
+            if (!data.sei_id) {
+                sell_item.name = data.sei_name;
+                sell_item.name_plural = data.sei_name_plural;
+                sell_item.keywords = data.keywords;
+                sell_item.unit_name = data.sei_unit_name;
+                sell_item.unit_name_plural = data.sei_unit_name_plural;
+                sell_item.tax = data.sei_tax*0.01;
+            } else {
+                stock_item.sellitem = data.sei_id;
+            }
+            console.log(data);
+            console.log(buy_item);
+            console.log(buy_item_price);
+            console.log(item_details);
+            console.log(stock_item);
+            console.log(sell_item);
 
-                if ($scope.new_details) {
-                    $scope.buy_item.itemqty = 1;
-                    $scope.buy_item.barcode = $scope.barcode;
-
-                    return $scope.item_details.$save().then(function (itemDetails) {
-                        $scope.buy_item.details = itemDetails;
-                        $scope.stock_item.details = itemDetails;
-                        return $scope.buy_item.$save().then(function (buyItem) {
-                            $scope.buy_item.id = buyItem.id;
-                            $scope.buy_item_price.buyitem = buyItem;
-                            return $scope.buy_item_price.$save().then(saveFood);
-                        })
-                    }, function(errors) {
-                        // TODO: display form errors
-                    });
+            // Enregistrement
+            function deleteEntities() {
+                buy_item.$delete();
+                buy_item_price.$delete();
+                item_details.$delete();
+                stock_item.$delete();
+                sell_item.$delete();
+            }
+            function saveBuyItemPrice() {
+                buy_item_price.$save().then(function (bip) {
+                    buy_item_price = bip;
+                }, deleteEntities);
+            }
+            function saveBuyItem() {
+                if (!data.bi_id) {
+                    buy_item.$save().then(function (bi) {
+                        buy_item = bi;
+                        buy_item_price.buyitem = bi.id;
+                        saveBuyItemPrice();
+                    }, deleteEntities);
                 } else {
-                    $scope.stock_item.details = $scope.item_details;
-                    $scope.buy_item_price.buyitem = $scope.buy_item;
-                    return $scope.buy_item_price.$save().then(saveFood);
+                    saveBuyItemPrice();
                 }
             }
+            function saveItemDetails() {
+                if (!data.id_id) {
+                    item_details.$save().then(function (id) {
+                        item_details = id;
+                        stock_item.details = id.id;
+                        buy_item.details = id.id;
+                        saveBuyItem();
+                        saveSellItem();
+                    }, deleteEntities);
+                } else {
+                    saveBuyItem();
+                    saveSellItem();
+                }
+            }
+            function saveSellItem() {
+                if (!data.sei_id) {
+                    sell_item.$save().then(function (sei) {
+                        sell_item = sei;
+                        stock_item.sellitem = sei.id;
+                        saveStockItem();
+                    }, deleteEntities);
+                } else {
+                    saveStockItem();
+                }
+            }
+            function saveStockItem() {
+                stock_item.$save().then(function (sti) {
+                    stock_item = sti;
+                }, deleteEntities);
+            }
+
+            saveItemDetails();
         };
 
         $scope.isValid = function () {
