@@ -103,7 +103,7 @@ angular.module('bars.api.transaction', [
     }])
 .factory('api.services.action', ['api.models.transaction',
     function(Transaction) {
-        var actions = ["buy", "throw", "give", "punish", "meal", "appro", "inventory", "deposit", "collectivePayment", "refund", "withdraw", "barInvestment"];
+        var actions = ["buy", "throw", "give", "punish", "meal", "appro", "inventory", "deposit", "collectivePayment", "refund", "withdraw", "barInvestment", "agios"];
         var Action = {};
         actions.forEach(function(action) {
             Action[action] = function(params) {
@@ -221,6 +221,8 @@ angular.module('bars.api.transaction', [
                             if (t.type == 'buy') {
                                 return sum + t.moneyflow;
                             } else if (t.type == 'punish' && t.account.owner.id == fuser) {
+                                return sum - t.moneyflow;
+                            } else if (t.type == 'agios' && t.account.owner.id == fuser) {
                                 return sum - t.moneyflow;
                             } else if (t.type == 'give') {
                                 if (t.account.owner.id == fuser) {
