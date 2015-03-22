@@ -570,17 +570,13 @@ angular.module('bars.admin.food', [
             console.log(sell_item);
 
             // Enregistrement
-            function deleteEntities() {
-                buy_item.$delete();
-                buy_item_price.$delete();
-                item_details.$delete();
-                stock_item.$delete();
-                sell_item.$delete();
+            function errorSaving() {
+                console.log("Une erreur s'est produite lors de l'enregistrement d'une entité")
             }
             function saveBuyItemPrice() {
                 buy_item_price.$save().then(function (bip) {
                     buy_item_price = bip;
-                }, deleteEntities);
+                }, errorSaving);
             }
             function saveBuyItem() {
                 if (!data.bi_id) {
@@ -588,7 +584,7 @@ angular.module('bars.admin.food', [
                         buy_item = bi;
                         buy_item_price.buyitem = bi.id;
                         saveBuyItemPrice();
-                    }, deleteEntities);
+                    }, errorSaving);
                 } else {
                     saveBuyItemPrice();
                 }
@@ -601,7 +597,7 @@ angular.module('bars.admin.food', [
                         buy_item.details = id.id;
                         saveBuyItem();
                         saveSellItem();
-                    }, deleteEntities);
+                    }, errorSaving);
                 } else {
                     saveBuyItem();
                     saveSellItem();
@@ -613,7 +609,7 @@ angular.module('bars.admin.food', [
                         sell_item = sei;
                         stock_item.sellitem = sei.id;
                         saveStockItem();
-                    }, deleteEntities);
+                    }, errorSaving);
                 } else {
                     saveStockItem();
                 }
@@ -621,10 +617,14 @@ angular.module('bars.admin.food', [
             function saveStockItem() {
                 stock_item.$save().then(function (sti) {
                     stock_item = sti;
-                }, deleteEntities);
+                }, errorSaving);
             }
 
-            saveItemDetails();
+            if (data.is_pack) {
+                saveBuyItem();
+            } else {
+                saveItemDetails();
+            }
         };
 
         $scope.isValid = function () {
