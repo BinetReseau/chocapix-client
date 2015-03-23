@@ -232,6 +232,7 @@ angular.module('bars.admin.food', [
                 sei_tax: '',
                 keywords: ''
             };
+            $scope.data = data;
             $scope.allow_barcode_edit = true;
             // $scope.buy_item = BuyItem.create();
             // $scope.item_details = ItemDetails.create();
@@ -262,7 +263,6 @@ angular.module('bars.admin.food', [
             $scope.allow_barcode_edit = false;
             search(data.barcode);
         }
-        $scope.data = data;
 
         function resetf() {
             init();
@@ -346,7 +346,7 @@ angular.module('bars.admin.food', [
                 //     return false;
                 // }
                 $scope.barcodeErrorSI = true;
-                $scope.block = false;
+                $scope.block = true;
                 return true;
             } else {
                 data.bi_id = null;
@@ -573,9 +573,21 @@ angular.module('bars.admin.food', [
             function errorSaving() {
                 console.log("Une erreur s'est produite lors de l'enregistrement d'une entité")
             }
+            var nbEnd = 0;
+            function entityEnd(nb) {
+                if (!nb) {
+                    nb = 1;
+                }
+                nbEnd += nb;
+                if (nbEnd == 5) {
+                    console.log('Init');
+                    init();
+                }
+            }
             function saveBuyItemPrice() {
                 buy_item_price.$save().then(function (bip) {
                     buy_item_price = bip;
+                    entityEnd();
                 }, errorSaving);
             }
             function saveBuyItem() {
@@ -584,8 +596,10 @@ angular.module('bars.admin.food', [
                         buy_item = bi;
                         buy_item_price.buyitem = bi.id;
                         saveBuyItemPrice();
+                        entityEnd();
                     }, errorSaving);
                 } else {
+                    entityEnd();
                     saveBuyItemPrice();
                 }
             }
@@ -597,8 +611,10 @@ angular.module('bars.admin.food', [
                         buy_item.details = id.id;
                         saveBuyItem();
                         saveSellItem();
+                        entityEnd();
                     }, errorSaving);
                 } else {
+                    entityEnd();
                     saveBuyItem();
                     saveSellItem();
                 }
@@ -609,18 +625,22 @@ angular.module('bars.admin.food', [
                         sell_item = sei;
                         stock_item.sellitem = sei.id;
                         saveStockItem();
+                        entityEnd();
                     }, errorSaving);
                 } else {
+                    entityEnd();
                     saveStockItem();
                 }
             }
             function saveStockItem() {
                 stock_item.$save().then(function (sti) {
                     stock_item = sti;
+                    entityEnd();
                 }, errorSaving);
             }
 
             if (data.is_pack) {
+                entityEnd(3);
                 saveBuyItem();
             } else {
                 saveItemDetails();
