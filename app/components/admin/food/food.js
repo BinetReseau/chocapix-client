@@ -263,6 +263,10 @@ angular.module('bars.admin.food', [
             $scope.allow_barcode_edit = false;
             search(data.barcode);
         }
+        $scope.alerts = [];
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        };
 
         function resetf() {
             init();
@@ -574,7 +578,9 @@ angular.module('bars.admin.food', [
 
             // Enregistrement
             function errorSaving() {
-                console.log("Une erreur s'est produite lors de l'enregistrement d'une entité")
+                $scope.alerts.push({type: 'danger', msg: "Une erreur s'est produite lors de l'ajout de l'aliment. Veuillez le signaler au Binet Réseau. Celui-ci a probablement été créé a moitié et risque de faire bugguer le site."});
+                console.log("Une erreur s'est produite lors de l'enregistrement d'une entité");
+                init();
             }
             var nbEnd = 0;
             function entityEnd(nb) {
@@ -583,7 +589,7 @@ angular.module('bars.admin.food', [
                 }
                 nbEnd += nb;
                 if (nbEnd == 5) {
-                    console.log('Init');
+                    $scope.alerts.push({type: 'success', msg: "L'aliment a été correctement créé."});
                     init();
                 }
             }
@@ -651,7 +657,7 @@ angular.module('bars.admin.food', [
         };
 
         $scope.isValid = function () {
-            return data.bip_price &&
+            return !$scope.block && data.bip_price &&
                 (
                     (data.is_pack // C'est un pack
                         && data.bi_itemqty && data.id_id) ||
