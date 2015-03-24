@@ -275,6 +275,9 @@ angular.module('bars.admin.food', [
         // Cherche dans la bdd globale
         // Appelée par search() (basic = false) et par ng-change sur barcode (basic = true)
         function searchGlobal (barcode, basic) {
+            if (!barcode) {
+                return false;
+            }
             // On regarde si le bar vend déjà ce code-barre
             var buy_item_price = _.find(BuyItemPrice.all(), function (f) {
                 return f.buyitem.barcode == barcode;
