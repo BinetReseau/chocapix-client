@@ -49,6 +49,7 @@ gulp.task('html', ['wiredep', 'scripts', 'partials'], function () {
     .pipe($.rev())
 
     .pipe(jsFilter)
+    .pipe($.stripDebug())
     .pipe($.ngAnnotate())
     .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
     .pipe(jsFilter.restore())
