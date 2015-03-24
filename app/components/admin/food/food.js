@@ -656,7 +656,7 @@ angular.module('bars.admin.food', [
                         && (
                             (data.new_sell // C'est un nouvel aliment
                                 && data.id_name && data.id_name_plural
-                                && data.sei_name && data.sei_name_plural && data.sei_tax
+                                && data.sei_name && data.sei_name_plural && (data.sei_tax === 0 || data.sei_tax > 0)
                                 && data.sti_sell_to_buy
                             ) ||
                             (!data.new_sell
