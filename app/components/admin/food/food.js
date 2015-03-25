@@ -802,7 +802,7 @@ angular.module('bars.admin.food', [
             recomputeAmount: function() {
                 var totalPrice = 0;
                 _.forEach(this.itemsList, function(item, i) {
-                    if (item.qty) {
+                    if (item.qty === 0 || item.qty > 0) {
                         item.qty_diff = item.qty * item.sell_to_buy / item.stockitem.sell_to_buy - item.stockitem.qty;
                     }
                     totalPrice += item.qty_diff * item.stockitem.price;
