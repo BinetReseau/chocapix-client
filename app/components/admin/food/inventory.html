@@ -55,7 +55,7 @@
                         </span>
                     </td>
                     <td class="vmiddle">
-                        <span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:qty item="item.stockitem" qty="item.qty_diff" out="item.sell_to_buy == 1 && 'buy' || 'sell'"></bars:stockitem:qty></span><span class="small">&nbsp;pour </span><span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:price item="item.stockitem" qty="item.qty_diff" out="item.sell_to_buy == 1 && 'buy' || 'sell'"></bars:stockitem:price></span>
+                        <span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:qty item="item.stockitem" qty="item.qty_diff" out="item.sell_to_buy == 1 && 'buy' || 'sell'"></bars:stockitem:qty></span><span class="small">&nbsp;pour </span><span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:price item="item.stockitem" qty="item.qty_diff"></bars:stockitem:price></span>
                     </td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="inventory.removeItem(item)" class="link">
