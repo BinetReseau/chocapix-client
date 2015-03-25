@@ -4,9 +4,9 @@ angular.module('bars.api.food', [
     'APIModel'
     ])
 
-.factory('api.models.buyitem', ['APIModel',
-    function(APIModel) {
-        return new APIModel({
+.factory('api.models.buyitem', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
+        var model = new APIModel({
                 url: 'buyitem',
                 type: 'BuyItem',
                 structure: {
@@ -19,6 +19,13 @@ angular.module('bars.api.food', [
                     }
                 }
             });
+        model.request = function(params) {
+            return APIInterface.request({
+                'url': 'buyitem',
+                'method': 'GET',
+                'params': params});
+        }
+        return model;
     }])
 .factory('api.models.buyitemprice', ['APIModel',
     function(APIModel) {
@@ -90,7 +97,7 @@ angular.module('bars.api.food', [
                     'filter': function(s) {
                         var all_keywords = "";
                         _.forEach(this.stockitems, function(n, i) { all_keywords = all_keywords + " " + n.details.keywords; });
-                        var searchable = this.name + " " + all_keywords;
+                        var searchable = this.name + " " + all_keywords + " " + this.keywords;
                         return !this.deleted && (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
@@ -346,6 +353,7 @@ angular.module('bars.api.food', [
             food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
             food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
+            food_item.keywords = $scope.newFood_item.keywords;
             food_item.$save();
         };
         $scope.resetFood();

@@ -2,11 +2,5 @@
     <h3 class="modal-title">Ajouter un nouvel aliment</h3>
 </div>
 <div class="modal-body">
-    <form class="form-horizontal">
-        <bars:admin:food:add sell-item="sell_item" item-details="item_details" buy-item="buy_item" buy-item-price="buy_item_price" stock-item="stock_item" add="add" new-details="new_details"></bars:admin:food:add>
-    </form>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="addFood()">Ajouter</button>
-    <button class="btn btn-warning" ng-click="cancel()">Annuler</button>
+    <bars:admin:food:add barcode="barcode" buy-item="buy_item" origin="origin"></bars:admin:food:add>
 </div>
