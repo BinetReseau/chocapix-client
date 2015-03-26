@@ -58,7 +58,7 @@ angular.module('bars.api.account', [
             controller: 'api.ctrl.account_detail',
             resolve:{
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
-                    return Account.get($stateParams.id);
+                    return Account.getSync($stateParams.id);
                 }],
                 roles: ['api.models.role', 'account', function(Role, account) {
                     return Role.ofUser(account.owner.id);
@@ -170,6 +170,13 @@ angular.module('bars.api.account', [
         };
         $scope.permExist = function (perm) {
             return $scope.permsName[perm];
+        };
+        $scope.removeRole = function (role) {
+            role.$delete();
+            updateRoles();
+        };
+        function updateRoles() {
+            roles = Role.ofUser(account.owner.id)
         };
     }])
 
