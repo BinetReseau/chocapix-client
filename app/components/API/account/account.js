@@ -91,8 +91,8 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user', 'roles',
-    function($scope, account, APIAction, User, roles) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles',
+    function($scope, account, APIAction, User, Role, roles) {
         $scope.account = account;
         $scope.query = {
             type: 'give',
@@ -172,11 +172,12 @@ angular.module('bars.api.account', [
             return $scope.permsName[perm];
         };
         $scope.removeRole = function (role) {
-            role.$delete();
-            updateRoles();
+            role.$delete().then(function () {
+                updateRoles();
+            });
         };
         function updateRoles() {
-            roles = Role.ofUser(account.owner.id)
+            $scope.roles = Role.ofUser(account.owner.id);
         };
     }])
 
