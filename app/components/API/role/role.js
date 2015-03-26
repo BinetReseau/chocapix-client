@@ -16,11 +16,11 @@ angular.module('bars.api.role', [
                 methods: {}
             });
 
-        model.ofUser = function(user) {
+        model.ofUser = function(user, bar) {
             return APIInterface.request({
                 'url': 'role',
                 'method': 'GET',
-                'params': {user: user}});
+                'params': {user: user, bar: bar}});
         };
 
         return model;

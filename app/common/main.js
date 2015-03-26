@@ -82,9 +82,16 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                roles: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
+                rolesc: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
                     if (AuthUser.isAuthenticated()) {
                         return Role.ofUser(user.id);
+                    } else {
+                        return null;
+                    }
+                }],
+                rolesg: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
+                    if (AuthUser.isAuthenticated()) {
+                        return Role.ofUser(user.id, 'root');
                     } else {
                         return null;
                     }
@@ -260,8 +267,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'roles',
-    function($scope, AuthUser, Account, User, Role, Meal, user, account, roles) {
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'rolesc', 'rolesg',
+    function($scope, AuthUser, Account, User, Role, Meal, user, account, rolesc, rolesg) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
@@ -271,8 +278,10 @@ angular.module('bars.main', [
         if (user) {
             AuthUser.account = account;
             AuthUser.user = user;
-            AuthUser.roles = roles;
-            AuthUser.computePerms();
+            if (Array.isArray(rolesc) && Array.isArray(rolesg)) {
+                AuthUser.roles = rolesc.concat(rolesg);
+                AuthUser.computePerms();
+            }
             Meal.account = AuthUser.account;
             Meal.init();
         }

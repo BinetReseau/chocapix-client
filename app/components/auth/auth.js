@@ -6,7 +6,7 @@ angular.module('bars.auth', [
 
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
 .factory('auth.service',
-    ['$injector', '$localStorage', '$q', 'APIURL', 
+    ['$injector', '$localStorage', '$q', 'APIURL',
     function ($injector, $localStorage, $q, APIURL) {
         if ($localStorage.auth === undefined) {
             $localStorage.auth = {
@@ -38,7 +38,7 @@ angular.module('bars.auth', [
 }])
 
 .factory('auth.user',
-    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role', '$state', '$stateParams', 
+    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role', '$state', '$stateParams',
     function (AuthService, $rootScope, $q, $timeout, Account, User, Role, $state, $stateParams) {
         return {
             user: null,
@@ -69,8 +69,16 @@ angular.module('bars.auth', [
                             }, function (error) {
                                 self.account = null;
                             });
+                            // Permissions dans le bar courant
                             Role.ofUser(user.id).then(function(roles) {
-                                self.roles = roles;
+                                self.roles = self.roles.concat(roles);
+                                self.computePerms();
+                            }, function (error) {
+                                self.roles = [];
+                            });
+                            // Permissions globales
+                            Role.ofUser(user.id, 'root').then(function(roles) {
+                                self.roles = self.roles.concat(roles);
                                 self.computePerms();
                             }, function (error) {
                                 self.roles = [];

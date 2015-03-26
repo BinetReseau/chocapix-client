@@ -110,7 +110,9 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
             req.data = this.unparse(req.data);
             if (this.getBar()) {
                 if (req.params) {
-                    req.params['bar'] = this.getBar();
+                    if (!req.params['bar']) {
+                        req.params['bar'] = this.getBar();
+                    }
                 } else {
                     req.params = {bar: this.getBar()};
                 }
