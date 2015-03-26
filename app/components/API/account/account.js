@@ -168,8 +168,18 @@ angular.module('bars.api.account', [
             "bars_transactions.add_approtransaction": "Faire une appro",
             "bars_core.change_role": "Gérer les rôles"
         };
+        $scope.rolen = 'customer';
         $scope.permExist = function (perm) {
             return $scope.permsName[perm];
+        };
+        $scope.addRole = function (name) {
+            var newRole = Role.create();
+            newRole.user = account.owner.id;
+            newRole.name = name;
+            newRole.bar = 'avironjone'; // TEMP
+            newRole.$save().then(function () {
+                updateRoles();
+            });
         };
         $scope.removeRole = function (role) {
             role.$delete().then(function () {
@@ -177,7 +187,9 @@ angular.module('bars.api.account', [
             });
         };
         function updateRoles() {
-            $scope.roles = Role.ofUser(account.owner.id);
+            Role.ofUser(account.owner.id).then(function (r) {
+                $scope.roles = r;
+            });
         };
     }])
 
