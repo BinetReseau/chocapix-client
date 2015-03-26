@@ -102,6 +102,31 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <fieldset>
+                                <h3>Modifications des rôles</h3>
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Permissions</th>
+                                            <th>Supprimer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="role in roles">
+                                            <td>{{ rolesName[role.name] }}</td>
+                                            <td>
+                                                <span ng-repeat="perm in role.perms | filter:permExist">
+                                                    {{ permsName[perm] }}<span ng-if="!$last">, </span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a title="Retirer ce rôle" class="link" ng-click="">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <h3>Réinitialiser le mot de passe</h3>
                                 <div class="alert alert-success alert-dismissible" role="alert" ng-if="pwdSuccess == 1">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>

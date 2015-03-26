@@ -58,7 +58,10 @@ angular.module('bars.api.account', [
             controller: 'api.ctrl.account_detail',
             resolve:{
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
-                    return Account.getSync($stateParams.id);
+                    return Account.get($stateParams.id);
+                }],
+                roles: ['api.models.role', 'account', function(Role, account) {
+                    return Role.ofUser(account.owner.id);
                 }]
             }
         });
@@ -88,8 +91,8 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user',
-    function($scope, account, APIAction, User) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 'roles',
+    function($scope, account, APIAction, User, roles) {
         $scope.account = account;
         $scope.query = {
             type: 'give',
@@ -129,6 +132,7 @@ angular.module('bars.api.account', [
             username: false
         };
         // Onglet "Modifier"
+        $scope.roles = roles;
         $scope.pwdSuccess = 0;
         $scope.jaiCompris = false;
         $scope.resetPwd = function() {
@@ -137,6 +141,35 @@ angular.module('bars.api.account', [
         $scope.toggleDeleted = function() {
             $scope.account.deleted = !$scope.account.deleted;
             $scope.account.$save();
+        };
+
+        $scope.rolesName = {
+            customer: "Consommateur",
+            treasurer: "Trésorier",
+            newsmanager: "Respo actualités",
+            policeman: "Respo amendes",
+            appromanager: "Respo appro",
+            inventorymanager: "Respo inventaire",
+            stockmanager: "Respo appro et inventaire",
+            admin: "Respo bar"
+        };
+        $scope.permsName = {
+            "bars_transactions.add_buytransaction": "Acheter un aliment",
+            "bars_transactions.add_throwtransaction": "Jeter un aliment",
+            "bars_transactions.add_givetransaction": "Faire un don",
+            "bars_transactions.add_mealtransaction": "Faire une bouffe à plusieurs",
+            "bars_bugtracker.add_bugreport": "Reporter un bug",
+            "bars_news.change_news": "Gérer les actualités",
+            "bars_transactions.add_punishtransaction": "Mettre une amende",
+            "bars_transactions.add_collectivePaymenttransaction": "Paiement collectif",
+            "bars_transactions.add_barInvestmenttransaction": "Loguer les achats de matériel du bar",
+            "bars_core.change_account": "Gérer les comptes",
+            "bars_transactions.add_inventorytransaction": "Faire un inventaire",
+            "bars_transactions.add_approtransaction": "Faire une appro",
+            "bars_core.change_role": "Gérer les rôles"
+        };
+        $scope.permExist = function (perm) {
+            return $scope.permsName[perm];
         };
     }])
 
