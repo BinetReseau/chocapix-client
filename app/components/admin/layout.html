@@ -8,11 +8,11 @@
                 <span class="glyphicon glyphicon-cutlery"></span> <span class="hidden-xs">Aliments</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_item')">Ajouter un aliment</a></li>
+                <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_itemdetails') && user.can('add_sellitem')">Ajouter un aliment</a></li>
                 <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a></li>
                 <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                 <li><a ui-sref="bar.admin.food.stockitems_list({ bar: bar.id })">Liste des aliments</a></li>
-                <li><a ui-sref="bar.admin.food.regroup({ bar: bar.id })" ng-if="user.can('add_item')">Regrouper des articles</a></li>
+                <li><a ui-sref="bar.admin.food.regroup({ bar: bar.id })" ng-if="user.can('add_sellitem')">Regrouper des articles</a></li>
                 <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })" ng-if="false">Graphiques</a></li>
             </ul>
         </li>
@@ -21,9 +21,9 @@
                 <span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Utilisateurs</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="bar.admin.account.add({ bar: bar.id })">Créer un utilisateur</a></li>
+                <li><a ui-sref="bar.admin.account.add({ bar: bar.id })" ng-if="user.can('add_user')">Créer un utilisateur</a></li>
                 <li><a ui-sref="bar.admin.account.link({ bar: bar.id })" ng-if="user.can('add_account')">Importer un utilisateur existant</a></li>
-                <li><a ui-sref="bar.admin.account.collectivePayment({ bar: bar.id })">Paiement collectif</a></li>
+                <li><a ui-sref="bar.admin.account.collectivePayment({ bar: bar.id })" ng-if="user.can('add_collectivePaymenttransaction')">Paiement collectif</a></li>
                 <li><a ui-sref="bar.admin.account.import({ bar: bar.id })">Importer des utilisateurs de bars</a></li>
             </ul>
         </li>
@@ -43,7 +43,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                 <li><a ui-sref="bar.admin.compta.infos({ bar: bar.id })">État du bar</a></li>
-                <li><a ui-sref="bar.admin.compta.investment({ bar: bar.id })">Loguer du matériel</a></li>
+                <li><a ui-sref="bar.admin.compta.investment({ bar: bar.id })" ng-if="user.can('add_barInvestmenttransaction')">Loguer du matériel</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'settings' && 'active'">

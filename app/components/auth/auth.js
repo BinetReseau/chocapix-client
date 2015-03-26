@@ -45,7 +45,6 @@ angular.module('bars.auth', [
             account: null,
             roles: [],
             perms: [],
-            admin: false, // TEMP [TODO] there are no global perms now...
             login: function(credentials) {
                 var self = this;
                 return AuthService.login(credentials).then(
@@ -113,17 +112,13 @@ angular.module('bars.auth', [
             },
             computePerms: function() {
                 this.perms = [];
-                this.admin = false;
                 for (var i = 0; i < this.roles.length; i++) {
                     this.perms = this.perms.concat(this.roles[i].perms);
-                    if (this.roles[i].name == 'admin' || this.roles[i].name == 'staffmanager') {
-                        this.admin = true;
-                    }
                 }
                 _.uniq(this.perms);
             },
             can: function (perm) {
-                return this.isAuthenticated() && (this.admin || _.findIndex(this.perms, function (p) {
+                return this.isAuthenticated() && (_.findIndex(this.perms, function (p) {
                     return p.indexOf('.' + perm) > -1;
                 }) > -1);
             },
