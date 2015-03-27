@@ -108,7 +108,8 @@ function($http, OFFURL) {
                     }
                 }
             }
-            console.log(quantity);
+            sell_to_buy = parseInt(sell_to_buy);
+            console.log(sell_to_buy);
             return {
                 sell_name: name,
                 sell_name_plural: name,
