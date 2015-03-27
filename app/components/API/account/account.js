@@ -160,6 +160,7 @@ angular.module('bars.api.account', [
             "bars_transactions.add_mealtransaction": "Faire une bouffe à plusieurs",
             "bars_bugtracker.add_bugreport": "Reporter un bug",
             "bars_news.change_news": "Gérer les actualités",
+            "bars_transactions.add_deposittransaction": "Créditer un compte",
             "bars_transactions.add_punishtransaction": "Mettre une amende",
             "bars_transactions.add_collectivePaymenttransaction": "Paiement collectif",
             "bars_transactions.add_barInvestmenttransaction": "Loguer les achats de matériel du bar",
@@ -180,6 +181,20 @@ angular.module('bars.api.account', [
             newRole.$save().then(function () {
                 updateRoles();
             });
+            if (name == "appromanager" || name == "inventorymanager" || name == "stockmanager") {
+                var newGRole = Role.create();
+                newGRole.user = account.owner.id;
+                newGRole.name = 'additem'; // TEMP - TO CHANGE
+                newGRole.bar = 'root';
+                newGRole.$save();
+            }
+            if (name == "admin") {
+                var newGRole = Role.create();
+                newGRole.user = account.owner.id;
+                newGRole.name = 'respobar'; // TEMP - TO CHANGE
+                newGRole.bar = 'root';
+                newGRole.$save();
+            }
         };
         $scope.removeRole = function (role) {
             role.$delete().then(function () {
