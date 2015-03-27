@@ -81,11 +81,15 @@ angular.module('bars.admin.account', [
                     $scope.amoney = $scope.naccount.amoney;
                     delete $scope.naccount.amoney;
                     $scope.naccount.$save().then(function(a) {
-                        APIAction.deposit({account: a.id, amount: $scope.amoney}).then(function() {
+                        if ($scope.amoney > 0) {
+                            APIAction.deposit({account: a.id, amount: $scope.amoney}).then(function() {
+                                $state.go('bar.account.details', {id: a.id});
+                            }, function(errors) {
+                                console.log("Erreur dépôt chèque.")
+                            });
+                        } else {
                             $state.go('bar.account.details', {id: a.id});
-                        }, function(errors) {
-                            console.log("Erreur dépôt chèque.")
-                        });
+                        }
                     }, function(errors) {
                         console.log("Erreur création Account.");
                     });
