@@ -1,4 +1,4 @@
-<div class="col-sm-12 col-md-6 col-lg-4">
+<div class="col-sm-12">
     <h1 class="text-center">
         <span class="label" ng-class="money >= 0 && 'label-success' || 'label-danger'">{{ money >= 0 && '+' || '' }} {{ money | currency }}</span><br />
         <small ng-if="money >= 0">Félicitations, le bar est en positif</small>
@@ -34,7 +34,7 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12 col-md-6 col-lg-8">
+<div class="col-sm-12 col-md-6 col-lg-8" ng-show="false">
     <div class="graph" id="graph1">
     </div>
     <div class="graphiquet">
