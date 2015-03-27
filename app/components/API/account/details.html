@@ -48,11 +48,18 @@
                                             <a class="btn btn-xs btn-success" ui-sref="bar.settings.credentials({bar: bar.id})">Modifier mon pseudo</a>
                                         </span>
                                     </td>
-                                    <td class="h4 title">Respo bar</td>
+                                    <td class="h4 title">{{ 'Rôle'|affs:(roles|filter:{name: '!customer'}).length }}</td>
                                     <td class="text-right value">
-                                        <span class="h4"><span class="label label-default">
-                                            -
-                                        </span></span>
+                                        <span class="h4">
+                                            <span class="label label-default" ng-if="roles.length == 1 && roles[0].name == 'customer'">
+                                                -
+                                            </span>
+                                            <span ng-if="roles.length > 1 || roles[0].name != 'customer'">
+                                                <span class="label" ng-class="role.name == 'admin' && 'label-success' || 'label-info'" ng-repeat="role in roles|filter:{name: '!customer'}" style="margin-left: 5px;">
+                                                    {{ rolesName[role.name] }}
+                                                </span>
+                                            </span>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
