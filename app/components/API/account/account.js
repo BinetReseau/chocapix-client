@@ -153,6 +153,16 @@ angular.module('bars.api.account', [
             stockmanager: "Respo appro et inventaire",
             admin: "Respo bar"
         };
+        $scope.rolesNameAuthorized = {
+            customer: "Consommateur",
+            treasurer: "Trésorier",
+            newsmanager: "Respo actualités",
+            policeman: "Respo amendes"
+            // appromanager: "Respo appro",
+            // inventorymanager: "Respo inventaire",
+            // stockmanager: "Respo appro et inventaire",
+            // admin: "Respo bar"
+        };
         $scope.permsName = {
             "bars_transactions.add_buytransaction": "Acheter un aliment",
             "bars_transactions.add_throwtransaction": "Jeter un aliment",
