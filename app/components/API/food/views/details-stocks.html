@@ -6,7 +6,7 @@
                 <th>Stock</th>
                 <th>Prix</th>
                 <th>
-                    <a class="btn btn-xs btn-success" ng-click="rattachInit()" ng-if="user.can('change_item')">Ajouter un article</a>
+                    <a class="btn btn-xs btn-success" ng-click="rattachInit()" ng-if="user.can('change_sellitem')">Ajouter un article</a>
                 </th>
             </tr>
         </thead>
@@ -15,7 +15,7 @@
                 <td>{{ si.details.name }}</td>
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
-                <td ng-if="user.can('change_item')">
+                <td ng-if="user.can('change_sellitem')">
                     <a title="Modifier cet aliment" ng-click="enterEdit(si)" class="btn btn-xs btn-warning link" >
                         <span class="glyphicon glyphicon-edit"></span> Modifier
                     </a>
