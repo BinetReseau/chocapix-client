@@ -1,9 +1,6 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
     <h3>Ajouter un nouvel aliment</h3>
     <div>
-        <bars:admin:food:add origin="origin" ng-if="user.can('add_sellitem') && user.can('add_stockitem') && user.can('add_itemdetails') && user.can('add_buyitem') && user.can('add_buyitemprice')"></bars:admin:food:add>
-    </div>
-    <div class="alert alert-danger" ng-if="!(user.can('add_sellitem') && user.can('add_stockitem') && user.can('add_itemdetails') && user.can('add_buyitem') && user.can('add_buyitemprice'))">
-        Vous n'avez pas tous les droits permettant d'ajouter un aliment
+        <bars:admin:food:add origin="origin"></bars:admin:food:add>
     </div>
 </div>

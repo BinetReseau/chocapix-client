@@ -1,4 +1,4 @@
-<form class="form-horizontal" ng-submit="isValid() && addFood()">
+<form class="form-horizontal" ng-submit="isValid() && addFood()" ng-if="user.can('add_sellitem') && user.can('add_stockitem') && user.can('add_itemdetails') && user.can('add_buyitem') && user.can('add_buyitemprice')">
     <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">{{ alert.msg }}</alert>
     <div class="form-group" ng-class="barcodeErrorSI && ' has-error' || ''">
         <label for="fbarcode" class="col-sm-2 control-label">Code-barre</label>
@@ -170,3 +170,6 @@
         </div>
     </div>
 </form>
+<div class="alert alert-danger" ng-if="!(user.can('add_sellitem') && user.can('add_stockitem') && user.can('add_itemdetails') && user.can('add_buyitem') && user.can('add_buyitemprice'))">
+    Vous n'avez pas tous les droits permettant de créer un aliment
+</div>

@@ -151,7 +151,7 @@ angular.module('bars.admin.food', [
                             barcode: function () {
                                 return Appro.itemToAdd;
                             },
-                            buy_item_price: function () {
+                            buy_item: function () {
                                 return undefined;
                             }
                         }
@@ -193,8 +193,9 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.dir.barsadminfoodadd',
-    ['$scope', '$modal', '$timeout', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF',
-    function($scope, $modal, $timeout, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF) {
+    ['$scope', '$modal', '$timeout', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF', 'auth.user',
+    function($scope, $modal, $timeout, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF, user) {
+        $scope.user = user;
         var init_items;
         var data;
         function init() {
