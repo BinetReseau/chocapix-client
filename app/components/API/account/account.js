@@ -59,6 +59,9 @@ angular.module('bars.api.account', [
             resolve:{
                 account: ['api.models.account', '$stateParams', function(Account, $stateParams) {
                     return Account.getSync($stateParams.id);
+                }],
+                roles: ['api.models.role', 'account', function(Role, account) {
+                    return Role.ofUser(account.owner.id);
                 }]
             }
         });
@@ -88,8 +91,8 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user',
-    function($scope, account, APIAction, User) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles',
+    function($scope, account, APIAction, User, Role, roles) {
         $scope.account = account;
         $scope.query = {
             type: 'give',
@@ -129,6 +132,7 @@ angular.module('bars.api.account', [
             username: false
         };
         // Onglet "Modifier"
+        $scope.roles = roles;
         $scope.pwdSuccess = 0;
         $scope.jaiCompris = false;
         $scope.resetPwd = function() {
@@ -137,6 +141,80 @@ angular.module('bars.api.account', [
         $scope.toggleDeleted = function() {
             $scope.account.deleted = !$scope.account.deleted;
             $scope.account.$save();
+        };
+
+        $scope.rolesName = {
+            customer: "Consommateur",
+            treasurer: "Trésorier",
+            newsmanager: "Respo actualités",
+            policeman: "Respo amendes",
+            appromanager: "Respo appro",
+            inventorymanager: "Respo inventaire",
+            stockmanager: "Respo appro et inventaire",
+            admin: "Respo bar"
+        };
+        $scope.rolesNameAuthorized = {
+            customer: "Consommateur",
+            treasurer: "Trésorier",
+            newsmanager: "Respo actualités",
+            policeman: "Respo amendes"
+            // appromanager: "Respo appro",
+            // inventorymanager: "Respo inventaire",
+            // stockmanager: "Respo appro et inventaire",
+            // admin: "Respo bar"
+        };
+        $scope.permsName = {
+            "bars_transactions.add_buytransaction": "Acheter un aliment",
+            "bars_transactions.add_throwtransaction": "Jeter un aliment",
+            "bars_transactions.add_givetransaction": "Faire un don",
+            "bars_transactions.add_mealtransaction": "Faire une bouffe à plusieurs",
+            "bars_bugtracker.add_bugreport": "Reporter un bug",
+            "bars_news.change_news": "Gérer les actualités",
+            "bars_transactions.add_deposittransaction": "Créditer un compte",
+            "bars_transactions.add_punishtransaction": "Mettre une amende",
+            "bars_transactions.add_collectivePaymenttransaction": "Paiement collectif",
+            "bars_transactions.add_barInvestmenttransaction": "Loguer les achats de matériel du bar",
+            "bars_core.change_account": "Gérer les comptes",
+            "bars_transactions.add_inventorytransaction": "Faire un inventaire",
+            "bars_transactions.add_approtransaction": "Faire une appro",
+            "bars_core.change_role": "Gérer les rôles"
+        };
+        $scope.rolen = 'customer';
+        $scope.permExist = function (perm) {
+            return $scope.permsName[perm];
+        };
+        $scope.addRole = function (name) {
+            var newRole = Role.create();
+            newRole.user = account.owner.id;
+            newRole.name = name;
+            newRole.bar = 'avironjone'; // TEMP
+            newRole.$save().then(function () {
+                updateRoles();
+            });
+            if (name == "appromanager" || name == "inventorymanager" || name == "stockmanager") {
+                var newGRole = Role.create();
+                newGRole.user = account.owner.id;
+                newGRole.name = 'additem'; // TEMP - TO CHANGE
+                newGRole.bar = 'root';
+                newGRole.$save();
+            }
+            if (name == "admin") {
+                var newGRole = Role.create();
+                newGRole.user = account.owner.id;
+                newGRole.name = 'respobar'; // TEMP - TO CHANGE
+                newGRole.bar = 'root';
+                newGRole.$save();
+            }
+        };
+        $scope.removeRole = function (role) {
+            role.$delete().then(function () {
+                updateRoles();
+            });
+        };
+        function updateRoles() {
+            Role.ofUser(account.owner.id).then(function (r) {
+                $scope.roles = r;
+            });
         };
     }])
 
