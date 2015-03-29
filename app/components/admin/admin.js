@@ -120,7 +120,7 @@ angular.module('bars.admin', [
             return diff.day;
         }
         var now = new Date();
-        var approDate = new Date(bar.next_scheduled_appro);
+        var approDate = new Date(bar.settings.next_scheduled_appro);
         $scope.nbDaysBeforeAppro = (now.getHours() >= approDate.getHours()) ? dateDiff(now, approDate) + 1 : dateDiff(now, approDate);
     }
 ])

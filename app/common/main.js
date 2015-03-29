@@ -145,7 +145,7 @@ angular.module('bars.main', [
             search: '',
             sellitems: sellitem,
             active: 'index',
-            infos: bar
+            infos: bar.settings
         };
 
         $scope.user = AuthUser;

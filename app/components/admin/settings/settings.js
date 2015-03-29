@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bars.admin.settings', [
-    
+
 ])
 
 .config(['$stateProvider', function($stateProvider) {
@@ -10,23 +10,23 @@ angular.module('bars.admin.settings', [
         templateUrl: "components/admin/settings/home.html",
         controller: 'admin.ctrl.settings',
         resolve: {
-            bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
-                return Bar.get($stateParams.bar);
+            barsettings: ['api.models.barsettings' , '$stateParams', function(BarSettings, $stateParams) {
+                return BarSettings.get($stateParams.bar);
             }]
         }
     });
 }])
 
 .controller('admin.ctrl.settings',
-    ['$scope', 'api.models.bar', 'bar',
-    function($scope, APIBar, bar) {
+    ['$scope', 'api.models.bar', 'barsettings',
+    function($scope, APIBar, barsettings) {
         $scope.admin.active = 'settings';
         // Seuil d'alerte
-        $scope.moneyLimit = bar.money_warning_threshold;
+        $scope.moneyLimit = barsettings.money_warning_threshold;
         $scope.saveMoneyLimit = function() {
             if ($scope.moneyLimit >= 0) {
-                bar.money_warning_threshold = $scope.moneyLimit;
-                bar.$save().then(function(b) {
+                barsettings.money_warning_threshold = $scope.moneyLimit;
+                barsettings.$save().then(function(b) {
                     //
                 }, function(errors) {
                     console.log('Erreur money_warning_threshold...');
@@ -34,22 +34,22 @@ angular.module('bars.admin.settings', [
             }
         };
         // Agios
-        $scope.agiosEnabled = bar.agios_enabled;
-        $scope.agiosThreshold = bar.agios_threshold;
-        $scope.agiosFactor = bar.agios_factor;
+        $scope.agiosEnabled = barsettings.agios_enabled;
+        $scope.agiosThreshold = barsettings.agios_threshold;
+        $scope.agiosFactor = barsettings.agios_factor;
         $scope.saveAgio = function() {
-            bar.agios_enabled = $scope.agiosEnabled;
+            barsettings.agios_enabled = $scope.agiosEnabled;
             if ($scope.agiosFactor >= 0) {
-                bar.agios_factor = $scope.agiosFactor;
+                barsettings.agios_factor = $scope.agiosFactor;
                 if ($scope.agiosThreshold >= 0) {
-                    bar.agios_threshold = $scope.agiosThreshold;
-                    bar.$save().then(function(b) {
+                    barsettings.agios_threshold = $scope.agiosThreshold;
+                    barsettings.$save().then(function(b) {
                         //
                     }, function(errors) {
                         console.log('Erreur agios...');
                     });
                 }
-            } 
+            }
         };
     }]
 )

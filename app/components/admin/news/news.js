@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bars.admin.news', [
-    
+
 ])
 .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('bar.admin.news', {
@@ -12,7 +12,12 @@ angular.module('bars.admin.news', [
         .state('bar.admin.news.next-appro', {
             url: '/next-appro',
             templateUrl: "components/admin/news/next-appro.html",
-            controller: 'admin.ctrl.news.next-appro'
+            controller: 'admin.ctrl.news.next-appro',
+            resolve: {
+                barsettings: ['api.models.barsettings', '$stateParams', function(BarSettings, $stateParams) {
+                    return BarSettings.get($stateParams.bar);
+                }]
+            }
         })
         .state('bar.admin.news.add', {
             url: '/add',
@@ -37,15 +42,15 @@ angular.module('bars.admin.news', [
     ;
 }])
 
-.controller('admin.ctrl.news.next-appro', 
-    ['$scope', 'api.models.bar', 'bar', '$state', 
-    function($scope, APIBar, bar, $state){
+.controller('admin.ctrl.news.next-appro',
+    ['$scope', 'api.models.barsettings', 'barsettings', '$state',
+    function($scope, APIBarSettings, barsettings, $state){
         $scope.admin.active = 'news';
         $scope.now = new Date();
-        $scope.nextAppro = new Date(bar.next_scheduled_appro);
+        $scope.nextAppro = new Date(barsettings.next_scheduled_appro);
         $scope.saveNextAppro = function() {
-            bar.next_scheduled_appro = $scope.nextAppro.toJSON();
-            bar.$save().then(function(b) {
+            barsettings.next_scheduled_appro = $scope.nextAppro.toJSON();
+            barsettings.$save().then(function(b) {
                 $state.go('bar.admin');
             }, function(errors) {
                 console.log('Something went wrong...');
