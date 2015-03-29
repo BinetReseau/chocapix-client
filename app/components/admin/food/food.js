@@ -394,8 +394,12 @@ angular.module('bars.admin.food', [
                         data.is_pack = true;
                         data.bi_itemqty = parseInt(infos.itemqty);
                     }
-                    data.id_name = infos.name;
-                    data.id_name_plural = infos.name_plural;
+                    data.id_name = infos.sell_name;
+                    data.id_name_plural = infos.sell_name_plural;
+                    data.id_brand = infos.brand;
+                    data.id_unit = infos.unit_name;
+                    data.id_unit_plural = infos.unit_name_plural;
+                    data.id_container_qty = infos.sell_to_buy;
                     data.sei_name = infos.sell_name;
                     data.sei_name_plural = infos.sell_name_plural;
                     data.sei_unit_name = infos.unit_name;
@@ -545,7 +549,7 @@ angular.module('bars.admin.food', [
 
             // Enregistrement
             function errorSaving() {
-                $scope.alerts.push({type: 'danger', msg: "Une erreur s'est produite lors de l'ajout de l'aliment. Veuillez le signaler au Binet Réseau. Celui-ci a probablement été créé a moitié et risque de faire bugguer le site."});
+                $scope.alerts.push({type: 'danger', msg: "Une erreur s'est produite lors de l'ajout de l'aliment. Veuillez le signaler au Binet Réseau. Celui-ci a probablement été créé à moitié et risque de faire bugguer le site."});
                 console.log("Une erreur s'est produite lors de l'enregistrement d'une entité");
                 init();
             }
