@@ -7,7 +7,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="searchUserInput">Rechercher</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="searchUserInput" placeholder="Tape un nom ou un pseudo" typeahead="usr.full_name for usr in user_list | filter:$viewValue | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="findUser($item)">
+                        <input type="text" class="form-control" id="searchUserInput" placeholder="Tape un nom ou un pseudo" typeahead="usr.lastname + ' ' + usr.firstname for usr in user_list | filter:$viewValue | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="findUser($item)">
                     </div>
                 </div>
             </form>

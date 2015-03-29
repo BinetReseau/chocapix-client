@@ -1,7 +1,7 @@
 <div class="col-sm-12">
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
-            <h1 class="text-center no-vertical-margin">{{ account.owner.full_name }}</h1>
+            <h1 class="text-center no-vertical-margin">{{ account.owner.firstname + ' ' + account.owner.lastname }}</h1>
         </div>
     </div>
 
@@ -167,7 +167,7 @@
                                         <div class="checkbox col-sm-offset-2 col-sm-10">
                                             <label>
                                                 <input type="checkbox" ng-model="jaiCompris">
-                                                J'ai bien compris que le mot de passe de <b>{{ account.owner.full_name }}</b> sera réinitialisé (génération aléatoire d'un nouveau mot de passe, transmis par mail).
+                                                J'ai bien compris que le mot de passe de <b>{{ account.owner.firstname + ' ' + account.owner.lastname }}</b> sera réinitialisé (génération aléatoire d'un nouveau mot de passe, transmis par mail).
                                             </label>
                                         </div>
                                     </div>

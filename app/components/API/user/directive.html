@@ -1,3 +1,3 @@
-<a title="En savoir plus sur {{ user.full_name }}" tooltip="{{ user.pseudo && user.full_name || '' }}" ui-sref="bar.user.details({ bar: bar.id, id: user.id })">
-    {{ user.pseudo || user.full_name }}
+<a title="En savoir plus sur {{ user.firstname }}" tooltip="{{ user.pseudo && user.firstname + ' ' + user.lastname || '' }}" ui-sref="bar.user.details({ bar: bar.id, id: user.id })">
+    {{ user.pseudo || user.firstname + ' ' + user.lastname }}
 </a>

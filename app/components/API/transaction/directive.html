@@ -17,7 +17,7 @@
                         <td class="type">
                             <ng:switch on="transaction.type">
                                 <span ng-switch-when="buy">Achat de</span>
-                                <a ng-switch-when="meal" tooltip-html-unsafe="{{ transaction.name && '<strong>' + safe(transaction.name) + '</strong><br />' || ''}}Loggué par {{ transaction.author.full_name }}" class="atooltip">
+                                <a ng-switch-when="meal" tooltip-html-unsafe="{{ transaction.name && '<strong>' + safe(transaction.name) + '</strong><br />' || ''}}Loggué par {{ transaction.author.firstname + ' ' + transaction.author.lastname }}" class="atooltip">
                                     Achat de
                                 </a>
                                 <span ng-switch-when="appro">Appro de</span>

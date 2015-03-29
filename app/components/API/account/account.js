@@ -15,10 +15,10 @@ angular.module('bars.api.account', [
                 },
                 methods: {
                     'filter': function(s) {
-                        if(!this.owner.full_name) {
+                        if(!(this.owner.lastname && this.owner.firstname)) {
                             return false;
                         } else {
-                            return !this.deleted && this.owner.is_active && _.deburr(this.owner.full_name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                            return !this.deleted && this.owner.is_active && _.deburr(this.owner.lastname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 || _.deburr(this.owner.firstname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
                                 _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
                         }
                     }
@@ -74,7 +74,7 @@ angular.module('bars.api.account', [
 .controller('api.ctrl.account_list',
     ['$scope', 'account_list', function($scope, account_list) {
         $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active; });
-        $scope.list_order = 'owner.full_name';
+        $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
         $scope.searchl = "";
         $scope.filterAccounts = function(o) {

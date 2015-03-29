@@ -20,7 +20,7 @@
         </div>
         <div class="panel-body" ng-bind-html="news.text | nl2br"></div>
         <div class="panel-footer">
-            {{ news.author.full_name }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}
+            {{ news.author.firstname + ' ' + news.author.lastname }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}
         </div>
     </div>
 </div>

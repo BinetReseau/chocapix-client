@@ -6,7 +6,7 @@
             <div class="panel-heading">
                 <span class="pull-right"><button class="btn btn-success" ng-click="solve(bug)">Résolu</button></span>
                 Reporté le : {{ bug.timestamp | date:'medium' }}<br />
-                par : {{ bug.author.full_name }} <small>({{ bug.bar.name }})</small>
+                par : {{ bug.author.firstname + ' ' + bug.author.lastname }} <small>({{ bug.bar.name }})</small>
             </div>
             <div class="panel-body">
                 <h4>Message</h4>

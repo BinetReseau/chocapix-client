@@ -49,7 +49,8 @@ angular.module('bars.root.user', [
         $scope.userBis = _.clone($scope.user);
 
         $scope.saveUser = function() {
-            $scope.user.full_name = $scope.userBis.full_name;
+            $scope.user.firstname = $scope.userBis.firstname;
+            $scope.user.lastname = $scope.userBis.lastname;
             $scope.user.$save().then(function(u) {
                 $scope.user = u;
                 $scope.userBis = _.clone(u);

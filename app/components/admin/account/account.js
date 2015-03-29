@@ -72,10 +72,9 @@ angular.module('bars.admin.account', [
         };
         $scope.createAccount = function() {
             if ($scope.nuser.password == $scope.nuser.passwordBis) {
-                $scope.nuser.full_name = _.capitalize(_.trim($scope.nuser.firstname)) + " " + _.capitalize(_.trim($scope.nuser.lastname));
+                $scope.nuser.firstname = _.capitalize(_.trim($scope.nuser.firstname));
+                $scope.nuser.lastname = _.trim($scope.nuser.lastname);
                 delete $scope.nuser.passwordBis;
-                delete $scope.nuser.lastname;
-                delete $scope.nuser.firstname;
                 $scope.nuser.$save().then(function(u) {
                     $scope.naccount.owner = u.id;
                     $scope.amoney = $scope.naccount.amoney;
@@ -119,7 +118,8 @@ angular.module('bars.admin.account', [
         $scope.importAccounts = function() {
             _.forEach($scope.oa, function (ouser) {
                 var nuser = User.create();
-                nuser.full_name = _.capitalize(_.trim(ouser.firstname)) + " " + _.capitalize(_.trim(ouser.lastname));
+                nuser.firstname = _.capitalize(_.trim(ouser.firstname));
+                nuser.lastname = _.trim(ouser.lastname);
                 nuser.email = ouser.email;
                 nuser.username = ouser.login;
                 nuser.$save().then(function(u) {
@@ -173,7 +173,7 @@ angular.module('bars.admin.account', [
         $scope.admin.active = 'account';
         $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active && !a.deleted; });
         $scope.account_list = _.forEach($scope.account_list, function(a) { a.pay = true; });
-        $scope.list_order = 'owner.full_name';
+        $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
         $scope.searchl = "";
         $scope.filterAccounts = function(o) {
