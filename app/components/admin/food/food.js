@@ -212,6 +212,12 @@ angular.module('bars.admin.food', [
                 bip_price: '',
                 id_name: '',
                 id_name_plural: '',
+                id_brand: '',
+                id_container: '',
+                id_container_plural: '',
+                id_container_qty: '',
+                id_unit: '',
+                id_unit_plural: '',
                 sti_sell_to_buy: '',
                 sei_name: '',
                 sei_name_plural: '',
@@ -488,6 +494,12 @@ angular.module('bars.admin.food', [
             if (!data.id_id) {
                 item_details.name = data.id_name;
                 item_details.name_plural = data.id_name_plural;
+                item_details.container = data.id_container;
+                item_details.container_plural = data.id_container_plural;
+                item_details.container_qty = data.id_container_qty;
+                item_details.unit = data.id_unit;
+                item_details.unit_plural = data.id_unit_plural;
+                item_details.brand = data.id_brand;
                 item_details.keywords = data.keywords;
             } else {
                 buy_item.details = data.id_id;
@@ -614,6 +626,16 @@ angular.module('bars.admin.food', [
         $scope.$watch('data.id_name', function (newv, oldv) {
             if (data.id_name_plural == oldv) {
                 data.id_name_plural = newv;
+            }
+        });
+        $scope.$watch('data.id_container', function (newv, oldv) {
+            if (data.id_container_plural == oldv) {
+                data.id_container_plural = newv;
+            }
+        });
+        $scope.$watch('data.id_unit', function (newv, oldv) {
+            if (data.id_unit_plural == oldv) {
+                data.id_unit_plural = newv;
             }
         });
         $scope.$watch('data.sei_name', function (newv, oldv) {

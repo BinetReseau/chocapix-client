@@ -57,11 +57,48 @@
         <div class="form-group">
             <label for="fname" class="col-sm-2 control-label">Nom d'achat</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" id="fname" placeholder="Pot de 830g de Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name" tooltip="Nomination exacte du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
+              <input type="text" class="form-control" id="fname" placeholder="Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name" tooltip="Nomination du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
             </div>
             <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" id="fname_plural" placeholder="Pots de 830g de Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+              <input type="text" class="form-control" id="fname_plural" placeholder="Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fbrand" class="col-sm-2 control-label">Marque</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="fbrand" placeholder="Ferrero" ng-model="data.id_brand" ng-disabled="data.id_id || block">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fcontainer" class="col-sm-2 control-label">Contenant</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="fcontainer" placeholder="Pot" ng-disabled="data.id_id || block" ng-model="data.id_container" tooltip="Pot, Paquet, Boite, Bouteille" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+            <label for="fcontainer_plural" class="col-sm-2 control-label">Pluriel</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="fcontainer_plural" placeholder="Pots" ng-disabled="data.id_id || block" ng-model="data.id_container_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="funit" class="col-sm-2 control-label">Unité</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="funit" placeholder="g" ng-disabled="data.id_id || block" ng-model="data.id_unit" tooltip="Unité écrite sur le contenant (g, ml, tranche)" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+            <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-disabled="data.id_id || block" ng-model="data.id_unit_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fcontainer_qty" class="col-sm-2 control-label">1 {{ data.id_container }} = </label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    <input type="number" step="any" min="0" class="form-control" id="fcontainer_qty" placeholder="1000" ng-model="data.id_container_qty" ng-disabled="data.id_id || block">
+                    <div class="input-group-addon">
+                        {{ (data.id_unit_plural && data.id_container_qty > 1) && data.id_unit_plural || (data.id_unit || ((data.id_name_plural && data.id_container_qty > 1) && data.id_name_plural || data.id_name)) }}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="text-center">
@@ -111,7 +148,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ data.id_name }} = </label>
+            <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
             <div class="col-sm-10">
                 <div class="input-group">
                     <input type="number" step="any" min="0" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="data.sti_sell_to_buy" ng-disabled="data.sti_id || block">
