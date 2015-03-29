@@ -15,6 +15,9 @@ angular.module('bars.bars', [
                     api: ['APIInterface' , function(APIInterface) {
                         APIInterface.setBar('');
                     }],
+                    barssettings_list: ['api.models.barsettings', function(BarSettings) {
+                        return BarSettings.reload();
+                    }],
                     bars_list: ['api.models.bar', function(Bar) {
                         return Bar.reload();
                     }],

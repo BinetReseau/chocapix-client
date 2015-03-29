@@ -13,7 +13,7 @@ angular.module('bars.main', [
                 api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
                     APIInterface.setBar($stateParams.bar);
                 }],
-                bar: ['api.models.bar' , '$stateParams', function(Bar, $stateParams) {
+                bar: ['api.models.bar', 'api.models.barsettings', '$stateParams', function(Bar, BarSettings, $stateParams) { // BarSettings necessary to register the model in APIModel
                     return Bar.get($stateParams.bar);
                 }],
                 itemdetails: ['api.models.itemdetails', '$rootScope', function(ItemDetails, $rootScope) {

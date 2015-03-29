@@ -21,6 +21,7 @@ angular.module('barsApp', [
   'APIModel',
   'OpenFoodFacts',
   'bars.api.bar',
+  'bars.api.barsettings',
   'bars.api.food',
   'bars.api.user',
   'bars.api.account',
