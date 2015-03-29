@@ -267,6 +267,12 @@ angular.module('bars.admin.food', [
             data.id_id = buy_item.details.id;
             data.id_name = buy_item.details.name;
             data.id_name_plural = buy_item.details.name_plural;
+            data.id_container = buy_item.details.container;
+            data.id_container_plural = buy_item.details.container_plural;
+            data.id_unit = buy_item.details.unit;
+            data.id_unit_plural = buy_item.details.unit_plural;
+            data.id_container_qty = buy_item.details.container_qty;
+            data.id_brand = buy_item.details.brand;
             $scope.itemInPack = buy_item.details.name;
             // A-t-on besoin de créer le StockItem ?
             var stockItem = _.find(StockItem.all(), function (i) {
@@ -360,6 +366,12 @@ angular.module('bars.admin.food', [
                 data.id_id = null;
                 data.id_name = '';
                 data.id_name_plural = '';
+                data.id_container = '';
+                data.id_container_plural = '';
+                data.id_unit = '';
+                data.id_unit_plural = '';
+                data.id_container_qty = '';
+                data.id_brand = '';
                 $scope.itemInPack = '';
             }
             if (basic) {
