@@ -118,6 +118,7 @@ function($http, OFFURL) {
                 unit_name: unit,
                 unit_name_plural: unit_plural,
                 sell_to_buy: sell_to_buy,
+                brand: o.product.brands,
                 is_pack: is_pack,
                 itemqty: itemqty
             };

@@ -1,5 +1,10 @@
-<bars:stockitem:qty item="item" qty="qty" out="out" ng-if="qty"></bars:stockitem:qty> 
+<bars:stockitem:qty item="item" qty="qty" out="out" ng-if="qty"></bars:stockitem:qty>
 <a title="Voir la fiche de cet aliment" ui-sref="bar.food.details({ bar: item.bar.id, id:item.sellitem.id })">
-    <span ng-if="!(qty)">{{ item.details.name }}</span> <!-- && unit_name == '' -->
-    <span ng-if="qty">{{ (qty * ratio > 1 && unit_name_plural) && unit_name_plural || unit_name }}</span>
+    <span ng-if="!(qty)">
+        <bars:itemdetails qty="1" itemdetails="item.details"></bars:itemdetails>
+    </span>
+    <span ng-if="qty">
+        <bars:itemdetails qty="qty * ratio" itemdetails="item.details"></bars:itemdetails>
+        <!-- {{ (qty * ratio > 1 && unit_name_plural) && unit_name_plural || unit_name }} -->
+    </span>
 </a>

@@ -1,0 +1,5 @@
+{{ qty > 1 && (itemdetails.container_plural || itemdetails.name_plural) || (itemdetails.container || itemdetails.name) }}
+<span ng-if="itemdetails.unit">
+    de {{ itemdetails.container_qty }} {{ itemdetails.container_qty > 1 && (itemdetails.unit_plural || itemdetails.unit) || itemdetails.unit }}
+    de {{ itemdetails.name }} {{ itemdetails.brand }}
+</span>

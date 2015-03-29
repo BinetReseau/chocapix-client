@@ -212,6 +212,12 @@ angular.module('bars.admin.food', [
                 bip_price: '',
                 id_name: '',
                 id_name_plural: '',
+                id_brand: '',
+                id_container: '',
+                id_container_plural: '',
+                id_container_qty: '',
+                id_unit: '',
+                id_unit_plural: '',
                 sti_sell_to_buy: '',
                 sei_name: '',
                 sei_name_plural: '',
@@ -261,6 +267,17 @@ angular.module('bars.admin.food', [
             data.id_id = buy_item.details.id;
             data.id_name = buy_item.details.name;
             data.id_name_plural = buy_item.details.name_plural;
+            data.id_container = buy_item.details.container;
+            data.id_container_plural = buy_item.details.container_plural;
+            data.id_unit = buy_item.details.unit;
+            data.id_unit_plural = buy_item.details.unit_plural;
+            data.id_container_qty = buy_item.details.container_qty;
+            data.id_brand = buy_item.details.brand;
+            data.sei_name = data.id_name;
+            data.sei_name_plural = data.id_name_plural;
+            data.sei_unit_name = data.id_unit;
+            data.sei_unit_name_plural = data.id_unit_plural;
+            data.sti_sell_to_buy = data.id_container_qty;
             $scope.itemInPack = buy_item.details.name;
             // A-t-on besoin de créer le StockItem ?
             var stockItem = _.find(StockItem.all(), function (i) {
@@ -354,6 +371,12 @@ angular.module('bars.admin.food', [
                 data.id_id = null;
                 data.id_name = '';
                 data.id_name_plural = '';
+                data.id_container = '';
+                data.id_container_plural = '';
+                data.id_unit = '';
+                data.id_unit_plural = '';
+                data.id_container_qty = '';
+                data.id_brand = '';
                 $scope.itemInPack = '';
             }
             if (basic) {
@@ -371,8 +394,12 @@ angular.module('bars.admin.food', [
                         data.is_pack = true;
                         data.bi_itemqty = parseInt(infos.itemqty);
                     }
-                    data.id_name = infos.name;
-                    data.id_name_plural = infos.name_plural;
+                    data.id_name = infos.sell_name;
+                    data.id_name_plural = infos.sell_name_plural;
+                    data.id_brand = infos.brand;
+                    data.id_unit = infos.unit_name;
+                    data.id_unit_plural = infos.unit_name_plural;
+                    data.id_container_qty = infos.sell_to_buy;
                     data.sei_name = infos.sell_name;
                     data.sei_name_plural = infos.sell_name_plural;
                     data.sei_unit_name = infos.unit_name;
@@ -488,6 +515,16 @@ angular.module('bars.admin.food', [
             if (!data.id_id) {
                 item_details.name = data.id_name;
                 item_details.name_plural = data.id_name_plural;
+                item_details.container = data.id_container;
+                item_details.container_plural = data.id_container_plural;
+                if (data.id_container_qty) {
+                    item_details.container_qty = data.id_container_qty;
+                } else {
+                    item_details.container_qty = 1;
+                }
+                item_details.unit = data.id_unit;
+                item_details.unit_plural = data.id_unit_plural;
+                item_details.brand = data.id_brand;
                 item_details.keywords = data.keywords;
             } else {
                 buy_item.details = data.id_id;
@@ -512,7 +549,7 @@ angular.module('bars.admin.food', [
 
             // Enregistrement
             function errorSaving() {
-                $scope.alerts.push({type: 'danger', msg: "Une erreur s'est produite lors de l'ajout de l'aliment. Veuillez le signaler au Binet Réseau. Celui-ci a probablement été créé a moitié et risque de faire bugguer le site."});
+                $scope.alerts.push({type: 'danger', msg: "Une erreur s'est produite lors de l'ajout de l'aliment. Veuillez le signaler au Binet Réseau. Celui-ci a probablement été créé à moitié et risque de faire bugguer le site."});
                 console.log("Une erreur s'est produite lors de l'enregistrement d'une entité");
                 init();
             }
@@ -614,6 +651,16 @@ angular.module('bars.admin.food', [
         $scope.$watch('data.id_name', function (newv, oldv) {
             if (data.id_name_plural == oldv) {
                 data.id_name_plural = newv;
+            }
+        });
+        $scope.$watch('data.id_container', function (newv, oldv) {
+            if (data.id_container_plural == oldv) {
+                data.id_container_plural = newv;
+            }
+        });
+        $scope.$watch('data.id_unit', function (newv, oldv) {
+            if (data.id_unit_plural == oldv) {
+                data.id_unit_plural = newv;
             }
         });
         $scope.$watch('data.sei_name', function (newv, oldv) {

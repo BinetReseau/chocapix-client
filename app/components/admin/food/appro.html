@@ -40,7 +40,7 @@
                     <th> </th>
                 </tr>
                 <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl">
-                    <td class="vmiddle">{{ item.buyitemprice.buyitem.itemqty }} {{ item.buyitemprice.buyitem.itemqty > 1 && item.buyitemprice.buyitem.details.name_plural || item.buyitemprice.buyitem.details.name }}</td>
+                    <td class="vmiddle"><bars:buyitem buyitem="item.buyitemprice.buyitem"></bars:buyitem></td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" />
                     </td>
