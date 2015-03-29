@@ -513,7 +513,11 @@ angular.module('bars.admin.food', [
                 item_details.name_plural = data.id_name_plural;
                 item_details.container = data.id_container;
                 item_details.container_plural = data.id_container_plural;
-                item_details.container_qty = data.id_container_qty;
+                if (data.id_container_qty) {
+                    item_details.container_qty = data.id_container_qty;
+                } else {
+                    item_details.container_qty = 1;
+                }
                 item_details.unit = data.id_unit;
                 item_details.unit_plural = data.id_unit_plural;
                 item_details.brand = data.id_brand;
