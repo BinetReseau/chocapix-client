@@ -273,6 +273,11 @@ angular.module('bars.admin.food', [
             data.id_unit_plural = buy_item.details.unit_plural;
             data.id_container_qty = buy_item.details.container_qty;
             data.id_brand = buy_item.details.brand;
+            data.sei_name = data.id_name;
+            data.sei_name_plural = data.id_name_plural;
+            data.sei_unit_name = data.id_unit;
+            data.sei_unit_name_plural = data.id_unit_plural;
+            data.sti_sell_to_buy = data.id_container_qty;
             $scope.itemInPack = buy_item.details.name;
             // A-t-on besoin de créer le StockItem ?
             var stockItem = _.find(StockItem.all(), function (i) {
