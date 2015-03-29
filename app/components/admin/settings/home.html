@@ -25,6 +25,29 @@
         </div>
     </div>
 
+    <!-- Durée d'annulation -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Durée d'annulation</h4>
+        </div>
+        <div class="panel-body">
+            <p>Durée pendant laquelle un utilisateur peut annuler ou restaurer une transaction.</p>
+            <form class="form-horizontal" ng-submit="saveTransactionCancel()">
+                <div class="form-group">
+                    <label for="timeCancel" class="control-label col-sm-3">Nombre d'heures</label>
+                    <div class="col-sm-9">
+                        <input type="number" min="0" step="any" class="form-control" id="timeCancel" ng-model="timeCancel">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-success" value="Enregistrer" ng-class="timeCancel < 0 && 'disabled'" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Gestion des agios -->
     <div class="panel panel-default">
         <div class="panel-heading">

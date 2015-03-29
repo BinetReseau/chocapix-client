@@ -33,6 +33,18 @@ angular.module('bars.admin.settings', [
                 });
             }
         };
+        // Durée d'annulation
+        $scope.timeCancel = barsettings.transaction_cancel_threshold;
+        $scope.saveTransactionCancel = function() {
+            if ($scope.timeCancel >= 0) {
+                barsettings.transaction_cancel_threshold = $scope.timeCancel;
+                barsettings.$save().then(function(b) {
+                    //
+                }, function(errors) {
+                    console.log('Erreur transaction_cancel_threshold...');
+                });
+            }
+        };
         // Agios
         $scope.agiosEnabled = barsettings.agios_enabled;
         $scope.agiosThreshold = barsettings.agios_threshold;
