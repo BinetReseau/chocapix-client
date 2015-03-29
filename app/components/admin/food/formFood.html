@@ -41,7 +41,7 @@
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-barcode"></span>
                     </div>
-                    <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buy_item_pricesf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="choiceItemDetail($item, $model, $label)" ng-keypress="createItemPack($event)" ng-disabled="block">
+                    <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buy_item_pricesf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="choiceItemDetail($item, $model, $label)" ng-keypress="createItemPack($event)" ng-disabled="block" typeahead-template-url="components/admin/food/typehead-itemdetails.html">
                 </div>
             </div>
         </div>

@@ -485,4 +485,27 @@ angular.module('bars.api.food', [
         }]
     };
 })
+.directive('barsBuyitem', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            buyitem: '=buyitem'
+        },
+        templateUrl: 'components/API/food/directives/buyitem-directive.html',
+        controller: ['$scope', function($scope) {
+        }]
+    };
+})
+.directive('barsItemdetails', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            itemdetails: '=itemdetails',
+            qty: '=qty'
+        },
+        templateUrl: 'components/API/food/directives/itemdetails-directive.html',
+        controller: ['$scope', function($scope) {
+        }]
+    };
+})
 ;
