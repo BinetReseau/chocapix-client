@@ -218,7 +218,7 @@ angular.module('bars.api.food', [
             qty: 1,
             type: Meal.in() && 'add' || 'buy',
             stockitem: $scope.food_item.stockitems[0],
-            buyitemprice: $scope.buy_item_prices[0],
+            buyitemprice: $scope.buy_item_prices[0].buyitem.id,
             unit_choice: stockItemUnits(food_item),
             unit: 'sellitem'
         };
@@ -238,7 +238,7 @@ angular.module('bars.api.food', [
                     $scope.query.qty = 1;
                 })
             } else if (type == 'appro') { // TODO : gérer la qty
-                APIAction[type]({items: [{buyitem: $scope.query.buyitemprice.buyitem.id, qty: qty}]}).then(function() {
+                APIAction[type]({items: [{buyitem: $scope.query.buyitemprice, qty: qty}]}).then(function() {
                     $scope.query.qty = 1;
                 });
             } else if (type == 'add') {

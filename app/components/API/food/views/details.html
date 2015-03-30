@@ -29,11 +29,15 @@
                 <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'throw'" />
 
                 <div class="checkbox unit" ng-if="(query.type == 'appro' && buy_item_prices.length == 1)">
-                    {{ query.qty > 1 && query.buyitemprice.buyitem.details.name_plural || query.buyitemprice.buyitem.details.name }}
+                    <bars:itemdetails qty="query.qty" itemdetails="query.buyitemprice.buyitem.details"></bars:itemdetails>
                 </div>
                 <div class="checkbox unit" ng-if="(query.type == 'appro') && buy_item_prices.length > 1">&times;</div>
-                <select class="form-control" ng-model="query.buyitemprice" ng-options="(bip.buyitem.itemqty + ' ' + (bip.buyitem.itemqty > 1 && bip.buyitem.details.name_plural || bip.buyitem.details.name)) for bip in buy_item_prices" ng-if="(query.type == 'appro') && buy_item_prices.length > 1"></select>
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.qty*query.buyitemprice.price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'appro' && buy_item_prices.length > 0" />
+                <!-- <select class="form-control" ng-model="query.buyitemprice" ng-options="(bip.buyitem.itemqty + ' ' + (bip.buyitem.itemqty > 1 && bip.buyitem.details.name_plural || bip.buyitem.details.name)) for bip in buy_item_prices" ng-if="(query.type == 'appro') && buy_item_prices.length > 1"></select> -->
+                <select class="form-control" ng-model="query.buyitemprice" ng-show="(query.type == 'appro') && buy_item_prices.length > 1">
+                    <option ng-repeat="bip in buy_item_prices" value="{{ bip.buyitem.id }}" compile='"<bars:buyitem buyitem=\"bip.buyitem\"></bars:buyitem>"'>
+                    </option>
+                </select>
+                <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'appro' && buy_item_prices.length > 0" />
             </form>
         </div>
     </div>
