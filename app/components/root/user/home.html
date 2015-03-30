@@ -25,6 +25,11 @@
     <h2>Importer des utilisateurs</h2>
     <form class="form-horizontal" ng-submit="importUsers()">
         <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <progressbar value="nb/total * 100" type="success"><b>{{ nb }} / {{ total }}</b></progressbar>
+            </div>
+        </div>
+        <div class="form-group">
             <label for="ulastname" class="col-sm-3 control-label">Format</label>
             <div class="col-sm-9">
 <pre>[{

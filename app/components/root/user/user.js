@@ -49,6 +49,8 @@ angular.module('bars.root.user', [
             }
         });
         $scope.importUsers = function() {
+            $scope.total = $scope.oa.length;
+            $scope.nb = 0;
             _.forEach($scope.oa, function (ouser) {
                 var nuser = User.create();
                 nuser.firstname = _.capitalize(_.trim(ouser.firstname));
@@ -61,7 +63,7 @@ angular.module('bars.root.user', [
                     naccount.owner = u.id;
                     //naccount.money = ouser.money;
                     naccount.$save().then(function(a) {
-
+                        $scope.nb++;
                     });
                 });
             });
