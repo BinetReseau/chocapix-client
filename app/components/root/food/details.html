@@ -1,62 +1,70 @@
 <div class="col-sm-12">
-    <h2 class="text-center">{{ item.name }}</h2>
+    <h2 class="text-center"><bars:itemdetails itemdetails="itemBis" qty="1"></bars:itemdetails></h2>
 
     <div class="row">
         <div class="col-sm-12">
-            <tabset>
-                <tab heading="Infos">
-                    <div class="row">
-                        <table class="table table-tab">
-                            <tbody>
-                                <tr>
-                                    <td class="h4 vmiddle title">Nom</td>
-                                    <td class="vmiddle text-right value">
-                                        <span class="h4">{{ item.name }}</span>
-                                    </td>
-                                    
-                                </tr>
-                                <tr>
-                                    <td class="h4 vmiddle title">Pluriel</td>
-                                    <td class="vmiddle text-right value">
-                                        <span class="h4">{{ item.name_plural }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="h4 vmiddle title">Mots-clés</td>
-                                    <td class="vmiddle text-right value">
-                                        <p>{{ item.keywords }}</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <form class="form-horizontal" role="form" ng-submit="saveItem()">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="brandInput">Marque</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="brandInput" ng-model="itemBis.brand" placeholder="Panzani" />
+                    </div> 
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="nameInput">Nom</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="nameInput" ng-model="itemBis.name" placeholder="Farfalle" />
                     </div>
-                </tab>
-                <tab heading="Modifier">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <form class="form-horizontal" role="form" ng-submit="saveItem()">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="nameInput">Nom</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="nameInput" placeholder="" ng-model="itemBis.name" />
-                                    </div> 
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="namePluralInput">Pluriel</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="namePluralInput" placeholder="" ng-model="itemBis.name_plural" />
-                                    </div> 
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10 col-sm-offset-2">
-                                        <input type="submit" value="Valider" class="btn btn-success" />
-                                    </div>
-                                </div>
-                            </form>
+                    <label class="control-label col-sm-2" for="namePluralInput">Pluriel</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="namePluralInput" ng-model="itemBis.name_plural" placeholder="Farfalles" />
+                    </div> 
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="containerInput">Contenant</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="containerInput" ng-model="itemBis.container" placeholder="Paquet" />
+                    </div>
+                    <label class="control-label col-sm-2" for="containerPluralInput">Pluriel</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="containerPluralInput" ng-model="itemBis.container_plural" placeholder="Paquets" />
+                    </div> 
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="unitInput">Unité</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="unitInput" ng-model="itemBis.unit" placeholder="g" />
+                        <span class="help-block">L'unité utilisée par les utilisateurs. Laisser vide si l'aliment se vend à l'unité (par exemple les pizzas).</span>
+                    </div>
+                    <label class="control-label col-sm-2" for="unitPluralInput">Pluriel</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="unitPluralInput" ng-model="itemBis.unit_plural" placeholder="g" />
+                    </div> 
+                </div>
+                <div class="form-group" ng-show="itemBis.unit">
+                    <label class="col-sm-2 control-label" for="containerQtyInput">1 {{ itemBis.container }} = </label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="number" step="any" min="0" class="form-control" id="containerQtyInput" placeholder="1000" ng-model="itemBis.container_qty" placeholder="500" />
+                            <div class="input-group-addon">
+                                {{ (itemBis.unit_plural && itemBis.container_qty > 1) && itemBis.unit_plural || (itemBis.unit || ((itemBis.name_plural && itemBis.container_qty > 1) && itemBis.name_plural || itemBis.name)) }}
+                            </div>
                         </div>
                     </div>
-                </tab>
-            </tabset>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="keywordsInput">Mots-clés</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="keywordsInput" ng-model="itemBis.keywords" placeholder="pates, nouilles" />
+                        <span class="help-block">Séparer les mots-clés par des virgules.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <input type="submit" value="Valider" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

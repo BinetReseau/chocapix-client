@@ -49,15 +49,39 @@ angular.module('bars.root.food', [
     function($scope, item, ItemDetails){
         $scope.item = item;
         $scope.itemBis = _.clone($scope.item);
+        console.log($scope.itemBis);
 
         $scope.saveItem = function() {
             $scope.item.name = $scope.itemBis.name;
             $scope.item.name_plural = $scope.itemBis.name_plural;
+            $scope.item.brand = $scope.itemBis.brand;
+            $scope.item.container = $scope.itemBis.container;
+            $scope.item.container_plural = $scope.itemBis.container_plural;
+            $scope.item.unit = $scope.itemBis.unit;
+            $scope.item.unit_plural = $scope.itemBis.unit_plural;
+            $scope.item.container_qty = $scope.itemBis.container_qty;
+            $scope.item.keywords = $scope.itemBis.keywords;
             $scope.item.$save().then(function(i) {
                 $scope.item = i;
                 $scope.itemBis = _.clone(i);
             });
         };
+
+        $scope.$watch('itemBis.name', function (newv, oldv) {
+            if ($scope.itemBis.name_plural == oldv) {
+                $scope.itemBis.name_plural = newv;
+            }
+        });
+        $scope.$watch('itemBis.container', function (newv, oldv) {
+            if ($scope.itemBis.container_plural == oldv) {
+                $scope.itemBis.container_plural = newv;
+            }
+        });
+        $scope.$watch('itemBis.unit', function (newv, oldv) {
+            if ($scope.itemBis.unit_plural == oldv) {
+                $scope.itemBis.unit_plural = newv;
+            }
+        });
     }]
 )
 ;
