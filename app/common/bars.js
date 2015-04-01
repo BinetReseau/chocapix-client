@@ -47,6 +47,9 @@ angular.module('bars.bars', [
         $rootScope.appLoaded = true;
 
         function upBars() {
+            bars_list = _.filter(bars_list, function (b) {
+                return b.id != 'root';
+            });
             $scope.gbars = [];
             for (var i = 0; i < bars_list.length; i++) {
                 if (i%3 == 0) {
