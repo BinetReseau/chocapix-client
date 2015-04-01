@@ -21,4 +21,36 @@
         <li>Lien vers la gestion des roots</li>
         <li>Lien vers la gestion des respos bar (dont "communication aux respos bar")</li>
     </ul>
+
+    <h2>Importer des utilisateurs</h2>
+    <form class="form-horizontal" ng-submit="importUsers()">
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <progressbar value="nb/total * 100" type="success"><b>{{ nb }} / {{ total }}</b></progressbar>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ulastname" class="col-sm-3 control-label">Format</label>
+            <div class="col-sm-9">
+<pre>[{
+    "section": "avironjone",
+    "firstname": "Prénom",
+    "name": "Nom",
+    "email": "prenom.nom@polytechnique.edu",
+    "login": "prenom.nom"
+}]</pre>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ulastname" class="col-sm-3 control-label">Liste JSON</label>
+            <div class="col-sm-9">
+                <textarea ng-model="lista" style="width: 100%; height: 200px;"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <input type="submit" class="btn btn-success" value="Importer {{ oa.length }} comptes" ng-class="oa.length == 0 && 'disabled' || ''" />
+            </div>
+          </div>
+    </form>
 </div>
