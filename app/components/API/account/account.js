@@ -194,14 +194,14 @@ angular.module('bars.api.account', [
             if (name == "appromanager" || name == "inventorymanager" || name == "stockmanager") {
                 var newGRole = Role.create();
                 newGRole.user = account.owner.id;
-                newGRole.name = 'additem'; // TEMP - TO CHANGE
+                newGRole.name = 'itemcreator';
                 newGRole.bar = 'root';
                 newGRole.$save();
             }
             if (name == "admin") {
                 var newGRole = Role.create();
                 newGRole.user = account.owner.id;
-                newGRole.name = 'respobar'; // TEMP - TO CHANGE
+                newGRole.name = 'staff';
                 newGRole.bar = 'root';
                 newGRole.$save();
             }
