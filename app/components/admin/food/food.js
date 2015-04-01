@@ -517,8 +517,8 @@ angular.module('bars.admin.food', [
                 item_details.name_plural = data.id_name_plural;
                 item_details.container = data.id_container;
                 item_details.container_plural = data.id_container_plural;
-                if (data.id_container_qty) {
-                    item_details.container_qty = data.id_container_qty;
+                if (parseFloat(data.id_container_qty)) {
+                    item_details.container_qty = parseFloat(data.id_container_qty);
                 } else {
                     item_details.container_qty = 1;
                 }
