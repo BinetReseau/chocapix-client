@@ -157,11 +157,11 @@ angular.module('bars.api.account', [
             customer: "Consommateur",
             treasurer: "Trésorier",
             newsmanager: "Respo actualités",
-            policeman: "Respo amendes"
-            // appromanager: "Respo appro",
-            // inventorymanager: "Respo inventaire",
-            // stockmanager: "Respo appro et inventaire",
-            // admin: "Respo bar"
+            policeman: "Respo amendes",
+            appromanager: "Respo appro",
+            inventorymanager: "Respo inventaire",
+            stockmanager: "Respo appro et inventaire",
+            admin: "Respo bar"
         };
         $scope.permsName = {
             "bars_transactions.add_buytransaction": "Acheter un aliment",
@@ -187,7 +187,6 @@ angular.module('bars.api.account', [
             var newRole = Role.create();
             newRole.user = account.owner.id;
             newRole.name = name;
-            newRole.bar = 'avironjone'; // TEMP
             newRole.$save().then(function () {
                 updateRoles();
             });

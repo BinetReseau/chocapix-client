@@ -105,11 +105,11 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Modifier" ng-if="user.can('change_account')">
+                <tab heading="Modifier" ng-iff="user.can('change_account')">
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <fieldset>
-                                <div ng-if="user.can('add_role')">
+                                <div ng-iff="user.can('add_role')">
                                     <h3>Modifications des rôles</h3>
                                     <table class="table table-hover table-striped">
                                         <thead>
