@@ -754,6 +754,7 @@ angular.module('bars.admin.food', [
             totalPrice: 0,
             inRequest: false,
             itemToAdd: "",
+            error: "",
             init: function() {
                 this.itemsList = [];
                 this.totalPrice = 0;
@@ -772,6 +773,7 @@ angular.module('bars.admin.food', [
                 this.totalPrice = totalPrice;
             },
             addItem: function(buyitemprice, qty) {
+                this.error = "";
                 if (!qty) {
                     qty = 1;
                 }
@@ -780,12 +782,29 @@ angular.module('bars.admin.food', [
                     other.qty += qty;
                     other.nb = nb++;
                 } else {
-                    this.itemsList.push({
-                        buyitemprice: buyitemprice,
-                        qty: qty,
-                        old_qty: qty,
-                        price: buyitemprice.price * qty,
-                        nb: nb++});
+                    // Avant de l'ajouter on va vérifier que l'itemdetails
+                    // et surtout le stockitem existent bien
+                    var ok = false;
+                    if (buyitemprice.buyitem) {
+                        if (buyitemprice.buyitem.details) {
+                            var details = buyitemprice.buyitem.details;
+                            var stockitem = _.find(StockItem.all(), {'details': details});
+                            if (stockitem) {
+                                if (stockitem.sellitem) {
+                                    this.itemsList.push({
+                                        buyitemprice: buyitemprice,
+                                        qty: qty,
+                                        old_qty: qty,
+                                        price: buyitemprice.price * qty,
+                                        nb: nb++});
+                                    ok = true;
+                                }
+                            }
+                        }
+                    }
+                    if (!ok) {
+                        this.error = "Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro";
+                    }
                 }
                 this.recomputeAmount();
                 this.itemToAdd = "";
@@ -807,6 +826,8 @@ angular.module('bars.admin.food', [
                 })
                 .then(function() {
                     refThis.init();
+                }, function () {
+                    console.log("Erreur lors de l'appro :///");
                 });
             },
             in: function() {
