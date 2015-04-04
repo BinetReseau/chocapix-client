@@ -22,7 +22,7 @@
                     <th>Unité</th>
                     <th>Marque</th>
                 </tr>
-                <tr ng-repeat="item in itemdetails_list | orderBy:'container':false">
+                <tr ng-repeat="item in itemdetails_list | orderBy:'container':false | orderBy:'brand':false | orderBy:'name':false">
                     <td><a ui-sref="root.food.details({bar: 'root', id: item.id})">{{ item.name }}</a></td>
                     <td>{{ item.container }}</td>
                     <td>{{ item.unit }}</td>
