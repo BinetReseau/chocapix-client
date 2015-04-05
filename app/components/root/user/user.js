@@ -15,7 +15,12 @@ angular.module('bars.root.user', [
         .state('root.user.base', {
             url: '/home',
             templateUrl: "components/root/user/home.html",
-            controller: 'root.ctrl.user.base'
+            controller: 'root.ctrl.user.base',
+            resolve: {
+                roles: ['api.models.role', function(Role) {
+                    return Role.ofName('admin');
+                }]
+            }
         })
         .state('root.user.details', {
             url: '/:id',
@@ -31,14 +36,25 @@ angular.module('bars.root.user', [
 }])
 
 .controller('root.ctrl.user.base',
-    ['$scope', 'user_list', '$state', 'api.models.user', 'api.models.account', 'APIInterface',
-    function($scope, user_list, $state, User, Account, APIInterface) {
+    ['$scope', 'user_list', 'roles', '$state', 'api.models.user', 'api.models.account', 'APIInterface',
+    function($scope, user_list, roles, $state, User, Account, APIInterface) {
         $scope.root.active = 'user';
         $scope.user_list = user_list;
         $scope.searchl = '';
         $scope.findUser = function(usr) {
             $state.go('root.user.details', {id: usr.id});
         };
+
+        $scope.respos = _.uniq(roles, false, function (r) {
+            return r.user.id;
+        });
+        $scope.remails = _.reduce($scope.respos, function (l, r) {
+            if (r.user.email) {
+                return l + ', ' + r.user.email;
+            } else {
+                return l;
+            }
+        }, '');
 
         // Importation
         $scope.lista = "";
