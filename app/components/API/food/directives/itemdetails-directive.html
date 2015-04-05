@@ -1,5 +1,8 @@
 {{ qty > 1 && (itemdetails.container_plural || itemdetails.name_plural) || (itemdetails.container || itemdetails.name) }}
-<span ng-if="itemdetails.unit">
-    de {{ itemdetails.container_qty }} {{ itemdetails.container_qty > 1 && (itemdetails.unit_plural || itemdetails.unit) || itemdetails.unit }}
-    de {{ itemdetails.name }} {{ itemdetails.brand }}
+<span ng-if="itemdetails.unit || itemdetails.container">
+    de {{ itemdetails.container_qty }} {{ itemdetails.container_qty > 1 && (itemdetails.unit_plural || itemdetails.unit || itemdetails.name_plural || itemdetails.name) || (itemdetails.unit || itemdetails.name) }}
+    <span ng-if="itemdetails.unit">
+        de {{ itemdetails.name }}
+    </span>
 </span>
+{{ itemdetails.brand }}
