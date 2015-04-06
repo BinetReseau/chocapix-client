@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bars.root.food', [
-    
+
 ])
 .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('root.food', {
@@ -10,6 +10,7 @@ angular.module('bars.root.food', [
         template: "<ui-view />",
         controller: ['$scope', function($scope) {
             $scope.root.active = 'food';
+            $scope.ordre = {name: 'name'};
         }]
     })
         .state('root.food.base', {
@@ -30,8 +31,8 @@ angular.module('bars.root.food', [
     ;
 }])
 
-.controller('root.ctrl.food.base', 
-    ['$scope', 'itemdetails_list', '$state', 
+.controller('root.ctrl.food.base',
+    ['$scope', 'itemdetails_list', '$state',
     function($scope, itemdetails_list, $state){
         $scope.itemdetails_list = itemdetails_list;
         $scope.searchl = '';
@@ -44,8 +45,8 @@ angular.module('bars.root.food', [
     }]
 )
 
-.controller('root.ctrl.food.details', 
-    ['$scope', 'item', 'api.models.itemdetails', 
+.controller('root.ctrl.food.details',
+    ['$scope', 'item', 'api.models.itemdetails',
     function($scope, item, ItemDetails){
         $scope.item = item;
         $scope.itemBis = _.clone($scope.item);
