@@ -18,7 +18,7 @@
             <form class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="ordre">Trier par</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-8">
                         <select ng-model="ordre.name" class="form-control">
                             <option value="name">Nom</option>
                             <option value="id">ID</option>
@@ -26,6 +26,11 @@
                             <option value="unit">Unité</option>
                             <option value="brand">Marque</option>
                         </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="form-control btn btn-primary" ng-model="ordre.revert" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                            Inverser
+                        </button>
                     </div>
                 </div>
             </form>
@@ -36,7 +41,7 @@
                     <th>Unité</th>
                     <th>Marque</th>
                 </tr>
-                <tr ng-repeat="item in itemdetails_list | orderBy:ordre.name:false">
+                <tr ng-repeat="item in itemdetails_list | orderBy:ordre.name:ordre.revert">
                     <td><a ui-sref="root.food.details({bar: 'root', id: item.id})">{{ item.name }}</a></td>
                     <td>{{ item.container }}</td>
                     <td>{{ item.unit }}</td>

@@ -10,7 +10,7 @@ angular.module('bars.root.food', [
         template: "<ui-view />",
         controller: ['$scope', function($scope) {
             $scope.root.active = 'food';
-            $scope.ordre = {name: 'name'};
+            $scope.ordre = {name: 'name', revert: false};
         }]
     })
         .state('root.food.base', {
