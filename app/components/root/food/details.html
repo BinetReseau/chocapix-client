@@ -8,7 +8,7 @@
                     <label class="control-label col-sm-2" for="brandInput">Marque</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="brandInput" ng-model="itemBis.brand" placeholder="Panzani" />
-                    </div> 
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="nameInput">Nom</label>
@@ -18,7 +18,7 @@
                     <label class="control-label col-sm-2" for="namePluralInput">Pluriel</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="namePluralInput" ng-model="itemBis.name_plural" placeholder="Farfalles" />
-                    </div> 
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="containerInput">Contenant</label>
@@ -28,7 +28,7 @@
                     <label class="control-label col-sm-2" for="containerPluralInput">Pluriel</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="containerPluralInput" ng-model="itemBis.container_plural" placeholder="Paquets" />
-                    </div> 
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="unitInput">Unité</label>
@@ -39,10 +39,10 @@
                     <label class="control-label col-sm-2" for="unitPluralInput">Pluriel</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="unitPluralInput" ng-model="itemBis.unit_plural" placeholder="g" />
-                    </div> 
+                    </div>
                 </div>
-                <div class="form-group" ng-show="itemBis.unit">
-                    <label class="col-sm-2 control-label" for="containerQtyInput">1 {{ itemBis.container }} = </label>
+                <div class="form-group" ng-show="itemBis.unit || itemBis.container">
+                    <label class="col-sm-2 control-label" for="containerQtyInput">1 {{ itemBis.container || itemBis.name }} = </label>
                     <div class="col-sm-10">
                         <div class="input-group">
                             <input type="number" step="any" min="0" class="form-control" id="containerQtyInput" placeholder="1000" ng-model="itemBis.container_qty" placeholder="500" />
@@ -57,6 +57,24 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="keywordsInput" ng-model="itemBis.keywords" placeholder="pates, nouilles" />
                         <span class="help-block">Séparer les mots-clés par des virgules.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Avant</label>
+                    <div class="col-sm-10">
+                        <bars:itemdetails itemdetails="item" qty="1"></bars:itemdetails>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Après</label>
+                    <div class="col-sm-10">
+                        <bars:itemdetails itemdetails="itemBis" qty="1"></bars:itemdetails>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Pluriel</label>
+                    <div class="col-sm-10">
+                        <bars:itemdetails itemdetails="itemBis" qty="3"></bars:itemdetails>
                     </div>
                 </div>
                 <div class="form-group">

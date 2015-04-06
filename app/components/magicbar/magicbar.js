@@ -322,8 +322,13 @@ angular.module('bars.magicbar', [
 						if (res.unit_name) {
 							if (unitsr[res.unit_name][res.food.unit_name]) {
 								res.qty = res.qty / unitsr[res.unit_name][res.food.unit_name];
-							} else if (unitsr[res.unit_name][res.food.buy_unit_name]) {
-								res.qty = res.qty / unitsr[res.unit_name][res.food.buy_unit_name] * res.food.buy_unit_value / res.food.unit_value;
+							} else {
+								var sti = _.find(res.food.stockitems, function (si) {
+									return unitsr[res.unit_name][si.details.unit];
+								});
+								if (sti) {
+									res.qty = res.qty / unitsr[res.unit_name][sti.details.unit] / sti.details.container_qty / sti.sell_to_buy;
+								}
 							}
 						}
 					}

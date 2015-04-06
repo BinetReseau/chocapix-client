@@ -198,6 +198,7 @@ angular.module('bars.admin.food', [
         $scope.user = user;
         var init_items;
         var data;
+        var oItemdetails;
         function init() {
             data = {
                 barcode: '',
@@ -226,6 +227,7 @@ angular.module('bars.admin.food', [
                 sei_tax: '',
                 keywords: ''
             };
+            oItemdetails = ItemDetails.create();
             $scope.data = data;
             $scope.allow_barcode_edit = true;
             $scope.itemInPack = "";
@@ -255,6 +257,17 @@ angular.module('bars.admin.food', [
         function resetf() {
             init();
         }
+        $scope.overviewItemdetails = function () {
+            oItemdetails.name = data.id_name;
+            oItemdetails.name_plural = data.id_name_plural;
+            oItemdetails.brand = data.id_brand;
+            oItemdetails.container = data.id_container;
+            oItemdetails.container_plural = data.id_container_plural;
+            oItemdetails.container_qty = data.id_container_qty;
+            oItemdetails.unit = data.id_unit;
+            oItemdetails.unit_plural = data.id_unit_plural;
+            return oItemdetails;
+        };
 
         $scope.new_details = function () {
             return data.bi_details_id == undefined;
@@ -517,8 +530,8 @@ angular.module('bars.admin.food', [
                 item_details.name_plural = data.id_name_plural;
                 item_details.container = data.id_container;
                 item_details.container_plural = data.id_container_plural;
-                if (data.id_container_qty) {
-                    item_details.container_qty = data.id_container_qty;
+                if (parseFloat(data.id_container_qty)) {
+                    item_details.container_qty = parseFloat(data.id_container_qty);
                 } else {
                     item_details.container_qty = 1;
                 }
