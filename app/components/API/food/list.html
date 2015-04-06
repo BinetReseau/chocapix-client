@@ -3,7 +3,7 @@
         <div class="panel-heading clearfix">
             <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">Aliments</h4>
             <input type="text" class="form-control right small" ng-model="searchl" placeholder="Rechercher">
-            <a title="Afficher les aliments cachés" ng-click="showHidden = !showHidden" class="pull-right btn btn-warning" ng-class="showHidden && 'active'" ng-show="user.can('change_item')">
+            <a title="Afficher les aliments cachés" ng-click="showHidden = !showHidden" class="pull-right btn btn-warning" ng-class="showHidden && 'active'" ng-show="user.can('change_sellitem')">
                 <span class="glyphicon glyphicon-eye-close"></span> <span class="hidden-xs">Aliments cachés</span>
             </a>
         </div>
@@ -13,13 +13,13 @@
                 <th>Quantité totale &ensp;<a href="" ng-click="reverse = list_order == 'fuzzy_qty' ? !reverse : false; list_order = 'fuzzy_qty'"><span class="glyphicon glyphicon-sort"></span></a></th>
                 <th>Prix</th>
             </tr>
-            <tr ng-repeat="f in food_list | filter:filterItems | filter:filterHidden() | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || '') ">
+            <tr ng-repeat="f in food_list | filter:filterItems | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || '') ">
                 <td><bars:sellitem item="f"></bars:sellitem></td>
                 <td><bars:sellitem:qty item="f" qty="f.fuzzy_qty" out="'sell'"></bars:sellitem:qty></td>
                 <td><bars:sellitem:price item="f" qty="1" in="'sell'"></bars:sellitem:price> <span ng-if="f.unit_name">/ {{ f.unit_name }}</span></td>
             </tr>
         </table>
-        <div class="panel-body" ng-if="(food_list | filter:filterItems | filter:filterHidden()).length == 0">
+        <div class="panel-body" ng-if="(food_list | filter:filterItems).length == 0">
             <em>Aucun aliment ne correspond à votre recherche.</em>
         </div>
     </div>

@@ -95,11 +95,11 @@ angular.module('bars.api.food', [
                     'stockitems.*': 'StockItem'
                 },
                 methods: {
-                    'filter': function(s) {
+                    'filter': function(s, showDeleted) {
                         var all_keywords = "";
                         _.forEach(this.stockitems, function(n, i) { all_keywords = all_keywords + " " + n.details.keywords; });
                         var searchable = this.name + " " + all_keywords + " " + this.keywords;
-                        return !this.deleted && (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                        return (!this.deleted || showDeleted) && (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
             });
@@ -169,17 +169,8 @@ angular.module('bars.api.food', [
         $scope.list_order = 'name';
         $scope.reverse = false;
         $scope.filterItems = function(o) {
-            return o.filter($scope.searchl);
+            return ($scope.showHidden || !o.deleted) && o.filter($scope.searchl, true);
         }
-        $scope.filterHidden = function() {
-            if ($scope.showHidden) {
-                return '';
-            } else {
-                return {
-                    deleted: false
-                };
-            }
-        };
     }]
 )
 .controller('api.ctrl.food_details',
@@ -215,37 +206,39 @@ angular.module('bars.api.food', [
             return res && ref_factor != 1;
         }
 
-        $scope.query = {
-            qty: 1,
-            type: Meal.in() && 'add' || 'buy',
-            stockitem: $scope.food_item.stockitems[0],
-            buyitemprice: $scope.buy_item_prices[0].buyitem.id,
-            unit_choice: stockItemUnits(food_item),
-            unit: 'sellitem'
-        };
-        $scope.inMeal = function () {
-            return Meal.in();
-        };
-        $scope.queryProcess = function(qty, type, unit_choice, unit) {
-            if (unit_choice) {
-                qty = (unit == 'itemdetails') ? qty/food_item.stockitems[0].sell_to_buy : qty;
-            }
-            if (type == 'buy') {
-                APIAction[type]({sellitem: $scope.food_item.id, qty: qty}).then(function() {
-                    $scope.query.qty = 1;
-                });
-            } else if (type == 'throw') { // TODO : gérer la qty
-                APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty}).then(function() {
-                    $scope.query.qty = 1;
-                })
-            } else if (type == 'appro') { // TODO : gérer la qty
-                APIAction[type]({items: [{buyitem: $scope.query.buyitemprice, qty: qty}]}).then(function() {
-                    $scope.query.qty = 1;
-                });
-            } else if (type == 'add') {
-                Meal.addItem($scope.food_item, qty);
-            }
-        };
+        if (food_item.stockitems.length > 0) {
+            $scope.query = {
+                qty: 1,
+                type: Meal.in() && 'add' || 'buy',
+                stockitem: $scope.food_item.stockitems[0],
+                buyitemprice: $scope.buy_item_prices[0].buyitem.id,
+                unit_choice: stockItemUnits(food_item),
+                unit: 'sellitem'
+            };
+            $scope.inMeal = function () {
+                return Meal.in();
+            };
+            $scope.queryProcess = function(qty, type, unit_choice, unit) {
+                if (unit_choice) {
+                    qty = (unit == 'itemdetails') ? qty/food_item.stockitems[0].sell_to_buy : qty;
+                }
+                if (type == 'buy') {
+                    APIAction[type]({sellitem: $scope.food_item.id, qty: qty}).then(function() {
+                        $scope.query.qty = 1;
+                    });
+                } else if (type == 'throw') { // TODO : gérer la qty
+                    APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty}).then(function() {
+                        $scope.query.qty = 1;
+                    })
+                } else if (type == 'appro') { // TODO : gérer la qty
+                    APIAction[type]({items: [{buyitem: $scope.query.buyitemprice, qty: qty}]}).then(function() {
+                        $scope.query.qty = 1;
+                    });
+                } else if (type == 'add') {
+                    Meal.addItem($scope.food_item, qty);
+                }
+            };
+        }
 
     }]
 )

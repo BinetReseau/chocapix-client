@@ -1,4 +1,11 @@
 <div class="col-sm-12">
+    <alert ng-if="food_item.stockitems.length == 0 && user.can('change_sellitem')" type="danger">
+        Cet aliment vendu par le bar n'est lié à aucun aliment acheté. Veuillez en ajouter dans l'onglet <b>Stocks</b> ou bien le supprimer dans l'onglet <b>Modifier</b>.
+    </alert>
+    <alert ng-if="food_item.stockitems.length == 0 && !user.can('change_sellitem')" type="warning">
+        Cet aliment est buggué et ne peut pas être acheté. Signalez-le à un respo-bar pour qu'il corrige ce problème !
+    </alert>
+
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 vcenter">
             <h1 class="text-center no-vertical-margin">{{ food_item.name }}</h1>
@@ -7,7 +14,7 @@
 
     <br />
 
-    <div class="row">
+    <div class="row" ng-show="food_item.stockitems.length > 0">
         <div class="col-sm-12">
             <form class="form-inline" role="form" ng-submit="queryProcess(query.qty, query.type, query.unit_choice, query.unit)" ng-if="user.can('add_transaction')">
                 <select class="form-control" ng-model="query.type" ng-options="option.name as option.value for option in actions">
