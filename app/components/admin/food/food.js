@@ -819,7 +819,7 @@ angular.module('bars.admin.food', [
                         }
                     }
                     if (!ok) {
-                        this.errors.push("Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro");
+                        this.errors.push("Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
                     }
                 }
                 this.recomputeAmount();
@@ -844,6 +844,7 @@ angular.module('bars.admin.food', [
                     refThis.init();
                 }, function () {
                     console.log("Erreur lors de l'appro :///");
+                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas égé validée.");
                 });
             },
             in: function() {
