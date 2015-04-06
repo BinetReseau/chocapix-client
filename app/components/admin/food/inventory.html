@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-2">
-                    <input type="button" class="btn btn-primary" ng-click="inventory.validate()" value="Valider l'inventaire" />
+                    <input type="button" class="btn btn-primary" ng-disabled="!inventory.in()" ng-click="inventory.validate()" value="Valider l'inventaire" />
                 </div>
             </div>
         </form>
