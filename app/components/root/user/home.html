@@ -24,7 +24,7 @@
                     <th>Email</th>
                     <th>Bar</th>
                 </tr>
-                <tr ng-repeat="respo in respos | orderBy:'bar'">
+                <tr ng-repeat="respo in respos | orderBy:'bar.id'">
                     <td>{{ respo.user.lastname }}</td>
                     <td>{{ respo.user.firstname }}</td>
                     <td>{{ respo.user.email }}</td>
