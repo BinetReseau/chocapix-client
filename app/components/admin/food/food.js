@@ -139,6 +139,9 @@ angular.module('bars.admin.food', [
                 return bip.filter(v);
             });
         };
+        $scope.closeAlert = function(index) {
+            Appro.errors.splice(index, 1);
+        };
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
@@ -767,7 +770,7 @@ angular.module('bars.admin.food', [
             totalPrice: 0,
             inRequest: false,
             itemToAdd: "",
-            error: "",
+            errors: [],
             init: function() {
                 this.itemsList = [];
                 this.totalPrice = 0;
@@ -816,7 +819,7 @@ angular.module('bars.admin.food', [
                         }
                     }
                     if (!ok) {
-                        this.error = "Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro";
+                        this.errors.push("Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro");
                     }
                 }
                 this.recomputeAmount();
