@@ -877,7 +877,20 @@ angular.module('bars.admin.food', [
                     other.qty += qty / other.sell_to_buy;
                     other.nb = nb++;
                 } else {
-                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
+                    // Avant de l'ajouter on va vérifier que l'itemdetails
+                    // et surtout le stockitem existent bien
+                    var ok = false;
+                    if (item.buyitem) {
+                        if (item.buyitem.details) {
+                            var details = item.buyitem.details;
+                            var stockitem = _.find(StockItem.all(), {'details': details});
+                            if (stockitem) {
+                                if (stockitem.sellitem) {
+                                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
+                                }
+                            }
+                        }
+                    }
                 }
                 this.itemToAdd = "";
                 this.recomputeAmount();
