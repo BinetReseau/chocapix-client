@@ -21,6 +21,13 @@ angular.module('bars.api.user', [
                 'data': {'old_password': oldpwd, 'password': newpwd}
             });
         };
+        model.resetPwd = function(email) {
+            return APIInterface.request({
+                'url': 'reset-password',
+                'method': 'POST',
+                'data': {'email': email}
+            });
+        };
 
         return model;
     }])

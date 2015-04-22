@@ -136,7 +136,12 @@ angular.module('bars.api.account', [
         $scope.pwdSuccess = 0;
         $scope.jaiCompris = false;
         $scope.resetPwd = function() {
-            // [TODO]
+            User.resetPwd(account.owner.email).then(function() {
+                $scope.pwdSuccess = 1;
+            }, function() {
+                $scope.pwdSuccess = -1;
+            });
+
         };
         $scope.toggleDeleted = function() {
             $scope.account.deleted = !$scope.account.deleted;
