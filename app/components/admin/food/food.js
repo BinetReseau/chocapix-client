@@ -105,7 +105,7 @@ angular.module('bars.admin.food', [
             $scope.sell_item_ref.unit_name = $scope.sell_item.unit_name;
             $scope.sell_item_ref.name_plural = $scope.sell_item.name_plural;
             $scope.sell_item_ref.unit_name_plural = $scope.sell_item.unit_name_plural;
-            $scope.sell_item_ref.tax = $scope.sell_item.tax;
+            $scope.sell_item_ref.tax = $scope.sell_item.tax/100;
             var refId = $scope.sell_item_ref.id;
             var unit_factor = 1/$scope.sell_item_ref.unit_factor;
             $scope.sell_item_ref.$save().then(function(newSellItem) {
