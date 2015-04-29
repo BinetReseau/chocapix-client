@@ -288,6 +288,9 @@ angular.module('bars.api.food', [
                         });
                         $modalInstance.close();
                     };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss();
+                    };
                 }],
                 size: 'lg'
             });

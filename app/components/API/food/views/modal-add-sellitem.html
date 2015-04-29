@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="close" ng-click="cancel()" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
     <h4 class="modal-title" id="attachModalLabel">Attacher un article à cet aliment</h4>
@@ -24,6 +24,6 @@
         </form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+    <button type="button" class="btn btn-default" ng-click="cancel()">Annuler</button>
     <button type="button" class="btn btn-primary" ng-click="validate()">Valider</button>
 </div>
