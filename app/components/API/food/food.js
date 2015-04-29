@@ -253,6 +253,7 @@ angular.module('bars.api.food', [
                 'data': {'stockitem': si.id}
             }).then(function(si) {
                 food_item.$reload();
+                si.$reload();
             });
         };
         $scope.rattachInit = function() {
@@ -284,6 +285,7 @@ angular.module('bars.api.food', [
                             'method': 'PUT',
                             'data': {'sellitem': $scope.itemToAttach.id, 'unit_factor': 1/$scope.itemToAttach.unit_factor}
                         }).then(function(si) {
+                            $scope.itemToAttach.$remove();
                             food_item.$reload();
                         });
                         $modalInstance.close();

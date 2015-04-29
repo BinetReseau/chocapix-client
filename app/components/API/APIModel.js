@@ -36,6 +36,11 @@ module.factory('BaseAPIEntity', [
                 return this.model.delete(this.id);
             }
         };
+        BaseAPIEntity.prototype.$remove = function() {
+            if(this.id) {
+                return this.model.remove(this.id);
+            }
+        };
         BaseAPIEntity.prototype.$reload = function() {
             return this.model.reload(this.id);
         };
@@ -453,6 +458,9 @@ module.factory('APIModel', ['BaseAPIEntity', 'APIInterface', 'MemoryEntityStore'
                 .then(function(obj) {
                     return self.memory_store.update(id, obj);
             });
+        };
+        APIModel.prototype.remove = function(id) {
+            this.memory_store.delete(id);
         };
         APIModel.prototype.delete = function(id) {
             var self = this;
