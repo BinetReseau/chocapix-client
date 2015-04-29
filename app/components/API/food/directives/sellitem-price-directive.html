@@ -1,1 +1,3 @@
-{{ (qty && price*qty || price) | currency }} <span ng-if="!qty && unit_name != ''"> / {{ unit_name }}</span>
+<span ng-if="qty || price >= 0.01">{{ (qty && price*qty || price) | currency }}</span>
+<span ng-if="!qty && price < 0.01">{{ price | currency:'€':4 }}</span>
+<span ng-if="!qty && unit_name != ''"> / {{ unit_name }}</span>
