@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
-                    <input type="submit" class="btn btn-success" value="Fister la section" />
+                    <input type="submit" class="btn btn-success" value="Fister {{ (account_list|filter:{pay: true}).length }} {{ 'personne'|affs:(account_list|filter:{pay: true}).length}}" />
                 </div>
             </div>
         </form>

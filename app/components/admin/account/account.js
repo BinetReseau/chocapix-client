@@ -195,8 +195,10 @@ angular.module('bars.admin.account', [
             APIAction.collectivePayment({accounts: accounts, amount: $scope.amount, motive: $scope.motive}).then(function () {
                 $scope.amount = 0;
                 $scope.motive = "";
-                $scope.allSelected = false;
-                $scope.toggleAll();
+                $scope.allSelected = true;
+                _.map($scope.account_list, function (o) {
+                    o.pay = false;
+                });
             })
         };
     }
