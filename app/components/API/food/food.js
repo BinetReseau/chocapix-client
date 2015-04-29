@@ -303,6 +303,7 @@ angular.module('bars.api.food', [
             si.$save().then(function(r) {
                 si = r;
                 si.edit = false;
+                food_item.$reload();
             }, function(errors) {
                 console.log('Erreur lors de la modification de ' + si.details.name);
             });
