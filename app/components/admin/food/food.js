@@ -77,30 +77,28 @@ angular.module('bars.admin.food', [
         $scope.sellitems_grp = [];
         $scope.searchl = "";
         $scope.searchll = "";
-        $scope.filterItems = function(o) {
-            return o.filter($scope.searchl);
+        $scope.sellitem_listf = function (t) {
+            return _.filter(sellitem_list, function (o) {
+                return o.filter(t) && _.find($scope.sellitems_grp, function (s) {
+                    return s.item.id == o.id;
+                }) === undefined;
+            });
         };
+
         $scope.filterItemsl = function(o) {
-            return o.filter($scope.searchll);
+            return o.item.filter($scope.searchll);
         };
         $scope.addItem = function(item) {
-            var other = _.find($scope.sellitems_grp, item);
-            if (!other) {
-                item.unit_factor = 1;
-                $scope.sellitems_grp.push(item);
-                $scope.sellitem_list.splice($scope.sellitem_list.indexOf(item), 1);
-                $scope.searchl = "";
-            }
+            $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            $scope.searchl = "";
         };
         $scope.removeItem = function(item) {
             var index = $scope.sellitems_grp.indexOf(item);
             $scope.sellitems_grp.splice(index, 1);
-            delete(item.unit_factor);
-            $scope.sellitem_list.push(item);
         };
         $scope.validate = function() {
             // Modification du premier SellItem
-            $scope.sell_item_ref = $scope.sellitems_grp.shift();
+            $scope.sell_item_ref = $scope.sellitems_grp.shift().item;
             $scope.sell_item_ref.name = $scope.sell_item.name;
             $scope.sell_item_ref.unit_name = $scope.sell_item.unit_name;
             $scope.sell_item_ref.name_plural = $scope.sell_item.name_plural;
@@ -108,6 +106,7 @@ angular.module('bars.admin.food', [
             $scope.sell_item_ref.tax = $scope.sell_item.tax/100;
             var refId = $scope.sell_item_ref.id;
             var unit_factor = 1/$scope.sell_item_ref.unit_factor;
+            var nb = $scope.sellitems_grp.length;
             $scope.sell_item_ref.$save().then(function(newSellItem) {
                 while ($scope.sellitems_grp.length > 0) {
                     var itemToMerge = $scope.sellitems_grp.shift();
@@ -115,10 +114,18 @@ angular.module('bars.admin.food', [
                     APIInterface.request({
                         'url': 'sellitem/' + refId + '/merge',
                         'method': 'PUT',
-                        'data': {'sellitem': itemToMerge.id, 'unit_factor': unit_factor}
+                        'data': {'sellitem': itemToMerge.item.id, 'unit_factor': unit_factor}
+                    }).then(function () {
+                        nb--;
+                        if (nb == 0) {
+                            $scope.sell_item_ref.$reload();
+                            $scope.sell_item = SellItem.create();
+                        }
                     });
+                    itemToMerge.item.$remove();
                 }
-            })
+            });
+
         };
     }
 ])
