@@ -50,16 +50,19 @@ angular.module('bars.admin.compta', [
     ['$scope', 'account_list', 'stockitem_list',
     function($scope, account_list, stockitem_list) {
         $scope.admin.active = 'compta';
-        $scope.foodValue = _.reduce(stockitem_list, function (total, f) {
-            if (!f.deleted) {
-                total += f.qty * f.price;
-            }
-            return total;
-        }, 0);
+        $scope.foodValue = function() {
+            return _.reduce(stockitem_list, function (total, f) {
+                if (!f.deleted) {
+                    total += f.qty * f.price;
+                }
+                return total;
+            }, 0);
+        };
         $scope.soldeBar = 0;
         $scope.accountsValue = _.reduce(account_list, function (total, a) {
             if (!a.deleted) {
                 if (a.owner.username == 'bar') {
+                    a.$reload();
                     $scope.soldeBar = a.money;
                 } else {
                     total += a.money;

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-sm-4 col-sm-offset-4">
             <h2 class="text-center">
-                <span class="label" ng-class="soldeBar + foodValue - accountsValue >= 0 && 'label-success' || 'label-danger'">{{ soldeBar + foodValue - accountsValue | currency }}</span>
+                <span class="label" ng-class="soldeBar + foodValue() - accountsValue >= 0 && 'label-success' || 'label-danger'">{{ soldeBar + foodValue() - accountsValue | currency }}</span>
                 <br /><small>solde total du bar</small>
             </h2>
         </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="col-sm-4">
             <h2 class="text-center">
-                <span class="label label-info">{{ foodValue | currency }}</span>
+                <span class="label label-info">{{ foodValue() | currency }}</span>
                 <br /><small>valeur des aliments non supprimés</small>
             </h2>
         </div>
