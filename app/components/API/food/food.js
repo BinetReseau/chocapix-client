@@ -346,9 +346,13 @@ angular.module('bars.api.food', [
             food_item.name = $scope.newFood_item.name;
             food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
-            food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
             food_item.keywords = $scope.newFood_item.keywords;
             food_item.$save();
+            _.forEach(food_item.stockitems, function (s) {
+                s.sell_to_buy = s.sell_to_buy * $scope.newFood_item.unit_factor;
+                s.price = s.price * $scope.newFood_item.unit_factor;
+                s.$save();
+            })
         };
         $scope.resetFood();
     }]
