@@ -325,6 +325,7 @@ angular.module('bars.admin.food', [
                             templateUrl: 'components/admin/food/modalAdd.html',
                             controller: 'admin.ctrl.food.addModal',
                             size: 'lg',
+                            backdrop: 'static',
                             resolve: {
                                 barcode: function () {
                                     return undefined;
@@ -338,7 +339,7 @@ angular.module('bars.admin.food', [
                             $scope.choiceItemDetail(buyItemPrice);
                             $scope.itemInPack = buyItemPrice.buyitem.details.name;
                         }, function () {
-
+                            console.log("Modal fermée ; c'est très mauvais");
                         });
                     }
                 });
