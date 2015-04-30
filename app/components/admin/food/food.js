@@ -583,6 +583,7 @@ angular.module('bars.admin.food', [
                 }
                 nbEnd += nb;
                 if (nbEnd == 5) {
+                    sell_item.$reload();
                     $scope.alerts.push({type: 'success', msg: "L'aliment a été correctement créé."});
                     $scope.origin.callback(buy_item_price);
                     init();
