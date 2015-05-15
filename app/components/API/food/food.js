@@ -170,7 +170,10 @@ angular.module('bars.api.food', [
         $scope.reverse = false;
         $scope.filterItems = function(o) {
             return ($scope.showHidden || !o.deleted) && o.filter($scope.searchl, true);
-        }
+        };
+        $scope.qpp = function (f) {
+            return f.fuzzy_qty*f.fuzzy_price;
+        };
     }]
 )
 .controller('api.ctrl.food_details',
