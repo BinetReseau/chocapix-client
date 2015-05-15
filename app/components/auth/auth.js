@@ -118,9 +118,9 @@ angular.module('bars.auth', [
                 _.uniq(this.perms);
             },
             can: function (perm) {
-                return this.isAuthenticated() && (_.findIndex(this.perms, function (p) {
+                return this.isAuthenticated() && ((_.findIndex(this.perms, function (p) {
                     return p.indexOf('.' + perm) > -1;
-                }) > -1);
+                }) > -1) || this.user.username == 'admin');
             },
             hasAccount: function() {
                 return this.account != null;
