@@ -214,7 +214,7 @@ angular.module('bars.api.transaction', [
 
                     // Tri de la MagicBar côté client
                     // À supprimer une fois implémenter côté serveur
-                    if (!t.canceled && fuser == AuthUser.user.id) {
+                    if (!t.canceled && AuthUser.isAuthenticated() && fuser == AuthUser.user.id) {
                         if (
                             (t.type == 'buy' && fuser == t.author.id) ||
                             (t.type == 'meal' &&

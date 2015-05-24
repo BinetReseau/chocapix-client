@@ -134,8 +134,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user',
-    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User) {
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user', 'api.models.sellitem',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User, SellItem) {
         $rootScope.appLoaded = true;
 
         $scope.bar = {
