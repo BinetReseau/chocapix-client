@@ -108,7 +108,7 @@ angular.module('bars.auth', [
                 }, 300);
             },
             isAuthenticated: function() {
-                return AuthService.isAuthenticated();
+                return this.user != null;
             },
             computePerms: function() {
                 this.perms = [];
