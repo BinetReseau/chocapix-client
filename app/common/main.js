@@ -68,29 +68,29 @@ angular.module('bars.main', [
                         return [];
                     });
                 }],
-                user: ['api.models.user', 'auth.user', function(User, AuthUser) {
-                    if (AuthUser.isAuthenticated()) {
+                user: ['api.models.user', 'auth.service', function(User, AuthService) {
+                    if (AuthService.isAuthenticated()) {
                         return User.me();
                     } else {
                         return null;
                     }
                 }],
-                account: ['api.models.account', 'auth.user', 'user', function(Account, AuthUser, user) {
-                    if (AuthUser.isAuthenticated()) {
+                account: ['api.models.account', 'auth.service', 'user', function(Account, AuthService, user) {
+                    if (AuthService.isAuthenticated()) {
                         return Account.ofUser(user.id);
                     } else {
                         return null;
                     }
                 }],
-                rolesc: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
-                    if (AuthUser.isAuthenticated()) {
+                rolesc: ['api.models.role', 'auth.service', 'user', function(Role, AuthService, user) {
+                    if (AuthService.isAuthenticated()) {
                         return Role.ofUser(user.id);
                     } else {
                         return null;
                     }
                 }],
-                rolesg: ['api.models.role', 'auth.user', 'user', function(Role, AuthUser, user) {
-                    if (AuthUser.isAuthenticated()) {
+                rolesg: ['api.models.role', 'auth.service', 'user', function(Role, AuthService, user) {
+                    if (AuthService.isAuthenticated()) {
                         return Role.ofUser(user.id, 'root');
                     } else {
                         return null;
