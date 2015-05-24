@@ -62,6 +62,20 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr ng-if="user.can('change_account')">
+                                    <td class="h4">Login</td>
+                                    <td class="end-of-column text-right">
+                                        <span class="h4"><span class="label label-default">
+                                            {{ account.owner.username }}
+                                        </span></span>
+                                    </td>
+                                    <td class="h4 row">Email</td>
+                                    <td class="text-right">
+                                        <a href="mailto:{{ account.owner.email }}" tooltip="Envoyer un mail">
+                                            <code>{{ account.owner.email }}</code>
+                                        </a>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="h4">Solde</td>
                                     <td class="end-of-column text-right">
