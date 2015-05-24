@@ -156,8 +156,12 @@ angular.module('bars.main', [
         $rootScope.$on('auth.hasLoggedIn', function () {
             if (User.all().length == 0 || User.all()[0].lastname === undefined || User.all()[User.all().length-1].lastname === undefined) {
                 User.reload();
-
             }
+        });
+        $rootScope.$on('auth.hasLoggedOut', function () {
+            _.forEach(SellItem.all(), function (si) {
+                si.urank = 0;
+            });
         });
 
         $scope.signalBug = function() {

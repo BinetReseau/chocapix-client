@@ -21,6 +21,13 @@ angular.module('bars.magicbar', [
         $scope.$watch('bar.search', function(qo) {
             analyse(qo, $scope);
         });
+		$scope.urank = function (e) {
+			if (e.food && e.food.urank > 0) {
+				return -e.food.urank;
+			} else {
+				return 0;
+			}
+		};
 
 		$scope.convertBarcode = function (e) {
 			if (e.which === 13) {

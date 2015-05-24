@@ -175,7 +175,7 @@ angular.module('bars.api.transaction', [
             // limitTo: '=?limit' // no more limit, infinite scroll everywhere
         },
         templateUrl: 'components/API/transaction/directive.html',
-        controller: ['$scope', '$filter', '$sanitize', 'api.models.transaction', function($scope, $filter, $sanitize, Transaction) {
+        controller: ['$scope', '$filter', '$sanitize', 'api.models.transaction', 'auth.user', function($scope, $filter, $sanitize, Transaction, AuthUser) {
             $scope.history = [];
             var allHistory = [];
             var page = 1;
@@ -185,7 +185,7 @@ angular.module('bars.api.transaction', [
                     inRequest = true;
                     var req = $scope.filter();
                     req.page = page++;
-                    req.page_size = 30;
+                    req.page_size = 60;
                     if ($scope.sellitem) {
                         req.sellitem = $scope.sellitem;
                     }
@@ -211,6 +211,27 @@ angular.module('bars.api.transaction', [
 
                 _.forEach(allHistory, function(t) {
                     t.parseTimestamp();
+
+                    // Tri de la MagicBar côté client
+                    // À supprimer une fois implémenter côté serveur
+                    if (!t.canceled && fuser == AuthUser.user.id) {
+                        if (
+                            (t.type == 'buy' && fuser == t.author.id) ||
+                            (t.type == 'meal' &&
+                                _.find(t.accounts, function (a) {
+                                    return a.account.owner.id == fuser;
+                                })
+                            )
+                           ) {
+                            _.forEach(t.items, function (item) {
+                                if (item.sellitem.urank) {
+                                    item.sellitem.urank++
+                                } else {
+                                    item.sellitem.urank = 1;
+                                }
+                            });
+                        }
+                    }
                 });
                 var history_by_date = _.groupBy(allHistory, 'timestamp_day');
                 var history_dates = _.keys(history_by_date);
