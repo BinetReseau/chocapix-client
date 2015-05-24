@@ -46,6 +46,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="list-group-item" ng-if="user.can('change_sellitem') || user.can('add_approtransaction') || user.can('add_inventorytransaction')">
+                    <div class="row">
+                        <div class="col-sm-4 text-left">
+                            <span class="h4">
+                                <a class="btn btn-primary btn-xs" ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <span class="h4">
+                                <a class="btn btn-info btn-xs" ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <span class="h4">
+                                <a class="btn btn-success btn-xs" ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_itemdetails') && user.can('add_sellitem')">Ajouter un aliment</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <div class="list-group-item" ng-if="false">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Total dépensé</span></div>
