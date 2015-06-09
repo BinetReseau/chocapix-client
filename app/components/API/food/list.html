@@ -14,7 +14,7 @@
                 <th>Prix</th>
                 <th ng-show="user.can('change_sellitem')">Valeur totale &ensp;<a href="" ng-click="reverse = list_order == qpp ? !reverse : true; list_order = qpp"><span class="glyphicon glyphicon-sort"></span></a></th>
             </tr>
-            <tr ng-repeat="f in food_list | filter:filterItems | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || '') ">
+            <tr ng-repeat="f in food_list | filter:filterItems | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || (f.stockitems.length == 0 && 'warning' || '')) ">
                 <td><bars:sellitem item="f"></bars:sellitem></td>
                 <td><bars:sellitem:qty item="f" qty="f.fuzzy_qty" out="'sell'"></bars:sellitem:qty></td>
                 <td><bars:sellitem:price item="f" in="'sell'"></bars:sellitem:price></td>
