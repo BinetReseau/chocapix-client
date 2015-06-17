@@ -47,7 +47,11 @@ angular.module('bars.admin.news', [
     function($scope, APIBarSettings, barsettings, $state){
         $scope.admin.active = 'news';
         $scope.now = new Date();
-        $scope.nextAppro = new Date(barsettings.next_scheduled_appro);
+        if (!barsettings.next_scheduled_appro) {
+            $scope.nextAppro = new Date();
+        } else {
+            $scope.nextAppro = new Date(barsettings.next_scheduled_appro);
+        }
         $scope.saveNextAppro = function() {
             barsettings.next_scheduled_appro = $scope.nextAppro.toJSON();
             barsettings.$save().then(function(b) {
