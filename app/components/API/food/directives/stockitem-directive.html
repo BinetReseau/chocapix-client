@@ -1,5 +1,5 @@
 <bars:stockitem:qty item="item" qty="qty" out="out" ng-if="qty"></bars:stockitem:qty>
-<a title="Voir la fiche de cet aliment" ui-sref="bar.food.details({ bar: item.bar.id, id:item.sellitem.id })">
+<a title="Voir la fiche de cet aliment" ui-sref="bar.food.details({ bar: '{{ :: item.bar.id }}', id: '{{ :: item.sellitem.id }}' })">
     <span ng-if="!(qty)">
         <bars:itemdetails qty="1" itemdetails="item.details"></bars:itemdetails>
     </span>
