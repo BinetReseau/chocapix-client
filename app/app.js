@@ -38,9 +38,10 @@ angular.module('barsApp', [
     // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
 }])
 
-.config(['$httpProvider',
-    function ($httpProvider) {
+.config(['$httpProvider', '$compileProvider',
+    function ($httpProvider, $compileProvider) {
         $httpProvider.interceptors.push('auth.interceptor');
+        $compileProvider.debugInfoEnabled(false);
 }])
 
 .run(['amMoment', 'auth.user', '$rootScope',
