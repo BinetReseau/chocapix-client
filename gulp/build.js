@@ -77,11 +77,6 @@ gulp.task('html', ['wiredep', 'scripts', 'partials'], function () {
 
 gulp.task('images', function () {
   return gulp.src('app/assets/img/**/*')
-    .pipe($.cache($.imagemin({
-      optimizationLevel: 3,
-      progressive: true,
-      interlaced: true
-    })))
     .pipe(gulp.dest('dist/assets/img'))
     .pipe($.size());
 });
