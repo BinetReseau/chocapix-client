@@ -12,7 +12,10 @@ angular.module('bars.root.bar', [
             .state('root.bar', {
                 url: "/bar",
                 abstract: true,
-                template: "<ui-view />"
+                template: "<ui-view />",
+                controller: ['$scope', function($scope) {
+                    $scope.root.active = 'bar';
+                }]
             })
                 .state('root.bar.list', {
                     url: '/list',
@@ -36,7 +39,6 @@ angular.module('bars.root.bar', [
 .controller('root.ctrl.bar.list',
     ['$scope', '$stateParams', 'api.models.bar', 'bars_list',
     function($scope, $stateParams, APIBar, bars_list) {
-        $scope.root.active = 'bars';
         $scope.bars_list = bars_list;
         $scope.list_order = 'name';
         $scope.reverse = false;
