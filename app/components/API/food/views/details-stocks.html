@@ -12,7 +12,11 @@
         </thead>
         <tbody>
             <tr ng-repeat-start="si in food_item.stockitems" ng-if="!si.edit">
-                <td><bars:itemdetails qty="1" itemdetails="si.details"></bars:itemdetails></td>
+                <td>
+                  <a title="Voir la fiche globale de cet aliment" ui-sref="bar.food.item_details({ bar: '{{ :: si.bar.id }}', id: '{{ :: si.details.id }}' })">
+                    <bars:itemdetails qty="1" itemdetails="si.details"></bars:itemdetails>
+                  </a>
+                </td>
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
                 <td ng-if="user.can('change_sellitem')">

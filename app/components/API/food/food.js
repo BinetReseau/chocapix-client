@@ -152,7 +152,18 @@ angular.module('bars.api.food', [
                     controller: 'api.ctrl.food_details.edit'
                 }
             }
-        });
+        })
+        .state('bar.food.item_details', {
+            url: "/details/:id",
+            templateUrl: "components/API/food/item-details.html",
+            controller: 'api.ctrl.food_item_details',
+            resolve: {
+                item_details: ['$stateParams', 'api.models.itemdetails', function($stateParams, ItemDetails) {
+                    return ItemDetails.get($stateParams.id);
+                }]
+            }
+        })
+        ;
 }])
 
 .controller('api.ctrl.food',
@@ -364,6 +375,12 @@ angular.module('bars.api.food', [
             })
         };
         $scope.resetFood();
+    }]
+)
+.controller('api.ctrl.food_item_details',
+    ['$scope', 'item_details',
+    function($scope, item_details) {
+        $scope.item_details = item_details;
     }]
 )
 .controller('api.ctrl.dir.barssellitem',
