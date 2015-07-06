@@ -24,6 +24,11 @@ angular.module('bars.root.bar', [
                     },
                     controller: 'root.ctrl.bar.list'
                 })
+                .state('root.bar.add', {
+                    url: '/add',
+                    templateUrl: "components/root/bar/add.html",
+                    controller: 'root.ctrl.bar.add'
+                })
         ;
     }
 ])
@@ -36,9 +41,25 @@ angular.module('bars.root.bar', [
         $scope.list_order = 'name';
         $scope.reverse = false;
         $scope.searchl = "";
+        console.log($scope.bars_list);
 
         $scope.filterBar = function(o) {
             return o.filter($scope.searchl);
+        };
+    }]
+)
+
+.controller('root.ctrl.bar.add', 
+    ['$scope', 'api.models.bar', 
+    function($scope, APIBar) {
+        $scope.bar = APIBar.create();
+
+        $scope.addBar = function(b) {
+            b.$save().then(function(rb) {
+                console.log(rb);
+            }, function(e) {
+                console.log(e);
+            });
         };
     }]
 )
