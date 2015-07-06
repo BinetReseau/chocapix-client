@@ -204,6 +204,9 @@ angular.module('bars.api.food', [
         if (AuthUser.can('add_approtransaction')) {
             $scope.actions.push({ name: "appro", value: "Approvisionner" });
         }
+        if (AuthUser.can('add_inventorytransaction')) {
+            $scope.actions.push({ name: "inventory", value: "Inventorier" });
+        }
         var item_details = _.map(food_item.stockitems, function (si) {
             return si.details.id;
         });
@@ -240,11 +243,15 @@ angular.module('bars.api.food', [
                     APIAction[type]({sellitem: $scope.food_item.id, qty: qty}).then(function() {
                         $scope.query.qty = 1;
                     });
-                } else if (type == 'throw') { // TODO : gérer la qty
+                } else if (type == 'throw') {
                     APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty}).then(function() {
                         $scope.query.qty = 1;
                     })
-                } else if (type == 'appro') { // TODO : gérer la qty
+                } else if (type == 'inventory') {
+                    APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty}]}).then(function() {
+                        $scope.query.qty = 1;
+                    })
+                } else if (type == 'appro') {
                     APIAction[type]({items: [{buyitem: $scope.query.buyitemprice, qty: qty}]}).then(function() {
                         $scope.query.qty = 1;
                     });

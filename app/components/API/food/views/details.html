@@ -19,6 +19,9 @@
             <form class="form-inline" role="form" ng-submit="queryProcess(query.qty, query.type, query.unit_choice, query.unit)" ng-if="user.can('add_transaction')">
                 <select class="form-control" ng-model="query.type" ng-options="option.name as option.value for option in actions">
                 </select>
+
+                <span ng-if="query.type == 'inventory'">Il reste </span>
+
                 <input type="number" min="0" class="form-control number" step="any" ng-model="query.qty" select-on-click />
 
                 <select class="form-control" ng-model="query.unit" ng-if="query.unit_choice && query.type != 'appro'">
@@ -32,8 +35,10 @@
                 <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.unit == 'itemdetails' && query.qty*food_item.fuzzy_price/food_item.stockitems[0].sell_to_buy || query.qty*food_item.fuzzy_price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="(query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1) && query.type != 'throw' && query.type != 'appro'" />
 
                 <span ng-if="query.type == 'throw' && food_item.stockitems.length > 1"> venant de </span>
-                <select class="form-control" ng-model="query.stockitem" ng-options="article.details.name for article in food_item.stockitems" ng-if="(query.type == 'throw') && food_item.stockitems.length > 1"></select>
+                <span ng-if="query.type == 'inventory' && food_item.stockitems.length > 1"> de </span>
+                <select class="form-control" ng-model="query.stockitem" ng-options="article.details.name for article in food_item.stockitems" ng-if="(query.type == 'throw' || query.type == 'inventory') && food_item.stockitems.length > 1"></select>
                 <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'throw'" />
+                <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty < 0 && 'disabled' || ''" ng-if="query.type == 'inventory'" />
 
                 <div class="checkbox unit" ng-if="(query.type == 'appro' && buy_item_prices.length == 1)">
                     <bars:itemdetails qty="query.qty" itemdetails="query.buyitemprice.buyitem.details"></bars:itemdetails>
