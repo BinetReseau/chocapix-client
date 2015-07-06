@@ -3,6 +3,7 @@
 angular.module('bars.root', [
     'bars.filters',
 
+    'bars.root.bar',
     'bars.root.user',
     'bars.root.food',
     'bars.root.bug'

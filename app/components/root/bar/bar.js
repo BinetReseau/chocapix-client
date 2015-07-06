@@ -18,7 +18,7 @@ angular.module('bars.root.bar', [
                     url: '/list',
                     templateUrl: "components/root/bar/list.html",
                     resolve: {
-                        bars_list: ['api.models.bar', function(Bar) {
+                        bars_list: ['api.models.bar', 'api.models.barsettings', function(Bar, BarSettings) {
                             return Bar.reload();
                         }]
                     },
@@ -36,6 +36,10 @@ angular.module('bars.root.bar', [
         $scope.list_order = 'name';
         $scope.reverse = false;
         $scope.searchl = "";
+
+        $scope.filterBar = function(o) {
+            return o.filter($scope.searchl);
+        };
     }]
 )
 ;
