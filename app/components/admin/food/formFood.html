@@ -1,224 +1,228 @@
 <form class="form-horizontal" ng-submit="isValid() && addFood()" ng-if="user.can('add_sellitem') && user.can('add_stockitem') && user.can('add_itemdetails') && user.can('add_buyitem') && user.can('add_buyitemprice')">
     <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">{{ alert.msg }}</alert>
-    <div class="form-group" ng-class="barcodeErrorSI && ' has-error' || ''">
-        <label for="fbarcode" class="col-sm-2 control-label">Code-barre</label>
-        <div class="col-sm-10">
-            <div class="input-group">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-barcode"></span>
-                </div>
-                <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="!allow_barcode_edit" ng-model="data.barcode" ng-keypress="searchf($event)" ng-change="searchGlobal(data.barcode, true)">
-            </div>
-            <span class="help-block">
-                Appuyez sur <kbd>Entrée</kbd> pour rechercher ce code-barre dans la base de données
-            </span>
-            <span class="help-block" ng-if="barcodeErrorSI">
-                Cet aliment existe déjà dans le bar<!--  : <bars:stockitem item="barcodeErrorSI"></bars:stockitem> -->
-            </span>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Aliment acheté</h3>
         </div>
-    </div>
-    <div class="text-center">
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2">
-                <p><small>Si votre aliment est un paquet, et si les éléments du paquet ont leur propre code-barre (typiquement un pack de canettes de coca) choisissez <strong>pack</strong>.</small></p>
-            </div>
-        </div>
-        <hr class="derrierebtn" />
-        <div class="btn-group btn-group-sm derrierebtn">
-            <a class="btn btn-primary" ng-class="block && 'disabled' || (!data.is_pack && 'active')" ng-click="data.is_pack = false">Il s'agit d'un aliment normal</a>
-            <a class="btn btn-primary" ng-class="block && 'disabled' || (data.is_pack && 'active')" ng-click="data.is_pack = true">Il s'agit d'un pack</a>
-        </div>
-        <br /><br />
-    </div>
-    <div ng-show="data.is_pack">
-        <div class="form-group">
-            <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
-            <div class="col-sm-3">
-                <input type="number" step="any" class="form-control" id="fpqty" placeholder="6" ng-model="data.bi_itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.bi_id || block">
-            </div>
-            <div class="col-sm-7">
-                <div class="input-group">
-                    <div class="input-group-addon">
-                        <span class="glyphicon glyphicon-barcode"></span>
+        <div class="panel-body">
+            <div class="form-group" ng-class="barcodeErrorSI && ' has-error' || ''">
+                <label for="fbarcode" class="col-sm-2 control-label">Code-barre</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-barcode"></span>
+                        </div>
+                        <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-disabled="!allow_barcode_edit" ng-model="data.barcode" ng-keypress="searchf($event)" ng-change="searchGlobal(data.barcode, true)">
                     </div>
-                    <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buy_item_pricesf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="choiceItemDetail($item, $model, $label)" ng-keypress="createItemPack($event)" ng-disabled="block" typeahead-template-url="components/admin/food/typehead-itemdetails.html">
+                    <span class="help-block">
+                        Appuyez sur <kbd>Entrée</kbd> pour rechercher ce code-barre dans la base de données
+                    </span>
+                    <span class="help-block" ng-if="barcodeErrorSI">
+                        Cet aliment existe déjà dans le bar<!--  : <bars:stockitem item="barcodeErrorSI"></bars:stockitem> -->
+                    </span>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="fpprice" class="col-sm-2 control-label">Prix</label>
-            <div class="col-sm-7">
-                <input type="number" step="any" min="0" class="form-control" id="fpprice" placeholder="2.34" ng-model="data.bip_price" ng-disabled="data.bip_id || block">
-            </div>
-            <label class="col-sm-3 control-label">€ / pack</label>
-        </div>
-    </div>
-    <div ng-show="!data.is_pack">
-        <div class="form-group">
-            <label for="fname" class="col-sm-2 control-label">Nom d'achat</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="fname" placeholder="Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name" tooltip="Nomination du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
-            </div>
-            <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="fname_plural" placeholder="Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="fcontainer" class="col-sm-2 control-label">Contenant</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="fcontainer" placeholder="Pot" ng-disabled="data.id_id || block" ng-model="data.id_container" tooltip="Pot, Paquet, Boite, Bouteille" tooltip-trigger="focus" tooltip-placement="bottom">
-            </div>
-            <label for="fcontainer_plural" class="col-sm-2 control-label">Pluriel</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="fcontainer_plural" placeholder="Pots" ng-disabled="data.id_id || block" ng-model="data.id_container_plural" tooltip-trigger="focus" tooltip-placement="bottom">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="funit" class="col-sm-2 control-label">Unité</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="funit" placeholder="g" ng-disabled="data.id_id || block" ng-model="data.id_unit" tooltip="Unité écrite sur le contenant (g, ml, tranche...), ou vide si sans unité" tooltip-trigger="focus" tooltip-placement="bottom">
-              <span class="help-block">
-                  Laisser <b>vide</b> si l'aliment se vend à l'unité, de manière indivisible (pizzas, pains au chocolat...).
-              </span>
-            </div>
-            <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-disabled="data.id_id || block" ng-model="data.id_unit_plural" tooltip-trigger="focus" tooltip-placement="bottom">
-            </div>
-        </div>
-        <div class="form-group" ng-show="data.id_unit || data.id_container">
-            <label for="fcontainer_qty" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="number" step="any" min="0" class="form-control" id="fcontainer_qty" placeholder="1000" ng-model="data.id_container_qty" ng-disabled="data.id_id || block">
-                    <div class="input-group-addon">
-                        {{ (data.id_unit_plural && data.id_container_qty > 1) && data.id_unit_plural || (data.id_unit || ((data.id_name_plural && data.id_container_qty > 1) && data.id_name_plural || data.id_name)) }}
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <p><small>Si votre aliment est un paquet, et si les éléments du paquet ont leur propre code-barre (typiquement un pack de canettes de coca) choisissez <strong>pack</strong>.</small></p>
                     </div>
                 </div>
+                <hr class="derrierebtn" />
+                <div class="btn-group btn-group-sm derrierebtn">
+                    <a class="btn btn-primary" ng-class="block && 'disabled' || (!data.is_pack && 'active')" ng-click="data.is_pack = false">Il s'agit d'un aliment normal</a>
+                    <a class="btn btn-primary" ng-class="block && 'disabled' || (data.is_pack && 'active')" ng-click="data.is_pack = true">Il s'agit d'un pack</a>
+                </div>
+                <br /><br />
+            </div>
+            <div ng-show="data.is_pack">
+                <div class="form-group">
+                    <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
+                    <div class="col-sm-3">
+                        <input type="number" step="any" class="form-control" id="fpqty" placeholder="6" ng-model="data.bi_itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.bi_id || block">
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-barcode"></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="canettes de coca 33cl" ng-model="itemInPack" tooltip="Produit contenu dans le pack" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.buyitem.details.name for item in buy_item_pricesf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="choiceItemDetail($item, $model, $label)" ng-keypress="createItemPack($event)" ng-disabled="block" typeahead-template-url="components/admin/food/typehead-itemdetails.html">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fpprice" class="col-sm-2 control-label">Prix</label>
+                    <div class="col-sm-7">
+                        <input type="number" step="any" min="0" class="form-control" id="fpprice" placeholder="2.34" ng-model="data.bip_price" ng-disabled="data.bip_id || block">
+                    </div>
+                    <label class="col-sm-3 control-label">€ / pack</label>
+                </div>
+            </div>
+            <div ng-show="!data.is_pack">
+                <div class="form-group">
+                    <label for="fname" class="col-sm-2 control-label">Nom d'achat</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="fname" placeholder="Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name" tooltip="Nomination du produit acheté" tooltip-trigger="focus" tooltip-placement="bottom">
+                    </div>
+                    <label for="fname_plural" class="col-sm-2 control-label">Pluriel</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="fname_plural" placeholder="Nutella" ng-disabled="data.id_id || block" ng-model="data.id_name_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fcontainer" class="col-sm-2 control-label">Contenant</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="fcontainer" placeholder="Pot" ng-disabled="data.id_id || block" ng-model="data.id_container" tooltip="Pot, Paquet, Boite, Bouteille" tooltip-trigger="focus" tooltip-placement="bottom">
+                    </div>
+                    <label for="fcontainer_plural" class="col-sm-2 control-label">Pluriel</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="fcontainer_plural" placeholder="Pots" ng-disabled="data.id_id || block" ng-model="data.id_container_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="funit" class="col-sm-2 control-label">Unité</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="funit" placeholder="g" ng-disabled="data.id_id || block" ng-model="data.id_unit" tooltip="Unité écrite sur le contenant (g, ml, tranche...), ou vide si sans unité" tooltip-trigger="focus" tooltip-placement="bottom">
+                      <span class="help-block">
+                          Laisser <b>vide</b> si l'aliment se vend à l'unité, de manière indivisible (pizzas, pains au chocolat...).
+                      </span>
+                    </div>
+                    <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-disabled="data.id_id || block" ng-model="data.id_unit_plural" tooltip-trigger="focus" tooltip-placement="bottom">
+                    </div>
+                </div>
+                <div class="form-group" ng-show="data.id_unit || data.id_container">
+                    <label for="fcontainer_qty" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="number" step="any" min="0" class="form-control" id="fcontainer_qty" placeholder="1000" ng-model="data.id_container_qty" ng-disabled="data.id_id || block">
+                            <div class="input-group-addon">
+                                {{ (data.id_unit_plural && data.id_container_qty > 1) && data.id_unit_plural || (data.id_unit || ((data.id_name_plural && data.id_container_qty > 1) && data.id_name_plural || data.id_name)) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fbrand" class="col-sm-2 control-label">Marque</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="fbrand" placeholder="" ng-model="data.id_brand" ng-disabled="data.id_id || block">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Aperçu</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">
+                            Appro de 4 <bars:itemdetails qty="4" itemdetails="overviewItemdetails()"></bars:itemdetails>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="fbrand" class="col-sm-2 control-label">Marque</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="fbrand" placeholder="" ng-model="data.id_brand" ng-disabled="data.id_id || block">
-            </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Aliment vendu</h3>
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Aperçu</label>
-            <div class="col-sm-10">
-                <p class="form-control-static">
-                    Appro de 4 <bars:itemdetails qty="4" itemdetails="overviewItemdetails()"></bars:itemdetails>
-                </p>
+        <div class="panel-body">
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <p>
+                            <small>Vous pouvez choisir de vendre sous un même nom des aliments aux codes-barres différents.<br />
+                            Par exemple, vous achetez des pots de Nutella de 720g, 800g et 1kg et vous souhaitez simplement vendre du "Nutella".</small>
+                        </p>
+                    </div>
+                </div>
+                <hr class="derrierebtn" />
+                <div class="btn-group btn-group-sm derrierebtn">
+                    <a class="btn btn-primary" ng-class="block && 'disabled' || (data.new_sell && 'active')" ng-click="data.new_sell = true">Le bar ne vend pas encore cet aliment</a>
+                    <a class="btn btn-primary" ng-class="block && 'disabled' || (!data.new_sell && 'active')" ng-click="data.new_sell = false">Rattacher à un aliment déjà vendu</a>
+                </div>
+                <br /><br />
             </div>
-        </div>
-        <div class="text-center">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
-                    <p>
-                        <small>Vous pouvez choisir de vendre sous un même nom des aliments aux codes-barres différents.<br />
-                        Par exemple, vous achetez des pots de Nutella de 720g, 800g et 1kg et vous souhaitez simplement vendre du "Nutella".</small>
+            <div ng-show="data.new_sell">
+                <div class="form-group">
+                    <label for="fsname" class="col-sm-2 control-label">Nom de vente</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-model="data.sei_name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
+                    </div>
+                    <label for="fsname_plural" class="col-sm-2 control-label">Pluriel</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-model="data.sei_name_plural" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="funit" placeholder="g" ng-model="data.sei_unit_name" tooltip="g, ml, tranche, etc..., ou rien" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
+                        <span class="help-block">
+                            Laisser <b>vide</b> si l'aliment se vend à l'unité, de manière indivisible (pizzas, pains au chocolat...).
+                        </span>
+                    </div>
+                    <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="data.sei_unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id || block">
+                    </div>
+                </div>
+            </div>
+            <div ng-show="!data.new_sell">
+                <div class="form-group">
+                    <label for="funit" class="col-sm-2 control-label">Aliment</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" placeholder="Nutella" ng-model="oldSellItem" tooltip="Produit déjà vendu par le bar" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.name for item in sellitemsf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="choiceSellItem($item, $model, $label)" typeahead-template-url="components/admin/food/typehead-sell-item.html"  ng-disabled="block" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input type="number" step="any" min="0" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="data.sti_sell_to_buy" ng-disabled="data.sti_id || block">
+                        <div class="input-group-addon">
+                            {{ (data.sei_unit_name_plural && data.sti_sell_to_buy > 1) && data.sei_unit_name_plural || (data.sei_unit_name || ((data.sei_name_plural && data.sti_sell_to_buy > 1) && data.sei_name_plural || data.sei_name)) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fprice" class="col-sm-2 control-label">Prix</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input type="number" step="any" min="0" class="form-control" id="fprice" placeholder="2.34" ng-model="data.bip_price" ng-disabled="data.bip_id || block">
+                        <div class="input-group-addon">
+                            € / 1 <bars:itemdetails qty="1" itemdetails="overviewItemdetails()"></bars:itemdetails>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-if="data.new_sell">
+                <label for="tax" class="col-sm-2 control-label">Taxe</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input type="number" step="any" min="0" class="form-control" id="tax" placeholder="20" ng-model="data.sei_tax" ng-disabled="data.sei_id || block">
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="(data.id_id && data.sei_id)  || block" ng-model="data.keywords">
+                </div>
+            </div>
+            <div class="form-group" ng-if="isValid()">
+                <label class="col-sm-2 control-label">Aperçu</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">
+                        Achat de 53 <span ng-if="data.sei_unit_name">{{ data.sei_unit_name_plural || data.sei_unit_name }} de {{ data.sei_name }}</span> <span ng-if="!data.sei_unit_name">{{ data.sei_name_plural || data.sei_name }}</span> pour {{ data.bip_price*(1+data.sei_tax/100)/data.sti_sell_to_buy*53 | currency }}
                     </p>
                 </div>
             </div>
-            <hr class="derrierebtn" />
-            <div class="btn-group btn-group-sm derrierebtn">
-                <a class="btn btn-primary" ng-class="block && 'disabled' || (data.new_sell && 'active')" ng-click="data.new_sell = true">Le bar ne vend pas encore cet aliment</a>
-                <a class="btn btn-primary" ng-class="block && 'disabled' || (!data.new_sell && 'active')" ng-click="data.new_sell = false">Rattacher à un aliment déjà vendu</a>
-            </div>
-            <br /><br />
         </div>
-        <div ng-show="data.new_sell">
-            <div class="form-group">
-                <label for="fsname" class="col-sm-2 control-label">Nom de vente</label>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-model="data.sei_name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
-                </div>
-                <label for="fsname_plural" class="col-sm-2 control-label">Pluriel</label>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-model="data.sei_name_plural" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="funit" placeholder="g" ng-model="data.sei_unit_name" tooltip="g, ml, tranche, etc..., ou rien" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
-                    <span class="help-block">
-                        Laisser <b>vide</b> si l'aliment se vend à l'unité, de manière indivisible (pizzas, pains au chocolat...).
-                    </span>
-                </div>
-                <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="data.sei_unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id || block">
-                </div>
-            </div>
-        </div>
-        <div ng-show="!data.new_sell">
-            <div class="form-group">
-                <label for="funit" class="col-sm-2 control-label">Aliment</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" placeholder="Nutella" ng-model="oldSellItem" tooltip="Produit déjà vendu par le bar" tooltip-trigger="focus" tooltip-placement="bottom" typeahead="item.name for item in sellitemsf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="choiceSellItem($item, $model, $label)" typeahead-template-url="components/admin/food/typehead-sell-item.html"  ng-disabled="block" />
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="number" step="any" min="0" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="data.sti_sell_to_buy" ng-disabled="data.sti_id || block">
-                    <div class="input-group-addon">
-                        {{ (data.sei_unit_name_plural && data.sti_sell_to_buy > 1) && data.sei_unit_name_plural || (data.sei_unit_name || ((data.sei_name_plural && data.sti_sell_to_buy > 1) && data.sei_name_plural || data.sei_name)) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="fprice" class="col-sm-2 control-label">Prix</label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="number" step="any" min="0" class="form-control" id="fprice" placeholder="2.34" ng-model="data.bip_price" ng-disabled="data.bip_id || block">
-                    <div class="input-group-addon">
-                        € / 1 <bars:itemdetails qty="1" itemdetails="overviewItemdetails()"></bars:itemdetails>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group" ng-if="data.new_sell">
-            <label for="tax" class="col-sm-2 control-label">Taxe</label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="number" step="any" min="0" class="form-control" id="tax" placeholder="20" ng-model="data.sei_tax" ng-disabled="data.sei_id || block">
-                    <span class="input-group-addon">%</span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="(data.id_id && data.sei_id)  || block" ng-model="data.keywords">
-            </div>
-        </div>
-        <div class="form-group" ng-if="isValid()">
-            <label class="col-sm-2 control-label">Aperçu</label>
-            <div class="col-sm-10">
-                <p class="form-control-static">
-                    Achat de 53 <span ng-if="data.sei_unit_name">{{ data.sei_unit_name_plural || data.sei_unit_name }} de {{ data.sei_name }}</span> <span ng-if="!data.sei_unit_name">{{ data.sei_name_plural || data.sei_name }}</span> pour {{ data.bip_price*(1+data.sei_tax/100)/data.sti_sell_to_buy*53 | currency }}
-                </p>
-            </div>
-        </div>
-        <!-- <div class="form-group" ng-if="buy_item_price.price && sell_item.name && sell_item.tax && stock_item.sell_to_buy">
-            <label class="col-sm-2 control-label">Aperçu</label>
-            <div class="col-sm-10">
-                <p class="form-control-static">
-                    Achat de <bars:sellitem item="sell_item" qty="53"></bars:sellitem> pour {{ buy_item_price.price*(1+sell_item.tax/100)/stock_item.sell_to_buy*53 | currency }}
-                </p>
-            </div>
-        </div> -->
     </div>
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <input type="submit" class="btn btn-primary" value="Ajouter" ng-class="!isValid() && 'disabled' || ''" />
-        </div>
+    <div class="col-sm-12 text-center">
+        <input type="submit" class="btn btn-primary" value="Ajouter" ng-class="!isValid() && 'disabled' || ''" />
     </div>
 </form>
 <div class="alert alert-danger" ng-if="!(user.can('add_sellitem') && user.can('add_stockitem') && user.can('add_itemdetails') && user.can('add_buyitem') && user.can('add_buyitemprice'))">
