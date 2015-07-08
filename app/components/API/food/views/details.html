@@ -32,7 +32,7 @@
                     {{ (food_item.unit_name_plural && query.qty > 1) && food_item.unit_name_plural || (food_item.unit_name || ((food_item.name_plural && query.qty > 1) && food_item.name_plural || food_item.name)) }}
                 </div>
 
-                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.unit == 'itemdetails' && query.qty*food_item.fuzzy_price/food_item.stockitems[0].sell_to_buy || query.qty*food_item.fuzzy_price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="(query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1) && query.type != 'throw' && query.type != 'appro'" />
+                <input type="submit" class="btn btn-success" value="Valider{{ query.qty > 0 && ' pour ' + ((query.unit == 'itemdetails' && query.qty*food_item.fuzzy_price/food_item.stockitems[0].sell_to_buy || query.qty*food_item.fuzzy_price) | currency) || '' }}" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="(query.type == 'buy' || query.type == 'add' || food_item.stockitems.length == 1) && query.type != 'throw' && query.type != 'inventory' && query.type != 'appro'" />
 
                 <span ng-if="query.type == 'throw' && food_item.stockitems.length > 1"> venant de </span>
                 <span ng-if="query.type == 'inventory' && food_item.stockitems.length > 1"> de </span>
@@ -43,12 +43,15 @@
                 <div class="checkbox unit" ng-if="(query.type == 'appro' && buy_item_prices.length == 1)">
                     <bars:itemdetails qty="query.qty" itemdetails="query.buyitemprice.buyitem.details"></bars:itemdetails>
                 </div>
-                <div class="checkbox unit" ng-if="(query.type == 'appro') && buy_item_prices.length > 1">&times;</div>
+                <div class="checkbox unit" ng-if="(query.type == 'appro')">&times;</div>
                 <!-- <select class="form-control" ng-model="query.buyitemprice" ng-options="(bip.buyitem.itemqty + ' ' + (bip.buyitem.itemqty > 1 && bip.buyitem.details.name_plural || bip.buyitem.details.name)) for bip in buy_item_prices" ng-if="(query.type == 'appro') && buy_item_prices.length > 1"></select> -->
                 <select class="form-control" ng-model="query.buyitemprice" ng-show="(query.type == 'appro') && buy_item_prices.length > 1">
                     <option ng-repeat="bip in buy_item_prices" value="{{ bip.buyitem.id }}" compile='"<bars:buyitem buyitem=\"bip.buyitem\"></bars:buyitem>"'>
                     </option>
                 </select>
+                <span ng-show="(query.type == 'appro') && buy_item_prices.length == 1">
+                    <bars:buyitem buyitem="buy_item_prices[0].buyitem"></bars:buyitem>
+                </span>
                 <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'appro' && buy_item_prices.length > 0" />
             </form>
         </div>
