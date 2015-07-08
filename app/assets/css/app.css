@@ -212,6 +212,30 @@ td.qty {
 td.remove {
     width: 20px;
 }
+td.icon {
+    width: 20px;
+}
+tr.condensed td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    font-size: 0.8em;
+    height: calc(0.8em + 8px);
+}
+td.alinea {
+    padding-left: 24px !important;
+}
+td.icon.ascii {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 4px !important;
+    font-size: calc(0.8em + 12px);
+    line-height: 0.8em;
+    height: calc(0.8em + 4px);
+    color: gray;
+}
+td.ascii.first {
+    overflow-y: hidden;
+}
 
 hr.derrierebtn {
     position: relative;
