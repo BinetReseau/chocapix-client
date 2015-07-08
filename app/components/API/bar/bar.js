@@ -12,7 +12,11 @@ angular.module('bars.api.bar', [
                 structure: {
                     'settings': "BarSettings"
                 },
-                methods: {}
+                methods: {
+                    'filter': function(s) {
+                        return _.deburr(this.id.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 || _.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
+                    }
+                }
             });
     }])
 ;

@@ -3,7 +3,7 @@
         <div class="panel-heading clearfix">
             <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">Bars</h4>
             <input type="text" class="form-control right small" ng-model="searchl" placeholder="Rechercher">
-            <a title="Ajouter un bar" class="pull-right btn btn-success" ui-sref="#"><!-- ng-show="user.can('add_bar')" -->
+            <a title="Ajouter un bar" class="pull-right btn btn-success" ui-sref="root.bar.add" ng-show="user.can('add_bar')">
                 Ajouter
             </a>
         </div>
@@ -13,7 +13,7 @@
                 <th>Nombre de comptes</th>
                 <th></th>
             </tr>
-            <tr ng-repeat="bar in bars_list | filter:searchl | orderBy:list_order:reverse" ng-class="bar.deleted && 'del' || ''">
+            <tr ng-repeat="bar in bars_list | filter:filterBar | orderBy:list_order:reverse" ng-class="bar.deleted && 'del' || ''">
                 <td>{{ bar.name }}</td>
                 <td>{{ 34 }}</td>
                 <td>Actions</td>
