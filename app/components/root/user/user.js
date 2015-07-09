@@ -41,6 +41,8 @@ angular.module('bars.root.user', [
         $scope.root.active = 'user';
         $scope.user_list = user_list;
         $scope.searchl = '';
+        $scope.search_rb = '';
+
         $scope.findUser = function(usr) {
             $state.go('root.user.details', {id: usr.id});
         };
@@ -48,6 +50,7 @@ angular.module('bars.root.user', [
         $scope.respos = _.uniq(roles, false, function (r) {
             return r.user.id;
         });
+
         $scope.remails = _.reduce($scope.respos, function (l, r) {
             if (r.user.email) {
                 return l + ', ' + r.user.email;
@@ -55,35 +58,35 @@ angular.module('bars.root.user', [
                 return l;
             }
         }, '');
-
+        
         // Importation
-        $scope.lista = "";
-        $scope.oa = [];
-        $scope.$watch('lista', function () {
-            if (JSON.parse($scope.lista)) {
-                $scope.oa = JSON.parse($scope.lista);
-            }
-        });
-        $scope.importUsers = function() {
-            $scope.total = $scope.oa.length;
-            $scope.nb = 0;
-            _.forEach($scope.oa, function (ouser) {
-                var nuser = User.create();
-                nuser.firstname = _.capitalize(_.trim(ouser.firstname));
-                nuser.lastname = _.capitalize(_.trim(ouser.lastname));
-                nuser.email = ouser.email;
-                nuser.username = ouser.login;
-                nuser.$save().then(function(u) {
-                    APIInterface.setBar(ouser.section);
-                    var naccount = Account.create();
-                    naccount.owner = u.id;
-                    //naccount.money = ouser.money;
-                    naccount.$save().then(function(a) {
-                        $scope.nb++;
-                    });
-                });
-            });
-        };
+        // $scope.lista = "";
+        // $scope.oa = [];
+        // $scope.$watch('lista', function () {
+        //     if (JSON.parse($scope.lista)) {
+        //         $scope.oa = JSON.parse($scope.lista);
+        //     }
+        // });
+        // $scope.importUsers = function() {
+        //     $scope.total = $scope.oa.length;
+        //     $scope.nb = 0;
+        //     _.forEach($scope.oa, function (ouser) {
+        //         var nuser = User.create();
+        //         nuser.firstname = _.capitalize(_.trim(ouser.firstname));
+        //         nuser.lastname = _.capitalize(_.trim(ouser.lastname));
+        //         nuser.email = ouser.email;
+        //         nuser.username = ouser.login;
+        //         nuser.$save().then(function(u) {
+        //             APIInterface.setBar(ouser.section);
+        //             var naccount = Account.create();
+        //             naccount.owner = u.id;
+        //             //naccount.money = ouser.money;
+        //             naccount.$save().then(function(a) {
+        //                 $scope.nb++;
+        //             });
+        //         });
+        //     });
+        // };
     }]
 )
 
