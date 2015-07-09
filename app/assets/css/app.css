@@ -228,6 +228,16 @@ hr.derrierebtn {
     margin: 0;
     border-color: #ccc;
 }
+.meal .popover-content {
+    padding: 0 !important;
+}
+.meal .popover {
+    width: 400px;
+    max-width: 400px;
+}
+.meal .popover-title {
+    text-align: center;
+}
 
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {

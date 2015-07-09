@@ -1,55 +1,47 @@
-<div class="popover {{ placement }}" ng-class="{ in: isOpen(), fade: animation() }" style="width: 400px; max-width: 400px;">
-    <div class="arrow"></div>
-    <div class="popover-inner">
-        <h3 class="popover-title text-center">Bouffe<span ng-if="meal.customersList.length > 1"> à plusieurs</span></h3>
-        <div class="popover-content" style="padding: 0;">
-            <div class="list-group" style="margin: 0px;">
-                <div class="list-group-item">
-                    <form class="form-horizontal text-center">
-                        <label class="sr-only" for="mealTitleInput">Titre de la bouffe</label>
-                        <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Titre de la bouffe" ng-model="meal.name" />
-                    </form>
-                    <button class="btn btn-success btn-block" ng-class="(meal.inRequest || meal.totalPrice <= 0) && 'disabled'" ng-click="meal.validate()">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
+<div class="list-group" style="margin: 0px;">
+    <div class="list-group-item">
+        <form class="form-horizontal text-center">
+            <label class="sr-only" for="mealTitleInput">Titre de la bouffe</label>
+            <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Titre de la bouffe" ng-model="meal.name" />
+        </form>
+        <button class="btn btn-success btn-block" ng-class="(meal.inRequest || meal.totalPrice <= 0) && 'disabled'" ng-click="meal.validate()">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
+    </div>
+    <div class="list-group-item">
+        <h5 class="list-group-item-heading text-center">Participants</h5>
+        <div class="list-group-item-text">
+            <form class="form-inline text-center">
+                <div class="form-group">
+                    <label class="sr-only" for="addMealCustomerInput">Ajouter</label>
+                    <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" ng-model="meal.accountToAdd" typeahead="account.owner.firstname + ' ' + account.owner.lastname for account in accountsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
                 </div>
-                <div class="list-group-item">
-                    <h5 class="list-group-item-heading text-center">Participants</h5>
-                    <div class="list-group-item-text">
-                        <form class="form-inline text-center">
-                            <div class="form-group">
-                                <label class="sr-only" for="addMealCustomerInput">Ajouter</label>
-                                <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" ng-model="meal.accountToAdd" typeahead="account.owner.firstname + ' ' + account.owner.lastname for account in accountsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
-                            </div>
-                        </form>
-                        <br />
-                        <div class="div-scroll">
-                        <table class="table table-condensed no-border">
-                            <tr ng-repeat="customer in meal.customersList" class="animated meal no-border">
-                                <td class="vmiddle qty"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm pqty" placeholder="1" ng-model="customer.ratio" ng-change="meal.recomputeAmount()"></td>
-                                <td class="vmiddle"><span class="form-control-static"><bars:account account="customer.account"></bars:account></span></td>
-                                <td class="text-right"><span class="label label-info vbottom">{{ customer.amount | currency }}</span></td>
-                                <td class="vmiddle text-right remove">
-                                    <a class="text-muted" ng-click="meal.removeCustomer(customer)"><span class="glyphicon glyphicon-remove"></span></a>
-                                </td>
-                            </tr>
-                        </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <h5 class="list-group-item-heading text-center">Aliments</h5>
-                    <div class="list-group-item-text">
-                        <table class="table table-condensed no-border">
-                            <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
-                                <td class="vmiddle qty"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm pqty" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit_name }}</td>
-                                <td class="vmiddle"><span class="form-control-static"><bars:sellitem item="item.item"></bars:sellitem></span></td>
-                                <td class="vmiddle text-right remove">
-                                    <a class="text-muted" ng-click="meal.removeItem(item)"><span class="glyphicon glyphicon-remove"></span></a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+            </form>
+            <br />
+            <div class="div-scroll">
+            <table class="table table-condensed no-border">
+                <tr ng-repeat="customer in meal.customersList" class="animated meal no-border">
+                    <td class="vmiddle qty"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm pqty" placeholder="1" ng-model="customer.ratio" ng-change="meal.recomputeAmount()"></td>
+                    <td class="vmiddle"><span class="form-control-static"><bars:account account="customer.account"></bars:account></span></td>
+                    <td class="text-right"><span class="label label-info vbottom">{{ customer.amount | currency }}</span></td>
+                    <td class="vmiddle text-right remove">
+                        <a class="text-muted" ng-click="meal.removeCustomer(customer)"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            </table>
             </div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <h5 class="list-group-item-heading text-center">Aliments</h5>
+        <div class="list-group-item-text">
+            <table class="table table-condensed no-border">
+                <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
+                    <td class="vmiddle qty"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm pqty" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.item.unit_name }}</td>
+                    <td class="vmiddle"><span class="form-control-static"><bars:sellitem item="item.item"></bars:sellitem></span></td>
+                    <td class="vmiddle text-right remove">
+                        <a class="text-muted" ng-click="meal.removeItem(item)"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

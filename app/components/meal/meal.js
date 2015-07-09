@@ -4,8 +4,8 @@ angular.module('bars.meal', [
 ])
 
 .controller('meal.ctrl',
-    ['$scope', 'api.models.account', 'bars.meal',
-    function($scope, Account, Meal) {
+    ['$scope', '$element', '$timeout', '$rootScope', 'api.models.account', 'bars.meal',
+    function($scope, $element, $timeout, $rootScope, Account, Meal) {
         $scope.meal = Meal;
         var accounts = Account.all();
         $scope.accountsf = function (v) {
@@ -13,20 +13,31 @@ angular.module('bars.meal', [
                 return a.filter(v);
             });
         };
+        var openned = false;
+        var _this = this;
+        this.toggle = function () {
+            $timeout(function () {
+                $element.triggerHandler(openned ? 'close' : 'open');
+                openned = !openned;
+            });
+        };
+        var close = function () {
+            if (openned) {
+                _this.toggle();
+            }
+        }
+        $rootScope.$on('auth.hasLoggedOut', close);
     }]
 )
-.directive('popoverMealPopup', [function() {
-    return {
-        restrict: 'EA',
-        templateUrl: 'components/meal/panel.html',
-        controller: 'meal.ctrl',
-        replace: true,
-        scope: {animation: '&', isOpen: '&', placement: '@'}
-    };
-}])
-.directive('popoverMeal', ['$compile', '$timeout', '$parse', '$window', '$tooltip', function ($compile, $timeout, $parse, $window, $tooltip) {
-    return $tooltip('popoverMeal', 'popover', 'click');
-}])
+.directive('popoverMeal', function() {
+  return {
+    scope: true,
+    controller: 'meal.ctrl',
+    link: function(scope, element, attrs, ctrl) {
+        return element.on('click', ctrl.toggle);
+    }
+  };
+})
 .factory('bars.meal',
     ['$rootScope', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
     function ($rootScope, SellItem, Account, APIAction, AuthUser) {
