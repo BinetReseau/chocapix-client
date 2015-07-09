@@ -101,18 +101,19 @@ angular.module('bars.root.user', [
     function($scope, User, Role, user, accounts, user_roles){
         $scope.user = user;
         $scope.userBis = _.clone($scope.user);
+        console.log($scope.userBis);
         $scope.accounts = accounts;
         $scope.isRespoBar = function(b) {
             var res = _.filter(user_roles, function(r) {
                 return r.name == "admin" && r.bar.id == b;
             });
-            console.log(res);
             return res.length > 0;
         };
 
         $scope.saveUser = function() {
             $scope.user.firstname = $scope.userBis.firstname;
             $scope.user.lastname = $scope.userBis.lastname;
+            $scope.user.email = $scope.userBis.email;
             $scope.user.$save().then(function(u) {
                 $scope.user = u;
                 $scope.userBis = _.clone(u);
