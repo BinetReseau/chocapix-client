@@ -379,7 +379,8 @@ angular.module('bars.api.food', [
                 s.sell_to_buy = s.sell_to_buy * $scope.newFood_item.unit_factor;
                 s.price = s.price * $scope.newFood_item.unit_factor;
                 s.$save();
-            })
+            });
+            $scope.resetFood();
         };
         $scope.resetFood();
     }]
