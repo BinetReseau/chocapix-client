@@ -29,6 +29,12 @@ angular.module('bars.root.user', [
             resolve: {
                 user_req: ['api.models.user', '$stateParams', function(User, $stateParams) {
                     return User.getSync($stateParams.id);
+                }],
+                accounts: ['api.models.account', '$stateParams', function(Account, $stateParams) {
+                    return Account.ofUser($stateParams.id);
+                }],
+                user_roles: ['api.models.role', '$stateParams', function(Role, $stateParams) {
+                    return Role.ofUser($stateParams.id);
                 }]
             }
         })
@@ -58,7 +64,7 @@ angular.module('bars.root.user', [
                 return l;
             }
         }, '');
-        
+
         // Importation
         // $scope.lista = "";
         // $scope.oa = [];
@@ -91,10 +97,18 @@ angular.module('bars.root.user', [
 )
 
 .controller('root.ctrl.user.details',
-    ['$scope', 'api.models.user', 'api.models.role', 'user_req',
-    function($scope, User, Role, user){
+    ['$scope', 'api.models.user', 'api.models.role', 'user_req', 'accounts', 'user_roles', 
+    function($scope, User, Role, user, accounts, user_roles){
         $scope.user = user;
         $scope.userBis = _.clone($scope.user);
+        $scope.accounts = accounts;
+        $scope.isRespoBar = function(b) {
+            var res = _.filter(user_roles, function(r) {
+                return r.name == "admin" && r.bar.id == b;
+            });
+            console.log(res);
+            return res.length > 0;
+        };
 
         $scope.saveUser = function() {
             $scope.user.firstname = $scope.userBis.firstname;

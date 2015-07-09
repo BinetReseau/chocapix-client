@@ -18,20 +18,25 @@
                                         <span class="h4">{{ user.firstname }}</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="last-tr">
                                     <td class="h4 vmiddle title">Pseudo</td>
                                     <td class="end-of-column vmiddle text-right value">
                                         <span class="h4">{{ user.pseudo }}</span>
                                     </td>
-                                    <td class="h4 vmiddle title">Administrateur</td>
+                                    <td class="h4 vmiddle title">Email</td>
                                     <td class="vmiddle text-right value">
-                                        <span class="h4">Oui</span>
+                                        <span class="h4"><a href="mailto:{{ user.email }}" tooltip="Envoyer un mail">{{ user.email }}</a></span>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="4">Liste des bars (sous forme d'icone avec une indication si respo bar)</td>
-                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td ng-repeat="a in accounts | orderBy:'bar.id'" class="text-center">
+                                        <img ng-src="assets/img/sections/{{ a.bar.id }}.png" alt="{{ a.bar.name || a.bar.id }}" /><br />
+                                        <span ng-if="isRespoBar(a.bar.id)">Respo bar</span>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </tab>
