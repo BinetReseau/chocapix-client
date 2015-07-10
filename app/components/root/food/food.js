@@ -36,6 +36,10 @@ angular.module('bars.root.food', [
     function($scope, itemdetails_list, $state){
         $scope.itemdetails_list = itemdetails_list;
         $scope.searchl = '';
+        $scope.ordre = {
+            name: 'name',
+            revert: false
+        }
         $scope.filterItems = function(o) {
             return o.filter($scope.searchl);
         };
