@@ -43,17 +43,26 @@ angular.module('bars.root.bar', [
         $scope.filterBar = function(o) {
             return o.filter($scope.searchl);
         };
+
+        $scope.deleteBar = function(b) {
+            if (confirm('Cette action est irréversible ! Toutes les transactions de ce bar, ainsi que les comptes seront définitivement perdus. Es-tu sûr de vouloir continuer ?')) {
+                b.$delete().then(function() {
+                    //
+                });
+            }
+        };
     }]
 )
 
 .controller('root.ctrl.bar.add', 
-    ['$scope', 'api.models.bar', 
-    function($scope, APIBar) {
+    ['$scope', 'api.models.bar', '$state', 
+    function($scope, APIBar, $state) {
         $scope.bar = APIBar.create();
+        console.log($scope.bar);
 
         $scope.addBar = function(b) {
-            b.$save().then(function(rb) {
-                console.log(rb);
+            b.model.save(b).then(function(rb) {
+                $state.go('root.bar.list');
             }, function(e) {
                 console.log(e);
             });
