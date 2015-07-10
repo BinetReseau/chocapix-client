@@ -1,5 +1,5 @@
 <div class="col-sm-12">
-    <h2 class="text-center">{{ user.firstname + ' ' + user.lastname }}</h2>
+    <h2 class="text-center">{{ user_req.firstname + ' ' + user_req.lastname }}</h2>
 
     <div class="row">
         <div class="col-sm-12">
@@ -11,31 +11,38 @@
                                 <tr>
                                     <td class="h4 vmiddle title">Nom</td>
                                     <td class="end-of-column vmiddle text-right value">
-                                        <span class="h4">{{ user.lastname }}</span>
+                                        <span class="h4">{{ user_req.lastname }}</span>
                                     </td>
                                     <td class="h4 vmiddle title">Prénom</td>
                                     <td class="vmiddle text-right value">
-                                        <span class="h4">{{ user.firstname }}</span>
+                                        <span class="h4">{{ user_req.firstname }}</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="last-tr">
                                     <td class="h4 vmiddle title">Pseudo</td>
                                     <td class="end-of-column vmiddle text-right value">
-                                        <span class="h4">{{ user.pseudo }}</span>
+                                        <span class="h4">{{ user_req.pseudo }}</span>
                                     </td>
-                                    <td class="h4 vmiddle title">Administrateur</td>
+                                    <td class="h4 vmiddle title">Email</td>
                                     <td class="vmiddle text-right value">
-                                        <span class="h4">Oui</span>
+                                        <span class="h4"><a href="mailto:{{ user_req.email }}" tooltip="Envoyer un mail">{{ user_req.email }}</a></span>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">Liste des bars (sous forme d'icone avec une indication si respo bar)</td>
                                 </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td ng-repeat="a in accounts | orderBy:'bar.id'" class="text-center">
+                                        <a ng-click="rights.active = true" tooltip="Gérer les droits" tooltip-placement="left">
+                                            <img ng-src="assets/img/sections/{{ a.bar.id }}.png" alt="{{ a.bar.name || a.bar.id }}" /><br />
+                                        </a>
+                                        <em ng-show="isRespoBar(a.bar.id)">Respo bar</em>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </tab>
-                <tab heading="Modifier">
+                <tab heading="Modifier" ng-if="user.can('change_user')">
                     <div class="row">
                         <div class="col-sm-12">
                             <form class="form-horizontal" role="form" ng-submit="saveUser()">
@@ -52,6 +59,12 @@
                                     </div> 
                                 </div>
                                 <div class="form-group">
+                                    <label class="control-label col-sm-2" for="emailInput">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="emailInput" placeholder="prenom.nom@polytechnique.edu" ng-model="userBis.email" />
+                                    </div> 
+                                </div>
+                                <div class="form-group">
                                     <div class="col-sm-10 col-sm-offset-2">
                                         <input type="submit" value="Valider" class="btn btn-success" />
                                     </div>
@@ -60,11 +73,22 @@
                         </div>
                     </div>
                 </tab>
+                <tab heading="Droits" ng-if="user.can('add_role') || user.can('delete_role')" active="rights.active">
+                    <div class="row">
+                        <table class="table table-tab">
+                            <tbody>
+                                <tr ng-repeat="b in bars_list | orderBy:'name'">
+                                    <td class="h5 vmiddle title">{{ b.name }}</td>
+                                    <td class="vmiddle text-right value">
+                                        <a class="btn btn-sm btn-success" ng-click="appointAdmin(b.id)" ng-if="!isRespoBar(b.id)">Nommer respo bar</a>
+                                        <a class="btn btn-sm btn-danger" ng-click="removeAdmin(b.id)" ng-if="isRespoBar(b.id)">Supprimer les droits de respo bar</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </tab>
             </tabset>
         </div>
     </div>
-    <p>À mettre ici :</p>
-    <ul>
-        <li>Un bouton pour lui donner des droits</li>
-    </ul>
 </div>

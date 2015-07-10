@@ -20,11 +20,6 @@ angular.module('bars.root.bar', [
                 .state('root.bar.list', {
                     url: '/list',
                     templateUrl: "components/root/bar/list.html",
-                    resolve: {
-                        bars_list: ['api.models.bar', 'api.models.barsettings', function(Bar, BarSettings) {
-                            return Bar.reload();
-                        }]
-                    },
                     controller: 'root.ctrl.bar.list'
                 })
                 .state('root.bar.add', {
