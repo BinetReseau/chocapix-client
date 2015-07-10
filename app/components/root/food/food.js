@@ -46,18 +46,17 @@ angular.module('bars.root.food', [
 )
 
 .controller('root.ctrl.food.details',
-    ['$scope', 'item', 'api.models.itemdetails', 'buyitems_list', 
-    function($scope, item, ItemDetails, buyitems_list){
+    ['$scope', 'item', 'api.models.itemdetails', 'api.models.buyitem', 
+    function($scope, item, ItemDetails, BuyItem){
         $scope.item = item;
         $scope.itemBis = _.clone($scope.item);
-        $scope.buyitems = _.filter(buyitems_list, function(b) {
-            return b.details.id == $scope.item.id;
+        BuyItem.request({details: $scope.item.id}).then(function(b) {
+            $scope.buyitems = b;
         });
+
         $scope.hasChanged = function() {
             return !angular.equals($scope.item, $scope.itemBis);
         };
-        console.log(buyitems_list);
-        console.log($scope.buyitems);
 
         $scope.saveItem = function() {
             $scope.item.name = $scope.itemBis.name;
