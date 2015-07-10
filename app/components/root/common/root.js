@@ -38,6 +38,10 @@ angular.module('bars.root', [
                     itemdetails_list: ['api.models.itemdetails', function(ItemDetails) {
                         ItemDetails.clear();
                         return ItemDetails.reload();
+                    }],
+                    buyitems_list: ['api.models.buyitem', function(BuyItem) {
+                        BuyItem.clear();
+                        return BuyItem.reload();
                     }]
                 },
                 views: {
