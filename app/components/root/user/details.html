@@ -1,5 +1,5 @@
 <div class="col-sm-12">
-    <h2 class="text-center">{{ user.firstname + ' ' + user.lastname }}</h2>
+    <h2 class="text-center">{{ user_req.firstname + ' ' + user_req.lastname }}</h2>
 
     <div class="row">
         <div class="col-sm-12">
@@ -11,21 +11,21 @@
                                 <tr>
                                     <td class="h4 vmiddle title">Nom</td>
                                     <td class="end-of-column vmiddle text-right value">
-                                        <span class="h4">{{ user.lastname }}</span>
+                                        <span class="h4">{{ user_req.lastname }}</span>
                                     </td>
                                     <td class="h4 vmiddle title">Prénom</td>
                                     <td class="vmiddle text-right value">
-                                        <span class="h4">{{ user.firstname }}</span>
+                                        <span class="h4">{{ user_req.firstname }}</span>
                                     </td>
                                 </tr>
                                 <tr class="last-tr">
                                     <td class="h4 vmiddle title">Pseudo</td>
                                     <td class="end-of-column vmiddle text-right value">
-                                        <span class="h4">{{ user.pseudo }}</span>
+                                        <span class="h4">{{ user_req.pseudo }}</span>
                                     </td>
                                     <td class="h4 vmiddle title">Email</td>
                                     <td class="vmiddle text-right value">
-                                        <span class="h4"><a href="mailto:{{ user.email }}" tooltip="Envoyer un mail">{{ user.email }}</a></span>
+                                        <span class="h4"><a href="mailto:{{ user_req.email }}" tooltip="Envoyer un mail">{{ user_req.email }}</a></span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -40,7 +40,7 @@
                         </table>
                     </div>
                 </tab>
-                <tab heading="Modifier">
+                <tab heading="Modifier" ng-if="user.can('change_user')">
                     <div class="row">
                         <div class="col-sm-12">
                             <form class="form-horizontal" role="form" ng-submit="saveUser()">
@@ -71,11 +71,22 @@
                         </div>
                     </div>
                 </tab>
+                <tab heading="Droits" ng-if="user.can('add_role') || user.can('delete_role')" active="true">
+                    <div class="row">
+                        <table class="table table-tab">
+                            <tbody>
+                                <tr ng-repeat="b in bars_list | orderBy:'name'">
+                                    <td class="h5 vmiddle title">{{ b.name }}</td>
+                                    <td class="vmiddle text-right value">
+                                        <a class="btn btn-sm btn-success" ng-click="appointAdmin(b.id)" ng-if="!isRespoBar(b.id)">Nommer respo bar</a>
+                                        <a class="btn btn-sm btn-danger" ng-click="removeAdmin(b.id)" ng-if="isRespoBar(b.id)">Supprimer les droits de respo bar</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </tab>
             </tabset>
         </div>
     </div>
-    <p>À mettre ici :</p>
-    <ul>
-        <li>Un bouton pour lui donner des droits</li>
-    </ul>
 </div>

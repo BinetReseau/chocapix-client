@@ -27,9 +27,9 @@ angular.module('bars.root', [
                             return null;
                         }
                     }],
-                    bars_list: ['api.models.bar', function(Bar) {
-                        Bar.reload();
-                        return Bar.all();
+                    bars_list: ['api.models.bar', 'api.models.barsettings', function(Bar, BarSettings) {
+                        Bar.clear();
+                        return Bar.reload();
                     }],
                     user_list: ['api.models.user', function(User) {
                         User.clear();
