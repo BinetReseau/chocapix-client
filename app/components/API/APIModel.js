@@ -113,15 +113,12 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
         APIInterface.prototype.request = function(req, doNotGetLinked) {
             var self = this;
             req.data = this.unparse(req.data);
-            console.log('req.data : ');
-            console.log(req.data);
             if (this.getBar()) {
                 if (req.params) {
                     if (!req.params['bar']) {
                         req.params['bar'] = this.getBar();
                     }
                     if (req.data && req.data['bar']) {
-                        console.log('ok');
                         req.params['bar'] = req.data['bar'];
                     }
                 } else {
@@ -129,7 +126,6 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
                 }
             }
             if (req.data && req.data['bar']) {
-                console.log('non');
                 if (!req.params)
                     req.params = {};
                 req.params['bar'] = req.data['bar'];
