@@ -127,6 +127,9 @@ angular.module('bars.root.user', [
         };
 
         // Perm tab
+        $scope.rights = {
+            active: false
+        };
         var member_bars = [];
         _.forEach(user_roles, function(r) {
             if (r.bar.id != 'root')

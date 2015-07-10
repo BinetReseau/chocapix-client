@@ -32,8 +32,10 @@
                             <tfoot>
                                 <tr>
                                     <td ng-repeat="a in accounts | orderBy:'bar.id'" class="text-center">
-                                        <img ng-src="assets/img/sections/{{ a.bar.id }}.png" alt="{{ a.bar.name || a.bar.id }}" /><br />
-                                        <span ng-if="isRespoBar(a.bar.id)">Respo bar</span>
+                                        <a ng-click="rights.active = true" tooltip="Gérer les droits" tooltip-placement="left">
+                                            <img ng-src="assets/img/sections/{{ a.bar.id }}.png" alt="{{ a.bar.name || a.bar.id }}" /><br />
+                                        </a>
+                                        <em ng-show="isRespoBar(a.bar.id)">Respo bar</em>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -71,7 +73,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Droits" ng-if="user.can('add_role') || user.can('delete_role')" active="true">
+                <tab heading="Droits" ng-if="user.can('add_role') || user.can('delete_role')" active="rights.active">
                     <div class="row">
                         <table class="table table-tab">
                             <tbody>
