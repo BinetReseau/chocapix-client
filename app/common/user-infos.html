@@ -1,6 +1,11 @@
 <ul class="nav navbar-nav navbar-right">
-    <li ng-show="user.can('add_mealtransaction')" class="hidden-xs">
-        <a popover-meal="nothing" popover-placement="bottom" class="link" ng-class="meal.in() && 'in-meal'">
+    <li ng-show="user.can('add_mealtransaction')" class="hidden-xs meal">
+        <a href ng-class="meal.in() && 'in-meal'"
+        popover-template="'components/meal/panel.html'"
+        popover-placement="bottom"
+        popover-title="Bouffe{{ meal.customersList.length > 1 && ' à plusieurs' || ''}}"
+        popover-trigger="open"
+        popover-meal>
             <span class="badge badge-info" ng-if="meal.in()">
                 {{ meal.totalPrice | currency }}
             </span>

@@ -2,7 +2,7 @@
     <table class="table table-striped table-hover table-tab">
         <thead>
             <tr>
-                <th>Article</th>
+                <th>Article acheté</th>
                 <th>Stock</th>
                 <th>Prix</th>
                 <th>
@@ -28,15 +28,21 @@
                     </a>
                 </td>
             </tr>
-            <tr ng-repeat-end ng-if="si.edit">
-                <td><bars:stockitem item="si" qty="1/si.sell_to_buy" out="'buy'"></bars:stockitem> = </td>
+            <tr ng-repeat-end ng-if="si.edit" class="vmiddle">
+                <td class="vmiddle"><bars:stockitem item="si" qty="1/si.sell_to_buy" out="'buy'"></bars:stockitem> = </td>
                 <td>
-                    <input type="number" min="0" step="any" ng-model="si.sell_to_buy_inv" class="form-control input-sm" />&times; <bars:sellitem item="si.sellitem" qty="1"></bars:sellitem>
+                    <form class="form-inline">
+                        <input type="number" min="0" step="any" ng-model="si.sell_to_buy_inv" class="form-control input-sm pqty" /> &times;
+                        <bars:sellitem item="si.sellitem" qty="1"></bars:sellitem>
+                    </form>
                 </td>
                 <td>
-                    <input type="number" min="0" step="any" ng-model="si.buy_price" class="form-control input-sm" />€ / <bars:stockitem item="si" out="'buy'"></bars:stockitem>
+                    <form class="form-inline">
+                        <input type="number" min="0" step="any" ng-model="si.buy_price" class="form-control input-sm pqty" /> € /
+                        <bars:stockitem item="si" out="'buy'"></bars:stockitem>
+                    </form>
                 </td>
-                <td>
+                <td class="vmiddle">
                     <a title="Valider les modifications" ng-click="editStockItem(si)" class="btn btn-xs btn-success link">
                         <span class="glyphicon glyphicon-ok"></span> Valider
                     </a>

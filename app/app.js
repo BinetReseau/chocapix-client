@@ -38,10 +38,11 @@ angular.module('barsApp', [
     // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
 }])
 
-.config(['$httpProvider', '$compileProvider',
-    function ($httpProvider, $compileProvider) {
+.config(['$httpProvider', '$compileProvider', '$tooltipProvider',
+    function ($httpProvider, $compileProvider, $tooltipProvider) {
         $httpProvider.interceptors.push('auth.interceptor');
         $compileProvider.debugInfoEnabled(false);
+        $tooltipProvider.setTriggers({'open': 'close'});
 }])
 
 .run(['amMoment', 'auth.user', '$rootScope',

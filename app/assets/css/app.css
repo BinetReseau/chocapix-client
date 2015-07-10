@@ -215,12 +215,31 @@ td.qty {
 td.remove {
     width: 20px;
 }
+tr.condensed td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    font-size: 0.8em;
+    height: calc(0.8em + 8px);
+}
+td.alinea {
+    padding-left: 48px !important;
+}
 
 hr.derrierebtn {
     position: relative;
     bottom: -1.1em;
     margin: 0;
     border-color: #ccc;
+}
+.meal .popover-content {
+    padding: 0 !important;
+}
+.meal .popover {
+    width: 400px;
+    max-width: 400px;
+}
+.meal .popover-title {
+    text-align: center;
 }
 
 /* Beautiful theme colors */

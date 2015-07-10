@@ -6,11 +6,11 @@ angular.module('bars.bars', [
 
 .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/home");
 
         $stateProvider
             .state('index', {
-                url: "/",
+                url: "/home",
                 resolve: {
                     api: ['APIInterface' , function(APIInterface) {
                         APIInterface.setBar('');

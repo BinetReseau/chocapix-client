@@ -14,11 +14,37 @@
                 <th>Prix</th>
                 <th ng-show="user.can('change_sellitem')">Valeur totale &ensp;<a href="" ng-click="reverse = list_order == qpp ? !reverse : true; list_order = qpp"><span class="glyphicon glyphicon-sort"></span></a></th>
             </tr>
-            <tr ng-repeat="f in food_list | filter:filterItems | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || (f.stockitems.length == 0 && 'warning' || '')) ">
-                <td><bars:sellitem item=":: f"></bars:sellitem></td>
+            <tr ng-repeat-start="f in food_list | filter:filterItems | orderBy:list_order:reverse" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || (f.stockitems.length == 0 && 'warning' || '')) ">
+                <td>
+                    <a ng-click="collapse = !collapse" tooltip="Voir la liste des aliments achetés" href><span class="glyphicon" ng-class="collapse && 'glyphicon-collapse-up' || 'glyphicon-collapse-down'"></span></a>
+                    <bars:sellitem item=":: f"></bars:sellitem>
+                </td>
                 <td><bars:sellitem:qty item=":: f" qty="f.fuzzy_qty" out="'sell'"></bars:sellitem:qty></td>
                 <td><bars:sellitem:price item=":: f" in="'sell'"></bars:sellitem:price></td>
                 <td ng-if="user.can('change_sellitem')">{{ f.fuzzy_price*f.fuzzy_qty | currency }}</td>
+            </tr>
+            <tr ng-repeat="si in f.stockitems | orderBy:list_order:reverse" class="info condensed" ng-if="collapse">
+                <td class="alinea">
+                    <a title="Voir la fiche globale de cet aliment" ui-sref="bar.food.item_details({ bar: '{{ :: si.bar.id }}', id: '{{ :: si.details.id }}' })">
+                      <bars:itemdetails qty="1" itemdetails=":: si.details"></bars:itemdetails>
+                    </a>
+                </td>
+                <td>
+                    <bars:stockitem:qty item=":: si" qty="si.qty" out="'sell'"></bars:stockitem:qty>
+                    {{ si.qty > 1 && f.unit_name_plural || f.unit_name }}
+                    <span ng-if="f.fuzzy_qty != 0">
+                        ({{ si.qty/f.fuzzy_qty*100 | number }} %)
+                    </span>
+                </td>
+                <td><bars:stockitem:price item=":: si" in="'sell'"></bars:stockitem:price></td>
+                <td ng-if="user.can('change_sellitem')">
+                    {{ si.price*si.qty*(1+f.tax) | currency }}
+                    <span ng-if="f.fuzzy_qty != 0 && f.fuzzy_price != 0">
+                        ({{ si.price*si.qty/f.fuzzy_price/f.fuzzy_qty*100*(1+f.tax) | number }} %)
+                    </span>
+                </td>
+            </tr>
+            <tr ng-repeat-end ng-if="false">
             </tr>
         </table>
         <div class="panel-body" ng-if="(food_list | filter:filterItems).length == 0">

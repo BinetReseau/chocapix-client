@@ -8,7 +8,7 @@ angular.module('bars.main', [
     $urlMatcherFactoryProvider.strictMode(false);
     $stateProvider
         .state('bar', {
-            url: "/{bar:[^/]+}",
+            url: "/{bar:(?!home)[^/]+}",
             resolve: {
                 api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
                     APIInterface.setBar($stateParams.bar);
