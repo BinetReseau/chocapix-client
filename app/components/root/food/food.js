@@ -51,6 +51,9 @@ angular.module('bars.root.food', [
         $scope.item = item;
         $scope.itemBis = _.clone($scope.item);
         console.log($scope.itemBis);
+        $scope.hasChanged = function() {
+            return !angular.equals($scope.item, $scope.itemBis);
+        };
 
         $scope.saveItem = function() {
             $scope.item.name = $scope.itemBis.name;
