@@ -6,6 +6,7 @@ angular.module('bars.root', [
     'bars.root.bar',
     'bars.root.user',
     'bars.root.food',
+    'bars.root.news', 
     'bars.root.bug'
     ])
 
