@@ -91,11 +91,23 @@
     <div class="row">
         <div class="col-sm-10 col-sm-offset-2">
             <p>Ce produit peut être acheté :</p>
-            <ul>
-                <li ng-repeat="bi in buyitems">
-                    <span ng-if="bi.itemqty == 1">à l'unité</span>
-                    <span ng-if="bi.itemqty != 1">par lot de {{ bi.itemqty }} {{ bi.itemqty > 1 && (itemBis.container_plural || itemBis.name_plural || itemBis.name) || (itemBis.container || itemBis.name) }}</span>
-                    <span ng-if="bi.barcode"> (code-barres : {{ bi.barcode }})</span>
-                </li>
-            </ul>
+            <table class="table">
+                <tr ng-repeat="bi in buyitems | orderBy:'itemqty'">
+                    <td ng-if="bi.itemqty == 1">
+                        à l'unité
+                    </td>
+                    <td ng-if="bi.itemqty != 1">
+                        par lot de {{ bi.itemqty }} {{ bi.itemqty > 1 && (itemBis.container_plural || itemBis.name_plural || itemBis.name) || (itemBis.container || itemBis.name) }}
+                    </td>
+                    <td>
+                        <span ng-if="bi.barcode">(code-barres : {{ bi.barcode }})</span>
+                    </td>
+                    <td class="text-right">
+                        <a ui-sref="root.food.buyitem_edit({id: bi.id})" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                        <a class="btn btn-xs btn-danger" ng-click="deleteBuyItem(bi)"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                   </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>

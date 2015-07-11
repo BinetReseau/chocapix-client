@@ -1,0 +1,37 @@
+<div class="col-sm-12">
+    <h2 class="text-center">Lot de {{ buy_item.itemqty }} <bars:itemdetails itemdetails="buy_item.details" qty="buy_item.itemqty"></h2>
+
+    <br />
+
+    <form class="form-horizontal" ng-submit="editBI(buy_item_bis)">
+        <div class="form-group">
+            <label for="fbarcode" class="col-sm-3 control-label">Code-barres</label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-barcode"></span>
+                    </div>
+                    <input type="text" class="form-control" id="fbarcode" placeholder="3017624047813" ng-model="buy_item_bis.barcode">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fitemqty" class="col-sm-3 control-label">Ce lot contient</label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input type="number" class="form-control" id="fbarcode" placeholder="3017624047813" ng-model="buy_item_bis.itemqty">
+                    <div class="input-group-addon">
+                        {{ buy_item_bis.details.container && ((buy_item_bis.details.container_plural && buy_item_bis.itemqty > 1) && buy_item_bis.details.container_plural || buy_item_bis.details.container) || ((buy_item_bis.details.name_plural && buy_item_bis.itemqty > 1) && buy_item_bis.details.name_plural || buy_item_bis.details.name) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input type="submit" value="Valider" class="btn btn-success" />
+                <a class="btn btn-warning pull-right" ui-sref="root.food.details({id: buy_item.details.id})">Retour à l'article</a>
+            </div>
+        </div>
+    </form>
+
+</div>
