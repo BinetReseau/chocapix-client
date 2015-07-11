@@ -108,7 +108,7 @@ angular.module('bars.admin.news', [
             news.$save().then(function() {
                 $scope.news_list = _.sortBy(News.all(), 'last_modified');
             });
-        }
+        };
     }
 ])
 .controller('admin.ctrl.news.edit',

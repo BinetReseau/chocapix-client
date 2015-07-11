@@ -39,6 +39,10 @@ angular.module('bars.root', [
                     itemdetails_list: ['api.models.itemdetails', function(ItemDetails) {
                         ItemDetails.clear();
                         return ItemDetails.reload();
+                    }],
+                    news_list: ['api.models.news', function(News) {
+                        News.clear();
+                        return News.request({bar: 'root'});
                     }]
                 },
                 views: {

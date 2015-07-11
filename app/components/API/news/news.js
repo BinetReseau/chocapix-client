@@ -4,9 +4,9 @@ angular.module('bars.api.news', [
     'APIModel'
     ])
 
-.factory('api.models.news', ['APIModel',
-    function(APIModel) {
-        return new APIModel({
+.factory('api.models.news', ['APIModel', 'APIInterface', 
+    function(APIModel, APIInterface) {
+        var model = new APIModel({
                 url: 'news',
                 type: "News",
                 structure: {
@@ -22,6 +22,13 @@ angular.module('bars.api.news', [
                 //     }
                 // }
             });
+        model.request = function(params) {
+            return APIInterface.request({
+                'url': 'news',
+                'method': 'GET',
+                'params': params});
+        }
+        return model;
     }
 ])
 .directive('barsNews', function() {
