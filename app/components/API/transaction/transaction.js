@@ -213,7 +213,7 @@ angular.module('bars.api.transaction', [
                     t.parseTimestamp();
 
                     // Tri de la MagicBar côté client
-                    // À supprimer une fois implémenter côté serveur
+                    // À supprimer une fois implémenté côté serveur
                     if (!t.canceled && AuthUser.isAuthenticated() && fuser == AuthUser.user.id) {
                         if (
                             (t.type == 'buy' && fuser == t.author.id) ||
@@ -225,7 +225,7 @@ angular.module('bars.api.transaction', [
                            ) {
                             _.forEach(t.items, function (item) {
                                 if (item.sellitem.urank) {
-                                    item.sellitem.urank++
+                                    item.sellitem.urank++;
                                 } else {
                                     item.sellitem.urank = 1;
                                 }
@@ -288,11 +288,17 @@ angular.module('bars.api.transaction', [
 
             loadMore();
 
-            $scope.$on('api.model.transaction.add', calculateHistory);
-            $scope.$on('auth.hasLoggedIn', function () {
+            function reinit() {
                 allHistory = [];
                 page = 1;
                 loadMore();
+            }
+
+            $scope.$on('api.model.transaction.add', calculateHistory);
+            $scope.$on('auth.hasLoggedIn', reinit);
+            $scope.$on('api.model.transaction.reload', function () {
+                $scope.history = [];
+                reinit();
             });
         }]
     };

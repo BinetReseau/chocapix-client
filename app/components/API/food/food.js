@@ -264,8 +264,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.stocks',
-    ['$scope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
-    function($scope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
+    function($scope, $rootScope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
         sellitem_list = _.without(sellitem_list, food_item);
         $scope.removeStockItem = function(si) {
             APIInterface.request({
@@ -330,6 +330,7 @@ angular.module('bars.api.food', [
                 si = r;
                 si.edit = false;
                 food_item.$reload();
+                $rootScope.$broadcast('api.model.transaction.reload');
             }, function(errors) {
                 console.log('Erreur lors de la modification de ' + si.details.name);
             });
@@ -340,8 +341,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.edit',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
-    function($scope, $stateParams, food_item, AuthUser, APIAction) {
+    ['$scope', '$rootScope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
+    function($scope, $rootScope, $stateParams, food_item, AuthUser, APIAction) {
         $scope.toggleDeleted = function() {
             $scope.food_item.deleted = !$scope.food_item.deleted;
             $scope.food_item.$save();
@@ -381,6 +382,7 @@ angular.module('bars.api.food', [
                 s.$save();
             });
             $scope.resetFood();
+            $rootScope.$broadcast('api.model.transaction.reload');
         };
         $scope.resetFood();
     }]
@@ -442,6 +444,53 @@ angular.module('bars.api.food', [
             $scope.$watch('item.unit_name', refresh);
             $scope.$watch('item.fuzzy_price', refresh);
             refresh();
+        }]
+    };
+})
+// Special directives with one-way data-binding
+// use it for fast display and no changes
+// Used for history, food list
+.controller('api.ctrl.dir.barssellitemoneway',
+    ['$scope', function($scope) {
+        $scope.unit_name = $scope.item.unit_name;
+        $scope.unit_name_plural = $scope.item.unit_name_plural;
+        $scope.abs = Math.abs;
+    }])
+.directive('barsSellitemOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            //unit: '=?unit',
+            qty: '=?qty'
+        },
+        templateUrl: 'components/API/food/directives/sellitem-oneway-directive.html',
+        controller: 'api.ctrl.dir.barssellitemoneway'
+    };
+})
+.directive('barsSellitemQtyOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            qty: '=qty'
+        },
+        templateUrl: 'components/API/food/directives/sellitem-qty-oneway-directive.html',
+        controller: 'api.ctrl.dir.barssellitemoneway'
+    };
+})
+.directive('barsSellitemPriceOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            qty: '=?qty',
+            tax: '=?tax'
+        },
+        templateUrl: 'components/API/food/directives/sellitem-price-oneway-directive.html',
+        controller: ['$scope', function($scope) {
+            $scope.price = $scope.item.fuzzy_price;
+            $scope.unit_name = $scope.item.unit_name;
         }]
     };
 })
