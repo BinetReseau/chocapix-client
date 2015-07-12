@@ -264,8 +264,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.stocks',
-    ['$scope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
-    function($scope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
+    function($scope, $rootScope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
         sellitem_list = _.without(sellitem_list, food_item);
         $scope.removeStockItem = function(si) {
             APIInterface.request({
@@ -330,6 +330,7 @@ angular.module('bars.api.food', [
                 si = r;
                 si.edit = false;
                 food_item.$reload();
+                $rootScope.$broadcast('api.model.transaction.reload');
             }, function(errors) {
                 console.log('Erreur lors de la modification de ' + si.details.name);
             });
@@ -340,8 +341,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.edit',
-    ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
-    function($scope, $stateParams, food_item, AuthUser, APIAction) {
+    ['$scope', '$rootScope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
+    function($scope, $rootScope, $stateParams, food_item, AuthUser, APIAction) {
         $scope.toggleDeleted = function() {
             $scope.food_item.deleted = !$scope.food_item.deleted;
             $scope.food_item.$save();
@@ -381,6 +382,7 @@ angular.module('bars.api.food', [
                 s.$save();
             });
             $scope.resetFood();
+            $rootScope.$broadcast('api.model.transaction.reload');
         };
         $scope.resetFood();
     }]
