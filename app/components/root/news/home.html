@@ -9,8 +9,7 @@
     <div ng-repeat="news in news_list | orderBy:'-last_modified'" class="panel panel-default">
         <div class="panel-heading">
             <div class="pull-right">
-                <a ng-click="upNews(news)" class="btn btn-info btn-xs atooltip" tooltip="Afficher sur la page d'accueil"><span class="glyphicon glyphicon-arrow-up"></span> Remonter</a>
-                <a ui-sref="bar.admin.news.edit({id: news.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <a ui-sref="root.news.edit({id: news.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
                 <a ng-if="!news.deleted" ng-click="trash(news)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
                 <a ng-if="news.deleted" ng-click="untrash(news)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a>
             </div>
@@ -20,7 +19,7 @@
         </div>
         <div class="panel-body" ng-bind-html="news.text | nl2br"></div>
         <div class="panel-footer">
-            {{ news.author.firstname + ' ' + news.author.lastname }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}
+            {{ news.author.firstname != "" && (news.author.firstname + ' ' + news.author.lastname) || (news.author.pseudo || news.author.username) }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}
         </div>
     </div>
 </div>

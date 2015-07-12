@@ -50,15 +50,17 @@ angular.module('bars.root.news', [
 )
 
 .controller('root.ctrl.news.add',
-    ['$scope', 'api.models.news', 'api.models.user', '$state',
-    function($scope, News, User, $state) {
+    ['$scope', 'api.models.news', 'api.models.user', '$state', 'news_list', 
+    function($scope, News, User, $state, news_list) {
         $scope.formType = 'add';
         $scope.news = News.create();
+        $scope.news.bar = 'root';
 
         $scope.saveNews = function() {
             $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
             $scope.news.deleted = false;
-            $scope.news.$save().then(function(newNews) {
+            $scope.news.model.save($scope.news).then(function(newNews) {
+                news_list.push(newNews);
                 $state.go('root.news.base');
             }, function(errors) {
                 // TODO: display form errors
