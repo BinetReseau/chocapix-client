@@ -28,6 +28,11 @@
                                 <span class="glyphicon glyphicon-cutlery"></span><span class="hidden-xs"> Aliments</span>
                             </a>
                         </li>
+                        <li ng-class="root.active == 'news' && 'active'">
+                            <a title="Actualités générales" ui-sref="root.news.base">
+                                <span class="glyphicon glyphicon-bullhorn"></span><span class="hidden-xs"> Actualités</span>
+                            </a>
+                        </li>
                         <li ng-class="root.active == 'bug' && 'active'">
                             <a title="Bugs reportés" ui-sref="root.bug.list">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span><span class="hidden-xs"> Bugs</span>

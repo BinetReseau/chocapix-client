@@ -59,22 +59,24 @@
                         <span class="help-block">Séparer les mots-clés par des virgules.</span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Avant</label>
-                    <div class="col-sm-10">
-                        <bars:itemdetails itemdetails="item" qty="1"></bars:itemdetails>
+                <div ng-show="hasChanged()">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Avant</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static"><bars:itemdetails itemdetails="item" qty="1"></bars:itemdetails></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Après</label>
-                    <div class="col-sm-10">
-                        <bars:itemdetails itemdetails="itemBis" qty="1"></bars:itemdetails>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Après</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static"><bars:itemdetails itemdetails="itemBis" qty="1"></bars:itemdetails></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Pluriel</label>
-                    <div class="col-sm-10">
-                        <bars:itemdetails itemdetails="itemBis" qty="3"></bars:itemdetails>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Pluriel</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static"><bars:itemdetails itemdetails="itemBis" qty="3"></bars:itemdetails></p>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -83,6 +85,29 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-2">
+            <p>Ce produit peut être acheté :</p>
+            <table class="table">
+                <tr ng-repeat="bi in buyitems | orderBy:'itemqty'">
+                    <td ng-if="bi.itemqty == 1">
+                        à l'unité
+                    </td>
+                    <td ng-if="bi.itemqty != 1">
+                        par lot de {{ bi.itemqty }} {{ bi.itemqty > 1 && (itemBis.container_plural || itemBis.name_plural || itemBis.name) || (itemBis.container || itemBis.name) }}
+                    </td>
+                    <td>
+                        <span ng-if="bi.barcode">(code-barres : {{ bi.barcode }})</span>
+                    </td>
+                    <td class="text-right">
+                        <a ui-sref="root.food.buyitem_edit({id: bi.id})" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                        <a class="btn btn-xs btn-danger" ng-click="deleteBuyItem(bi)"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                   </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

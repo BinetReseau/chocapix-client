@@ -6,6 +6,7 @@ angular.module('bars.root', [
     'bars.root.bar',
     'bars.root.user',
     'bars.root.food',
+    'bars.root.news', 
     'bars.root.bug'
     ])
 
@@ -27,9 +28,9 @@ angular.module('bars.root', [
                             return null;
                         }
                     }],
-                    bars_list: ['api.models.bar', function(Bar) {
-                        Bar.reload();
-                        return Bar.all();
+                    bars_list: ['api.models.bar', 'api.models.barsettings', function(Bar, BarSettings) {
+                        Bar.clear();
+                        return Bar.reload();
                     }],
                     user_list: ['api.models.user', function(User) {
                         User.clear();
@@ -38,6 +39,10 @@ angular.module('bars.root', [
                     itemdetails_list: ['api.models.itemdetails', function(ItemDetails) {
                         ItemDetails.clear();
                         return ItemDetails.reload();
+                    }],
+                    news_list: ['api.models.news', function(News) {
+                        News.clear();
+                        return News.request({bar: 'root'});
                     }]
                 },
                 views: {

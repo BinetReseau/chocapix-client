@@ -29,7 +29,9 @@ angular.module('bars.admin.news', [
             templateUrl: "components/admin/news/list.html",
             controller: 'admin.ctrl.news.list',
             resolve: {
-                news_list: ['api.models.news', function(News) {
+                news_list_bar: ['api.models.news', function(News) {
+                    News.clear();
+                    News.reload();
                     return News.all();
                 }]
             }
@@ -92,10 +94,10 @@ angular.module('bars.admin.news', [
     }
 ])
 .controller('admin.ctrl.news.list',
-    ['$scope', 'api.models.news', 'api.models.account', 'news_list',
+    ['$scope', 'api.models.news', 'api.models.account', 'news_list_bar',
     function($scope, News, Account, news_list) {
         $scope.admin.active = 'news';
-        $scope.news_list = _.sortBy(news_list, 'last_modified');
+        $scope.news_list = news_list;
         $scope.trash = function(news) {
             news.deleted = true;
             news.$save();
@@ -106,9 +108,9 @@ angular.module('bars.admin.news', [
         };
         $scope.upNews = function(news) {
             news.$save().then(function() {
-                $scope.news_list = _.sortBy(News.all(), 'last_modified');
+                $scope.news_list = News.all();
             });
-        }
+        };
     }
 ])
 .controller('admin.ctrl.news.edit',

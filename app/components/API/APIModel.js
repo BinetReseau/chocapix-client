@@ -118,9 +118,18 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
                     if (!req.params['bar']) {
                         req.params['bar'] = this.getBar();
                     }
+                    if (req.data && req.data['bar']) {
+                        req.params['bar'] = req.data['bar'];
+                    }
                 } else {
                     req.params = {bar: this.getBar()};
                 }
+            }
+            if (req.data && req.data['bar']) {
+                if (!req.params) {
+                    req.params = {};
+                }
+                req.params['bar'] = req.data['bar'];
             }
             req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url;
             req.url += (req.url.charAt(-1) === '/' || req.url.indexOf("?") !== -1 ? "" : "/");

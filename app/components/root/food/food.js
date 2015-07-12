@@ -28,6 +28,16 @@ angular.module('bars.root.food', [
                 }]
             }
         })
+        .state('root.food.buyitem_edit', {
+            url: '/buyitem/:id', 
+            templateUrl: 'components/root/food/buyitem_edit.html',
+            controller: 'root.ctrl.food.buyitem_edit',
+            resolve: {
+                buy_item: ['api.models.buyitem', '$stateParams', function(BuyItem, $stateParams) {
+                    return BuyItem.getSync($stateParams.id);
+                }]
+            }
+        })
     ;
 }])
 
@@ -36,6 +46,10 @@ angular.module('bars.root.food', [
     function($scope, itemdetails_list, $state){
         $scope.itemdetails_list = itemdetails_list;
         $scope.searchl = '';
+        $scope.ordre = {
+            name: 'name',
+            revert: false
+        }
         $scope.filterItems = function(o) {
             return o.filter($scope.searchl);
         };
@@ -46,11 +60,20 @@ angular.module('bars.root.food', [
 )
 
 .controller('root.ctrl.food.details',
-    ['$scope', 'item', 'api.models.itemdetails',
-    function($scope, item, ItemDetails){
+    ['$scope', 'item', 'api.models.itemdetails', 'api.models.buyitem', 
+    function($scope, item, ItemDetails, BuyItem){
         $scope.item = item;
         $scope.itemBis = _.clone($scope.item);
-        console.log($scope.itemBis);
+        function updateBuyItems() {
+            BuyItem.request({details: $scope.item.id}).then(function(b) {
+                $scope.buyitems = b;
+            });
+        }
+        updateBuyItems();
+
+        $scope.hasChanged = function() {
+            return !angular.equals($scope.item, $scope.itemBis);
+        };
 
         $scope.saveItem = function() {
             $scope.item.name = $scope.itemBis.name;
@@ -68,6 +91,14 @@ angular.module('bars.root.food', [
             });
         };
 
+        $scope.deleteBuyItem = function(bi) {
+            if (confirm('Cette opération est irréversible. Es-tu sûr de vouloir supprimer cette référence de produit ?')) {
+                bi.$delete().then(function() {
+                    updateBuyItems();
+                });
+            }
+        };
+
         $scope.$watch('itemBis.name', function (newv, oldv) {
             if ($scope.itemBis.name_plural == oldv) {
                 $scope.itemBis.name_plural = newv;
@@ -83,6 +114,22 @@ angular.module('bars.root.food', [
                 $scope.itemBis.unit_plural = newv;
             }
         });
+    }]
+)
+
+.controller('root.ctrl.food.buyitem_edit',
+    ['$scope', 'buy_item', 'api.models.buyitem', '$state', 
+    function($scope, buy_item, BuyItem, $state) {
+        $scope.buy_item = buy_item;
+        $scope.buy_item_bis = _.clone(buy_item);
+
+        $scope.editBI = function() {
+            $scope.buy_item.barcode = $scope.buy_item_bis.barcode;
+            $scope.buy_item.itemqty = $scope.buy_item_bis.itemqty;
+            $scope.buy_item.$save().then(function(bir) {
+                $state.go('root.food.details', {id: $scope.buy_item.details.id});
+            });
+        };
     }]
 )
 ;
