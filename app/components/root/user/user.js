@@ -140,6 +140,12 @@ angular.module('bars.root.user', [
             return member_bars.indexOf(b.id) > -1;
         });
 
+        function isRootStaff() {
+            return (_.filter(user_roles, function(r) {
+                return r.bar.id == 'root' && r.name == 'staff';
+            })).length > 0;
+        }
+
         $scope.appointAdmin = function(b) {
             var newRole = Role.create();
             newRole.name = "admin";
@@ -149,11 +155,13 @@ angular.module('bars.root.user', [
                 updateRoles();
             });
 
-            var newGRole = Role.create();
-            newGRole.user = user_req.id;
-            newGRole.name = 'staff';
-            newGRole.bar = 'root';
-            newGRole.$save();
+            if (!isRootStaff()) {
+                var newGRole = Role.create();
+                newGRole.user = user_req.id;
+                newGRole.name = 'staff';
+                newGRole.bar = 'root';
+                newGRole.$save();
+            }
         };
         $scope.removeAdmin = function (b) {
             var role = _.find($scope.roles, function(r) {
