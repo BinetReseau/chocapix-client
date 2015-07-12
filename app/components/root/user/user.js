@@ -53,7 +53,7 @@ angular.module('bars.root.user', [
             $state.go('root.user.details', {id: usr.id});
         };
 
-        $scope.respos = _.uniq(roles, false, function (r) {
+        $scope.respos = _.uniq(_.reject(roles, function(rn) { return rn.user.lastname === 'Bar'; }), false, function (r) {
             return r.user.id;
         });
 
