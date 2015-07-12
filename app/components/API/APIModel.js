@@ -126,8 +126,9 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
                 }
             }
             if (req.data && req.data['bar']) {
-                if (!req.params)
+                if (!req.params) {
                     req.params = {};
+                }
                 req.params['bar'] = req.data['bar'];
             }
             req.url = APIURL + ((req.url && req.url.charAt(0) !== "/") ? "/" : "") + req.url;

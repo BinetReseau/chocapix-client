@@ -32,9 +32,9 @@ angular.module('barsApp', [
 ])
 
 .config(['APIURLProvider', 'OFFURLProvider', function(APIURL, OFFURL) {
-    // APIURL.url = "http://bars.nadrieil.fr/api";
-    // OFFURL.url = "http://bars.nadrieril.fr/off";
-    APIURL.url = "http://127.0.0.1:8000";
+    APIURL.url = "http://bars.nadrieril.fr/api";
+    OFFURL.url = "http://bars.nadrieril.fr/off";
+    // APIURL.url = "http://127.0.0.1:8000";
     // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
 }])
 
