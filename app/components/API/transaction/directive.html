@@ -11,8 +11,8 @@
                     </h2>
                 </div>
                 <table class="table table-striped table-hover table-condensed history">
-                    <tr ng-repeat="transaction in d.history track by transaction.id" ng-class="transaction.canceled && 'del'" ng-init="details = {show:false}">
-                        <td class="time"><a todo-tooltip-for-debug tooltip="id: {{ ::transaction.id }}" class="atooltip" tooltip-placement="left">{{ :: transaction.timestamp | date:'shortTime' }}</a></td>
+                    <tr ng-repeat="transaction in d.history track by transaction.id" ng-class="transaction.canceled && 'del'">
+                        <td class="time">{{ :: transaction.timestamp | date:'shortTime' }}</td>
 
                         <td class="type">
                             <ng:switch on=":: transaction.type">
@@ -37,7 +37,7 @@
                         <td class="item">
                             <ng:switch on=":: transaction.type">
                                 <span ng-switch-when="throw">
-                                    <bars:sellitem item="transaction.stockitem.sellitem" qty=":: transaction.qty" out="'sell'"></bars:stockitem>
+                                    <bars:sellitem item=":: transaction.stockitem.sellitem" qty=":: transaction.qty" out="'sell'"></bars:stockitem>
                                 </span>
 
                                 <span ng-switch-when="give">
@@ -62,36 +62,39 @@
                                     {{ :: transaction.amount | currency }} d'agios
                                 </span>
                             </ng:switch>
-                            <div ng-if=":: (transaction.type == 'buy' || transaction.type == 'meal')">
-                                <a ng-show="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood" class="link" ng-click="detailsFood = true">
+                            <div ng-if=":: (transaction.type == 'buy')">
+                                <bars:sellitem:oneway item=":: transaction.items[0].sellitem" qty=":: -transaction.items[0].qty"></bars:sellitem:oneway>
+                            </div>
+                            <div ng-if=":: (transaction.type == 'meal')">
+                                <a ng-if="(transaction.items | filter:sellOrStock).length > 1 && !transaction.detailsFood" class="link" ng-click="transaction.detailsFood = true">
                                     {{ :: transaction.items.length | filter:sellOrStock }} aliments
                                 </a>
-                                <div collapse="(transaction.items | filter:sellOrStock).length > 1 && !detailsFood">
-                                    <div ng-repeat="x in (transaction.items | filter:sellOrStock)">
-                                        <span ng-if="x.stockitem">
-                                            <bars:sellitem item="x.stockitem.sellitem" qty=":: x.qty"></bars:stockitem>
+                                <div ng-if="!((transaction.items | filter:sellOrStock).length > 1 && !transaction.detailsFood)">
+                                    <div ng-repeat="x in :: (transaction.items | filter:sellOrStock)">
+                                        <span ng-if=":: x.stockitem">
+                                            <bars:sellitem:oneway item=":: x.stockitem.sellitem" qty=":: x.qty"></bars:sellitem:oneway>
                                         </span>
-                                        <span ng-if="x.sellitem">
-                                            <bars:sellitem item="x.sellitem" qty=":: -x.qty"></bars:sellitem>
+                                        <span ng-if=":: x.sellitem">
+                                            <bars:sellitem:oneway item=":: x.sellitem" qty=":: -x.qty"></bars:sellitem:oneway>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div ng-if=":: (transaction.type == 'appro')">
-                                <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true" class="link">
+                                <a ng-if="transaction.items.length > 1 && !transaction.detailsFood" class="link" ng-click="transaction.detailsFood = true" class="link">
                                     {{ :: transaction.items.length }} aliments
                                 </a>
-                                <div collapse="transaction.items.length > 1 && !detailsFood">
-                                    <div ng-repeat="x in transaction.items">
-                                        <bars:stockitem item="x.stockitem" qty=":: x.qty" out="'buy'"></bars:stockitem>
+                                <div ng-if="!(transaction.items.length > 1 && !transaction.detailsFood)">
+                                    <div ng-repeat="x in :: transaction.items">
+                                        <bars:stockitem item=":: x.stockitem" qty=":: x.qty" out="'buy'"></bars:stockitem>
                                     </div>
                                 </div>
                             </div>
                             <div ng-if=":: (transaction.type == 'inventory')">
-                                <a ng-show="transaction.items.length > 1 && !detailsFood" class="link" ng-click="detailsFood = true" class="link">
+                                <a ng-if="transaction.items.length > 1 && !transaction.detailsFood" class="link" ng-click="transaction.detailsFood = true" class="link">
                                     {{ :: transaction.items.length }} aliments
                                 </a>
-                                <div collapse="transaction.items.length == 1 || !detailsFood">
+                                <div ng-if="!(transaction.items.length == 1 || !transaction.detailsFood)">
                                     <div ng-repeat="x in transaction.items">
                                         <bars:stockitem item="x.stockitem"></bars:stockitem>
                                         <div class="pull-right">
@@ -106,20 +109,20 @@
                                 </div>
                                 <span ng-if=":: (transaction.items.length == 1)" ng-init="x = transaction.items[0]">
                                     <span ng-if=":: (x.qty >= 0)" class="label label-success">
-                                        +<bars:stockitem:qty item="x.stockitem" qty=":: x.qty" out="'buy'"></bars:stockitem:qty>
+                                        +<bars:stockitem:qty item=":: x.stockitem" qty=":: x.qty" out="'buy'"></bars:stockitem:qty>
                                     </span>
                                     <span ng-if=":: (x.qty < 0)" class="label label-danger">
-                                        <bars:stockitem:qty item="x.stockitem" qty=":: x.qty" out="'buy'"></bars:stockitem:qty>
+                                        <bars:stockitem:qty item=":: x.stockitem" qty=":: x.qty" out="'buy'"></bars:stockitem:qty>
                                     </span>
                                     &nbsp;&nbsp;
-                                    <bars:stockitem item="x.stockitem"></bars:stockitem>
+                                    <bars:stockitem item=":: x.stockitem"></bars:stockitem>
                                 </span>
                             </div>
                             <div ng-if=":: (transaction.type == 'collectivePayment')">
-                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true" class="link">
+                                <a ng-if="transaction.accounts.length > 1 && !transaction.detailsAccounts" ng-click="transaction.detailsAccounts = true" class="link">
                                     {{ :: transaction.accounts.length }} personnes
                                 </a>
-                                <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
+                                <div ng-if="!(transaction.accounts.length > 1 && !transaction.detailsAccounts)">
                                     <div ng-repeat="x in :: transaction.accounts">
                                         <bars:account account=":: x.account"></bars:account>
                                         <div class="pull-right" ng-if=":: (transaction.accounts.length > 1)">
@@ -133,10 +136,10 @@
                         <td class="par">par</td>
                         <td class="user">
                             <div ng-if=":: (transaction.type == 'meal')">
-                                <a ng-show="transaction.accounts.length > 1 && !detailsAccounts" ng-click="detailsAccounts = true" class="link">
+                                <a ng-if="transaction.accounts.length > 1 && !transaction.detailsAccounts" ng-click="transaction.detailsAccounts = true" class="link">
                                     {{ :: transaction.accounts.length }} personnes
                                 </a>
-                                <div collapse="transaction.accounts.length > 1 && !detailsAccounts">
+                                <div ng-if="!(transaction.accounts.length > 1 && !transaction.detailsAccounts)">
                                     <div ng-repeat="x in :: transaction.accounts">
                                         <bars:account account=":: x.account"></bars:account>
                                         <div class="pull-right" ng-if=":: (transaction.accounts.length > 1)">
@@ -155,7 +158,7 @@
                             </span>
                         </td>
                         <td class="buttons">
-                            <span ng-show=":: transaction.can_cancel">
+                            <span ng-if=":: transaction.can_cancel">
                                 <a title="Annuler cette transaction" ng-if="!transaction.canceled" ng-click="transaction.cancel()" class="label label-warning">Annuler</a>
                                 <a title="Rétablir cette transaction" ng-if="transaction.canceled" ng-click="transaction.restore()" class="label label-warning">Rétablir</a>
                             </span>

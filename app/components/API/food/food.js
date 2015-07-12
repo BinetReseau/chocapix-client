@@ -445,6 +445,53 @@ angular.module('bars.api.food', [
         }]
     };
 })
+// Special directives with one-way data-binding
+// use it for fast display and no changes
+// Used for history, food list
+.controller('api.ctrl.dir.barssellitemoneway',
+    ['$scope', function($scope) {
+        $scope.unit_name = $scope.item.unit_name;
+        $scope.unit_name_plural = $scope.item.unit_name_plural;
+        $scope.abs = Math.abs;
+    }])
+.directive('barsSellitemOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            //unit: '=?unit',
+            qty: '=?qty'
+        },
+        templateUrl: 'components/API/food/directives/sellitem-oneway-directive.html',
+        controller: 'api.ctrl.dir.barssellitemoneway'
+    };
+})
+.directive('barsSellitemQtyOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            qty: '=qty'
+        },
+        templateUrl: 'components/API/food/directives/sellitem-qty-oneway-directive.html',
+        controller: 'api.ctrl.dir.barssellitemoneway'
+    };
+})
+.directive('barsSellitemPriceOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            item: '=item',
+            qty: '=?qty',
+            tax: '=?tax'
+        },
+        templateUrl: 'components/API/food/directives/sellitem-price-oneway-directive.html',
+        controller: ['$scope', function($scope) {
+            $scope.price = $scope.item.fuzzy_price;
+            $scope.unit_name = $scope.item.unit_name;
+        }]
+    };
+})
 .controller('api.ctrl.dir.barsstockitem',
     ['$scope', function($scope) {
         function refresh() {
