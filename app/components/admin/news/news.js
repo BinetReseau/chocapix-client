@@ -30,6 +30,7 @@ angular.module('bars.admin.news', [
             controller: 'admin.ctrl.news.list',
             resolve: {
                 news_list: ['api.models.news', function(News) {
+                    News.reload();
                     return News.all();
                 }]
             }

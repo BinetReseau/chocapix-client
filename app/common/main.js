@@ -96,9 +96,9 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                news: ['api.models.news', '$rootScope', function(News, $rootScope) {
+                news: ['api.models.news', '$rootScope', 'bar', function(News, $rootScope, bar) {
                     News.clear();
-                    return News.reload().then(function (o) {
+                    return News.request({bar: [bar.id, 'root']}).then(function (o) {
                         $rootScope.$broadcast('api.News.loaded');
                         return o;
                     });
