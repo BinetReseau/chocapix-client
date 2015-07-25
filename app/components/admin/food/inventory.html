@@ -47,7 +47,10 @@
                             <input type="number" step="any" min="0" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" ng-change="inventory.recomputeAmount()" />
                             <select ng-model="item.sell_to_buy" ng-change="inventory.recomputeAmount()">
                                 <option value="{{ item.stockitem.sell_to_buy }}">{{ item.stockitem.sellitem.unit_name || item.stockitem.sellitem.name }}</option>
-                                <option value="1">{{ item.stockitem.details.name }}</option>
+                                <option value="1">
+                                    x
+                                    {{ item.stockitem.details.container_qty }} {{ item.stockitem.details.container_qty > 1 && (item.stockitem.details.unit_plural || item.stockitem.details.unit || item.stockitem.details.name_plural || item.stockitem.details.name) || (item.stockitem.details.unit || item.stockitem.details.name) }}
+                                </option>
                             </select>
                         </td>
                         <td class="vmiddle">
@@ -56,7 +59,9 @@
                             </span>
                         </td>
                         <td class="vmiddle">
-                            <span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:qty item="item.stockitem" qty="item.qty_diff" out="item.sell_to_buy == 1 && 'buy' || 'sell'"></bars:stockitem:qty></span><span class="small">&nbsp;pour </span><span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'"><bars:stockitem:price item="item.stockitem" qty="item.qty_diff"></bars:stockitem:price></span>
+                            <span class="label" ng-class="item.qty_diff >= 0 && 'label-success' || 'label-danger'">
+                                <bars:stockitem:price item="item.stockitem" qty="item.qty_diff"></bars:stockitem:price>
+                            </span>
                         </td>
                         <td class="vmiddle">
                             <a title="Supprimer de l'appro cet aliment" ng-click="inventory.removeItem(item)" class="link">
