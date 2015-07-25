@@ -80,7 +80,7 @@
                                     <td class="h4">Solde</td>
                                     <td class="end-of-column text-right">
                                         <span class="h4">
-                                            <em ng-if="account.money <= 0" class="text-danger small">(depuis le {{ account.overdrawn_since | date:'dd/MM/yyyy' }})</em>
+                                            <em ng-if="account.money <= 0 && account.overdrawn_since" class="text-danger small">(depuis le {{ account.overdrawn_since | date:'dd/MM/yyyy' }})</em>
                                             <span class="label" ng-class="account.money > 0 && 'label-success' || 'label-danger'">
                                             {{ account.money | currency }}
                                             </span>
