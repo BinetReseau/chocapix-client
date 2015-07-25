@@ -724,6 +724,18 @@ angular.module('bars.admin.food', [
             });
         };
 
+        $scope.timeLimit = 6;
+        var firstDate;
+        function monthsAgo(n) {
+            var d = new Date();
+            d.setMonth(d.getMonth() - n);
+            return d;
+        }
+        $scope.timeChanged = function() {
+            firstDate = monthsAgo($scope.timeLimit);
+        };
+        $scope.timeChanged();
+
         $scope.barcodei = '';
         $scope.searcha = '';
         // Filtre sur les aliments dans l'inventaire
@@ -736,12 +748,14 @@ angular.module('bars.admin.food', [
         // Filtre sur les SellItem
         $scope.filteri = function(o) {
             return !o.deleted
-            && o.filter($scope.searchi, true);
+            && o.filter($scope.searchi, true)
+            && new Date(o.oldest_inventory) >= firstDate;
         };
         // Filtre sur les StockItem
         $scope.filters = function (o) {
             return !Inventory.find(o)
-            && o.filter($scope.searchi, true);
+            && o.filter($scope.searchi, true)
+            && new Date(o.last_inventory) >= firstDate;
         };
         // On scanne un code-barres
         $scope.addBarcode = function (e) {
