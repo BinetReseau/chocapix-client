@@ -190,6 +190,7 @@ angular.module('bars.api.food', [
 .controller('api.ctrl.food_details',
     ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.models.buyitemprice', 'api.services.action', 'bars.meal',
     function($scope, $stateParams, food_item, AuthUser, BuyItemPrice, APIAction, Meal) {
+        $scope.moment = moment;
         $scope.food_item = food_item;
         $scope.actions = [];
         if (AuthUser.can('add_buytransaction')) {

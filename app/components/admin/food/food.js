@@ -751,6 +751,7 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.stockitems_list',
     ['$scope', 'stockitem_list',
     function($scope, stockitem_list){
+        $scope.moment = moment;
         $scope.stockitem_list = stockitem_list;
         $scope.searchl = "";
         $scope.list_order = 'details.name';
