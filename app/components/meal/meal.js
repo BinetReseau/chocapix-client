@@ -27,6 +27,7 @@ angular.module('bars.meal', [
             }
         }
         $rootScope.$on('auth.hasLoggedOut', close);
+        $rootScope.$on('meal.hasBeenValidated', close);
     }]
 )
 .directive('popoverMeal', function() {
@@ -121,6 +122,7 @@ angular.module('bars.meal', [
                     name: this.name
                 })
                 .then(function() {
+                    $rootScope.$broadcast('meal.hasBeenValidated');
                     refThis.init();
                 });
             },
