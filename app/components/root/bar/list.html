@@ -15,7 +15,7 @@
             </tr>
             <tr ng-repeat="bar in bars_list | filter:filterBar | orderBy:list_order:reverse" ng-class="bar.deleted && 'del' || ''">
                 <td>{{ bar.name }}</td>
-                <td>{{ 34 }}</td>
+                <td>{{ bar.count_accounts }}</td>
                 <td class="text-right">
                     <a class="btn btn-xs btn-danger" ng-click="deleteBar(bar)" ng-if="bar.id != 'root'">
                         <span class="glyphicon glyphicon-trash"></span> Supprimer

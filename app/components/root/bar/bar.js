@@ -41,7 +41,7 @@ angular.module('bars.root.bar', [
         console.log($scope.bars_list);
 
         $scope.filterBar = function(o) {
-            return o.filter($scope.searchl);
+            return o.name != 'Root' && o.filter($scope.searchl);
         };
 
         $scope.deleteBar = function(b) {
