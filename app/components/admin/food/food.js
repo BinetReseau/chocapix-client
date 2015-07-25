@@ -713,8 +713,8 @@ angular.module('bars.admin.food', [
     };
 })
 .controller('admin.ctrl.food.inventory',
-    ['$scope', '$timeout', 'api.models.buyitemprice', 'admin.inventory',
-    function($scope, $timeout, BuyItemPrice, Inventory) {
+    ['$scope', '$timeout', 'api.models.buyitemprice', 'api.models.sellitem', 'admin.inventory',
+    function($scope, $timeout, BuyItemPrice, SellItem, Inventory) {
         $scope.admin.active = 'food';
 
         var buy_item_prices = BuyItemPrice.all();
@@ -724,10 +724,24 @@ angular.module('bars.admin.food', [
             });
         };
 
-        $scope.searchi = '';
+        $scope.searcha = '';
         $scope.filterl = function (o) {
-            return o.stockitem.filter($scope.searchi);
+            return o.stockitem.filter($scope.searcha)
+            && o.stockitem.filter(Inventory.itemToAdd);
         };
+
+        $scope.searchi = '';
+        $scope.food_list = SellItem.all();
+        $scope.filteri = function(o) {
+            return !o.deleted
+            && o.filter($scope.searchi, true)
+            && o.filter(Inventory.itemToAdd);
+        };
+        $scope.filters = function (o) {
+            return !Inventory.find(o)
+            && o.filter($scope.searchi, true)
+            && o.filter(Inventory.itemToAdd);
+        }
 
         $timeout(function () {
             document.getElementById("addInventoryItemInput").focus();
@@ -876,33 +890,24 @@ angular.module('bars.admin.food', [
                 this.inRequest = false;
                 this.totalPrice = 0;
             },
-            addItem: function(item, qty) {
-                if (!qty) {
-                    qty = item.buyitem.itemqty;
-                }
-                var stockitem = item.buyitem.details.stockitem;
-                var other = _.find(this.itemsList, {'stockitem': stockitem});
+            addItem: function(stockitem, qty) {
+                // if (!qty) {
+                //     qty = item.buyitem.itemqty;
+                // }
+                var other = this.find(stockitem);
                 if (other) {
                     other.qty += qty / other.sell_to_buy;
                     other.nb = nb++;
                 } else {
                     // Avant de l'ajouter on va vérifier que l'itemdetails
                     // et surtout le stockitem existent bien
-                    var ok = false;
-                    if (item.buyitem) {
-                        if (item.buyitem.details) {
-                            var details = item.buyitem.details;
-                            var stockitem = _.find(StockItem.all(), {'details': details});
-                            if (stockitem) {
-                                if (stockitem.sellitem) {
-                                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
-                                }
-                            }
-                        }
-                    }
+                    this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
                 }
-                this.itemToAdd = "";
+                // this.itemToAdd = "";
                 this.recomputeAmount();
+            },
+            find: function(stockitem) {
+                return _.find(this.itemsList, {'stockitem': stockitem});
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);

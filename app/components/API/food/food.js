@@ -96,10 +96,16 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s, showDeleted) {
-                        var all_keywords = "";
-                        _.forEach(this.stockitems, function(n, i) { all_keywords = all_keywords + " " + n.details.keywords; });
-                        var searchable = this.name + " " + all_keywords + " " + this.keywords;
-                        return (!this.deleted || showDeleted) && (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                        if (this.deleted && !showDeleted) {
+                            return false;
+                        }
+                        if (_.find(this.stockitems, function(n) {
+                            return n.details.filter(s);
+                        })) {
+                            return true;
+                        }
+                        var searchable = this.name + " " + this.keywords;
+                        return (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                     }
                 }
             });
