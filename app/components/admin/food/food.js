@@ -717,6 +717,8 @@ angular.module('bars.admin.food', [
     function($scope, $timeout, BuyItemPrice, BuyItem, SellItem, Inventory) {
         $scope.admin.active = 'food';
 
+        $scope.moment = moment;
+
         var buy_item_prices = BuyItemPrice.all();
         $scope.buy_item_pricesf = function (v) {
             return _.filter(buy_item_prices, function (bip) {

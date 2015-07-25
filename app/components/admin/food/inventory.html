@@ -107,7 +107,7 @@
                     </td>
                     <td><bars:sellitem:qty:oneway item=":: f" qty=":: f.fuzzy_qty" out="'sell'"></bars:sellitem:qty:oneway></td>
                     <td>
-                        {{ f.oldest_inventory | date:'fullDate' }}
+                        {{ (moment(f.oldest_inventory).isAfter('2015-03-01')) && (f.oldest_inventory | date:"short") || 'jamais'}}
                     </td>
                     <td>
                         <a class="btn btn-danger btn-xs" ng-click=":: inventory.addSellItem(f, 0)" tooltip="Cet aliment n'est plus en stock" href>
@@ -126,7 +126,7 @@
                         {{ si.qty > 1 && f.unit_name_plural || f.unit_name }}
                     </td>
                     <td>
-                        {{ si.last_inventory | date:'fullDate' }}
+                        {{ (moment(si.last_inventory).isAfter('2015-03-01')) && (si.last_inventory | date:"short") || 'jamais'}}
                     </td>
                     <td>
                         <a class="btn btn-success btn-xs" ng-click=":: inventory.addStockItem(si, 1)" tooltip="Ajouter cet aliment à l'inventaire" href>

@@ -18,7 +18,7 @@
                     <bars:itemdetails qty="1" itemdetails="si.details"></bars:itemdetails>
                   </a>
                 </td>
-                <td>{{ (moment(si.last_inventory).isAfter('2015-03-01')) && (si.last_inventory | date:"short") || 'jamais'}}
+                <td>{{ (moment(si.last_inventory).isAfter('2015-03-01')) && (si.last_inventory | date:"short") || 'jamais'}}</td>
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
                 <td ng-if="user.can('change_sellitem')">
