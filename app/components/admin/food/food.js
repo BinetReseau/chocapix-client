@@ -753,7 +753,7 @@ angular.module('bars.admin.food', [
 					});
 					if (buy_item) {
                         if (buy_item.details.stockitem && buy_item.details.stockitem.sellitem) {
-                            Inventory.addStockitem(buy_item.details.stockitem, buy_item.itemqty);
+                            Inventory.addStockItem(buy_item.details.stockitem, buy_item.itemqty);
                             $scope.barcodei = "";
                         }
 					}
@@ -907,7 +907,16 @@ angular.module('bars.admin.food', [
                 this.inRequest = false;
                 this.totalPrice = 0;
             },
-            addStockitem: function(stockitem, qty) {
+            addSellItem: function(sellitem, qty) {
+                if (!qty) {
+                    qty = 0;
+                }
+                var _this = this;
+                _.forEach(sellitem.stockitems, function(si) {
+                    _this.addStockItem(si, qty);
+                });
+            },
+            addStockItem: function(stockitem, qty) {
                 var other = this.find(stockitem);
                 if (other) {
                     other.qty += qty / other.sell_to_buy;
