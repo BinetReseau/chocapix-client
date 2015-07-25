@@ -9,7 +9,7 @@
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-barcode"></span>
                         </div>
-                        <input type="text" tabindex="40" class="form-control" placeholder="Aliment à ajouter à l'inventaire" ng-model="inventory.itemToAdd" autocomplete="off" />
+                        <input type="text" tabindex="40" class="form-control" placeholder="Scanner un code-barres" ng-model="barcodei" autocomplete="off" ng-keypress="addBarcode($event)" />
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                 </tr>
                 <tr ng-repeat="si in f.stockitems | filter:filters" class="info condensed" ng-if="collapse || (food_list | filter:filteri).length == 1">
                     <td class="alinea">
-                        <a title="Ajouter cet aliment à l'inventaire" ng-click="inventory.addItem(si, 1)" href>
+                        <a title="Ajouter cet aliment à l'inventaire" ng-click="inventory.addStockitem(si, 1)" href>
                           <bars:itemdetails qty="1" itemdetails=":: si.details"></bars:itemdetails>
                         </a>
                     </td>

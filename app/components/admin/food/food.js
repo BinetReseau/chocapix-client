@@ -713,8 +713,8 @@ angular.module('bars.admin.food', [
     };
 })
 .controller('admin.ctrl.food.inventory',
-    ['$scope', '$timeout', 'api.models.buyitemprice', 'api.models.sellitem', 'admin.inventory',
-    function($scope, $timeout, BuyItemPrice, SellItem, Inventory) {
+    ['$scope', '$timeout', 'api.models.buyitemprice', 'api.models.buyitem', 'api.models.sellitem', 'admin.inventory',
+    function($scope, $timeout, BuyItemPrice, BuyItem, SellItem, Inventory) {
         $scope.admin.active = 'food';
 
         var buy_item_prices = BuyItemPrice.all();
@@ -724,24 +724,42 @@ angular.module('bars.admin.food', [
             });
         };
 
+        $scope.barcodei = '';
         $scope.searcha = '';
+        // Filtre sur les aliments dans l'inventaire
         $scope.filterl = function (o) {
-            return o.stockitem.filter($scope.searcha)
-            && o.stockitem.filter(Inventory.itemToAdd);
+            return o.stockitem.filter($scope.searcha);
         };
 
         $scope.searchi = '';
         $scope.food_list = SellItem.all();
+        // Filtre sur les SellItem
         $scope.filteri = function(o) {
             return !o.deleted
-            && o.filter($scope.searchi, true)
-            && o.filter(Inventory.itemToAdd);
+            && o.filter($scope.searchi, true);
         };
+        // Filtre sur les StockItem
         $scope.filters = function (o) {
             return !Inventory.find(o)
-            && o.filter($scope.searchi, true)
-            && o.filter(Inventory.itemToAdd);
-        }
+            && o.filter($scope.searchi, true);
+        };
+        // On scanne un code-barres
+        $scope.addBarcode = function (e) {
+			if (e.which === 13) {
+				var barcode = $scope.barcodei;
+				if (barcode && !isNaN(barcode)) {
+					var buy_item = _.find(BuyItem.all(), function (bi) {
+						return bi.filter(barcode);
+					});
+					if (buy_item) {
+                        if (buy_item.details.stockitem && buy_item.details.stockitem.sellitem) {
+                            Inventory.addStockitem(buy_item.details.stockitem, buy_item.itemqty);
+                            $scope.barcodei = "";
+                        }
+					}
+				}
+			}
+		};
 
         $timeout(function () {
             document.getElementById("addInventoryItemInput").focus();
@@ -883,17 +901,13 @@ angular.module('bars.admin.food', [
         return {
             itemsList: [],
             inRequest: false,
-            itemToAdd: "",
             totalPrice: 0,
             init: function() {
                 this.itemsList = [];
                 this.inRequest = false;
                 this.totalPrice = 0;
             },
-            addItem: function(stockitem, qty) {
-                // if (!qty) {
-                //     qty = item.buyitem.itemqty;
-                // }
+            addStockitem: function(stockitem, qty) {
                 var other = this.find(stockitem);
                 if (other) {
                     other.qty += qty / other.sell_to_buy;
@@ -903,7 +917,6 @@ angular.module('bars.admin.food', [
                     // et surtout le stockitem existent bien
                     this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
                 }
-                // this.itemToAdd = "";
                 this.recomputeAmount();
             },
             find: function(stockitem) {
