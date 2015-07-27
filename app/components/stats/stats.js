@@ -54,7 +54,7 @@ angular.module('bars.stats', [
             var interval = $scope.interval || 'days';
 
             function next(d) {
-                if (interval == 'mounths') {
+                if (interval == 'months') {
                     return d.setMonth(d.getMonth() + 1);
                 } else if (interval == 'days') {
                     return d.setDate(d.getDate() + 1);
