@@ -1,0 +1,32 @@
+<div class="row">
+    <bars:stats:graph futur-data="data" interval="params.interval" label="label" unit="unit"></bars:stats:graph>
+</div>
+<form class="form-horizontal">
+    <div class="form-group">
+        <!-- <div class="col-sm-4">
+            <select ng-model="params.interval" class="form-control" ng-change="computeData()">
+                <option value="days" selected="selected">Jour</option>
+                <option value="months">Mois</option>
+                <option value="years">Année</option>
+            </select>
+        </div>-->
+        <label for="date_start" class="col-sm-2 control-label">Début</label>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input id="date_start" type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-model="params.date_start" is-open="start_opened" ng-change="computeData()" ng-click="open($event, 'start')" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event, '')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <label for="date_start" class="col-sm-2 control-label">Fin</label>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input id="date_end" type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-model="params.date_end" min-date="params.date_start" is-open="end_opened" ng-change="computeData()" ng-click="open($event, 'end')" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event, 'end')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
