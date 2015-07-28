@@ -54,33 +54,26 @@ angular.module('bars.stats', [
             var interval = $scope.interval || 'days';
 
             function next(d) {
-                if (interval == 'months') {
-                    return d.setMonth(d.getMonth() + 1);
-                } else if (interval == 'days') {
-                    return d.setDate(d.getDate() + 1);
-                }
+                return d.add(1, interval);
             }
             function format(d) {
-                d = new Date(d);
-                var out = d.getFullYear();
                 if (interval == 'years') {
-                    return out;
+                    return d.format("YYYY");
+                } else if (interval == 'months') {
+                    return d.format("YYYY-MM");
                 }
-                out += '-' + d.getMonth();
-                if (interval == 'months') {
-                    return out;
-                }
-                out += '-' + d.getDate();
-                return out;
+                return d.format("YYYY-MM-DD");
             }
 
             function updateData() {
                 $scope.futurData.then(function (data) {
                     $scope.data = [];
-                    var current = new Date(data[0][0]);
+                    if (data.length == 0) {
+                        return;
+                    }
+                    var current = moment(data[0][0]);
                     for (var i = 0; i < data.length; i++) {
-                        while (current < new Date(data[i][0])) {
-                            console.log(current, new Date(data[i][0]));
+                        while (current.isBefore(data[i][0])) {
                             $scope.data.push({
                                 date: format(current),
                                 value: 0
@@ -88,12 +81,11 @@ angular.module('bars.stats', [
                             next(current);
                         }
                         $scope.data.push({
-                            date: format(data[i][0]),
+                            date: format(moment(data[i][0])),
                             value: Math.round(-data[i][1]*100)/100
                         });
                         next(current);
                     }
-                    console.log($scope.data);
                 });
             }
             updateData();
@@ -118,7 +110,8 @@ angular.module('bars.stats', [
             $scope.params = {
                 interval: 'days',
                 date_start: moment().subtract(7, 'days').toDate(),
-                date_end: moment().endOf('day').toDate()
+                date_end: moment().endOf('day').toDate(),
+                type: 'buy'
             };
 
             $scope.computeData = function() {
