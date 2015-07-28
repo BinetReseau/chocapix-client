@@ -10,13 +10,17 @@ angular.module('bars.stats', [
             xkey: '=xkey',
             ykeys: '=ykeys',
             labels: '=labels',
-            postUnits: '=postUnits'
+            postUnits: '=postUnits',
+            xLabels: '=xlabels'
         },
         link: function (scope, elem, attrs) {
             elem.addClass('morris-chart');
+            var xLabels = scope.xLabels;
             scope.$watch('data', function() {
                 if(scope.data) {
-                    if(!scope.morris) {
+                    if(!scope.morris || xLabels != scope.xLabels) {
+                        elem.empty();
+                        xLabels = scope.xLabels;
                         scope.morris = new Morris.Line({
                             element: elem,
                             data: scope.data,
@@ -24,6 +28,7 @@ angular.module('bars.stats', [
                             ykeys: scope.ykeys,
                             labels: scope.labels,
                             postUnits: scope.postUnits,
+                            xLabels: xLabels,
                             smooth: false
                         });
                     } else {
@@ -50,9 +55,12 @@ angular.module('bars.stats', [
             $scope.ykeys = ['value'];
             $scope.labels = [$scope.label];
             $scope.postUnits = " " + $scope.unit;
+            $scope.xlabels = intervalToXLabels($scope.interval);
 
-            var interval = $scope.interval || 'days';
-
+            var interval;
+            function intervalToXLabels(i) {
+                return i.substring(0, i.length - 1);
+            }
             function next(d) {
                 return d.add(1, interval);
             }
@@ -66,6 +74,8 @@ angular.module('bars.stats', [
             }
 
             function updateData() {
+                interval = $scope.interval || 'days';
+                $scope.xlabels = intervalToXLabels($scope.interval);
                 $scope.futurData.then(function (data) {
                     $scope.data = [];
                     if (data.length == 0) {
@@ -109,17 +119,19 @@ angular.module('bars.stats', [
 
             $scope.params = {
                 interval: 'days',
-                date_start: moment().subtract(7, 'days').toDate(),
-                date_end: moment().endOf('day').toDate(),
-                type: 'buy'
+                date_start: $scope.date_start,
+                date_end: $scope.date_end,
+                type: ['buy', 'meal']
             };
 
             $scope.computeData = function() {
                 var start = moment($scope.params.date_start);
                 var end = moment($scope.params.date_end);
                 var range = moment.range(start, end);
-                if (range.diff('days') > 45) {
+                if (range.diff('days') > 90) {
                     $scope.params.interval = 'months';
+                } else if (range.diff('days') > 45) {
+                    $scope.params.interval = 'weeks';
                 } else {
                     $scope.params.interval = 'days';
                 }

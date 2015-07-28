@@ -69,7 +69,7 @@
                     <div ui-view="stocks"></div>
                 </tab>
                 <tab heading="Graphiques" active="gactive">
-                    <div class="row" ui-view="graphs" ng-if="gactive"></div>
+                    <div ui-view="graphs" ng-if="gactive"></div>
                 </tab>
                 <tab heading="Modifier l'aliment vendu" ng-if="user.can('change_sellitem')">
                     <div class="row" ui-view="edit"></div>
