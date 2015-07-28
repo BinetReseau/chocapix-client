@@ -358,8 +358,9 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.graphs',
-    ['$scope',
-    function ($scope) {
+    ['$scope', 'food_item',
+    function ($scope, food_item) {
+        $scope.item = food_item;
         $scope.data = $scope.food_item.stats({type: 'buy'});
     }]
 )

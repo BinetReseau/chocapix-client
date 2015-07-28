@@ -23,6 +23,7 @@
     "jquery": "*",
     "lodash": "*",
     "moment": "*",
+    "moment-range": "*",
     "ngstorage": "*",
     "morris.js": "^0.5.1",
     "ngInfiniteScroll": "^1.2.0",
