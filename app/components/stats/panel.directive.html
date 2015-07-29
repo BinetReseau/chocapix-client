@@ -3,13 +3,31 @@
 </div>
 <form class="form-horizontal">
     <div class="form-group">
-        <!-- <div class="col-sm-4">
+        <label for="stat_type" class="col-sm-2 control-label">Type de graphique</label>
+        <div class="col-sm-10">
+            <label class="radio-inline">
+                <input type="radio" name="stat_type" id="stat_type_evolution" value="evolution" ng-model="stat_type" />
+                évolution
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="stat_type" id="stat_type_average" value="average" ng-model="stat_type" />
+                moyenne
+            </label>
+        </div>
+    </div>
+    <div class="form-group" ng-show="stat_type == 'average'">
+        <label for="average_duration" class="col-sm-2 control-label">Durée</label>
+        <div class="col-sm-10">
             <select ng-model="params.interval" class="form-control" ng-change="computeData()">
                 <option value="days" selected="selected">Jour</option>
+                <option value="weeks">Semaine</option>
                 <option value="months">Mois</option>
                 <option value="years">Année</option>
             </select>
-        </div>-->
+            <span class="help-block">Par exemple, "Jour" donnera les statistiques moyennes sur une journée, calculées avec les données comprises entre les dates ci-dessous.</span>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="date_start" class="col-sm-2 control-label">Début</label>
         <div class="col-sm-4">
             <div class="input-group">

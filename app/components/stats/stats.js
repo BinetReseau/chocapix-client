@@ -112,7 +112,12 @@ angular.module('bars.stats', [
         },
         templateUrl: 'components/stats/panel.directive.html',
         controller: ['$scope', function($scope) {
-            $scope.label = 'Quantité achetée';
+            if ($scope.model._type == "Account") {
+                $scope.label = 'Somme dépensée';
+            } else {
+                $scope.label = 'Quantité achetée';
+            }
+            $scope.stat_type = 'evolution';
             $scope.unit = $scope.model.unit_name;
             $scope.date_start = moment().subtract(7, 'days').toDate();
             $scope.date_end = moment().endOf('day').toDate();
@@ -121,19 +126,24 @@ angular.module('bars.stats', [
                 interval: 'days',
                 date_start: $scope.date_start,
                 date_end: $scope.date_end,
-                type: ['buy', 'meal']
+                type: ['buy', 'meal'],
+                aggregate: false
             };
 
             $scope.computeData = function() {
-                var start = moment($scope.params.date_start);
-                var end = moment($scope.params.date_end);
-                var range = moment.range(start, end);
-                if (range.diff('days') > 90) {
-                    $scope.params.interval = 'months';
-                } else if (range.diff('days') > 45) {
-                    $scope.params.interval = 'weeks';
+                if ($scope.stat_type == 'evolution') {
+                    var start = moment($scope.params.date_start);
+                    var end = moment($scope.params.date_end);
+                    var range = moment.range(start, end);
+                    if (range.diff('days') > 90) {
+                        $scope.params.interval = 'months';
+                    } else if (range.diff('days') > 45) {
+                        $scope.params.interval = 'weeks';
+                    } else {
+                        $scope.params.interval = 'days';
+                    }
                 } else {
-                    $scope.params.interval = 'days';
+                    $scope.params.aggregate = true;
                 }
                 $scope.data = $scope.model.stats($scope.params);
                 console.log($scope.data);
