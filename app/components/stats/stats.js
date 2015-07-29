@@ -29,7 +29,16 @@ angular.module('bars.stats', [
                             labels: scope.labels,
                             postUnits: scope.postUnits,
                             xLabels: xLabels,
-                            smooth: false
+                            smooth: false,
+                            dateFormat: function(x) { return moment(x).format('DD/MM/YYYY'); },
+                            xLabelFormat: function(x) { 
+                                if (xLabels == "hour") {
+                                    return moment(x).format('HH:mm');
+                                }
+                                else {
+                                    return moment(x).format('DD/MM/YYYY');
+                                }
+                            }
                         });
                     } else {
                         scope.morris.setData(scope.data);
@@ -114,11 +123,12 @@ angular.module('bars.stats', [
         controller: ['$scope', function($scope) {
             if ($scope.model._type == "Account") {
                 $scope.label = 'Somme dépensée';
+                $scope.unit = '€';
             } else {
                 $scope.label = 'Quantité achetée';
+                $scope.unit = $scope.model.unit_name;
             }
             $scope.stat_type = 'evolution';
-            $scope.unit = $scope.model.unit_name;
             $scope.date_start = moment().subtract(7, 'days').toDate();
             $scope.date_end = moment().endOf('day').toDate();
 
@@ -127,7 +137,7 @@ angular.module('bars.stats', [
                 date_start: $scope.date_start,
                 date_end: $scope.date_end,
                 type: ['buy', 'meal'],
-                aggregate: false
+                // aggregate: false
             };
 
             $scope.computeData = function() {
@@ -143,7 +153,7 @@ angular.module('bars.stats', [
                         $scope.params.interval = 'days';
                     }
                 } else {
-                    $scope.params.aggregate = true;
+                    // $scope.params.aggregate = true;
                 }
                 $scope.data = $scope.model.stats($scope.params);
                 console.log($scope.data);
