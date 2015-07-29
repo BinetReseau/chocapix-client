@@ -30,7 +30,13 @@ angular.module('bars.stats', [
                             postUnits: scope.postUnits,
                             xLabels: xLabels,
                             smooth: false,
-                            dateFormat: function(x) { return moment(x).format('DD/MM/YYYY'); },
+                            dateFormat: function(x) { 
+                                if (xLabels == "hour") {
+                                    return moment(x).format('DD/MM/YYYY HH:mm');
+                                } else {
+                                    return moment(x).format('DD/MM/YYYY'); 
+                                }
+                            },
                             xLabelFormat: function(x) { 
                                 if (xLabels == "hour") {
                                     return moment(x).format('HH:mm');
@@ -78,8 +84,11 @@ angular.module('bars.stats', [
                     return d.format("YYYY");
                 } else if (interval == 'months') {
                     return d.format("YYYY-MM");
+                } else if (interval == 'days') {
+                    return d.format("YYYY-MM-DD");
+                } else {
+                    return d.format("YYYY-MM-DD HH:mm");
                 }
-                return d.format("YYYY-MM-DD");
             }
 
             function updateData() {
@@ -148,8 +157,10 @@ angular.module('bars.stats', [
                         $scope.params.interval = 'months';
                     } else if (range.diff('days') > 45) {
                         $scope.params.interval = 'weeks';
-                    } else {
+                    } else if (range.diff('days') > 2) {
                         $scope.params.interval = 'days';
+                    } else {
+                        $scope.params.interval = 'hours';
                     }
                 } 
                 $scope.data = $scope.model.stats($scope.params);
