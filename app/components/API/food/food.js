@@ -68,8 +68,8 @@ angular.module('bars.api.food', [
                 }
             });
     }])
-.factory('api.models.stockitem', ['APIModel',
-    function(APIModel) {
+.factory('api.models.stockitem', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
         return new APIModel({
                 url: 'stockitem',
                 type: 'StockItem',
@@ -81,6 +81,12 @@ angular.module('bars.api.food', [
                 methods: {
                     'filter': function(s) {
                         return !this.deleted && this.details.filter(s);
+                    },
+                    'stats': function(params) {
+                        return APIInterface.request({
+                            'url': 'stockitem/' + this.id + '/stats',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });

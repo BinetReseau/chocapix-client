@@ -21,6 +21,12 @@ angular.module('bars.api.account', [
                             return !this.deleted && this.owner.is_active && _.deburr(this.owner.lastname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 || _.deburr(this.owner.firstname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
                                 _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
                         }
+                    },
+                    'stats': function(params) {
+                        return APIInterface.request({
+                            'url': 'account/' + this.id + '/stats',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
