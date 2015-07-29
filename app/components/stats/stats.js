@@ -136,8 +136,7 @@ angular.module('bars.stats', [
                 interval: 'days',
                 date_start: $scope.date_start,
                 date_end: $scope.date_end,
-                type: ['buy', 'meal'],
-                // aggregate: false
+                type: ['buy', 'meal']
             };
 
             $scope.computeData = function() {
@@ -152,9 +151,7 @@ angular.module('bars.stats', [
                     } else {
                         $scope.params.interval = 'days';
                     }
-                } else {
-                    // $scope.params.aggregate = true;
-                }
+                } 
                 $scope.data = $scope.model.stats($scope.params);
                 console.log($scope.data);
             }
