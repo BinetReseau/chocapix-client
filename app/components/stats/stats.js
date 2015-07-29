@@ -11,7 +11,8 @@ angular.module('bars.stats', [
             ykeys: '=ykeys',
             labels: '=labels',
             postUnits: '=postUnits',
-            xLabels: '=xlabels'
+            xLabels: '=xlabels',
+            parseTime: '=parseTime'
         },
         link: function (scope, elem, attrs) {
             elem.addClass('morris-chart');
@@ -30,32 +31,51 @@ angular.module('bars.stats', [
                             postUnits: scope.postUnits,
                             xLabels: xLabels,
                             smooth: false,
+                            parseTime: scope.parseTime,
                             dateFormat: function(x) {
-                                if (xLabels == "hour") {
-                                    return moment(x).format('DD/MM/YYYY HH:mm');
-                                } else if (xLabels == "month") {
-                                    return moment(x).format("MMMM YYYY");
-                                } else if (xLabels == "week") {
-                                    return moment(x).format("DD/MM/YYYY") + ' → ' + moment(x).add(1, 'week').format("DD/MM/YYYY");
-                                } else {
-                                    return moment(x).format('dddd DD MMMM YYYY');
+                                if (scope.parseTime) {
+                                    if (xLabels == "hour") {
+                                        return moment(x).format('DD/MM/YYYY HH:mm');
+                                    } else if (xLabels == "month") {
+                                        return moment(x).format("MMMM YYYY");
+                                    } else if (xLabels == "week") {
+                                        return moment(x).format("DD/MM/YYYY") + ' → ' + moment(x).add(1, 'week').format("DD/MM/YYYY");
+                                    } else {
+                                        return moment(x).format('dddd DD MMMM YYYY');
+                                    }
                                 }
+                                return parseOf(x);
                             },
                             xLabelFormat: function(x) {
-                                if (xLabels == "hour") {
-                                    return moment(x).format('HH:mm');
-                                } else if (xLabels == "month") {
-                                    return moment(x).format("MMM YYYY");
-                                } else {
-                                    return moment(x).format('DD/MM/YYYY');
+                                if (scope.parseTime) {
+                                    if (xLabels == "hour") {
+                                        return moment(x).format('HH:mm');
+                                    } else if (xLabels == "month") {
+                                        return moment(x).format("MMM YYYY");
+                                    } else {
+                                        return moment(x).format('DD/MM/YYYY');
+                                    }
                                 }
+                                return parseOf(x);
                             }
                         });
                     } else {
                         scope.morris.setData(scope.data);
                     }
                 }
-            })
+            });
+
+            function parseOf(x) {
+                var dict;
+                if (xLabels == "hour") {
+                    return x.label + "h"
+                } else if (xLabels == "day") {
+                    dict = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+                } else {
+                    dict = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+                }
+                return dict[x.label];
+            };
         }
     }
 })
@@ -78,8 +98,19 @@ angular.module('bars.stats', [
             $scope.xlabels = intervalToXLabels($scope.interval);
 
             var interval;
+            var history = true;
             function intervalToXLabels(i) {
-                return i.substring(0, i.length - 1);
+                if (i == 'hours' || i == 'days' || i == 'weeks' || i == 'months' || i == 'years') {
+                    return i.substring(0, i.length - 1);
+                } else {
+                    if (i == 'hours_of_day') {
+                        return 'hour';
+                    } else if (i == 'days_of_week') {
+                        return 'day';
+                    } else {
+                        return 'month';
+                    }
+                }
             }
             function next(d) {
                 return d.add(1, interval);
@@ -98,26 +129,73 @@ angular.module('bars.stats', [
 
             function updateData() {
                 interval = $scope.interval || 'days';
+                history = (interval.indexOf('_of_') == -1);
+
                 $scope.xlabels = intervalToXLabels($scope.interval);
+                $scope.parseTime = history;
+
                 $scope.futurData.then(function (data) {
                     $scope.data = [];
                     if (data.length == 0) {
                         return;
                     }
-                    var current = moment(data[0][0]);
-                    for (var i = 0; i < data.length; i++) {
-                        while (current.isBefore(data[i][0])) {
+                    data = _.sortBy(data, function (a) {
+                        if (history) {
+                            return a[0];
+                        } else {
+                            return parseInt(a[0]);
+                        }
+                    });
+
+                    // Évolution
+                    if (history) {
+                        var current = moment(data[0][0]);
+                        for (var i = 0; i < data.length; i++) {
+                            while (current.isBefore(data[i][0])) {
+                                $scope.data.push({
+                                    date: format(current),
+                                    value: 0
+                                });
+                                next(current);
+                            }
                             $scope.data.push({
-                                date: format(current),
-                                value: 0
+                                date: format(moment(data[i][0])),
+                                value: Math.round(-data[i][1]*100)/100
                             });
                             next(current);
                         }
-                        $scope.data.push({
-                            date: format(moment(data[i][0])),
-                            value: Math.round(-data[i][1]*100)/100
-                        });
-                        next(current);
+                    } else { // Moyenne
+                        var currentEnd, current;
+                        if (interval == 'hours_of_day') {
+                            current = 0;
+                            currentEnd = 23;
+                        } else if (interval == 'days_of_week') {
+                            current = 0;
+                            currentEnd = 6;
+                        } else {
+                            current = parseInt(data[0][0]);
+                            currentEnd = parseInt(data[data.length-1][0]);
+                        }
+
+                        for (var i = 0; i < data.length; i++) {
+                            for (;current < data[i][0]; current++) {
+                                $scope.data.push({
+                                    date: current,
+                                    value: 0
+                                });
+                            }
+                            $scope.data.push({
+                                date: parseInt(data[i][0]),
+                                value: Math.round(-data[i][1]*100)/100
+                            });
+                            current++;
+                        }
+                        for (;current <= currentEnd; current++) {
+                            $scope.data.push({
+                                date: current,
+                                value: 0
+                            });
+                        }
                     }
                 });
             }
@@ -169,7 +247,6 @@ angular.module('bars.stats', [
                     }
                 }
                 $scope.data = $scope.model.stats($scope.params);
-                console.log($scope.data);
             }
             $scope.computeData();
 
