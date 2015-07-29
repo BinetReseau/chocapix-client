@@ -30,18 +30,23 @@ angular.module('bars.stats', [
                             postUnits: scope.postUnits,
                             xLabels: xLabels,
                             smooth: false,
-                            dateFormat: function(x) { 
+                            dateFormat: function(x) {
                                 if (xLabels == "hour") {
                                     return moment(x).format('DD/MM/YYYY HH:mm');
+                                } else if (xLabels == "month") {
+                                    return moment(x).format("MMMM YYYY");
+                                } else if (xLabels == "week") {
+                                    return moment(x).format("DD/MM/YYYY") + ' → ' + moment(x).add(1, 'week').format("DD/MM/YYYY");
                                 } else {
-                                    return moment(x).format('DD/MM/YYYY'); 
+                                    return moment(x).format('dddd DD MMMM YYYY');
                                 }
                             },
-                            xLabelFormat: function(x) { 
+                            xLabelFormat: function(x) {
                                 if (xLabels == "hour") {
                                     return moment(x).format('HH:mm');
-                                }
-                                else {
+                                } else if (xLabels == "month") {
+                                    return moment(x).format("MMM YYYY");
+                                } else {
                                     return moment(x).format('DD/MM/YYYY');
                                 }
                             }
@@ -135,7 +140,7 @@ angular.module('bars.stats', [
                 $scope.unit = '€';
             } else {
                 $scope.label = 'Quantité achetée';
-                $scope.unit = $scope.model.unit_name;
+                $scope.unit = $scope.model.unit_name_plural;
             }
             $scope.stat_type = 'evolution';
             $scope.date_start = moment().subtract(7, 'days').toDate();
@@ -153,16 +158,16 @@ angular.module('bars.stats', [
                     var start = moment($scope.params.date_start);
                     var end = moment($scope.params.date_end);
                     var range = moment.range(start, end);
-                    if (range.diff('days') > 90) {
+                    if (range.diff('days') > 120) {
                         $scope.params.interval = 'months';
-                    } else if (range.diff('days') > 45) {
+                    } else if (range.diff('days') > 60) {
                         $scope.params.interval = 'weeks';
                     } else if (range.diff('days') > 2) {
                         $scope.params.interval = 'days';
                     } else {
                         $scope.params.interval = 'hours';
                     }
-                } 
+                }
                 $scope.data = $scope.model.stats($scope.params);
                 console.log($scope.data);
             }
