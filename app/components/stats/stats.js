@@ -95,17 +95,6 @@ angular.module('bars.stats', [
             function next(d) {
                 return d.add(1, interval);
             }
-            function format(d) {
-                if (interval == 'years') {
-                    return d.format("YYYY");
-                } else if (interval == 'months') {
-                    return d.format("YYYY-MM");
-                } else if (interval == 'days') {
-                    return d.format("YYYY-MM-DD");
-                } else {
-                    return d.format("YYYY-MM-DD HH:mm");
-                }
-            }
 
             function updateData() {
                 interval = $scope.interval || 'days';
@@ -133,13 +122,13 @@ angular.module('bars.stats', [
                         for (var i = 0; i < data.length; i++) {
                             while (current.isBefore(data[i][0])) {
                                 $scope.data.push({
-                                    date: format(current),
+                                    date: current.format(),
                                     value: 0
                                 });
                                 next(current);
                             }
                             $scope.data.push({
-                                date: format(moment(data[i][0])),
+                                date: data[i][0],
                                 value: Math.round(-data[i][1]*100)/100
                             });
                             next(current);
