@@ -12,6 +12,8 @@ angular.module('bars.stats', [
             labels: '=labels',
             postUnits: '=postUnits',
             xLabels: '=xlabels',
+            dateFormat: '&dateFormat',
+            xlabelformat: '&xlabelformat',
             parseTime: '=parseTime'
         },
         link: function (scope, elem, attrs) {
@@ -32,31 +34,17 @@ angular.module('bars.stats', [
                             xLabels: xLabels,
                             smooth: false,
                             parseTime: scope.parseTime,
-                            dateFormat: function(x) {
+                            dateFormat: function (x) {
                                 if (scope.parseTime) {
-                                    if (xLabels == "hour") {
-                                        return moment(x).format('DD/MM/YYYY HH:mm');
-                                    } else if (xLabels == "month") {
-                                        return moment(x).format("MMMM YYYY");
-                                    } else if (xLabels == "week") {
-                                        return moment(x).format("DD/MM/YYYY") + ' → ' + moment(x).add(1, 'week').format("DD/MM/YYYY");
-                                    } else {
-                                        return moment(x).format('dddd DD MMMM YYYY');
-                                    }
+                                    return scope.dateFormat({x: x});
                                 }
-                                return parseOf(x);
+                                return scope.dateFormat({x: x.label});
                             },
-                            xLabelFormat: function(x) {
+                            xLabelFormat: function (x) {
                                 if (scope.parseTime) {
-                                    if (xLabels == "hour") {
-                                        return moment(x).format('HH:mm');
-                                    } else if (xLabels == "month") {
-                                        return moment(x).format("MMM YYYY");
-                                    } else {
-                                        return moment(x).format('DD/MM/YYYY');
-                                    }
+                                    return scope.xlabelformat({x: x});
                                 }
-                                return parseOf(x);
+                                return scope.xlabelformat({x: x.label});
                             }
                         });
                     } else {
@@ -64,18 +52,6 @@ angular.module('bars.stats', [
                     }
                 }
             });
-
-            function parseOf(x) {
-                var dict;
-                if (xLabels == "hour") {
-                    return x.label + "h"
-                } else if (xLabels == "day") {
-                    dict = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
-                } else {
-                    dict = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
-                }
-                return dict[x.label];
-            };
         }
     }
 })
@@ -99,6 +75,10 @@ angular.module('bars.stats', [
 
             var interval;
             var history = true;
+
+            var dict_days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+            var dict_months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+
             function intervalToXLabels(i) {
                 if (i == 'hours' || i == 'days' || i == 'weeks' || i == 'months' || i == 'years') {
                     return i.substring(0, i.length - 1);
@@ -198,6 +178,33 @@ angular.module('bars.stats', [
                         }
                     }
                 });
+
+                if (history) {
+                    if (interval == "hours") {
+                        $scope.dateFormat = function(x) { return moment(x).format('DD/MM/YYYY HH:mm'); };
+                        $scope.xlabelformat = function (x) { return moment(x).format('HH:mm'); };
+                    } else if (interval == "months") {
+                        $scope.dateFormat = function(x) { return moment(x).format("MMMM YYYY"); };
+                        $scope.xlabelformat = function (x) { return moment(x).format("MMM YYYY"); };
+                    } else if (interval == "weeks") {
+                        $scope.dateFormat = function(x) { return moment(x).format("DD/MM/YYYY") + ' → ' + moment(x).add(1, 'week').format("DD/MM/YYYY"); };
+                        $scope.xlabelformat = function (x) { return moment(x).format('DD/MM/YYYY'); };
+                    } else {
+                        $scope.dateFormat = function(x) { return moment(x).format('dddd DD MMMM YYYY'); };
+                        $scope.xlabelformat = function (x) { return moment(x).format('DD/MM/YYYY'); };
+                    }
+                } else {
+                    var fnp;
+                    if (interval == "hours_of_day") {
+                        fnp = function(x) { return x + "h"; };
+                    } else if (interval == "days_of_week") {
+                        fnp = function(x) { return dict_days[x]; };
+                    } else {
+                        fnp = function(x) {return dict_months[x]; };
+                    }
+                    $scope.dateFormat = fnp;
+                    $scope.xlabelformat = fnp;
+                }
             }
             updateData();
 
