@@ -72,6 +72,7 @@ angular.module('bars.stats', [
             $scope.labels = [$scope.label];
             $scope.postUnits = " " + $scope.unit;
             $scope.xlabels = intervalToXLabels($scope.interval);
+            $scope.sth2show = true;
 
             var interval;
             var history = true;
@@ -106,8 +107,10 @@ angular.module('bars.stats', [
                 $scope.futurData.then(function (data) {
                     $scope.data = [];
                     if (data.length == 0) {
+                        $scope.sth2show = false;
                         return;
                     }
+                    $scope.sth2show = true;
                     data = _.sortBy(data, function (a) {
                         if (history) {
                             return a[0];
@@ -245,6 +248,15 @@ angular.module('bars.stats', [
                 $scope.data = $scope.model.stats($scope.params);
             }
             $scope.computeData();
+
+            $scope.stat_type_change = function() {
+                if ($scope.stat_type == 'evolution') {
+                    $scope.params.interval = 'days';
+                } else {
+                    $scope.params.interval = 'hours_of_day';
+                }
+                $scope.computeData();
+            };
 
             // Utils functions for datepicker
             $scope.start_opened = false;
