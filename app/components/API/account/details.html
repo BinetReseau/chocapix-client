@@ -111,16 +111,8 @@
                         </table>
                     </div>
                 </tab>
-                <tab heading="Graphiques" ng-if="false">
-                    <div class="row">
-                        <div class="col-sm-12 text-center">
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    <h1>ICI un BÔÔÔ GRAPHIQUE</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <tab heading="Graphiques" active="gactive">
+                    <bars:stats:panel model="account" ng-if="gactive"></bars:stats:panel>
                 </tab>
                 <tab heading="Modifier" ng-if="user.can('change_account')">
                     <div class="row">

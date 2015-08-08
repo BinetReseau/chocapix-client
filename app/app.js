@@ -17,6 +17,7 @@ angular.module('barsApp', [
   'bars.magicbar',
   'bars.meal',
   'bars.settings',
+  'bars.stats',
 
   'APIModel',
   'OpenFoodFacts',
@@ -36,6 +37,9 @@ angular.module('barsApp', [
     OFFURL.url = "http://bars.nadrieril.fr/off";
     // APIURL.url = "http://127.0.0.1:8000";
     // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
+    // APIURL.url = "http://chocapix/api";
+    // OFFURL.url = "http://chocapix/off";
+
 }])
 
 .config(['$httpProvider', '$compileProvider', '$tooltipProvider',

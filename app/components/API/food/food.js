@@ -68,8 +68,8 @@ angular.module('bars.api.food', [
                 }
             });
     }])
-.factory('api.models.stockitem', ['APIModel',
-    function(APIModel) {
+.factory('api.models.stockitem', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
         return new APIModel({
                 url: 'stockitem',
                 type: 'StockItem',
@@ -81,12 +81,18 @@ angular.module('bars.api.food', [
                 methods: {
                     'filter': function(s) {
                         return !this.deleted && this.details.filter(s);
+                    },
+                    'stats': function(params) {
+                        return APIInterface.request({
+                            'url': 'stockitem/' + this.id + '/stats',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
     }])
-.factory('api.models.sellitem', ['APIModel',
-    function(APIModel) {
+.factory('api.models.sellitem', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
         return new APIModel({
                 url: 'sellitem',
                 type: 'SellItem',
@@ -106,6 +112,12 @@ angular.module('bars.api.food', [
                         }
                         var searchable = this.name + " " + this.keywords;
                         return (_.deburr(searchable.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                    },
+                    'stats': function(params) {
+                        return APIInterface.request({
+                            'url': 'sellitem/' + this.id + '/stats',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
@@ -152,6 +164,10 @@ angular.module('bars.api.food', [
                 'stocks@bar.food.details': {
                     templateUrl: "components/API/food/views/details-stocks.html",
                     controller: 'api.ctrl.food_details.stocks',
+                },
+                'graphs@bar.food.details': {
+                    templateUrl: "components/API/food/views/details-graphs.html",
+                    controller: 'api.ctrl.food_details.graphs',
                 },
                 'edit@bar.food.details': {
                     templateUrl: "components/API/food/views/details-edit.html",
@@ -345,6 +361,13 @@ angular.module('bars.api.food', [
         $scope.quitEdit = function(si) {
             si.edit = false;
         };
+    }]
+)
+.controller('api.ctrl.food_details.graphs',
+    ['$scope', 'food_item',
+    function ($scope, food_item) {
+        $scope.item = food_item;
+        $scope.data = $scope.food_item.stats({type: 'buy'});
     }]
 )
 .controller('api.ctrl.food_details.edit',

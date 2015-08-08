@@ -242,6 +242,10 @@ hr.derrierebtn {
     text-align: center;
 }
 
+.morris-chart svg {
+    width: 100%;
+}
+
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {
     color: rgb(51, 122, 183);

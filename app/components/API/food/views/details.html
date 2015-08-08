@@ -68,12 +68,8 @@
                 <tab heading="Stocks"> <!-- ng-if="food_item.stockitems.length > 1"> -->
                     <div ui-view="stocks"></div>
                 </tab>
-                <tab heading="Graphiques" ng-if="false">
-                    <div class="row">
-                        <div class="col-sm-12 text-center">
-                            <h1>ICI un BÔÔÔ GRAPHIQUE</h1>
-                        </div>
-                    </div>
+                <tab heading="Graphiques" active="gactive">
+                    <div ui-view="graphs" ng-if="gactive"></div>
                 </tab>
                 <tab heading="Modifier l'aliment vendu" ng-if="user.can('change_sellitem')">
                     <div class="row" ui-view="edit"></div>
