@@ -188,7 +188,7 @@ angular.module('bars.stats', [
                 } else {
                     var fnp;
                     if (interval == "hours_of_day") {
-                        fnp = function(x) { return x + "h"; };
+                        fnp = function(x) { return (parseInt(x)+parseInt(moment().format("ZZ")/100))%24 + "h"; };
                     } else if (interval == "days_of_week") {
                         fnp = function(x) { return dict_days[x]; };
                     } else {
