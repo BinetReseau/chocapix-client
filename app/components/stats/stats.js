@@ -122,7 +122,13 @@ angular.module('bars.stats', [
                     // Évolution
                     if (history) {
                         var current = moment(data[0][0]);
+                        if (interval == 'hours') {
+                            var current = moment(data[0][0] + "Z");
+                        }
                         for (var i = 0; i < data.length; i++) {
+                            if (interval == 'hours') {
+                                data[i][0] += "Z";
+                            }
                             while (current.isBefore(data[i][0])) {
                                 $scope.data.push({
                                     date: current.format(),
@@ -173,7 +179,7 @@ angular.module('bars.stats', [
 
                 if (history) {
                     if (interval == "hours") {
-                        $scope.dateFormat = function(x) { return moment(x).format('DD/MM/YYYY HH:mm'); };
+                        $scope.dateFormat = function(x) { return moment(x).format('dddd DD MMMM YYYY HH:mm'); };
                         $scope.xlabelformat = function (x) { return moment(x).format('HH:mm'); };
                     } else if (interval == "months") {
                         $scope.dateFormat = function(x) { return moment(x).format("MMMM YYYY"); };
