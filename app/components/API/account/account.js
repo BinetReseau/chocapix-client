@@ -77,9 +77,6 @@ angular.module('bars.api.account', [
                 }],
                 buy_spent: ['account', function(account) {
                     return account.total_spent({type: ['buy', 'meal']});
-                }],
-                punish_spent: ['account', function(account) {
-                    return account.total_spent({type: 'punish'});
                 }]
             }
         });
@@ -109,11 +106,10 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent', 'punish_spent',
-    function($scope, account, APIAction, User, Role, roles, buy_spent, punish_spent) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent',
+    function($scope, account, APIAction, User, Role, roles, buy_spent) {
         $scope.account = account;
         $scope.buy_spent = buy_spent;
-        $scope.punish_spent = punish_spent;
         $scope.query = {
             type: 'give',
             motive: '',
