@@ -26,8 +26,14 @@ angular.module('bars.meal', [
                 _this.toggle();
             }
         }
+        var open = function () {
+            if (!openned) {
+                _this.toggle();
+            }
+        }
         $rootScope.$on('auth.hasLoggedOut', close);
         $rootScope.$on('meal.hasBeenValidated', close);
+        $rootScope.$on('meal.begin', open);
     }]
 )
 .directive('popoverMeal', function() {
@@ -90,6 +96,9 @@ angular.module('bars.meal', [
                 this.recomputeAmount();
             },
             addItem: function(item, qty) {
+                if (!this.in()) {
+                    $rootScope.$broadcast('meal.begin');
+                }
                 if (!qty) {
                     qty = 1;
                 }
@@ -124,6 +133,7 @@ angular.module('bars.meal', [
                 .then(function() {
                     $rootScope.$broadcast('meal.hasBeenValidated');
                     refThis.init();
+                    document.getElementById("q_alim").focus();
                 });
             },
             in: function() {

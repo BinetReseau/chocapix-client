@@ -4,7 +4,7 @@
             <label class="sr-only" for="mealTitleInput">Titre de la bouffe</label>
             <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Titre de la bouffe" ng-model="meal.name" />
         </form>
-        <button class="btn btn-success btn-block" ng-class="(meal.inRequest || meal.totalPrice <= 0) && 'disabled'" ng-click="meal.validate()">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
+        <button class="btn btn-success btn-block" ng-class="(meal.inRequest || meal.totalPrice <= 0) && 'disabled'" ng-click="meal.validate()" tabindex="6">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
     </div>
     <div class="list-group-item">
         <h5 class="list-group-item-heading text-center">Participants</h5>
@@ -12,7 +12,7 @@
             <form class="form-inline text-center">
                 <div class="form-group">
                     <label class="sr-only" for="addMealCustomerInput">Ajouter</label>
-                    <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" ng-model="meal.accountToAdd" typeahead="account.owner.firstname + ' ' + account.owner.lastname for account in accountsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
+                    <input type="text" id="addMealCustomerInput" class="form-control" placeholder="Ajouter" ng-model="meal.accountToAdd" tabindex="4" typeahead="account.owner.firstname + ' ' + account.owner.lastname for account in accountsf($viewValue) | limitTo:5" autocomplete="off" typeahead-on-select="meal.addCustomer($item, $model, $label)" />
                 </div>
             </form>
             <br />
