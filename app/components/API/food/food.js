@@ -222,6 +222,11 @@ angular.module('bars.api.food', [
         $scope.qpp = function (f) {
             return f.fuzzy_qty*f.fuzzy_price;
         };
+
+        $scope.limit = {nb: 30};
+        $scope.showMore = function () {
+            $scope.limit.nb += 5;
+        };
     }]
 )
 .controller('api.ctrl.food_details',
