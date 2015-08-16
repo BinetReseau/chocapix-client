@@ -27,6 +27,12 @@ angular.module('bars.api.account', [
                             'url': 'account/' + this.id + '/stats',
                             'method': 'GET',
                             'params': params});
+                    },
+                    'total_spent': function(params) {
+                        return APIInterface.request({
+                            'url': 'account/' + this.id + '/total_spent',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
@@ -35,6 +41,12 @@ angular.module('bars.api.account', [
                 'url': 'account',
                 'method': 'GET',
                 'params': {owner: user}});
+        };
+        model.ranking = function(params) {
+            return APIInterface.request({
+                'url': 'account/ranking',
+                'method': 'GET',
+                'params': params});
         };
 
         return model;
@@ -68,6 +80,9 @@ angular.module('bars.api.account', [
                 }],
                 roles: ['api.models.role', 'account', function(Role, account) {
                     return Role.ofUser(account.owner.id);
+                }],
+                buy_spent: ['account', function(account) {
+                    return account.total_spent({type: ['buy', 'meal']});
                 }]
             }
         });
@@ -97,9 +112,10 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles',
-    function($scope, account, APIAction, User, Role, roles) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent',
+    function($scope, account, APIAction, User, Role, roles, buy_spent) {
         $scope.account = account;
+        $scope.buy_spent = buy_spent;
         $scope.query = {
             type: 'give',
             motive: '',

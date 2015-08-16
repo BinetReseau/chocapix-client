@@ -1,0 +1,7 @@
+<tbody>
+    <tr ng-repeat="a in ranking | orderBy: 'total_spent'">
+        <td>#{{ $index+1 }}</td>
+        <td><bars:account account="Account.get(a.id)"></bars:account></td>
+        <td>{{ -a.total_spent|currency }}</td>
+    </tr>
+</tbody>

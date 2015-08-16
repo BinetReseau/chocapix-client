@@ -32,6 +32,11 @@
                             <span class="glyphicon glyphicon-cutlery"></span><span class="hidden-xs"> Aliments</span>
                         </a>
                     </li>
+                    <li ng-class="bar.active == 'ranking' && 'active'">
+                        <a title="Aliments du bar" ui-sref="bar.ranking({ bar: bar.id })">
+                            <span class="glyphicon glyphicon-equalizer"></span><span class="hidden-xs"> Classements</span>
+                        </a>
+                    </li>
                     <li ng-class="bar.active == 'admin' && 'active'" ng-if="user.can('add_news') || user.can('add_approtransaction') || user.can('add_sellitem') || user.can('add_inventorytransaction') || user.can('add_account') || user.can('add_barInvestmenttransaction') || user.can('add_collectivePaymenttransaction')">
                         <a title="Administration" ui-sref="bar.admin({ bar: bar.id })">
                             <span class="glyphicon glyphicon-dashboard"></span><span class="hidden-xs"> Administration</span>
