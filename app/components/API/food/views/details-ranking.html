@@ -1,0 +1,18 @@
+<div class="row">
+    <table class="table table-striped table-hover table-tab">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Utilisateur</th>
+                <th>Quantité totale</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="a in best_ever | orderBy: 'total_spent'">
+                <td>#{{ $index+1 }}</td>
+                <td><bars:account account="Account.get(a.id)"></bars:account></td>
+                <td><bars:sellitem:qty item="food_item" qty="-a.total_spent"></bars:sellitem:qty></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

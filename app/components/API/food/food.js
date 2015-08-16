@@ -118,6 +118,12 @@ angular.module('bars.api.food', [
                             'url': 'sellitem/' + this.id + '/stats',
                             'method': 'GET',
                             'params': params});
+                    },
+                    'ranking': function(params) {
+                        return APIInterface.request({
+                            'url': 'sellitem/' + this.id + '/ranking',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
@@ -168,6 +174,15 @@ angular.module('bars.api.food', [
                 'graphs@bar.food.details': {
                     templateUrl: "components/API/food/views/details-graphs.html",
                     controller: 'api.ctrl.food_details.graphs',
+                },
+                'ranking@bar.food.details': {
+                    templateUrl: "components/API/food/views/details-ranking.html",
+                    controller: 'api.ctrl.food_details.ranking',
+                    resolve: {
+                        best_ever: ['food_item', function (food_item) {
+                            return food_item.ranking({});
+                        }]
+                    }
                 },
                 'edit@bar.food.details': {
                     templateUrl: "components/API/food/views/details-edit.html",
@@ -368,6 +383,14 @@ angular.module('bars.api.food', [
     function ($scope, food_item) {
         $scope.item = food_item;
         $scope.data = $scope.food_item.stats({type: 'buy'});
+    }]
+)
+.controller('api.ctrl.food_details.ranking',
+    ['$scope', 'food_item', 'best_ever', 'api.models.account',
+    function ($scope, food_item, best_ever, Account) {
+        $scope.best_ever = best_ever;
+        $scope.food_item = food_item;
+        $scope.Account = Account;
     }]
 )
 .controller('api.ctrl.food_details.edit',
