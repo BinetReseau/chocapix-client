@@ -42,6 +42,12 @@ angular.module('bars.api.account', [
                 'method': 'GET',
                 'params': {owner: user}});
         };
+        model.ranking = function(params) {
+            return APIInterface.request({
+                'url': 'account/ranking',
+                'method': 'GET',
+                'params': params});
+        };
 
         return model;
     }])

@@ -1,0 +1,54 @@
+<div class="col-sm-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title text-center text-capitalizefirst">
+                Meilleurs consommateurs ever
+            </h2>
+        </div>
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr ng-repeat="a in best_ever | orderBy: 'total_spent'">
+                    <td>#{{ $index+1 }}</td>
+                    <td><bars:account account="Account.get(a.id)"></bars:account></td>
+                    <td>{{ -a.total_spent|currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title text-center text-capitalizefirst">
+                Le dernier mois
+            </h2>
+        </div>
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr ng-repeat="a in best_month | orderBy: 'total_spent'">
+                    <td>#{{ $index+1 }}</td>
+                    <td><bars:account account="Account.get(a.id)"></bars:account></td>
+                    <td>{{ -a.total_spent|currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title text-center text-capitalizefirst">
+                Les plus cohèzes
+            </h2>
+        </div>
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr ng-repeat="a in best_coheze | orderBy: 'total_spent'">
+                    <td>#{{ $index+1 }}</td>
+                    <td><bars:account account="Account.get(a.id)"></bars:account></td>
+                    <td>{{ -a.total_spent|currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
