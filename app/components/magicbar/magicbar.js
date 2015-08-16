@@ -5,8 +5,30 @@ angular.module('bars.magicbar', [
 ])
 
 .controller('magicbar.ctrl',
-    ['$scope', '$filter', '$modal', '$timeout', 'api.services.action', 'api.models.buyitem', 'magicbar.analyse', 'bars.meal',
-    function($scope, $filter, $modal, $timeout, APIAction, BuyItem, analyse, Meal) {
+    ['$scope', '$rootScope', '$filter', '$modal', '$timeout', 'auth.user', 'api.services.action', 'api.models.buyitem', 'api.models.sellitem', 'magicbar.analyse', 'bars.meal',
+    function($scope, $rootScope, $filter, $modal, $timeout, AuthUser, APIAction, BuyItem, SellItem, analyse, Meal) {
+		// MagicBar sorting
+		function cleanSellItems() {
+			_.forEach(SellItem.all(), function (si) {
+				si.urank = 0;
+			});
+		}
+		function updateSellItems() {
+			if (!AuthUser.account) {
+				return;
+			}
+			AuthUser.account.magicbar_ranking({})
+			.then(function (ranking) {
+				_.forEach(ranking, function (r) {
+					SellItem.get(r.id).urank = r.nb_transactions;
+				});
+			});
+		}
+		updateSellItems();
+		$rootScope.$on('auth.hasLoggedIn', updateSellItems);
+		$rootScope.$on('auth.hasLoggedOut', updateSellItems);
+
+
         $scope.query = {
             type: 'buy',
             qty: 1,

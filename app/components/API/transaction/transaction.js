@@ -171,8 +171,8 @@ angular.module('bars.api.transaction', [
             filter: '&filter',
             sellitem: "=?sellitem",
             buyInStock: '=?buyInStock', // false: display buytransaction with sellitems ; true: display buytransaction with stockitem
-            dailyTotal: '=?dailyTotal' // true: display total price by day
-            // limitTo: '=?limit' // no more limit, infinite scroll everywhere
+            dailyTotal: '=?dailyTotal', // true: display total price by day
+            pageSize: '=?pageSize' // number of items to load
         },
         templateUrl: 'components/API/transaction/directive.html',
         controller: ['$scope', '$filter', '$sanitize', 'api.models.transaction', 'auth.user', function($scope, $filter, $sanitize, Transaction, AuthUser) {
@@ -180,12 +180,15 @@ angular.module('bars.api.transaction', [
             var allHistory = [];
             var page = 1;
             var inRequest = false;
+            if (!$scope.pageSize) {
+                $scope.pageSize = 30;
+            }
             function loadMore() {
                 if (!inRequest) {
                     inRequest = true;
                     var req = $scope.filter();
                     req.page = page++;
-                    req.page_size = 60;
+                    req.page_size = $scope.pageSize;
                     if ($scope.sellitem) {
                         req.sellitem = $scope.sellitem;
                     }
@@ -211,27 +214,6 @@ angular.module('bars.api.transaction', [
 
                 _.forEach(allHistory, function(t) {
                     t.parseTimestamp();
-
-                    // Tri de la MagicBar côté client
-                    // À supprimer une fois implémenté côté serveur
-                    if (!t.canceled && AuthUser.isAuthenticated() && fuser == AuthUser.user.id) {
-                        if (
-                            (t.type == 'buy' && fuser == t.author.id) ||
-                            (t.type == 'meal' &&
-                                _.find(t.accounts, function (a) {
-                                    return a.account.owner.id == fuser;
-                                })
-                            )
-                           ) {
-                            _.forEach(t.items, function (item) {
-                                if (item.sellitem.urank) {
-                                    item.sellitem.urank++;
-                                } else {
-                                    item.sellitem.urank = 1;
-                                }
-                            });
-                        }
-                    }
                 });
                 var history_by_date = _.groupBy(allHistory, 'timestamp_day');
                 var history_dates = _.keys(history_by_date);

@@ -33,6 +33,12 @@ angular.module('bars.api.account', [
                             'url': 'account/' + this.id + '/total_spent',
                             'method': 'GET',
                             'params': params});
+                    },
+                    'magicbar_ranking': function(params) {
+                        return APIInterface.request({
+                            'url': 'account/' + this.id + '/magicbar_ranking',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
