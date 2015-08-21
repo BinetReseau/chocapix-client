@@ -39,6 +39,12 @@ angular.module('bars.api.account', [
                             'url': 'account/' + this.id + '/magicbar_ranking',
                             'method': 'GET',
                             'params': params});
+                    },
+                    'sellitem_ranking': function(params) {
+                        return APIInterface.request({
+                            'url': 'account/' + this.id + '/sellitem_ranking',
+                            'method': 'GET',
+                            'params': params});
                     }
                 }
             });
@@ -89,6 +95,9 @@ angular.module('bars.api.account', [
                 }],
                 buy_spent: ['account', function(account) {
                     return account.total_spent({type: ['buy', 'meal']});
+                }],
+                best_sellitem: ['account', function(account) {
+                    return account.sellitem_ranking({});
                 }]
             }
         });
@@ -118,10 +127,11 @@ angular.module('bars.api.account', [
         };
     }])
 .controller('api.ctrl.account_detail',
-    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent',
-    function($scope, account, APIAction, User, Role, roles, buy_spent) {
+    ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent', 'best_sellitem',
+    function($scope, account, APIAction, User, Role, roles, buy_spent, best_sellitem) {
         $scope.account = account;
         $scope.buy_spent = buy_spent;
+        $scope.best_sellitem = best_sellitem;
         $scope.query = {
             type: 'give',
             motive: '',

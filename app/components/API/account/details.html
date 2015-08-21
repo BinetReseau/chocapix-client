@@ -100,6 +100,20 @@
                 <tab heading="Graphiques" active="gactive">
                     <bars:stats:panel model="account" ng-if="gactive"></bars:stats:panel>
                 </tab>
+                <tab heading="Aliments préférés">
+                    <div class="row">
+                        <table class="table table-striped table-hover table-tab">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Aliment</th>
+                                    <th>Nombre d'achats</th>
+                                </tr>
+                            </thead>
+                            <tbody bars:ranking:sellitems ranking="best_sellitem" limit="20"></tbody>
+                        </table>
+                    </div>
+                </tab>
                 <tab heading="Modifier" ng-if="user.can('change_account')">
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">

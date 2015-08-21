@@ -15,7 +15,9 @@
                     Meilleurs consommateurs ever
                 </h2>
             </div>
-            <table bars:ranking:accounts ranking="best_ever" class="table table-hover table-striped"></table>
+            <table class="table table-hover table-striped">
+                <tbody bars:ranking:accounts ranking="best_ever"></tbody>
+            </table>
         </div>
     </div>
     <div class="col-sm-4">
@@ -25,7 +27,9 @@
                     Le dernier mois
                 </h2>
             </div>
-            <table bars:ranking:accounts ranking="best_month" class="table table-hover table-striped"></table>
+            <table class="table table-hover table-striped">
+                <tbody bars:ranking:accounts ranking="best_month"></tbody>
+            </table>
         </div>
     </div>
     <div class="col-sm-4">
@@ -35,7 +39,9 @@
                     Les plus cohèzes
                 </h2>
             </div>
-            <table bars:ranking:accounts ranking="best_coheze" class="table table-hover table-striped"></table>
+            <table class="table table-hover table-striped">
+                <tbody bars:ranking:accounts ranking="best_coheze"></tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -47,7 +53,9 @@
                     Aliments les plus consommés
                 </h2>
             </div>
-            <table bars:ranking:sellitems ranking="best_sellitem" limit="50" class="table table-hover table-striped"></table>
+            <table class="table table-hover table-striped">
+                <tbody bars:ranking:sellitems ranking="best_sellitem" limit="50"></tbody>
+            </table>
         </div>
     </div>
 </div>
