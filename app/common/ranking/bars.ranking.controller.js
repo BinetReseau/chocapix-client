@@ -8,5 +8,13 @@ angular.module('bars.granking')
         $scope.Bar = Bar;
         $scope.bars_list = bars_list;
         $scope.best_nazis = best_nazis;
+
+        $scope.promoOfBar = function (bar) {
+            if (bar.match(/jone$/)) {
+                return 'warning';
+            } else {
+                return 'danger';
+            }
+        };
     }])
 ;
