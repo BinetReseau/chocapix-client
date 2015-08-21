@@ -20,7 +20,7 @@ angular.module('bars.magicbar', [
 			AuthUser.account.magicbar_ranking({})
 			.then(function (ranking) {
 				_.forEach(ranking, function (r) {
-					SellItem.get(r.id).urank = r.nb_transactions;
+					SellItem.get(r.id).urank = r.val;
 				});
 			});
 		}
