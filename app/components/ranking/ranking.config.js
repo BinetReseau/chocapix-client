@@ -18,6 +18,10 @@ angular.module('bars.ranking', [
                 }],
                 best_coheze: ['api.models.account', function(Account) {
                     return Account.ranking({type: 'meal'});
+                }],
+                best_sellitem: ['bar', function(bar) {
+                    console.log(bar);
+                    return bar.sellitem_ranking({});
                 }]
             }
         })

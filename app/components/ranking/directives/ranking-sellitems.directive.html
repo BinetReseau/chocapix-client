@@ -1,0 +1,7 @@
+<tbody>
+    <tr ng-repeat="a in ranking | orderBy:'val':true | limitTo: limit">
+        <td>#{{ $index+1 }}</td>
+        <td><bars:sellitem:oneway item="SellItem.get(a.id)"></bars:sellitem:oneway></td>
+        <td>{{ a.val|number }} achats</td>
+    </tr>
+</tbody>
