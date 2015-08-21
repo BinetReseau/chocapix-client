@@ -6,7 +6,7 @@ angular.module('bars.api.bar', [
 
 .factory('api.models.bar', ['APIModel', 'APIInterface',
     function(APIModel, APIInterface) {
-        return new APIModel({
+        var model = new APIModel({
                 url: 'bar',
                 type: "Bar",
                 structure: {
@@ -24,5 +24,14 @@ angular.module('bars.api.bar', [
                     }
                 }
             });
+
+        model.nazi_ranking = function (params) {
+            return APIInterface.request({
+                'url': 'bar/nazi_ranking',
+                'method': 'GET',
+                'params': params});
+        };
+        
+        return model;
     }])
 ;
