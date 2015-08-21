@@ -12,8 +12,9 @@ angular.module('barsApp', [
 
   'bars.auth',
   'bars.root',
-  'bars.main',
+  'bars.granking',
   'bars.bars',
+  'bars.main',
   'bars.admin',
   'bars.magicbar',
   'bars.meal',

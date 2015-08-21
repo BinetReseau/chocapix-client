@@ -6,14 +6,12 @@ angular.module('bars.root', [
     'bars.root.bar',
     'bars.root.user',
     'bars.root.food',
-    'bars.root.news', 
+    'bars.root.news',
     'bars.root.bug'
     ])
 
-.config(['$stateProvider', '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/");
-
+.config(['$stateProvider',
+    function($stateProvider) {
         $stateProvider
             .state('root', {
                 url: "/root",
