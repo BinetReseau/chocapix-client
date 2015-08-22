@@ -19,9 +19,11 @@ angular.module('bars.ranking', [
                 best_coheze: ['api.models.account', function(Account) {
                     return Account.ranking({type: 'meal'});
                 }],
-                best_sellitem: ['bar', function(bar) {
-                    console.log(bar);
+                best_sellitem_ever: ['bar', function(bar) {
                     return bar.sellitem_ranking({});
+                }],
+                best_sellitem_week: ['bar', function(bar) {
+                    return bar.sellitem_ranking({date_start: moment().subtract(1, 'weeks').toDate()});
                 }]
             }
         })

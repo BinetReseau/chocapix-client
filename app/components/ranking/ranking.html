@@ -3,7 +3,7 @@
     <div class="btn-group btn-group-sm">
         <a class="btn btn-default" ng-class="state.active == 'user' && 'active'" ng-click="state.active = 'user'">Utilisateurs</a>
         <a class="btn btn-default" ng-class="state.active == 'food' && 'active'" ng-click="state.active = 'food'">Aliments</a>
-        <a ui-sref="ranking" class="btn btn-default" target="_blank">Inter-bars</a>
+        <a ui-sref="ranking" class="btn btn-default" target="_blank">Inter Bars</a>
     </div>
 </div><br /><br />
 
@@ -46,15 +46,27 @@
     </div>
 </div>
 <div ng-if="state.active == 'food'">
-    <div class="col-sm-6 col-sm-offset-3">
+    <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 class="panel-title text-center text-capitalizefirst">
-                    Aliments les plus consommés
+                    Aliments les plus consommés ever
                 </h2>
             </div>
             <table class="table table-hover table-striped">
-                <tbody bars:ranking:sellitems ranking="best_sellitem" limit="50"></tbody>
+                <tbody bars:ranking:sellitems ranking="best_sellitem_ever" limit="50"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center text-capitalizefirst">
+                    La dernière semaine
+                </h2>
+            </div>
+            <table class="table table-hover table-striped">
+                <tbody bars:ranking:sellitems ranking="best_sellitem_week" limit="50"></tbody>
             </table>
         </div>
     </div>
