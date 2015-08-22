@@ -195,6 +195,25 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.approhelper',
     ['$scope', 'bar', 'api.models.sellitem',
     function($scope, bar, SellItem) {
+        $scope.params = {
+            date_appro_next: new Date(),
+            date_appro_1week: new Date(),
+            date_appro_2week: new Date()
+        };
+
+        if (bar.settings.next_scheduled_appro) {
+            var next_scheduled_appro = moment(bar.settings.next_scheduled_appro);
+            if (moment().isBefore(next_scheduled_appro)) {
+                $scope.params.date_appro_next = next_scheduled_appro.toDate();
+                $scope.params.date_appro_1week = next_scheduled_appro.clone().subtract(1, 'weeks').toDate();
+                $scope.params.date_appro_2week = next_scheduled_appro.clone().subtract(2, 'weeks').toDate();
+            } else {
+                $scope.params.date_appro_next = next_scheduled_appro.clone().add(1, 'weeks').toDate();
+                $scope.params.date_appro_1week = next_scheduled_appro.toDate();
+                $scope.params.date_appro_2week = next_scheduled_appro.clone().subtract(1, 'weeks').toDate();
+            }
+        }
+
         // Utils functions for datepicker
         $scope.date_appro_next_opened = false;
         $scope.date_appro_1week_opened = false;
