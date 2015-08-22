@@ -30,6 +30,11 @@ angular.module('bars.admin.food', [
             templateUrl: "components/admin/food/appro.html",
             controller: 'admin.ctrl.food.appro'
         })
+        .state('bar.admin.food.approhelper', {
+            url: "/appro-helper",
+            templateUrl: "components/admin/food/approhelper.html",
+            controller: 'admin.ctrl.food.approhelper'
+        })
         .state('bar.admin.food.inventory', {
             url: "/inventory",
             templateUrl: "components/admin/food/inventory.html",
@@ -185,6 +190,29 @@ angular.module('bars.admin.food', [
         $timeout(function () {
             document.getElementById("addApproItemInput").focus();
         }, 300);
+    }
+])
+.controller('admin.ctrl.food.approhelper',
+    ['$scope', 'bar', 'api.models.sellitem',
+    function($scope, bar, SellItem) {
+        // Utils functions for datepicker
+        $scope.date_appro_next_opened = false;
+        $scope.date_appro_1week_opened = false;
+        $scope.date_appro_2week_opened = false;
+        $scope.open = function($event, w) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.date_appro_next_opened = false;
+            $scope.date_appro_1week_opened = false;
+            $scope.date_appro_2week_opened = false;
+            if (w == 'date_appro_next') {
+                $scope.date_appro_next_opened = true;
+            } else if (w == 'date_appro_1week') {
+                $scope.date_appro_1week_opened = true;
+            } else if (w == 'date_appro_2week') {
+                $scope.date_appro_2week_opened = true;
+            }
+        };
     }
 ])
 .controller('admin.ctrl.food.addModal',
