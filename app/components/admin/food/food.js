@@ -200,6 +200,7 @@ angular.module('bars.admin.food', [
             date_appro_next: new Date(),
             date_appro_before: new Date(),
         };
+        $scope.items = [];
 
         function updateDataBuy(params) {
             var date_2next = moment(params.date_appro_2next);
@@ -218,8 +219,9 @@ angular.module('bars.admin.food', [
                 var itemsObj = {};
                 var items = [];
                 _.forEach(data[1], function (sei) {
-                    var item = {id: sei.id};
-                    item.qtyBefore = Math.max(0, SellItem.get(sei.id).fuzzy_qty + sei.total/7*nbDays);
+                    var item = {id: sei.id, sei: SellItem.get(sei.id)};
+                    item.qtyBefore = Math.max(0, item.sei.fuzzy_qty + sei.total/7*nbDays);
+                    console.log(item.sei.fuzzy_qty, sei.total/7*nbDays);
                     itemsObj[sei.id] = item;
                 });
 
@@ -231,12 +233,13 @@ angular.module('bars.admin.food', [
                         // S'il n'y a pas eu de consommation jusqu'à aujourd'hui,
                         // on fait l'hypothèse qu'il n'y en aura pas jusqu'à la
                         // prochaine appro
-                        item = {id: sei.id, qtyBefore: SellItem.get(sei.id).fuzzy_qty};
+                        item = {id: sei.id, sei: SellItem.get(sei.id), qtyBefore: SellItem.get(sei.id).fuzzy_qty};
                     }
 
                     item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
                      // Équivalent en nombre de transactions ; utile uniquement pour le tri
                     item.nbToBuy = -item.qtyToBuy*sei.val/sei.total;
+                    item.qtyBuyed = -sei.total;
 
                     itemsObj[sei.id] = item;
                 });
@@ -245,6 +248,7 @@ angular.module('bars.admin.food', [
                     items.push(item);
                 });
 
+                $scope.items = items;
                 console.log(items);
             });
         }
