@@ -12,7 +12,7 @@
                     </span>
                 </div>
             </div>
-            <label for="date_appro_next" class="col-sm-3 control-label">Sur-prochaine appro</label>
+            <label for="date_appro_2next" class="col-sm-3 control-label">Sur-prochaine appro</label>
             <div class="col-sm-3">
                 <div class="input-group">
                     <input id="date_appro_2next" type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-model="params.date_appro_2next" ng-change="dateChange(params)" is-open="date_appro_2next_opened" ng-click="open($event, 'date_appro_2next')" />
@@ -23,21 +23,12 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="date_appro_1week" class="col-sm-3 control-label">Dernière appro</label>
+            <label for="date_appro_before" class="col-sm-3 control-label">Tenir compte des achats jusqu'au</label>
             <div class="col-sm-3">
                 <div class="input-group">
-                    <input id="date_appro_1week" type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-model="params.date_appro_1week" ng-change="dateChange(params)" is-open="date_appro_1week_opened" ng-click="open($event, 'date_appro_1week')" />
+                    <input id="date_appro_before" type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-model="params.date_appro_before" ng-change="dateChange(params)" is-open="date_appro_before_opened" ng-click="open($event, 'date_appro_before')" />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open($event, 'date_appro_1week')"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                </div>
-            </div>
-            <label for="date_appro_next" class="col-sm-3 control-label">Avant-dernière appro</label>
-            <div class="col-sm-3">
-                <div class="input-group">
-                    <input id="date_appro_2week" type="text" class="form-control" datepicker-popup="EEEE dd MMMM" ng-model="params.date_appro_2week" ng-change="dateChange(params)" is-open="date_appro_2week_opened" ng-click="open($event, 'date_appro_2week')" />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open($event, 'date_appro_2week')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="open($event, 'date_appro_before')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
             </div>

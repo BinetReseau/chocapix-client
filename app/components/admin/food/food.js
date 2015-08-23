@@ -198,13 +198,19 @@ angular.module('bars.admin.food', [
         $scope.params = {
             date_appro_2next: new Date(),
             date_appro_next: new Date(),
-            date_appro_1week: new Date(),
-            date_appro_2week: new Date()
+            date_appro_before: new Date(),
         };
 
         function updateDataBuy(params) {
-            bar.sellitem_ranking({date_start: params.date_appro_2week, date_end: params.date_appro_1week});
-            bar.sellitem_ranking({date_start: params.date_appro_1week});
+            var date_2next = moment(params.date_appro_2next);
+            var date_next = moment(params.date_appro_next);
+            var date_before = moment(params.date_appro_before);
+
+            // On initialise la date de fin au dernier isoWeekday précédent date_before
+            var date_end = date_before.clone().subtract(((date_before.day()-date_2next.day() + 7)%7), 'days');
+            var date_start = date_end.clone().subtract(date_2next.diff(date_next, 'days'), 'days');
+
+            bar.sellitem_ranking({date_start: date_start.toDate(), date_end: date_end.toDate()});
         }
 
         if (bar.settings.next_scheduled_appro) {
@@ -212,13 +218,9 @@ angular.module('bars.admin.food', [
             if (moment().isBefore(next_scheduled_appro)) {
                 $scope.params.date_appro_2next = next_scheduled_appro.clone().add(1, 'weeks').toDate();
                 $scope.params.date_appro_next = next_scheduled_appro.toDate();
-                $scope.params.date_appro_1week = next_scheduled_appro.clone().subtract(1, 'weeks').toDate();
-                $scope.params.date_appro_2week = next_scheduled_appro.clone().subtract(2, 'weeks').toDate();
             } else {
                 $scope.params.date_appro_2next = next_scheduled_appro.clone().add(2, 'weeks').toDate();
                 $scope.params.date_appro_next = next_scheduled_appro.clone().add(1, 'weeks').toDate();
-                $scope.params.date_appro_1week = next_scheduled_appro.toDate();
-                $scope.params.date_appro_2week = next_scheduled_appro.clone().subtract(1, 'weeks').toDate();
             }
         }
 
@@ -229,23 +231,19 @@ angular.module('bars.admin.food', [
         // Utils functions for datepicker
         $scope.date_appro_2next_opened = false;
         $scope.date_appro_next_opened = false;
-        $scope.date_appro_1week_opened = false;
-        $scope.date_appro_2week_opened = false;
+        $scope.date_appro_before_opened = false;
         $scope.open = function($event, w) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.date_appro_2next_opened = false;
             $scope.date_appro_next_opened = false;
-            $scope.date_appro_1week_opened = false;
-            $scope.date_appro_2week_opened = false;
+            $scope.date_appro_before_opened = false;
             if (w == 'date_appro_next') {
                 $scope.date_appro_next_opened = true;
             } else if (w == 'date_appro_2next') {
                 $scope.date_appro_2next_opened = true;
-            } else if (w == 'date_appro_1week') {
-                $scope.date_appro_1week_opened = true;
-            } else if (w == 'date_appro_2week') {
-                $scope.date_appro_2week_opened = true;
+            } else if (w == 'date_appro_before') {
+                $scope.date_appro_before_opened = true;
             }
         };
     }
