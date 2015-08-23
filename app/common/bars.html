@@ -107,7 +107,17 @@
         <div class="col-sm-8 col-sm-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title text-center">Liste des bars</h3>
+                    <h3 class="panel-title text-center">
+                        <span class="label label-success label-xs" style="float: left; opacity: 0;">
+                            <span class="glyphicon glyphicon-equalizer"></span>
+                            Classements &raquo;
+                        </span>
+                        Liste des bars
+                        <a title="Classements inter-bars" ui-sref="ranking" class="btn btn-success btn-xs" target="_blank" style="float: right;">
+                            <span class="glyphicon glyphicon-equalizer"></span>
+                            Classements &raquo;
+                        </a>
+                    </h3>
                 </div>
                 <table class="table">
                     <tr ng-repeat="bars in gbars" class="no-border">
