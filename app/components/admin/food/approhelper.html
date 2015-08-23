@@ -53,7 +53,7 @@
                     <span tooltip="Quantité à acheter">À acheter</span>
                 </th>
             </tr>
-            <tr ng-repeat="item in items | orderBy:'nb'">
+            <tr ng-repeat="item in items | filter:search | orderBy:'nb'">
                 <td><bars:sellitem:oneway item="item.sei"></bars:sellitem:oneway></td>
                 <td><bars:sellitem:qty item="item.sei" qty="item.qtyBuyed"></bars:sellitem:qty></td>
                 <td><bars:sellitem:qty item="item.sei" qty="item.qtyBefore"></bars:sellitem:qty></td>

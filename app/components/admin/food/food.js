@@ -201,6 +201,10 @@ angular.module('bars.admin.food', [
             date_appro_before: new Date(),
         };
         $scope.items = [];
+        $scope.searchl = '';
+        $scope.search = function (item) {
+            return item.sei.filter($scope.searchl);
+        };
 
         function updateDataBuy(params) {
             var date_2next = moment(params.date_appro_2next);
