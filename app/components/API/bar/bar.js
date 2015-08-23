@@ -31,7 +31,13 @@ angular.module('bars.api.bar', [
                 'method': 'GET',
                 'params': params});
         };
-        
+        model.items_ranking = function (params) {
+            return APIInterface.request({
+                'url': 'bar/items_ranking',
+                'method': 'GET',
+                'params': params});
+        };
+
         return model;
     }])
 ;
