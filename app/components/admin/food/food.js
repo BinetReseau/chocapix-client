@@ -193,8 +193,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.approhelper',
-    ['$scope', 'bar', 'api.models.sellitem',
-    function($scope, bar, SellItem) {
+    ['$scope', 'bar', 'api.models.sellitem', '$q',
+    function($scope, bar, SellItem, $q) {
         $scope.params = {
             date_appro_2next: new Date(),
             date_appro_next: new Date(),
@@ -209,8 +209,44 @@ angular.module('bars.admin.food', [
             // On initialise la date de fin au dernier isoWeekday précédent date_before
             var date_end = date_before.clone().subtract(((date_before.day()-date_2next.day() + 7)%7), 'days');
             var date_start = date_end.clone().subtract(date_2next.diff(date_next, 'days'), 'days');
+            var nbDays = date_next.diff(moment(), 'days');
 
-            bar.sellitem_ranking({date_start: date_start.toDate(), date_end: date_end.toDate()});
+            $q.all([
+                bar.sellitem_ranking({date_start: date_start.toDate(), date_end: date_end.toDate()}),
+                bar.sellitem_ranking({date_start: moment().subtract(1, 'weeks').toDate()})
+            ]).then(function (data) {
+                var itemsObj = {};
+                var items = [];
+                _.forEach(data[1], function (sei) {
+                    var item = {id: sei.id};
+                    item.qtyBefore = Math.max(0, SellItem.get(sei.id).fuzzy_qty + sei.total/7*nbDays);
+                    itemsObj[sei.id] = item;
+                });
+
+                _.forEach(data[0], function (sei) {
+                    var item;
+                    if (itemsObj[sei.id]) {
+                        item = itemsObj[sei.id];
+                    } else {
+                        // S'il n'y a pas eu de consommation jusqu'à aujourd'hui,
+                        // on fait l'hypothèse qu'il n'y en aura pas jusqu'à la
+                        // prochaine appro
+                        item = {id: sei.id, qtyBefore: SellItem.get(sei.id).fuzzy_qty};
+                    }
+
+                    item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
+                     // Équivalent en nombre de transactions ; utile uniquement pour le tri
+                    item.nbToBuy = -item.qtyToBuy*sei.val/sei.total;
+
+                    itemsObj[sei.id] = item;
+                });
+
+                _.forEach(itemsObj, function (item) {
+                    items.push(item);
+                });
+
+                console.log(items);
+            });
         }
 
         if (bar.settings.next_scheduled_appro) {
