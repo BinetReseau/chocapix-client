@@ -207,7 +207,17 @@ angular.module('bars.admin.food', [
             var date_next = moment(params.date_appro_next);
             var date_before = moment(params.date_appro_before);
 
-            // On initialise la date de fin au dernier isoWeekday précédent date_before
+            // On va regarder quelles sont les quantités consommées sur le même intervalle de temps
+            // Par exemple si la personne indique prochaine appro "mardi 1er septembre"
+            // et sur-prochaine appro "jeudi 10 septembre"
+            // et tenir compte des achats avant le "mercredi 1er juillet"
+            // alors on va regarder quelles ont été les quantités consommées
+            // entre le "mardi 16 juin" et le "jeudi 25 juin"
+            // Cela permet de prévoir les quantités qui seront consommées entre les deux appros
+
+            // On va également regarder les quantités consommées les sept derniers jours
+            // Afin de faire une moyenne par jour et d'estimer les quantités restantes
+            // le jour de l'appro
             var date_end = date_before.clone().subtract(((date_before.day()-date_2next.day() + 7)%7), 'days');
             var date_start = date_end.clone().subtract(date_2next.diff(date_next, 'days'), 'days');
             var nbDays = date_next.diff(moment(), 'days');
@@ -218,10 +228,11 @@ angular.module('bars.admin.food', [
             ]).then(function (data) {
                 var itemsObj = {};
                 var items = [];
+
+                // On estime les quantités restantes le jour de l'appro
                 _.forEach(data[1], function (sei) {
                     var item = {id: sei.id, sei: SellItem.get(sei.id)};
                     item.qtyBefore = Math.max(0, item.sei.fuzzy_qty + sei.total/7*nbDays);
-                    console.log(item.sei.fuzzy_qty, sei.total/7*nbDays);
                     itemsObj[sei.id] = item;
                 });
 
@@ -236,9 +247,11 @@ angular.module('bars.admin.food', [
                         item = {id: sei.id, sei: SellItem.get(sei.id), qtyBefore: SellItem.get(sei.id).fuzzy_qty};
                     }
 
+                    // On estime les quantités à acheter
                     item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
                      // Équivalent en nombre de transactions ; utile uniquement pour le tri
                     item.nbToBuy = -item.qtyToBuy*sei.val/sei.total;
+                    // Quantité qui devrait être consommée entre les deux appros
                     item.qtyBuyed = -sei.total;
 
                     itemsObj[sei.id] = item;
@@ -249,7 +262,6 @@ angular.module('bars.admin.food', [
                 });
 
                 $scope.items = items;
-                console.log(items);
             });
         }
 
