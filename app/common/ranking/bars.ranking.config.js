@@ -20,7 +20,10 @@ angular.module('bars.granking', ['bars.filters'])
                 }],
                 best_bieres_month: ['api.models.bar', 'ranking.items', function(Bar, RankingItems) {
                     return Bar.items_ranking({date_start: moment().subtract(1, 'months').toDate(), item: RankingItems.beer});
-                }]
+                }],
+                best_pizzas_ever: ['api.models.bar', 'ranking.items', function(Bar, RankingItems) {
+                    return Bar.items_ranking({item: RankingItems.pizza});
+                }],
             }
         })
     ;
