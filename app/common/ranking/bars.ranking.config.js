@@ -13,7 +13,7 @@ angular.module('bars.granking', ['bars.filters'])
                     return Bar.reload();
                 }],
                 best_nazis: ['api.models.bar', function(Bar) {
-                    return Bar.nazi_ranking({});
+                    return Bar.nazi_ranking({date_start: moment("2015-04-01").toDate()});
                 }],
                 best_bieres_ever: ['api.models.bar', 'ranking.items', function(Bar, RankingItems) {
                     return Bar.items_ranking({date_start: moment("2015-04-01").toDate(), item: RankingItems.beer});
@@ -22,7 +22,7 @@ angular.module('bars.granking', ['bars.filters'])
                     return Bar.items_ranking({date_start: moment().subtract(1, 'months').toDate(), item: RankingItems.beer});
                 }],
                 best_pizzas_ever: ['api.models.bar', 'ranking.items', function(Bar, RankingItems) {
-                    return Bar.items_ranking({item: RankingItems.pizza});
+                    return Bar.items_ranking({date_start: moment("2015-04-01").toDate(), item: RankingItems.pizza});
                 }],
             }
         })
