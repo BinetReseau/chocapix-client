@@ -9,15 +9,5 @@ angular.module('bars.granking')
         $scope.best_bieres_ever = best_bieres_ever;
         $scope.best_bieres_month = best_bieres_month;
         $scope.best_pizzas_ever = best_pizzas_ever;
-
-        $scope.nbDays = moment().diff(moment("2015-04-01"), 'days');
-
-        $scope.promoOfBar = function (bar) {
-            if (bar.match(/jone$/)) {
-                return 'warning';
-            } else {
-                return 'danger';
-            }
-        };
     }])
 ;

@@ -31,6 +31,21 @@ angular.module('bars.granking', ['bars.filters'])
             controller: 'bars.granking.home.ctrl',
             templateUrl: "common/ranking/home.html"
         })
+        .state('ranking.beer', {
+            url: "/binouzes",
+            controller: 'bars.granking.beer.ctrl',
+            templateUrl: "common/ranking/beer.html"
+        })
+        .state('ranking.pizza', {
+            url: "/pizzas",
+            controller: 'bars.granking.pizza.ctrl',
+            templateUrl: "common/ranking/pizza.html"
+        })
+        .state('ranking.punish', {
+            url: "/amendes",
+            controller: 'bars.granking.punish.ctrl',
+            templateUrl: "common/ranking/punish.html"
+        })
     ;
 }])
 ;
