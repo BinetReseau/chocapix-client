@@ -14,5 +14,10 @@ angular.module('bars.granking')
         $scope.nth = function (n, ranking) {
             return Bar.get(_.sortByAll(ranking, 'val')[n-1].id).name;
         };
+        $scope.total = function (ranking) {
+            return _.reduce(ranking, function (total, bar) {
+                return total - bar.val;
+            }, 0);
+        }
     }])
 ;

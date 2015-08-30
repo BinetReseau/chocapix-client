@@ -270,6 +270,15 @@ hr.derrierebtn {
 .Ranking-Description__Img img {
     height: 100%;
 }
+.Ranking-Total {
+    float: right;
+    text-align: center;
+    margin-right: -10px;
+    margin-top: -5px;
+}
+.Ranking-Total__Qty {
+    font-size: 30px;
+}
 
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {
