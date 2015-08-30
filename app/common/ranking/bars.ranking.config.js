@@ -5,7 +5,7 @@ angular.module('bars.granking', ['bars.filters'])
     $stateProvider
         .state('ranking', {
             url: "/ranking",
-            templateUrl: "common/ranking/ranking.html",
+            templateUrl: "common/ranking/layout.html",
             controller: 'bars.granking.ctrl',
             resolve: {
                 bars_list: ['api.models.bar', 'api.models.barsettings', function(Bar, BarSettings) {
@@ -25,6 +25,11 @@ angular.module('bars.granking', ['bars.filters'])
                     return Bar.items_ranking({date_start: moment("2015-04-01").toDate(), item: RankingItems.pizza});
                 }],
             }
+        })
+        .state('ranking.home', {
+            url: "/",
+            controller: 'bars.granking.home.ctrl',
+            templateUrl: "common/ranking/home.html"
         })
     ;
 }])

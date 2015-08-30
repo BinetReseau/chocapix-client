@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center text-capitalizefirst">
+                    <span tooltip="En nombre de bières">
+                        Les plus alcooliques ever
+                    </span>
+                </h2>
+            </div>
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr ng-repeat="bar in best_bieres_ever | orderBy:'val'" ng-class="promoOfBar(bar.id)">
+                        <td>#{{ $index+1 }}</td>
+                        <td>{{ Bar.get(bar.id).name }}</td>
+                        <td>{{ -bar.val|qty:0 }} bouteilles ({{ -bar.val/nbDays|qty:0 }} / jour)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center text-capitalizefirst">
+                    <span>
+                        Les plus alcooliques du mois
+                    </span>
+                </h2>
+            </div>
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr ng-repeat="bar in best_bieres_month | orderBy:'val'" ng-class="promoOfBar(bar.id)">
+                        <td>#{{ $index+1 }}</td>
+                        <td>{{ Bar.get(bar.id).name }}</td>
+                        <td>{{ -bar.val|qty:0 }} bouteilles</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center text-capitalizefirst">
+                    <span tooltip="Total des amendes données dans chaque bar">
+                        Les plus fachos
+                    </span>
+                </h2>
+            </div>
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr ng-repeat="bar in best_nazis | orderBy:'val'" ng-class="promoOfBar(bar.id)">
+                        <td>#{{ $index+1 }}</td>
+                        <td>{{ Bar.get(bar.id).name }}</td>
+                        <td>{{ -bar.val|currency }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center text-capitalizefirst">
+                    <span>
+                        Pizzas
+                    </span>
+                </h2>
+            </div>
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr ng-repeat="bar in best_pizzas_ever | orderBy:'val'" ng-class="promoOfBar(bar.id)">
+                        <td>#{{ $index+1 }}</td>
+                        <td>{{ Bar.get(bar.id).name }}</td>
+                        <td>{{ -bar.val|qty:0 }} pizzas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
