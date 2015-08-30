@@ -2,7 +2,7 @@
 
 angular.module('bars.granking')
 .controller('bars.granking.ctrl',
-    ['$scope', '$rootScope', function($scope, $rootScope) {
+    ['$scope', '$rootScope', 'api.models.bar', function($scope, $rootScope, Bar) {
         $rootScope.appLoaded = true;
         $scope.nbDays = moment().diff(moment("2015-04-01"), 'days');
         $scope.promoOfBar = function (bar) {
@@ -12,5 +12,7 @@ angular.module('bars.granking')
                 return 'danger';
             }
         };
+        $scope.Bar = Bar;
+        $scope.state = {active: null};
     }])
 ;
