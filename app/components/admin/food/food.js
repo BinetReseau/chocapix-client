@@ -243,28 +243,43 @@ angular.module('bars.admin.food', [
                     itemsObj[sei.id] = item;
                 });
 
-                for (var i = 0; i <= 1; i++) {
-                    _.forEach(data[i], function (sei) {
-                        var item;
-                        if (itemsObj[sei.id]) {
-                            item = itemsObj[sei.id];
-                        } else {
-                            // S'il n'y a pas eu de consommation jusqu'à aujourd'hui,
-                            // on fait l'hypothèse qu'il n'y en aura pas jusqu'à la
-                            // prochaine appro
-                            item = {id: sei.id, sei: SellItem.get(sei.id), qtyBefore: SellItem.get(sei.id).fuzzy_qty};
-                        }
+                // On a calculé les quantités consommées sur deux fois l'intervalle précisé
+                // On va fusionner et moyenner ces deux listes
+                var buyed = {};
+                _.forEach(data[0], function (sei) {
+                    buyed[sei.id] = {total: sei.total/2, val: sei.val};
+                });
 
-                        // On estime les quantités à acheter
-                        item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
-                         // Équivalent en nombre de transactions ; utile uniquement pour le tri
-                        item.nbToBuy = -item.qtyToBuy*sei.val/sei.total;
-                        // Quantité qui devrait être consommée entre les deux appros
-                        item.qtyBuyed = -sei.total;
+                _.forEach(data[1], function (sei) {
+                    if (buyed[sei.id]) {
+                        buyed[sei.id].total = buyed[sei.id].total + sei.total/2;
+                        buyed[sei.id].val += sei.val;
+                    } else {
+                        buyed[sei.id] = {total: sei.total/2, val: sei.val};
+                    }
+                });
 
-                        itemsObj[sei.id] = item;
-                    });
-                }
+                // Ensuite on estime les quantités à acheter
+                _.forEach(buyed, function (sei, id) {
+                    var item;
+                    if (itemsObj[id]) {
+                        item = itemsObj[id];
+                    } else {
+                        // S'il n'y a pas eu de consommation jusqu'à aujourd'hui,
+                        // on fait l'hypothèse qu'il n'y en aura pas jusqu'à la
+                        // prochaine appro
+                        item = {id: id, sei: SellItem.get(id), qtyBefore: Math.max(0, SellItem.get(id).fuzzy_qty)};
+                    }
+
+                    // On estime les quantités à acheter
+                    item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
+                     // Équivalent en nombre de transactions ; utile uniquement pour le tri
+                    item.nbToBuy = item.qtyToBuy*sei.val/sei.total;
+                    // Quantité qui devrait être consommée entre les deux appros
+                    item.qtyBuyed = -sei.total;
+
+                    itemsObj[id] = item;
+                });
 
                 _.forEach(itemsObj, function (item) {
                     items.push(item);
