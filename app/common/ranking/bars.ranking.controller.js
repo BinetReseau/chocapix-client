@@ -2,13 +2,9 @@
 
 angular.module('bars.granking')
 .controller('bars.granking.ctrl',
-    ['$scope', '$rootScope', 'api.models.bar', 'bars_list', 'best_nazis', function($scope, $rootScope, Bar, bars_list, best_nazis) {
+    ['$scope', '$rootScope', 'api.models.bar', function($scope, $rootScope, Bar) {
         $rootScope.appLoaded = true;
-
-        $scope.Bar = Bar;
-        $scope.bars_list = bars_list;
-        $scope.best_nazis = best_nazis;
-
+        $scope.nbDays = moment().diff(moment("2015-04-01"), 'days');
         $scope.promoOfBar = function (bar) {
             if (bar.match(/jone$/)) {
                 return 'warning';
@@ -16,5 +12,7 @@ angular.module('bars.granking')
                 return 'danger';
             }
         };
+        $scope.Bar = Bar;
+        $scope.state = {active: null};
     }])
 ;

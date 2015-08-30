@@ -1,6 +1,6 @@
 <tr ng-repeat="a in ranking | orderBy:'val':true | limitTo: limit">
     <td>#{{ $index+1 }}</td>
     <td><bars:sellitem:oneway item="SellItem.get(a.id)"></bars:sellitem:oneway></td>
-    <td>{{ a.val|number }} achats</td>
-    <td><bars:sellitem:qty:oneway item="SellItem.get(a.id)" qty="-a.total"></bars:sellitem:qty:oneway></td>
+    <td>{{ a.val|number }} {{ 'achat'|affs:a.val }}</td>
+    <td><bars:sellitem:qty:oneway item="SellItem.get(a.id)" qty="abs(a.total)"></bars:sellitem:qty:oneway></td>
 </tr>

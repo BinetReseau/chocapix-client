@@ -11,6 +11,7 @@ angular.module('bars.ranking')
         templateUrl: 'components/ranking/directives/ranking-sellitems.directive.html',
         controller: ['$scope', 'api.models.sellitem', function ($scope, SellItem) {
             $scope.SellItem = SellItem;
+            $scope.abs = Math.abs;
             if (!$scope.limit) {
                 $scope.limit = 999999;
             }

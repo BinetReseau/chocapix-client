@@ -1,0 +1,89 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="list-group">
+            <a ui-sref="ranking.beer" class="list-group-item">
+                <div class="Ranking-Description">
+                    <div class="Ranking-Description__Label">
+                        Bières
+                    </div>
+                    <div class="Ranking-Description__Img">
+                        <img src="assets/img/icons/beer.svg" />
+                    </div>
+                </div>
+
+                <div class="Ranking-Total">
+                    <span class="Ranking-Total__Qty">
+                        {{ total(best_bieres_ever) | qty:0 }}
+                    </span><br />
+                    <span class="label label-warning">
+                        bouteilles
+                    </span>
+                </div>
+
+                <h4 class="list-group-item-heading">{{ nth(1, best_bieres_ever) }}</h4>
+                <p class="list-group-item-text">
+                    #2 {{ nth(2, best_bieres_ever) }}<br />
+                    #3 {{ nth(3, best_bieres_ever) }}
+                </p>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="list-group">
+            <a ui-sref="ranking.pizza" class="list-group-item">
+                <div class="Ranking-Description">
+                    <div class="Ranking-Description__Label">
+                        Pizzas
+                    </div>
+                    <div class="Ranking-Description__Img">
+                        <img src="assets/img/icons/pizza.svg" />
+                    </div>
+                </div>
+
+                <div class="Ranking-Total">
+                    <span class="Ranking-Total__Qty">
+                        {{ total(best_pizzas_ever) | qty:0 }}
+                    </span><br />
+                    <span class="label label-primary">
+                        pizzas
+                    </span>
+                </div>
+
+                <h4 class="list-group-item-heading">{{ nth(1, best_pizzas_ever) }}</h4>
+                <p class="list-group-item-text">
+                    #2 {{ nth(2, best_pizzas_ever) }}<br />
+                    #3 {{ nth(3, best_pizzas_ever) }}
+                </p>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="list-group">
+            <a ui-sref="ranking.punish" class="list-group-item">
+                <div class="Ranking-Description">
+                    <div class="Ranking-Description__Label">
+                        Amendes
+                    </div>
+                    <div class="Ranking-Description__Img">
+                        <img src="assets/img/icons/punish.svg" />
+                    </div>
+                </div>
+
+                <div class="Ranking-Total">
+                    <span class="Ranking-Total__Qty">
+                        {{ total(best_nazis) | currency:'€':0 }}
+                    </span><br />
+                    <span class="label label-danger">
+                        d'amendes
+                    </span>
+                </div>
+
+                <h4 class="list-group-item-heading">{{ nth(1, best_nazis) }}</h4>
+                <p class="list-group-item-text">
+                    #2 {{ nth(2, best_nazis) }}<br />
+                    #3 {{ nth(3, best_nazis) }}
+                </p>
+            </a>
+        </div>
+    </div>
+</div>

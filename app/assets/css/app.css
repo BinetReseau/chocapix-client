@@ -246,6 +246,40 @@ hr.derrierebtn {
     width: 100%;
 }
 
+/* Ranking */
+.Ranking-Description {
+    float: left;
+    margin-right: 20px;
+}
+.Ranking-Description__Label {
+    height: 20px;
+    transform: rotate(-90deg) translate(-48px, -5px);
+    transform-origin: left top 0;
+    font-size: 12px;
+    width: 80px;
+    padding: 0;
+    display: inline-block;
+    border-bottom: 1px solid lightgray;
+    text-align: center;
+}
+.Ranking-Description__Img {
+    display: inline-block;
+    height: 60px;
+    margin-left: -50px;
+}
+.Ranking-Description__Img img {
+    height: 100%;
+}
+.Ranking-Total {
+    float: right;
+    text-align: center;
+    margin-right: -10px;
+    margin-top: -5px;
+}
+.Ranking-Total__Qty {
+    font-size: 30px;
+}
+
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {
     color: rgb(51, 122, 183);
