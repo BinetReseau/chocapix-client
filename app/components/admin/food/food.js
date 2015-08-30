@@ -224,42 +224,47 @@ angular.module('bars.admin.food', [
             // le jour de l'appro
             var date_end = date_before.clone().subtract(((date_before.day()-date_2next.day() + 7)%7), 'days');
             var date_start = date_end.clone().subtract(date_2next.diff(date_next, 'days'), 'days');
+            var date_2end = date_start.clone().subtract(((date_start.day()-date_2next.day() + 7)%7), 'days');
+            var date_2start = date_2end.clone().subtract(date_2next.diff(date_next, 'days'), 'days');
             var nbDays = date_next.diff(moment(), 'days');
 
             $q.all([
                 bar.sellitem_ranking({date_start: date_start.toDate(), date_end: date_end.toDate()}),
+                bar.sellitem_ranking({date_start: date_2start.toDate(), date_end: date_2end.toDate()}),
                 bar.sellitem_ranking({date_start: moment().subtract(1, 'weeks').toDate()})
             ]).then(function (data) {
                 var itemsObj = {};
                 var items = [];
 
                 // On estime les quantités restantes le jour de l'appro
-                _.forEach(data[1], function (sei) {
+                _.forEach(data[2], function (sei) {
                     var item = {id: sei.id, sei: SellItem.get(sei.id)};
                     item.qtyBefore = Math.max(0, item.sei.fuzzy_qty + sei.total/7*nbDays);
                     itemsObj[sei.id] = item;
                 });
 
-                _.forEach(data[0], function (sei) {
-                    var item;
-                    if (itemsObj[sei.id]) {
-                        item = itemsObj[sei.id];
-                    } else {
-                        // S'il n'y a pas eu de consommation jusqu'à aujourd'hui,
-                        // on fait l'hypothèse qu'il n'y en aura pas jusqu'à la
-                        // prochaine appro
-                        item = {id: sei.id, sei: SellItem.get(sei.id), qtyBefore: SellItem.get(sei.id).fuzzy_qty};
-                    }
+                for (var i = 0; i <= 1; i++) {
+                    _.forEach(data[i], function (sei) {
+                        var item;
+                        if (itemsObj[sei.id]) {
+                            item = itemsObj[sei.id];
+                        } else {
+                            // S'il n'y a pas eu de consommation jusqu'à aujourd'hui,
+                            // on fait l'hypothèse qu'il n'y en aura pas jusqu'à la
+                            // prochaine appro
+                            item = {id: sei.id, sei: SellItem.get(sei.id), qtyBefore: SellItem.get(sei.id).fuzzy_qty};
+                        }
 
-                    // On estime les quantités à acheter
-                    item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
-                     // Équivalent en nombre de transactions ; utile uniquement pour le tri
-                    item.nbToBuy = -item.qtyToBuy*sei.val/sei.total;
-                    // Quantité qui devrait être consommée entre les deux appros
-                    item.qtyBuyed = -sei.total;
+                        // On estime les quantités à acheter
+                        item.qtyToBuy = Math.max(0, -sei.total - item.qtyBefore);
+                         // Équivalent en nombre de transactions ; utile uniquement pour le tri
+                        item.nbToBuy = -item.qtyToBuy*sei.val/sei.total;
+                        // Quantité qui devrait être consommée entre les deux appros
+                        item.qtyBuyed = -sei.total;
 
-                    itemsObj[sei.id] = item;
-                });
+                        itemsObj[sei.id] = item;
+                    });
+                }
 
                 _.forEach(itemsObj, function (item) {
                     items.push(item);
