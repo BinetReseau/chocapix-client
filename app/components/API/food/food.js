@@ -63,7 +63,7 @@ angular.module('bars.api.food', [
                                 return false;
                             }
                         }
-                        return true;
+                        return !this.stockitem.deleted && !this.stockitem.sellitem.deleted;
                     }
                 }
             });
