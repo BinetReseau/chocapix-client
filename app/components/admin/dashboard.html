@@ -28,8 +28,8 @@
         </div>
         <div class="col-sm-6">
             <h2 class="text-center">
-                <span class="label label-primary">{{ nbDaysBeforeAppro }}</span>
-                <br /><small>jour{{ nbDaysBeforeAppro > 1 && 's' || '' }} avant la livraison</small>
+                <span class="label" ng-class="nbDaysBeforeAppro >= 0 && 'label-primary' || 'label-default'">{{ nbDaysBeforeAppro >= 0 && nbDaysBeforeAppro || '-' }}</span>
+                <br /><small ng-if="nbDaysBeforeAppro >= 0">jour{{ nbDaysBeforeAppro > 1 && 's' || '' }} avant la livraison</small>
             </h2>
         </div>
     </div>
