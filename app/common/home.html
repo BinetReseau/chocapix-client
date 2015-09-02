@@ -18,11 +18,11 @@
 
         <div class="col-sm-6">
             <div class="list-group">
-                <div class="list-group-item" ng-if="false">
+                <div class="list-group-item" ng-if="user.user !== null">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Dernière connexion</span></div>
                         <div class="col-sm-5 text-right">
-                            <span>Aujourd'hui à 13h23</span>
+                            <span>{{ user.user.previous_login | date:"EEEE dd/MM à HH:mm" }}</span>
                         </div>
                     </div>
                 </div>
