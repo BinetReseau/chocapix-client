@@ -230,7 +230,6 @@ angular.module('bars.api.account', [
             var newRole = Role.create();
             newRole.user = account.owner.id;
             newRole.name = name;
-            newRole.bar = 'avironjone'; // TEMP
             newRole.$save().then(function () {
                 updateRoles();
             });
