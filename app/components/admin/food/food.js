@@ -340,8 +340,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.dir.barsadminfoodadd',
-    ['$scope', '$modal', '$timeout', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF', 'auth.user',
-    function($scope, $modal, $timeout, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF, user) {
+    ['$scope', '$modal', '$timeout', '$q', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF', 'auth.user',
+    function($scope, $modal, $timeout, $q, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF, user) {
         $scope.user = user;
         var init_items;
         var data;
@@ -721,10 +721,22 @@ angular.module('bars.admin.food', [
                 }
                 nbEnd += nb;
                 if (nbEnd == 5) {
-                    sell_item.$reload();
-                    $scope.alerts.push({type: 'success', msg: "L'aliment a été correctement créé."});
-                    $scope.origin.callback(buy_item_price);
-                    init();
+                    var promises = [];
+                    if (sell_item.id > 0) {
+                        promises.push(sell_item.$reload());
+                    }
+                    if (stock_item.id > 0) {
+                        promises.push(stock_item.$reload());
+                    }
+                    if (item_details.id > 0) {
+                        promises.push(item_details.$reload());
+                    }
+
+                    $q.all(promises).then(function() {
+                        $scope.alerts.push({type: 'success', msg: "L'aliment a été correctement créé."});
+                        $scope.origin.callback(buy_item_price);
+                        init();
+                    });
                 }
             }
             function saveBuyItemPrice() {
