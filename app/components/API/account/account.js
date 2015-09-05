@@ -14,12 +14,17 @@ angular.module('bars.api.account', [
                     'owner': 'User'
                 },
                 methods: {
-                    'filter': function(s) {
+                    'filter': function(s, showDeleted) {
+                        if (!showDeleted) {
+                            showDeleted = false;
+                        }
                         if(!(this.owner.lastname && this.owner.firstname)) {
                             return false;
                         } else {
-                            return !this.deleted && this.owner.is_active && _.deburr(this.owner.lastname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 || _.deburr(this.owner.firstname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                                _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
+                            return (showDeleted || (!this.deleted && this.owner.is_active)) &&
+                                (_.deburr(this.owner.lastname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                                _.deburr(this.owner.firstname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                                _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                         }
                     },
                     'stats': function(params) {
@@ -114,7 +119,7 @@ angular.module('bars.api.account', [
         $scope.reverse = false;
         $scope.searchl = "";
         $scope.filterAccounts = function(o) {
-            return o.filter($scope.searchl);
+            return o.filter($scope.searchl, $scope.showHidden);
         };
         $scope.filterHidden = function() {
             if ($scope.showHidden) {
