@@ -15,7 +15,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return s == this.barcode || this.details.filter(s);
+                        return s == this.barcode || !this.details || this.details.filter(s);
                     }
                 }
             });
@@ -38,7 +38,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return this.buyitem.filter(s);
+                        return !this.buyitem || this.buyitem.filter(s);
                     }
                 }
             });
@@ -63,7 +63,7 @@ angular.module('bars.api.food', [
                                 return false;
                             }
                         }
-                        return !this.stockitem.deleted && !this.stockitem.sellitem.deleted;
+                        return !this.stockitem || !this.stockitem.sellitem || (!this.stockitem.deleted && !this.stockitem.sellitem.deleted);
                     }
                 }
             });
@@ -80,7 +80,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return !this.deleted && this.details.filter(s);
+                        return !this.deleted && (!this.details || this.details.filter(s));
                     },
                     'stats': function(params) {
                         return APIInterface.request({
