@@ -117,6 +117,9 @@ angular.module('bars.meal', [
             filterAccounts: function(o) {
                 return o.filter(this.accountToAdd);
             },
+            isValidatable: function() {
+                return this.totalPrice > 0 && this.customersList.length > 0 && this.itemsList.length > 0;
+            },
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
