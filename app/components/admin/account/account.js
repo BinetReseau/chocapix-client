@@ -60,15 +60,17 @@ angular.module('bars.admin.account', [
         $scope.nuser.passwordBis = "";
         $scope.nuser.username = "";
         $scope.nuser.pseudo = "";
+        $scope.nuser.email = "";
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
         $scope.isValidUser = function() {
             var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
             var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
+            var emailTest = $scope.nuser.email && $scope.nuser.email.length > 0;
             var usernameTest = $scope.nuser.username.length > 0;
             var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
             var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
-            return lastnameTest && firstnameTest && usernameTest && pwdTest && moneyTest;
+            return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
         };
         $scope.createAccount = function() {
             if ($scope.nuser.password == $scope.nuser.passwordBis) {
