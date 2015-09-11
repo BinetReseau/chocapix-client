@@ -45,6 +45,18 @@ angular.module('bars.admin.settings', [
                 });
             }
         };
+        // Taxe par défaut
+        $scope.defaultTax = barsettings.default_tax*100;
+        $scope.saveDefaultTax = function() {
+            if ($scope.defaultTax >= 0) {
+                barsettings.default_tax = $scope.defaultTax/100;
+                barsettings.$save().then(function(b) {
+                    //
+                }, function(errors) {
+                    console.log('Erreur transaction_cancel_threshold...');
+                });
+            }
+        };
         // Agios
         $scope.agiosEnabled = barsettings.agios_enabled;
         $scope.agiosThreshold = barsettings.agios_threshold;

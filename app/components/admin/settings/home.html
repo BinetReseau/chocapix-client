@@ -48,6 +48,32 @@
         </div>
     </div>
 
+    <!-- Taxe par défaut (pour remplir les champs) -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Taxe par défaut</h4>
+        </div>
+        <div class="panel-body">
+            <p>Taxe par défaut pour les nouveaux aliments. Cela permet de pré-remplir le champ <b>Taxe</b> lors de la création d'un aliment, mais ne modifiera pas les taxes actuelles.</p>
+            <form class="form-horizontal" ng-submit="saveDefaultTax()">
+                <div class="form-group">
+                    <label for="defaultTax" class="control-label col-sm-3">Taxe</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" min="0" step="any" class="form-control" id="defaultTax" ng-model="defaultTax">
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-success" value="Enregistrer" ng-class="defaultTax < 0 && 'disabled'" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Gestion des agios -->
     <div class="panel panel-default">
         <div class="panel-heading">
