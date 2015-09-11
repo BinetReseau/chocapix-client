@@ -13,7 +13,7 @@
         </a>
     </li>
     <li class="hidden-xs">
-        <a ui-sref="bar.account.details({ bar: bar.id, id: user.account.id })">{{ user.user.firstname + ' ' + user.user.lastname }}</a>
+        <a ui-sref="bar.account.details({ bar: bar.id, id: user.account.id })" class="text-ellipsis Header__User">{{ user.user.firstname + ' ' + user.user.lastname }}</a>
     </li>
     <li class="navbar-brand" ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || (user.account.money < bar.infos.money_warning_threshold && 'animated rubberBand' || '')">
         <span ng-class="user.account.money < 0 && 'label label-danger' || (user.account.money < bar.infos.money_warning_threshold && 'label label-warning' || 'label label-info')">

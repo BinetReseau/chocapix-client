@@ -32,6 +32,11 @@ body {
 .text-capitalizefirst:first-letter {
     text-transform: uppercase;
 }
+.text-ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 
 .form-control.right {
     float: right;
@@ -240,6 +245,9 @@ hr.derrierebtn {
 }
 .meal .popover-title {
     text-align: center;
+}
+.Header__User {
+    max-width: 220px;
 }
 
 .morris-chart svg {
