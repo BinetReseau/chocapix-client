@@ -19,9 +19,6 @@ module.factory('BaseAPIEntity', [
         }
         BaseAPIEntity.prototype.$update = function(obj) {
             var self = this;
-            _.forOwn(this, function(v, k) {
-                delete self[k];
-            });
             _.assign(this, obj);
         };
         BaseAPIEntity.prototype.$save = function() {
