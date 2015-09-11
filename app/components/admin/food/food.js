@@ -340,8 +340,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.dir.barsadminfoodadd',
-    ['$scope', '$modal', '$timeout', '$q', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF', 'auth.user',
-    function($scope, $modal, $timeout, $q, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF, user) {
+    ['$scope', '$modal', '$timeout', '$q', 'api.models.sellitem', 'api.models.itemdetails', 'api.models.stockitem', 'api.models.buyitem', 'api.models.buyitemprice', 'api.services.action', 'OFF', 'auth.user', 'bar.infos',
+    function($scope, $modal, $timeout, $q, SellItem, ItemDetails, StockItem, BuyItem, BuyItemPrice, APIAction, OFF, user, BarInfos) {
         $scope.user = user;
         var init_items;
         var data;
@@ -371,7 +371,7 @@ angular.module('bars.admin.food', [
                 sei_name_plural: '',
                 sei_unit_name: '',
                 sei_unit_name_plural: '',
-                sei_tax: '',
+                sei_tax: BarInfos.bar.settings.default_tax*100,
                 keywords: ''
             };
             oItemdetails = ItemDetails.create();

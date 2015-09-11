@@ -134,8 +134,8 @@ angular.module('bars.main', [
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user', 'api.models.sellitem',
-    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User, SellItem) {
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user', 'api.models.sellitem', 'bar.infos',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User, SellItem, BarInfos) {
         $rootScope.appLoaded = true;
 
         $scope.bar = {
@@ -147,6 +147,8 @@ angular.module('bars.main', [
             active: 'index',
             infos: bar.settings
         };
+        BarInfos.bar = bar;
+        BarInfos.id = $stateParams.bar;
 
         $scope.user = AuthUser;
         $scope.user_authenticated = function() {

@@ -28,9 +28,6 @@ angular.module('bars.admin', [
                     }],
                     bar_account: ['api.models.account', function(Account) {
                         return Account.ofUser(6);
-                    }],
-                    bar: ['api.models.bar', '$stateParams', function(Bar, $stateParams) {
-                        return Bar.get($stateParams.bar);
                     }]
                 }
             }

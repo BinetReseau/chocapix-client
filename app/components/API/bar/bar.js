@@ -40,4 +40,7 @@ angular.module('bars.api.bar', [
 
         return model;
     }])
+.factory('bar.infos', [function() {
+    return {};
+}])
 ;
