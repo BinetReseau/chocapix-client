@@ -214,8 +214,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_list',
-    ['$scope', 'food_list',
-    function($scope, food_list) {
+    ['$scope', '$timeout', 'food_list',
+    function($scope, $timeout, food_list) {
         $scope.food_list = food_list;
         $scope.searchl = "";
         $scope.list_order = 'name';
@@ -231,6 +231,10 @@ angular.module('bars.api.food', [
         $scope.showMore = function () {
             $scope.limit.nb += 5;
         };
+
+        $timeout(function () {
+            document.getElementById("searchl").focus();
+        }, 300);
     }]
 )
 .controller('api.ctrl.food_details',

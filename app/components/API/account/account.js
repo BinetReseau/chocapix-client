@@ -113,7 +113,7 @@ angular.module('bars.api.account', [
         $scope.bar.active = 'account';
     }])
 .controller('api.ctrl.account_list',
-    ['$scope', 'account_list', function($scope, account_list) {
+    ['$scope', '$timeout', 'account_list', function($scope, $timeout, account_list) {
         $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active; });
         $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
@@ -130,6 +130,10 @@ angular.module('bars.api.account', [
                 };
             }
         };
+
+        $timeout(function () {
+            document.getElementById("searchl").focus();
+        }, 300);
     }])
 .controller('api.ctrl.account_detail',
     ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent', 'best_sellitem',
