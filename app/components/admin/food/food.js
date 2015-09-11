@@ -722,13 +722,14 @@ angular.module('bars.admin.food', [
                 nbEnd += nb;
                 if (nbEnd == 5) {
                     var promises = [];
+                    if (buy_item_price.id > 0) {
+                        promises.push(buy_item.$reload());
+                    }
                     if (sell_item.id > 0) {
                         promises.push(sell_item.$reload());
                     }
                     if (stock_item.id > 0) {
                         promises.push(stock_item.$reload());
-                    }
-                    if (item_details.id > 0) {
                         promises.push(item_details.$reload());
                     }
 
