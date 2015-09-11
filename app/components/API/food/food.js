@@ -102,6 +102,10 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s, showDeleted) {
+                        // Ignore one letter searchs
+                        if (s.length == 1) {
+                            return false;
+                        }
                         if (this.deleted && !showDeleted) {
                             return false;
                         }
