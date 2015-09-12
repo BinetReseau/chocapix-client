@@ -60,14 +60,16 @@ angular.module('bars.auth', [
                                 }
 
                                 self.account = account;
-                                $rootScope.$broadcast('auth.hasLoggedIn');
                                 $timeout(function() {
                                     if(document.getElementById("q_alim")) {
                                         document.getElementById("q_alim").focus();
                                     }
                                 }, 300);
 
-                                self.menus = Menu.request({account: self.account.id});
+                                Menu.request({account: self.account.id}).then(function(menus) {
+                                    $rootScope.$broadcast('auth.hasLoggedIn');
+                                    self.menus = menus;
+                                });
                             }, function (error) {
                                 self.account = null;
                             });

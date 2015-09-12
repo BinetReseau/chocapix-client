@@ -8,12 +8,15 @@ angular.module('bars.magicbar', [
     ['$scope', '$rootScope', '$filter', '$modal', '$timeout', 'auth.user', 'api.services.action', 'api.models.buyitem', 'api.models.sellitem', 'magicbar.analyse', 'bars.meal',
     function($scope, $rootScope, $filter, $modal, $timeout, AuthUser, APIAction, BuyItem, SellItem, analyse, Meal) {
 		// MagicBar sorting
-		function cleanSellItems() {
+		function cleanRanking() {
 			_.forEach(SellItem.all(), function (si) {
 				si.urank = 0;
 			});
+			_.forEach(AuthUser.menus, function (menu) {
+				menu.urank = 0;
+			})
 		}
-		function updateSellItems() {
+		function updateRanking() {
 			if (!AuthUser.account) {
 				return;
 			}
@@ -22,11 +25,19 @@ angular.module('bars.magicbar', [
 				_.forEach(ranking, function (r) {
 					SellItem.get(r.id).urank = r.val;
 				});
+				_.forEach(AuthUser.menus, function (menu) {
+					menu.urank = _.reduce(menu.items, function (total, item) {
+						return total + item.sellitem.urank;
+					}, 0);
+					if (menu.items.length > 0) {
+						menu.urank = menu.urank/menu.items.length;
+					}
+				});
 			});
 		}
-		updateSellItems();
-		$rootScope.$on('auth.hasLoggedIn', updateSellItems);
-		$rootScope.$on('auth.hasLoggedOut', updateSellItems);
+		updateRanking();
+		$rootScope.$on('auth.hasLoggedIn', updateRanking);
+		$rootScope.$on('auth.hasLoggedOut', updateRanking);
 
 
         $scope.query = {
@@ -46,6 +57,8 @@ angular.module('bars.magicbar', [
 		$scope.urank = function (e) {
 			if (e.food && e.food.urank > 0) {
 				return -e.food.urank;
+			} else if (e.menu && e.menu.urank > 0) {
+				return -e.menu.urank;
 			} else {
 				return 0;
 			}
