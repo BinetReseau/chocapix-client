@@ -95,8 +95,8 @@ angular.module('bars.meal', [
                 this.customersList.splice(this.customersList.indexOf(cstmr), 1);
                 this.recomputeAmount();
             },
-            addItem: function(item, qty) {
-                if (!this.in()) {
+            addItem: function(item, qty, keepClose) {
+                if (!this.in() && !keepClose) {
                     $rootScope.$broadcast('meal.begin');
                 }
                 if (!qty) {

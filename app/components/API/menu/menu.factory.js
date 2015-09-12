@@ -10,6 +10,11 @@ angular.module('bars.api.menu')
                 structure: {
                     'account': 'Account',
                     'items.*.sellitem': 'SellItem'
+                },
+                methods: {
+                    'filter': function (s) {
+                        return s.length != 1 && (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                    }
                 }
             });
         model.request = function(params) {
