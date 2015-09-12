@@ -90,6 +90,9 @@ angular.module('bars.magicbar', [
                     $scope.bar.search = '';
                 });
             } else if (_.contains(['buymenu', 'addmenu'], type)) {
+				if (!Meal.in()) {
+					Meal.name = $item.menu.name;
+				}
 				_.forEach($item.menu.items, function (item) {
 					Meal.addItem(item.sellitem, item.qty*$item.qty, type == 'buymenu');
 				});
