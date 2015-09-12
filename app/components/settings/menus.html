@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label for="new-item" class="col-sm-3 control-label">Ajouter un aliment</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem">
+                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem" typeahead="item.name for item in sellitem_listf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="addItem($item)" typeahead-template-url="components/admin/food/typehead-sell-item.html">
                     </div>
                 </div>
             </form>
