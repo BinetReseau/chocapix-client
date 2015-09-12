@@ -3,8 +3,8 @@
         <li ng-class="settings.active == 'credentials' && 'active'">
             <a title="Identifiants" ui-sref="bar.settings.credentials({ bar: bar.id })"><span class="glyphicon glyphicon-lock"></span> Identifiants</a>
         </li>
-        <li ng-if="false">
-            <a href="">Mes menus</a>
+        <li ng-class="settings.active == 'menus' && 'active'">
+            <a title="Mes menus" ui-sref="bar.settings.menus({ bar: bar.id })"><span class="glyphicon glyphicon-list-alt"></span> Mes menus</a>
         </li>
     </ul>
     <br />

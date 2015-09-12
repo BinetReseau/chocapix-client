@@ -32,6 +32,17 @@ angular.module('bars.settings', [
                 }]
             }
         })
+        // Menus
+        .state('bar.settings.menus', {
+            url: "/menus",
+            templateUrl: "components/settings/menus.html",
+            controller: 'settings.ctrl.menus',
+            resolve: {
+                me: ['api.models.user', function(User) {
+                    return User.me();
+                }]
+            }
+        })
         ;
 }])
 
@@ -130,6 +141,13 @@ angular.module('bars.settings', [
                 console.log('Mots de passe différents.');
             }
         };
+    }
+])
+
+.controller('settings.ctrl.menus',
+    ['$scope', 'api.models.menu',
+    function($scope, Menu) {
+        $scope.settings.active = 'menus';
     }
 ])
 ;
