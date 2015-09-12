@@ -165,7 +165,10 @@ angular.module('bars.settings', [
             var menu = $scope.selectedMenu.menu;
             originalMenu.name = menu.name;
             originalMenu.items = _.clone(menu.items);
-            originalMenu.$save().then($scope.closeMenu);
+            originalMenu.$save().then(function (newMenu) {
+                AuthUser.menus.push(newMenu);
+                $scope.closeMenu();
+            });
         };
 
         $scope.sellitem_listf = function (t) {

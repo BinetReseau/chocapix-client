@@ -404,7 +404,9 @@ angular.module('bars.magicbar', [
 				if (o.food) {
 					out = out + o.food.id;
 				} else if (o.account) {
-					out = o.account.id;
+					out = out + o.account.id;
+				} else if (o.menu) {
+					out = out + o.menu.id;
 				}
 				return out;
 			});
