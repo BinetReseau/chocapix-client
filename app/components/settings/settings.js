@@ -36,12 +36,7 @@ angular.module('bars.settings', [
         .state('bar.settings.menus', {
             url: "/menus",
             templateUrl: "components/settings/menus.html",
-            controller: 'settings.ctrl.menus',
-            resolve: {
-                me: ['api.models.user', function(User) {
-                    return User.me();
-                }]
-            }
+            controller: 'settings.ctrl.menus'
         })
         ;
 }])
@@ -145,9 +140,10 @@ angular.module('bars.settings', [
 ])
 
 .controller('settings.ctrl.menus',
-    ['$scope', 'api.models.menu',
-    function($scope, Menu) {
+    ['$scope', 'api.models.menu', 'auth.user',
+    function($scope, Menu, AuthUser) {
         $scope.settings.active = 'menus';
+        $scope.menus = AuthUser.menus;
     }
 ])
 ;

@@ -2,8 +2,8 @@
 
 angular.module('bars.api.menu')
 
-.factory('api.models.menu', ['APIModel',
-    function(APIModel) {
+.factory('api.models.menu', ['APIModel', 'APIInterface',
+    function(APIModel, APIInterface) {
         var model = new APIModel({
                 url: 'menu',
                 type: 'Menu',
@@ -12,6 +12,12 @@ angular.module('bars.api.menu')
                     'items.*.sellitem': 'SellItem'
                 }
             });
+        model.request = function(params) {
+            return APIInterface.request({
+                'url': 'menu',
+                'method': 'GET',
+                'params': params});
+        };
         return model;
     }])
 ;

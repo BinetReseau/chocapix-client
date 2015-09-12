@@ -96,6 +96,13 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
+                menus: ['api.models.menu', 'auth.service', 'account', function(Menu, AuthService, account) {
+                    if (AuthService.isAuthenticated()) {
+                        return Menu.request({account: account[0].id});
+                    } else {
+                        return null;
+                    }
+                }],
                 news: ['api.models.news', '$rootScope', 'bar', function(News, $rootScope, bar) {
                     News.clear();
                     return News.request({bar: [bar.id, 'root']}).then(function (o) {
@@ -273,8 +280,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'rolesc', 'rolesg',
-    function($scope, AuthUser, Account, User, Role, Meal, user, account, rolesc, rolesg) {
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'rolesc', 'rolesg', 'menus',
+    function($scope, AuthUser, Account, User, Role, Meal, user, account, rolesc, rolesg, menus) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
@@ -284,6 +291,7 @@ angular.module('bars.main', [
         if (user) {
             AuthUser.account = account;
             AuthUser.user = user;
+            AuthUser.menus = menus;
             if (Array.isArray(rolesc) && Array.isArray(rolesg)) {
                 AuthUser.roles = rolesc.concat(rolesg);
                 AuthUser.computePerms();
