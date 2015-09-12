@@ -1,5 +1,13 @@
 <div class="col-sm-4">
     <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h2 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">
+                Liste des menus
+            </h2>
+            <a title="Créer un nouveau menu" class="pull-right btn btn-info" ng-click="createMenu()">
+                <span class="glyphicon glyphicon-plus"></span> <span class="hidden-xs">Créer</span>
+            </a>
+        </div>
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
@@ -37,13 +45,13 @@
                 <div class="form-group">
                     <label for="name" class="col-sm-3 control-label">Nom du menu</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="name" ng-model="selectedMenu.menu.name">
+                      <input type="text" class="form-control" id="name" ng-model="selectedMenu.menu.name" tabindex="100">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="new-item" class="col-sm-3 control-label">Ajouter un aliment</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem" typeahead="item.name for item in sellitem_listf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="addItem($item)" typeahead-template-url="components/admin/food/typehead-sell-item.html" tabindex="100">
+                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem" typeahead="item.name for item in sellitem_listf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="addItem($item)" typeahead-template-url="components/admin/food/typehead-sell-item.html" tabindex="110">
                     </div>
                 </div>
             </form>

@@ -140,8 +140,8 @@ angular.module('bars.settings', [
 ])
 
 .controller('settings.ctrl.menus',
-    ['$scope', 'api.models.menu', 'auth.user', 'sellitem',
-    function($scope, Menu, AuthUser, sellitem_list) {
+    ['$scope', '$timeout', 'api.models.menu', 'auth.user', 'sellitem',
+    function($scope, $timeout, Menu, AuthUser, sellitem_list) {
         $scope.settings.active = 'menus';
         $scope.menus = AuthUser.menus;
 
@@ -179,6 +179,18 @@ angular.module('bars.settings', [
         $scope.addItem = function (item) {
             $scope.selectedMenu.menu.items.unshift({sellitem: item, qty: 1});
             $scope.selectedMenu.newItem = "";
+        };
+
+        $scope.createMenu = function() {
+            var newMenu = Menu.create();
+            newMenu.name = "";
+            newMenu.account = AuthUser.account.id;
+            newMenu.items = [];
+            $scope.selectMenu(newMenu);
+
+            $timeout(function () {
+                document.getElementById("name").focus();
+            }, 300);
         };
 
     }
