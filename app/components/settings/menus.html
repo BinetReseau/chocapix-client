@@ -21,13 +21,19 @@
 
 <div class="col-sm-8" ng-if="selectedMenu.menu">
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title text-center text-capitalizefirst">
+        <div class="panel-heading clearfix">
+            <h2 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">
                 Modifier le menu
             </h2>
+            <a title="Annuler les modifications" class="pull-right btn btn-danger" style="margin-left: 1em;" ng-click="closeMenu()">
+                <span class="glyphicon glyphicon-remove"></span> <span class="hidden-xs">Annuler</span>
+            </a>
+            <a title="Sauvegarder les modifications" class="pull-right btn btn-success" ng-click="saveMenu()">
+                <span class="glyphicon glyphicon-ok"></span> <span class="hidden-xs">Valider</span>
+            </a>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal" ng-submit="saveMenu()">
+            <form class="form-horizontal">
                 <div class="form-group">
                     <label for="name" class="col-sm-3 control-label">Nom du menu</label>
                     <div class="col-sm-9">
@@ -48,16 +54,16 @@
                     <th>Aliment</th>
                     <th>Quantité</th>
                     <th>Prix</th>
-                    <th> </th>
+                    <th>Supprimer</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in selectedMenu.menu.items">
+                <tr ng-repeat="(index, item) in selectedMenu.menu.items">
                     <td class="vmiddle"><bars:sellitem item="item.sellitem"></bars:sellitem></td>
                     <td class="vmiddle"><input type="number" min="0" step="any" ng-model="item.qty" class="form-control input-sm mqty" placeholder="Quantité"> {{ item.qty > 1 && item.sellitem.unit_name_plural || item.sellitem.unit_name }}</td>
                     <td class="vmiddle"> {{ item.sellitem.fuzzy_price * item.qty | currency}}</td>
                     <td class="vmiddle">
-                        <a class="btn btn-danger btn-xs">
+                        <a class="btn btn-danger btn-xs" ng-click="deleteItem(index)">
                             <span class="glyphicon glyphicon-trash"></span>
                             Supprimer
                         </a>

@@ -145,10 +145,29 @@ angular.module('bars.settings', [
         $scope.settings.active = 'menus';
         $scope.menus = AuthUser.menus;
 
-        $scope.selectedMenu = {menu: undefined};
         $scope.selectMenu = function (menu) {
-            $scope.selectedMenu.menu = menu;
+            $scope.selectedMenu.originalMenu = menu;
+            $scope.selectedMenu.menu = _.clone(menu);
+            $scope.selectedMenu.menu.items = _.clone(menu.items);
         };
+
+        $scope.deleteItem = function(index) {
+            $scope.selectedMenu.menu.items.splice(index, 1);
+        };
+
+        $scope.closeMenu = function() {
+            $scope.selectedMenu = {menu: undefined, originalMenu: undefined};
+        };
+        $scope.closeMenu();
+
+        $scope.saveMenu = function() {
+            var originalMenu = $scope.selectedMenu.originalMenu;
+            var menu = $scope.selectedMenu.menu;
+            originalMenu.name = menu.name;
+            originalMenu.items = _.clone(menu.items);
+            originalMenu.$save().then($scope.closeMenu);
+        };
+
     }
 ])
 ;
