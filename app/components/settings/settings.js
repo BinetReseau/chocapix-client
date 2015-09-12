@@ -144,6 +144,11 @@ angular.module('bars.settings', [
     function($scope, Menu, AuthUser) {
         $scope.settings.active = 'menus';
         $scope.menus = AuthUser.menus;
+
+        $scope.selectedMenu = {menu: undefined};
+        $scope.selectMenu = function (menu) {
+            $scope.selectedMenu.menu = menu;
+        };
     }
 ])
 ;

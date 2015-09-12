@@ -1,25 +1,69 @@
-<div class="col-sm-6">
+<div class="col-sm-4">
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title text-center text-capitalizefirst">
-                Liste
-            </h2>
-        </div>
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>Nom du menu</th>
-                    <th>Nombre d'aliments</th>
+                    <th>Aliments</th>
                     <th>Prix</th>
                 </tr>
             </thead>
             <tbody>
-                
+                <tr ng-repeat="menu in menus" class="link" ng-click="selectMenu(menu)">
+                    <td>{{ menu.name }}</td>
+                    <td>{{ menu.items.length }}</td>
+                    <td>5 €</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<div class="col-sm-6">
-milieu
+<div class="col-sm-8" ng-if="selectedMenu.menu">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title text-center text-capitalizefirst">
+                Modifier le menu
+            </h2>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" ng-submit="saveMenu()">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">Nom du menu</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="name" ng-model="selectedMenu.menu.name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="new-item" class="col-sm-3 control-label">Ajouter un aliment</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Aliment</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in selectedMenu.menu.items">
+                    <td class="vmiddle"><bars:sellitem item="item.sellitem"></bars:sellitem></td>
+                    <td class="vmiddle"><input type="number" min="0" step="any" ng-model="item.qty" class="form-control input-sm mqty" placeholder="Quantité"> {{ item.qty > 1 && item.sellitem.unit_name_plural || item.sellitem.unit_name }}</td>
+                    <td class="vmiddle"> {{ item.sellitem.fuzzy_price * item.qty | currency}}</td>
+                    <td class="vmiddle">
+                        <a class="btn btn-danger btn-xs">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

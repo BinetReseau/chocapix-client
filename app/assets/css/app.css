@@ -48,7 +48,7 @@ body {
 table.max {
     width: 100%;
 }
-a.link {
+.link {
     cursor: pointer;
 }
 .atooltip:hover {
@@ -209,6 +209,10 @@ dl.no-margin {
 .pqty {
     display: inline-block;
     width: 60px;
+}
+.mqty {
+    display: inline-block;
+    width: 100px;
 }
 .margin-left {
     margin-left: 1em;
