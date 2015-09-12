@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label for="new-item" class="col-sm-3 control-label">Ajouter un aliment</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem" typeahead="item.name for item in sellitem_listf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="addItem($item)" typeahead-template-url="components/admin/food/typehead-sell-item.html">
+                      <input type="text" class="form-control" id="new-item" ng-model="selectedMenu.newItem" typeahead="item.name for item in sellitem_listf($viewValue) | limitTo:10" autocomplete="off" typeahead-on-select="addItem($item)" typeahead-template-url="components/admin/food/typehead-sell-item.html" tabindex="100">
                     </div>
                 </div>
             </form>
@@ -60,7 +60,7 @@
             <tbody>
                 <tr ng-repeat="(index, item) in selectedMenu.menu.items">
                     <td class="vmiddle"><bars:sellitem item="item.sellitem"></bars:sellitem></td>
-                    <td class="vmiddle"><input type="number" min="0" step="any" ng-model="item.qty" class="form-control input-sm mqty" placeholder="Quantité"> {{ item.qty > 1 && item.sellitem.unit_name_plural || item.sellitem.unit_name }}</td>
+                    <td class="vmiddle"><input type="number" min="0" step="any" ng-model="item.qty" class="form-control input-sm mqty" placeholder="Quantité" tabindex="150"> {{ item.qty > 1 && item.sellitem.unit_name_plural || item.sellitem.unit_name }}</td>
                     <td class="vmiddle"> {{ item.sellitem.fuzzy_price * item.qty | currency}}</td>
                     <td class="vmiddle">
                         <a class="btn btn-danger btn-xs" ng-click="deleteItem(index)">

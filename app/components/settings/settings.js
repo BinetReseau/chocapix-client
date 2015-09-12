@@ -177,7 +177,7 @@ angular.module('bars.settings', [
         };
 
         $scope.addItem = function (item) {
-            $scope.selectedMenu.menu.items.push({sellitem: item, qty: 1});
+            $scope.selectedMenu.menu.items.unshift({sellitem: item, qty: 1});
             $scope.selectedMenu.newItem = "";
         };
 
