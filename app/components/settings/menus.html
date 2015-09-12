@@ -33,7 +33,10 @@
             <h2 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">
                 Modifier le menu
             </h2>
-            <a title="Annuler les modifications" class="pull-right btn btn-danger" style="margin-left: 1em;" ng-click="closeMenu()">
+            <a title="Supprimer le menu" class="pull-right btn btn-danger" style="margin-left: 1em;" ng-click="deleteMenu()">
+                <span class="glyphicon glyphicon-trash"></span> <span class="hidden-xs">Supprimer</span>
+            </a>
+            <a title="Annuler les modifications" class="pull-right btn btn-warning" style="margin-left: 1em;" ng-click="closeMenu()">
                 <span class="glyphicon glyphicon-remove"></span> <span class="hidden-xs">Annuler</span>
             </a>
             <a title="Sauvegarder les modifications" class="pull-right btn btn-success" ng-click="saveMenu()">

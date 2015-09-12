@@ -196,11 +196,15 @@ angular.module('bars.settings', [
             }, 300);
         };
 
+        $scope.deleteMenu = function() {
+            $scope.selectedMenu.originalMenu.$delete().then($scope.closeMenu);
+        };
+
         $scope.menuPrice = function (menu) {
             return _.reduce(menu.items, function (total, item) {
                 return total + item.sellitem.fuzzy_price*item.qty;
             }, 0);
-        }
+        };
     }
 ])
 ;
