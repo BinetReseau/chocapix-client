@@ -166,7 +166,9 @@ angular.module('bars.settings', [
             originalMenu.name = menu.name;
             originalMenu.items = _.clone(menu.items);
             originalMenu.$save().then(function (newMenu) {
-                AuthUser.menus.push(newMenu);
+                if (!menu.id) {
+                    AuthUser.menus.push(newMenu);
+                }
                 $scope.closeMenu();
             });
         };
@@ -187,7 +189,6 @@ angular.module('bars.settings', [
         $scope.createMenu = function() {
             var newMenu = Menu.create();
             newMenu.name = "";
-            newMenu.account = AuthUser.account.id;
             newMenu.items = [];
             $scope.selectMenu(newMenu);
 
@@ -197,7 +198,16 @@ angular.module('bars.settings', [
         };
 
         $scope.deleteMenu = function() {
-            $scope.selectedMenu.originalMenu.$delete().then($scope.closeMenu);
+            var id = $scope.selectedMenu.originalMenu.id;
+            $scope.selectedMenu.originalMenu.$delete().then(function () {
+                var key;
+                _.forEach(AuthUser.menus, function (menu, k) {
+                    if (menu.id == id) {
+                        AuthUser.menus.splice(k, 1);
+                    }
+                });
+                $scope.closeMenu();
+            });
         };
 
         $scope.menuPrice = function (menu) {

@@ -8,7 +8,8 @@ angular.module('bars.api.menu')
                 url: 'menu',
                 type: 'Menu',
                 structure: {
-                    'account': 'Account',
+                    'bar': 'Bar',
+                    'user': 'User',
                     'items.*.sellitem': 'SellItem'
                 },
                 methods: {

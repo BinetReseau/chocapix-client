@@ -96,9 +96,9 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
-                menus: ['api.models.menu', 'auth.service', 'account', function(Menu, AuthService, account) {
+                menus: ['api.models.menu', 'auth.service', 'user', function(Menu, AuthService, user) {
                     if (AuthService.isAuthenticated()) {
-                        return Menu.request({account: account[0].id});
+                        return Menu.request({user: user.id});
                     } else {
                         return null;
                     }

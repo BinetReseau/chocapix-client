@@ -66,7 +66,7 @@ angular.module('bars.auth', [
                                     }
                                 }, 300);
 
-                                Menu.request({account: self.account.id}).then(function(menus) {
+                                Menu.request({user: self.user.id}).then(function(menus) {
                                     $rootScope.$broadcast('auth.hasLoggedIn');
                                     self.menus = menus;
                                 });
