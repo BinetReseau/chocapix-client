@@ -13,7 +13,12 @@ angular.module('bars.admin.account', [
         .state('bar.admin.account.add', {
             url: '/add',
             templateUrl: "components/admin/account/add.html",
-            controller: 'admin.ctrl.account.add'
+            controller: 'admin.ctrl.account.add',
+            resolve: {
+                user_list: ['api.models.user', function(User) {
+                    return User.all();
+                }]
+            }
         })
         .state('bar.admin.account.import', {
             url: '/import',
@@ -50,8 +55,8 @@ angular.module('bars.admin.account', [
     }
 ])
 .controller('admin.ctrl.account.add',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state',
-    function($scope, Account, User, APIAction, $state) {
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 'user_list', 
+    function($scope, Account, User, APIAction, $state, user_list) {
         $scope.admin.active = 'account';
         $scope.nuser = User.create();
         $scope.nuser.lastname = "";
@@ -63,11 +68,17 @@ angular.module('bars.admin.account', [
         $scope.nuser.email = "";
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
+        function checkUsername(username) {
+            return _.filter(user_list, function (u) {
+                return u.username.toLocaleLowerCase() == username.toLocaleLowerCase();
+            }).length == 0;
+        }
+        $scope.checkUsername = checkUsername;
         $scope.isValidUser = function() {
             var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
             var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
             var emailTest = $scope.nuser.email && $scope.nuser.email.length > 0;
-            var usernameTest = $scope.nuser.username.length > 0;
+            var usernameTest = $scope.nuser.username.length > 0 && checkUsername($scope.nuser.username);
             var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
             var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
