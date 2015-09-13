@@ -166,6 +166,7 @@ angular.module('bars.settings', [
             originalMenu.name = menu.name;
             originalMenu.items = _.clone(menu.items);
             originalMenu.$save().then(function (newMenu) {
+                newMenu.updateRank();
                 if (!menu.id) {
                     AuthUser.menus.push(newMenu);
                 }

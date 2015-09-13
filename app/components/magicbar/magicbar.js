@@ -26,12 +26,7 @@ angular.module('bars.magicbar', [
 					SellItem.get(r.id).urank = r.val;
 				});
 				_.forEach(AuthUser.menus, function (menu) {
-					menu.urank = _.reduce(menu.items, function (total, item) {
-						return total + item.sellitem.urank;
-					}, 0);
-					if (menu.items.length > 0) {
-						menu.urank = menu.urank/menu.items.length;
-					}
+					menu.updateRank();
 				});
 			});
 		}

@@ -15,6 +15,14 @@ angular.module('bars.api.menu')
                 methods: {
                     'filter': function (s) {
                         return s.length != 1 && (_.deburr(this.name.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
+                    },
+                    'updateRank': function () {
+                        this.urank = _.reduce(this.items, function (total, item) {
+                            return total + item.sellitem.urank;
+                        }, 0);
+                        if (this.items.length > 0) {
+                            this.urank = this.urank/this.items.length;
+                        }
                     }
                 }
             });
