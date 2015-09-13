@@ -209,12 +209,6 @@ angular.module('bars.settings', [
                 $scope.closeMenu();
             });
         };
-
-        $scope.menuPrice = function (menu) {
-            return _.reduce(menu.items, function (total, item) {
-                return total + item.sellitem.fuzzy_price*item.qty;
-            }, 0);
-        };
     }
 ])
 ;

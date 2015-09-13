@@ -16,10 +16,10 @@
     </ng:switch>
     <span ng-switch on="match.model.type">
 		<span ng-switch-when="buymenu">
-            {{ match.model.qty | number }} {{ 'menu' | affs:match.model.qty }} {{ match.model.menu.name }}
+            {{ match.model.qty | number }} {{ 'menu' | affs:match.model.qty }} {{ match.model.menu.name }} pour {{ match.model.menu | menuPrice:match.model.qty | currency }}
         </span>
 		<span ng-switch-when="addmenu">
-            {{ match.model.qty | number }} {{ 'menu' | affs:match.model.qty }} {{ match.model.menu.name }}
+            {{ match.model.qty | number }} {{ 'menu' | affs:match.model.qty }} {{ match.model.menu.name }} pour {{ match.model.menu | menuPrice:match.model.qty | currency }}
         </span>
         <span ng-switch-when="give">
             {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>

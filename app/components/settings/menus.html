@@ -20,7 +20,7 @@
                 <tr ng-repeat="menu in menus" class="link" ng-click="selectMenu(menu)">
                     <td><a>{{ menu.name }}</a></td>
                     <td>{{ menu.items.length }}</td>
-                    <td>{{ menuPrice(menu) | currency }}</td>
+                    <td>{{ menu | menuPrice | currency }}</td>
                 </tr>
             </tbody>
         </table>
