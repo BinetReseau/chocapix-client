@@ -93,13 +93,16 @@ angular.module('bars.settings', [
             }
         };
         $scope.checkUsername = function() {
-            return _.filter(user_list, {username: $scope.nusername}).length == 0;
+            return _.filter(user_list, function (u) {
+                return u.username.toLocaleLowerCase() == $scope.nusername.toLocaleLowerCase();
+            }).length == 0;
         };
         $scope.changeUsername = function() {
             $scope.alerts = _.filter($scope.alerts, function(a) {
                 return a.context != 'username';
             });
-            if (_.filter(user_list, {username: $scope.nusername}).length == 0) {
+            
+            if ($scope.checkUsername($scope.nusername)) {
                 var tempUsername = $scope.nusername;
                 $scope.nusername = '';
                 $scope.myUser.username = tempUsername;

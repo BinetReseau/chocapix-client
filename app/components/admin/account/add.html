@@ -27,10 +27,11 @@
                   <input type="text" class="form-control" id="upseudo" placeholder="Pour l'affichage" ng-model="nuser.pseudo" />
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-class="!checkUsername(nuser.username) && 'has-error' || ''">
                 <label for="uusername" class="col-sm-3 control-label">Login</label>
                 <div class="col-sm-9">
                   <input type="text" class="form-control" id="uusername" placeholder="Pour se connecter" ng-model="nuser.username" />
+                  <span class="help-block" ng-if="!checkUsername(nuser.username)">Ce login existe déjà.</span>
                 </div>
             </div>
             <div class="form-group">
