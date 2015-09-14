@@ -79,14 +79,15 @@
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">
-                    Aliments inventoriés dans
+                <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;" tooltip="Afficher uniquement les aliments inventoriés depuis :">
+                    Durée : 
                     <select ng-model="timeLimit" ng-change="timeChanged()">
+                        <option value="24">les 2 dernières années</option>
                         <option value="12">la dernière année</option>
                         <option value="6">les 6 derniers mois</option>
                         <option value="4">les 4 derniers mois</option>
                         <option value="2">les 2 derniers mois</option>
-                        <option value="1">le dernier mois</option>
+                        <option value="1">le dernier mois</option>                       
                     </select>
                 </h4>
                 <input type="text" class="form-control right small" ng-model="searchi" placeholder="Rechercher" tabindex="41">
@@ -110,8 +111,8 @@
                         {{ (moment(f.oldest_inventory).isAfter('2015-03-01')) && (f.oldest_inventory | date:"short") || 'jamais'}}
                     </td>
                     <td>
-                        <a class="btn btn-danger btn-xs" ng-click=":: inventory.addSellItem(f, 0)" tooltip="Cet aliment n'est plus en stock" href>
-                            Absent
+                        <a class="btn btn-danger btn-xs" ng-click=":: inventory.addSellItem(f, 0)" tooltip="Cliquer ici si cet aliment n'est plus en stock" href>
+                            Épuisé
                         </a>
                     </td>
                 </tr>
