@@ -25,16 +25,6 @@ angular.module('bars.admin.account', [
             templateUrl: "components/admin/account/import.html",
             controller: 'admin.ctrl.account.import'
         })
-        .state('bar.admin.account.link', {
-            url: '/link',
-            templateUrl: "components/admin/account/link.html",
-            controller: 'admin.ctrl.account.link',
-            resolve: {
-                user_list: ['api.models.user', function(User) {
-                    return User.all();
-                }]
-            }
-        })
         .state('bar.admin.account.collectivePayment', {
             url: '/fist',
             templateUrl: "components/admin/account/collectivePayment.html",
@@ -83,6 +73,24 @@ angular.module('bars.admin.account', [
             var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
         };
+        // Import an user in the current bar
+        // Retrieve the bars' users
+        var barUsers = {};
+        _.forEach(Account.all(), function(a) {
+            barUsers[a.owner.id] = true;
+        });
+        // Remove users already having an account in the current bar
+        var users_list = _.filter(user_list, function(u) {
+            return u.username != 'bar' && !barUsers[u.id];
+        });
+        $scope.users_list = users_list;
+        $scope.user = null;
+        $scope.findUser = function(usr) {
+            $scope.user = usr;
+        }
+        $scope.account = Account.create();
+        $scope.money = 0;
+
         $scope.createAccount = function(usr,money) {
             $scope.naccount.owner = usr.id;
             delete $scope.naccount.amoney;
@@ -150,35 +158,6 @@ angular.module('bars.admin.account', [
                 });
             });
         };
-    }
-])
-.controller('admin.ctrl.account.link',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'user_list', '$state',
-    function($scope, Account, User, APIAction, user_list, $state) {
-        $scope.admin.active = 'account';
-        var users_list = _.filter(user_list, function(n) {
-            return n.username != 'bar';
-        });
-        $scope.users_list = users_list;
-        $scope.user = null;
-        $scope.findUser = function(usr) {
-            $scope.user = usr;
-        }
-        $scope.account = Account.create();
-        $scope.money = 0;
-        $scope.createAccount = function(usr) {
-            $scope.account.owner = $scope.user.id;
-            $scope.account.$save().then(function(account) {
-                APIAction.deposit({account: account.id, amount: $scope.money}).then(function() {
-                    $state.go('bar.account.details', {id: account.id});
-                }, function(errors) {
-                    console.log('Erreur dépôt chèque.')
-                });
-            }, function(errors) {
-                console.log('Erreur création Account.');
-                // [TODO] Form error
-            });
-        }
     }
 ])
 .controller('admin.ctrl.account.collectivePayment',
