@@ -83,28 +83,30 @@ angular.module('bars.admin.account', [
             var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
         };
-        $scope.createAccount = function() {
+        $scope.createAccount = function(usr,money) {
+            $scope.naccount.owner = usr.id;
+            delete $scope.naccount.amoney;
+            $scope.naccount.$save().then(function(a) {
+                if (money > 0) {
+                    APIAction.deposit({account: a.id, amount: money}).then(function() {
+                        $state.go('bar.account.details', {id: a.id});
+                    }, function(errors) {
+                        console.log("Erreur dépôt chèque.")
+                    });
+                } else {
+                    $state.go('bar.account.details', {id: a.id});
+                }
+            }, function(errors) {
+                console.log("Erreur création Account.");
+            });
+        };
+        $scope.createUser = function() {
             if ($scope.nuser.password == $scope.nuser.passwordBis) {
                 $scope.nuser.firstname = _.capitalize(_.trim($scope.nuser.firstname));
                 $scope.nuser.lastname = _.trim($scope.nuser.lastname);
                 delete $scope.nuser.passwordBis;
                 $scope.nuser.$save().then(function(u) {
-                    $scope.naccount.owner = u.id;
-                    $scope.amoney = $scope.naccount.amoney;
-                    delete $scope.naccount.amoney;
-                    $scope.naccount.$save().then(function(a) {
-                        if ($scope.amoney > 0) {
-                            APIAction.deposit({account: a.id, amount: $scope.amoney}).then(function() {
-                                $state.go('bar.account.details', {id: a.id});
-                            }, function(errors) {
-                                console.log("Erreur dépôt chèque.")
-                            });
-                        } else {
-                            $state.go('bar.account.details', {id: a.id});
-                        }
-                    }, function(errors) {
-                        console.log("Erreur création Account.");
-                    });
+                    $scope.createAccount(u,$scope.naccount.amoney);
                 }, function(errors) {
                     console.log("Erreur création User.");
                 });
@@ -113,8 +115,7 @@ angular.module('bars.admin.account', [
                 $scope.passwordBis = '';
                 console.log("Mots de passe différents");
             }
-
-        }
+        };
     }
 ])
 .controller('admin.ctrl.account.import',
