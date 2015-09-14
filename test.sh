@@ -28,7 +28,15 @@ then
     sed -i '.save' 's/bars_django\.settings\.dev_local/bars_django.settings.test/' manage.py
 
     yes "yes" | ./resetdb.sh
+    ./manage.py runserver &
+    sleep 5
 
+    cd ../chocapix-client
+
+    protractor test/e2e/conf.js
+
+    kill %1
+    cd ../chocapix-server
     sed -i '.save' 's/bars_django\.settings\.test/bars_django.settings.dev_local/' bars_django/wsgi.py
     sed -i '.save' 's/bars_django\.settings\.test/bars_django.settings.dev_local/' manage.py
 
