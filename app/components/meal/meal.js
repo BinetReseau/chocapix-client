@@ -57,7 +57,7 @@ angular.module('bars.meal', [
             inRequest: false,
             name: "",
             init: function() {
-                this.customersList = [ { account: this.account, ratio: 1, amount: 0 } ];
+                this.customersList = [ ];
                 this.itemsList = [];
                 this.totalPrice = 0;
                 this.accountToAdd = "";
