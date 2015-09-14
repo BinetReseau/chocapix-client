@@ -33,6 +33,7 @@
     <div class="list-group-item">
         <h5 class="list-group-item-heading text-center">Aliments</h5>
         <div class="list-group-item-text">
+            <div class="div-scroll">
             <table class="table table-condensed no-border">
                 <tr ng-repeat="item in meal.itemsList" class="animated fadeInRight no-border">
                     <td class="vmiddle qty"><input type="number" min="0" id="qtyItem{{ $index }}Input" class="form-control input-sm pqty" placeholder="Quantité" ng-model="item.buy_qty" ng-change="meal.recomputeAmount()"> {{ item.buy_qty > 1 && item.item.unit_name_plural || item.item.unit_name }}</td>
@@ -42,6 +43,7 @@
                     </td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
 </div>
