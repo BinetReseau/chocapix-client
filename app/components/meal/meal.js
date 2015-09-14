@@ -140,7 +140,10 @@ angular.module('bars.meal', [
                 });
             },
             in: function() {
-                return this.customersList.length > 1 || this.itemsList.length > 0;
+                //return this.customersList.length > 1 || this.itemsList.length > 0;
+                // a faerix, on ne fait que des bouffes à plusieurs.
+                // on s'enlève de la bouffe, et on fait logger à qqn d'autre.
+                return true;
             }
         };
 
