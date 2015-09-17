@@ -45,6 +45,17 @@ angular.module('bars.meal', [
     }
   };
 })
+.directive('barsMeal', function() {
+  return {
+    scope: true,
+    restrict: 'E',
+    templateUrl: 'components/meal/panel.html',
+    controller: 'meal.ctrl',
+    link: function(scope, element, attrs, ctrl) {
+        return element.on('click', ctrl.toggle);
+    }
+  };
+})
 .factory('bars.meal',
     ['$rootScope', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
     function ($rootScope, SellItem, Account, APIAction, AuthUser) {
