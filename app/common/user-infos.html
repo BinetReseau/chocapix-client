@@ -1,17 +1,4 @@
 <ul class="nav navbar-nav navbar-right">
-    <li ng-show="user.can('add_mealtransaction')" class="hidden-xs meal">
-        <a href ng-class="meal.in() && 'in-meal'"
-        popover-template="'components/meal/panel.html'"
-        popover-placement="bottom"
-        popover-title="Bouffe{{ meal.customersList.length > 1 && ' à plusieurs' || ''}}"
-        popover-trigger="open"
-        popover-meal>
-            <span class="badge badge-info" ng-if="meal.in()">
-                {{ meal.totalPrice | currency }}
-            </span>
-            <span class="glyphicon glyphicon-shopping-cart"></span>
-        </a>
-    </li>
     <li class="hidden-xs">
         <a ui-sref="bar.account.details({ bar: bar.id, id: user.account.id })" class="text-ellipsis Header__User">{{ user.user.firstname + ' ' + user.user.lastname }}</a>
     </li>

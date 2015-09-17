@@ -1,22 +1,6 @@
 <div class="col-sm-12">
     <div class="row">
         <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Actualités</h3>
-                </div>
-                <ul class="list-group fixed-panel" id="lnews" style="max-height: 200px; overflow: auto;">
-                    <li ng-repeat="news in list_news() | orderBy:'-last_modified' as disp_news" ng-if="disp_news.length > 0" class="list-group-item" ng-class="news_recente(disp_news[$index]) && 'list-group-item-info' || ''" >
-                        <bars:news news="news"></bars:news>
-                    </li>
-                    <li class="list-group-item" ng-if="disp_news.length == 0">
-                        <em>Aucune actualité...</em>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
             <div class="list-group">
                 <div class="list-group-item" ng-if="user.user !== null">
                     <div class="row">
@@ -85,6 +69,25 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Actualités</h3>
+                </div>
+                <ul class="list-group fixed-panel" id="lnews" style="max-height: 200px; overflow: auto;">
+                    <li ng-repeat="news in list_news() | orderBy:'-last_modified' as disp_news" ng-if="disp_news.length > 0" class="list-group-item" ng-class="news_recente(disp_news[$index]) && 'list-group-item-info' || ''" >
+                        <bars:news news="news"></bars:news>
+                    </li>
+                    <li class="list-group-item" ng-if="disp_news.length == 0">
+                        <em>Aucune actualité...</em>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <bars:meal></bars:meal>
             </div>
         </div>
     </div>
