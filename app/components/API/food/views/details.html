@@ -36,7 +36,9 @@
 
                 <span ng-if="query.type == 'throw' && food_item.stockitems.length > 1"> venant de </span>
                 <span ng-if="query.type == 'inventory' && food_item.stockitems.length > 1"> de </span>
-                <select class="form-control" ng-model="query.stockitem" ng-options="article.details.name for article in food_item.stockitems" ng-if="(query.type == 'throw' || query.type == 'inventory') && food_item.stockitems.length > 1"></select>
+                <select class="form-control" ng-model="query.stockitem" ng-if="(query.type == 'throw' || query.type == 'inventory') && food_item.stockitems.length > 1">
+                    <option ng-repeat="article in food_item.stockitems" value="{{ article.id }}" compile='"<bars:itemdetails itemdetails=\"article.details\"></bars:itemdetails>"'></option>
+                </select>
                 <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty <= 0 && 'disabled' || ''" ng-if="query.type == 'throw'" />
                 <input type="submit" class="btn btn-success" value="Valider" ng-class="query.qty < 0 && 'disabled' || ''" ng-if="query.type == 'inventory'" />
 
