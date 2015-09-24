@@ -1,0 +1,26 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <h3>
+        <div class="pull-right">
+            <a class="btn btn-success btn-sm" ui-sref="bar.admin.news.add">Ajouter</a>
+        </div>
+        Liste des news
+    </h3>
+
+    <div ng-repeat="news in news_list | orderBy:'-last_modified'" class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+                <a ng-click="upNews(news)" class="btn btn-info btn-xs atooltip" tooltip="Afficher sur la page d'accueil"><span class="glyphicon glyphicon-arrow-up"></span> Remonter</a>
+                <a ui-sref="bar.admin.news.edit({id: news.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <a ng-if="!news.deleted" ng-click="trash(news)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                <a ng-if="news.deleted" ng-click="untrash(news)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a>
+            </div>
+            <h3 class="panel-title">
+                {{ news.name }} <span ng-if="news.deleted"><small><em>(supprimée)</em></small></span>
+            </h3>
+        </div>
+        <div class="panel-body" ng-bind-html="news.text | nl2br"></div>
+        <div class="panel-footer">
+            {{ news.author.firstname + ' ' + news.author.lastname }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}
+        </div>
+    </div>
+</div>

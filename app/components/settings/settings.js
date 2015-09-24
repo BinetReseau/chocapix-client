@@ -32,6 +32,12 @@ angular.module('bars.settings', [
                 }]
             }
         })
+        // Menus
+        .state('bar.settings.menus', {
+            url: "/menus",
+            templateUrl: "components/settings/menus.html",
+            controller: 'settings.ctrl.menus'
+        })
         ;
 }])
 
@@ -87,13 +93,16 @@ angular.module('bars.settings', [
             }
         };
         $scope.checkUsername = function() {
-            return _.filter(user_list, {username: $scope.nusername}).length == 0;
+            return _.filter(user_list, function (u) {
+                return u.username.toLocaleLowerCase() == $scope.nusername.toLocaleLowerCase();
+            }).length == 0;
         };
         $scope.changeUsername = function() {
             $scope.alerts = _.filter($scope.alerts, function(a) {
                 return a.context != 'username';
             });
-            if (_.filter(user_list, {username: $scope.nusername}).length == 0) {
+            
+            if ($scope.checkUsername($scope.nusername)) {
                 var tempUsername = $scope.nusername;
                 $scope.nusername = '';
                 $scope.myUser.username = tempUsername;
@@ -129,6 +138,80 @@ angular.module('bars.settings', [
                 $scope.alerts.push({context: 'pwd', type: 'warning', msg: 'Les mots de passe sont différents.'});
                 console.log('Mots de passe différents.');
             }
+        };
+    }
+])
+
+.controller('settings.ctrl.menus',
+    ['$scope', '$timeout', 'api.models.menu', 'auth.user', 'sellitem',
+    function($scope, $timeout, Menu, AuthUser, sellitem_list) {
+        $scope.settings.active = 'menus';
+        $scope.menus = AuthUser.menus;
+
+        $scope.selectMenu = function (menu) {
+            $scope.selectedMenu.originalMenu = menu;
+            $scope.selectedMenu.menu = _.clone(menu);
+            $scope.selectedMenu.menu.items = _.clone(menu.items);
+        };
+
+        $scope.deleteItem = function(index) {
+            $scope.selectedMenu.menu.items.splice(index, 1);
+        };
+
+        $scope.closeMenu = function() {
+            $scope.selectedMenu = {menu: undefined, originalMenu: undefined};
+        };
+        $scope.closeMenu();
+
+        $scope.saveMenu = function() {
+            var originalMenu = $scope.selectedMenu.originalMenu;
+            var menu = $scope.selectedMenu.menu;
+            originalMenu.name = menu.name;
+            originalMenu.items = _.clone(menu.items);
+            originalMenu.$save().then(function (newMenu) {
+                newMenu.updateRank();
+                if (!menu.id) {
+                    AuthUser.menus.push(newMenu);
+                }
+                $scope.closeMenu();
+            });
+        };
+
+        $scope.sellitem_listf = function (t) {
+            return _.filter(sellitem_list, function (o) {
+                return o.filter(t) && _.find($scope.selectedMenu.menu.items, function (s) {
+                    return s.sellitem.id == o.id;
+                }) === undefined;
+            });
+        };
+
+        $scope.addItem = function (item) {
+            $scope.selectedMenu.menu.items.unshift({sellitem: item, qty: 1});
+            $scope.selectedMenu.newItem = "";
+        };
+
+        $scope.createMenu = function() {
+            var newMenu = Menu.create();
+            newMenu.name = "";
+            newMenu.items = [];
+            $scope.selectMenu(newMenu);
+
+            $timeout(function () {
+                document.getElementById("name").focus();
+            }, 300);
+        };
+
+        $scope.deleteMenu = function() {
+            var id = $scope.selectedMenu.originalMenu.id;
+            $scope.selectedMenu.originalMenu.$delete().then(function () {
+                var key;
+                _.forEach(AuthUser.menus, function (menu, k) {
+                    if (menu.id == id) {
+                        AuthUser.menus.splice(k, 1);
+                    }
+                });
+                $scope.closeMenu();
+            });
         };
     }
 ])

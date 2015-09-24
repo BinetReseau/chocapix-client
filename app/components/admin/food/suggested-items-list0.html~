@@ -1,0 +1,28 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <h3>
+        <div class="pull-right">
+            <a class="btn btn-success btn-sm" ui-sref="bar.admin.food.suggested_items_list.add">Ajouter</a>
+        </div>
+        Liste des aliments suggérés
+    </h3>
+
+    <div class="panel panel-default">
+        <table class="table table-striped table-hover" ng-if="suggested_items_list.length > 0">
+            <tr>
+                <th>Nom &ensp;<a href="" ng-click="reverse = list_order == 'details.name' ? !reverse : false; list_order = 'details.name'"><span class="glyphicon glyphicon-sort"></span></a></th>
+                <th>Nombre de personnes souhaitant avoir cet aliment &ensp;<a href="" ng-click="reverse = list_order == 'wished' ? !reverse : false; list_order = 'wished'"><span class="glyphicon glyphicon-sort"></span></a></th>
+                <th>Actions</th>
+            </tr>
+            <tr ng-repeat="f in suggested_items_list | orderBy:list_order:reverse" ng-class="f.already_added && 'del'">
+                <td><bars:suggested:item item="f"></bars:suggested:item></td>
+                <td><bars:suggested:item:wished item="f" wished="f.wished" out="'buy'"></bars:suggested:item:wished></td>
+                <td><bars:suggested:item item="f" out="'buy'" unit="false"><a ui-sref="bar.admin.suggested_item.edit({id: suggested_item.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <a ng-if="!suggested_item.already_added" ng-click="trash(suggested_item)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                <a ng-if="suggested_item.already_added" ng-click="untrash(suggested_item)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a></bars:suggested:item></td>
+            </tr>
+        </table>
+        <div class="panel-body" ng-if="suggested_items_list.length == 0">
+            <em>Aucun aliment ne correspond à votre recherche.</em>
+        </div>
+    </div>
+</div>

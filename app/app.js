@@ -32,14 +32,16 @@ angular.module('barsApp', [
   'bars.api.transaction',
   'bars.api.news',
   'bars.api.role',
-  'bars.api.bug'
+  'bars.api.bug',
+  'bars.api.menu',
+  'bars.api.suggested_items'
 ])
 
 .config(['APIURLProvider', 'OFFURLProvider', function(APIURL, OFFURL) {
-    APIURL.url = "http://bars.nadrieril.fr/api";
-    OFFURL.url = "http://bars.nadrieril.fr/off";
-    // APIURL.url = "http://127.0.0.1:8000";
-    // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
+    //APIURL.url = "http://bars.nadrieril.fr/api";
+    //OFFURL.url = "http://bars.nadrieril.fr/off";
+     APIURL.url = "http://127.0.0.1:8000";
+     OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
     // APIURL.url = "http://chocapix/api";
     // OFFURL.url = "http://chocapix/off";
 
@@ -101,7 +103,7 @@ angular.module('barsApp', [
     ['$rootScope', '$scope', '$timeout',
     function ($rootScope, $scope, $timeout) {
         $scope.percent = 0;
-        var step = 100/8;
+        var step = 100/9;
         $rootScope.$watch('appLoaded', function () {
             if ($scope.appLoaded) {
                 $scope.percent = 100;
@@ -142,6 +144,10 @@ angular.module('barsApp', [
         $rootScope.$on('api.News.loaded', function () {
             $scope.percent += step;
             $scope.mleft = "News";
+        });
+        $rootScope.$on('api.SuggestedItems.loaded',function() {
+            $scope.percent += step;
+            $scope.mleft = "SuggestedItems";
         });
     }])
 ;

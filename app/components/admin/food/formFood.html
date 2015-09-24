@@ -120,7 +120,7 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-show="!data.is_pack">
         <div class="panel-heading">
             <h3 class="panel-title">Aliment vendu</h3>
         </div>
@@ -221,7 +221,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 text-center">
+    <div class="text-center">
         <input type="submit" class="btn btn-primary" value="Ajouter" ng-class="!isValid() && 'disabled' || ''" />
     </div>
 </form>

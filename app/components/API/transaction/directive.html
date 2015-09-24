@@ -11,7 +11,7 @@
                     </h2>
                 </div>
                 <table class="table table-striped table-hover table-condensed history">
-                    <tr ng-repeat="transaction in d.history track by transaction.id" ng-class="transaction.canceled && 'del'">
+                    <tr ng-repeat="transaction in d.history track by transaction.id" ng-class="transaction.canceled && 'del' || (is_new_to_me(transaction) && 'info')">
                         <td class="time">{{ :: transaction.timestamp | date:'shortTime' }}</td>
 
                         <td class="type">

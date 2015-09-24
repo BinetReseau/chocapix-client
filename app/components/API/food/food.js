@@ -15,7 +15,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return s == this.barcode || this.details.filter(s);
+                        return s == this.barcode || !this.details || this.details.filter(s);
                     }
                 }
             });
@@ -38,7 +38,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return this.buyitem.filter(s);
+                        return !this.buyitem || this.buyitem.filter(s);
                     }
                 }
             });
@@ -63,7 +63,7 @@ angular.module('bars.api.food', [
                                 return false;
                             }
                         }
-                        return true;
+                        return !this.stockitem || !this.stockitem.sellitem || (!this.stockitem.deleted && !this.stockitem.sellitem.deleted);
                     }
                 }
             });
@@ -80,7 +80,7 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s) {
-                        return !this.deleted && this.details.filter(s);
+                        return !this.deleted && (!this.details || this.details.filter(s));
                     },
                     'stats': function(params) {
                         return APIInterface.request({
@@ -102,6 +102,10 @@ angular.module('bars.api.food', [
                 },
                 methods: {
                     'filter': function(s, showDeleted) {
+                        // Ignore one letter searchs
+                        if (s.length == 1) {
+                            return false;
+                        }
                         if (this.deleted && !showDeleted) {
                             return false;
                         }
@@ -210,8 +214,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_list',
-    ['$scope', 'food_list',
-    function($scope, food_list) {
+    ['$scope', '$timeout', 'food_list',
+    function($scope, $timeout, food_list) {
         $scope.food_list = food_list;
         $scope.searchl = "";
         $scope.list_order = 'name';
@@ -227,6 +231,10 @@ angular.module('bars.api.food', [
         $scope.showMore = function () {
             $scope.limit.nb += 5;
         };
+
+        $timeout(function () {
+            document.getElementById("searchl").focus();
+        }, 300);
     }]
 )
 .controller('api.ctrl.food_details',

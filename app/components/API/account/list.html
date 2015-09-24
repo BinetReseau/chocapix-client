@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading clearfix">
             <h4 class="panel-title pull-left text-capitalizefirst" style="padding-top: 7.5px;">Utilisateurs</h4>
-            <input type="text" class="form-control right small" ng-model="searchl" placeholder="Rechercher">
+            <input type="text" class="form-control right small" ng-model="searchl" placeholder="Rechercher" id="searchl">
             <a title="Afficher les comptes cachés" ng-click="showHidden = !showHidden" class="pull-right btn btn-warning" ng-class="showHidden && 'active'" ng-show="user.can('change_account')">
                 <span class="glyphicon glyphicon-eye-close"></span> Comptes cachés
             </a>

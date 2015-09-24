@@ -38,13 +38,14 @@ angular.module('bars.auth', [
 }])
 
 .factory('auth.user',
-    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role', '$state', '$stateParams',
-    function (AuthService, $rootScope, $q, $timeout, Account, User, Role, $state, $stateParams) {
+    ['auth.service', '$rootScope', '$q', '$timeout', 'api.models.account', 'api.models.user', 'api.models.role', 'api.models.menu', '$state', '$stateParams',
+    function (AuthService, $rootScope, $q, $timeout, Account, User, Role, Menu, $state, $stateParams) {
         return {
             user: null,
             account: null,
             roles: [],
             perms: [],
+            menus: [],
             login: function(credentials) {
                 var self = this;
                 return AuthService.login(credentials).then(
@@ -59,12 +60,16 @@ angular.module('bars.auth', [
                                 }
 
                                 self.account = account;
-                                $rootScope.$broadcast('auth.hasLoggedIn');
                                 $timeout(function() {
                                     if(document.getElementById("q_alim")) {
                                         document.getElementById("q_alim").focus();
                                     }
                                 }, 300);
+
+                                Menu.request({user: self.user.id}).then(function(menus) {
+                                    $rootScope.$broadcast('auth.hasLoggedIn');
+                                    self.menus = menus;
+                                });
                             }, function (error) {
                                 self.account = null;
                             });
@@ -95,6 +100,7 @@ angular.module('bars.auth', [
                 this.account = null;
                 this.roles = [];
                 this.perms = [];
+                this.menus = [];
                 $rootScope.$broadcast('auth.hasLoggedOut');
 
                 if($stateParams.bar) {

@@ -9,6 +9,9 @@ angular.module('bars.api.user', [
         var model = new APIModel({
                 url: 'user',
                 type: "User",
+                structure: {
+                	suggested_items: "SuggestedItem"
+                },
                 methods: {
                     'me': {url: 'me', static: true},
                 }

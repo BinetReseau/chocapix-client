@@ -14,12 +14,17 @@ angular.module('bars.api.account', [
                     'owner': 'User'
                 },
                 methods: {
-                    'filter': function(s) {
+                    'filter': function(s, showDeleted) {
+                        if (!showDeleted) {
+                            showDeleted = false;
+                        }
                         if(!(this.owner.lastname && this.owner.firstname)) {
                             return false;
                         } else {
-                            return !this.deleted && this.owner.is_active && _.deburr(this.owner.lastname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 || _.deburr(this.owner.firstname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
-                                _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1;
+                            return (showDeleted || (!this.deleted && this.owner.is_active)) &&
+                                (_.deburr(this.owner.lastname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                                _.deburr(this.owner.firstname.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1 ||
+                                _.deburr(this.owner.pseudo.toLocaleLowerCase()).indexOf(_.deburr(s.toLocaleLowerCase())) > -1);
                         }
                     },
                     'stats': function(params) {
@@ -108,13 +113,13 @@ angular.module('bars.api.account', [
         $scope.bar.active = 'account';
     }])
 .controller('api.ctrl.account_list',
-    ['$scope', 'account_list', function($scope, account_list) {
+    ['$scope', '$timeout', 'account_list', function($scope, $timeout, account_list) {
         $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active; });
         $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
         $scope.searchl = "";
         $scope.filterAccounts = function(o) {
-            return o.filter($scope.searchl);
+            return o.filter($scope.searchl, $scope.showHidden);
         };
         $scope.filterHidden = function() {
             if ($scope.showHidden) {
@@ -125,6 +130,10 @@ angular.module('bars.api.account', [
                 };
             }
         };
+
+        $timeout(function () {
+            document.getElementById("searchl").focus();
+        }, 300);
     }])
 .controller('api.ctrl.account_detail',
     ['$scope', 'account', 'api.services.action', 'api.models.user', 'api.models.role', 'roles', 'buy_spent', 'best_sellitem',
@@ -230,7 +239,6 @@ angular.module('bars.api.account', [
             var newRole = Role.create();
             newRole.user = account.owner.id;
             newRole.name = name;
-            newRole.bar = 'avironjone'; // TEMP
             newRole.$save().then(function () {
                 updateRoles();
             });

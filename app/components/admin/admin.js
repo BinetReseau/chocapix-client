@@ -26,11 +26,11 @@ angular.module('bars.admin', [
                     stockitem_list: ['api.models.stockitem', function(StockItem) {
                         return StockItem.all();
                     }],
+                    suggested_items_list: ['api.models.suggested_items', function(SuggestedItem) {
+                        return SuggestedItem.all();
+                    }],
                     bar_account: ['api.models.account', function(Account) {
                         return Account.ofUser(6);
-                    }],
-                    bar: ['api.models.bar', '$stateParams', function(Bar, $stateParams) {
-                        return Bar.get($stateParams.bar);
                     }]
                 }
             }

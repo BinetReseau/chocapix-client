@@ -258,6 +258,22 @@ angular.module('bars.api.transaction', [
                 inRequest = false;
             }
 
+            $scope.is_new_to_me = function(t) {
+                if (AuthUser.user === null || AuthUser.account === null) {
+                    return false;
+                }
+                if (moment(t.timestamp).isBefore(AuthUser.user.previous_login) || t.author == AuthUser.user) {
+                    return false;
+                }
+                if (t.account && t.account == AuthUser.account) {
+                    return true;
+                }
+                if (t.accounts && _.some(t.accounts, {'account': AuthUser.account})) {
+                    return true;
+                } 
+                return false;
+            };
+
             if ($scope.buyInStock) {
                 $scope.sellOrStock = {sellitem: undefined};
             } else {

@@ -8,12 +8,15 @@ angular.module('bars.magicbar', [
     ['$scope', '$rootScope', '$filter', '$modal', '$timeout', 'auth.user', 'api.services.action', 'api.models.buyitem', 'api.models.sellitem', 'magicbar.analyse', 'bars.meal',
     function($scope, $rootScope, $filter, $modal, $timeout, AuthUser, APIAction, BuyItem, SellItem, analyse, Meal) {
 		// MagicBar sorting
-		function cleanSellItems() {
+		function cleanRanking() {
 			_.forEach(SellItem.all(), function (si) {
 				si.urank = 0;
 			});
+			_.forEach(AuthUser.menus, function (menu) {
+				menu.urank = 0;
+			})
 		}
-		function updateSellItems() {
+		function updateRanking() {
 			if (!AuthUser.account) {
 				return;
 			}
@@ -22,11 +25,14 @@ angular.module('bars.magicbar', [
 				_.forEach(ranking, function (r) {
 					SellItem.get(r.id).urank = r.val;
 				});
+				_.forEach(AuthUser.menus, function (menu) {
+					menu.updateRank();
+				});
 			});
 		}
-		updateSellItems();
-		$rootScope.$on('auth.hasLoggedIn', updateSellItems);
-		$rootScope.$on('auth.hasLoggedOut', updateSellItems);
+		updateRanking();
+		$rootScope.$on('auth.hasLoggedIn', updateRanking);
+		$rootScope.$on('auth.hasLoggedOut', updateRanking);
 
 
         $scope.query = {
@@ -46,6 +52,8 @@ angular.module('bars.magicbar', [
 		$scope.urank = function (e) {
 			if (e.food && e.food.urank > 0) {
 				return -e.food.urank;
+			} else if (e.menu && e.menu.urank > 0) {
+				return -e.menu.urank;
 			} else {
 				return 0;
 			}
@@ -67,7 +75,7 @@ angular.module('bars.magicbar', [
 		};
 
         $scope.executeQuery = function($item, $model, $label) {
-            if ($item.food === null && $item.account === null) {
+            if ($item.food === null && $item.account === null && $item.menu === null) {
                 return;
             }
             var type = $item.type;
@@ -89,7 +97,17 @@ angular.module('bars.magicbar', [
                 APIAction[type](req).then(function() {
                     $scope.bar.search = '';
                 });
-            } else if (_.contains(['punish', 'refund', 'withdraw'], type)) {
+            } else if (_.contains(['buymenu', 'addmenu'], type)) {
+				if (!Meal.in()) {
+					Meal.name = $item.menu.name;
+				}
+				_.forEach($item.menu.items, function (item) {
+					Meal.addItem(item.sellitem, item.qty*$item.qty, type == 'buymenu');
+				});
+				if (type == 'buymenu') {
+					Meal.validate();
+				}
+			} else if (_.contains(['punish', 'refund', 'withdraw'], type)) {
 				var req = {account: $item.account.id, amount: $item.qty, motive: ''};
 				$timeout(function () {
 					document.getElementById('mmotive').focus();
@@ -263,6 +281,19 @@ angular.module('bars.magicbar', [
 					});
 	            }
 
+				// Menu
+				var menus = _.filter(AuthUser.menus, function (o) {
+					return o.filter(term);
+	            });
+	            if (menus.length >= 1) {
+					_.forEach(menus, function(a) {
+						parsedTerms[i].push({
+							type: 'menu',
+							value: a
+						});
+					});
+	            }
+
 	            // Account
 	            var accounts = _.filter($scope.bar.accounts, function (o) {
 					return o.filter(term);
@@ -285,7 +316,7 @@ angular.module('bars.magicbar', [
 				suggestion = suggestion || [];
 				i = i || 0;
 				if(i >= parsedTerms.length) {
-					if(hasType(suggestion, 'food') || hasType(suggestion, 'account')) {
+					if(hasType(suggestion, 'food') || hasType(suggestion, 'account') || hasType(suggestion, 'menu')) {
 						return [suggestion];
 					} else {
 						return [];
@@ -296,11 +327,13 @@ angular.module('bars.magicbar', [
 					var canBe = parsedTerms[i][j];
 					if((canBe.type === 'qty' || canBe.type === 'unit_name' || canBe.type === 'type') && hasType(suggestion, canBe.type)) {
 						continue;
-					} else if(canBe.type === 'account' && hasType(suggestion, 'food')) {
+					} else if(canBe.type === 'account' && (hasType(suggestion, 'food') || hasType(suggestion, 'menu'))) {
 						continue;
-					} else if(canBe.type === 'food' && hasType(suggestion, 'account')) {
+					} else if(canBe.type === 'food' && (hasType(suggestion, 'account') || hasType(suggestion, 'menu'))) {
 						continue;
-					} else if(canBe.type === 'account' || canBe.type === 'food') {
+					} else if(canBe.type === 'menu' && (hasType(suggestion, 'account') || hasType(suggestion, 'food'))) {
+						continue;
+					} else if(canBe.type === 'account' || canBe.type === 'food' || canBe.type === 'menu') {
 						var other = _.find(suggestion, {type:canBe.type});
 						if(other && other.value !== canBe.value) {
 							continue;
@@ -337,6 +370,20 @@ angular.module('bars.magicbar', [
 						if(res.type !== 'give' && res.type !== 'punish' && res.type !== 'deposit' && res.type !== 'refund' && res.type !== 'withdraw') {
 							return []; // Discard
 						}
+					} else if(_.find(suggestion, {type:'menu'})) {
+						res.otype = 'menu';
+						if (!res.type && Meal.in()) {
+							res.type = 'addmenu';
+						}
+						res.type = res.type || 'buy';
+						if (res.type == 'add') {
+							res.type = 'addmenu';
+						} else if (res.type == 'buy') {
+							res.type = 'buymenu';
+						}
+						if(res.type !== 'buymenu' && res.type !== 'addmenu') {
+							return []; // Discard
+						}
 					} else {
 						res.otype = 'food';
 						if (!res.type && Meal.in()) {
@@ -368,7 +415,9 @@ angular.module('bars.magicbar', [
 				if (o.food) {
 					out = out + o.food.id;
 				} else if (o.account) {
-					out = o.account.id;
+					out = out + o.account.id;
+				} else if (o.menu) {
+					out = out + o.menu.id;
 				}
 				return out;
 			});

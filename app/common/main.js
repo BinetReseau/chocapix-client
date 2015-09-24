@@ -96,10 +96,24 @@ angular.module('bars.main', [
                         return null;
                     }
                 }],
+                menus: ['api.models.menu', 'auth.service', 'user', function(Menu, AuthService, user) {
+                    if (AuthService.isAuthenticated()) {
+                        return Menu.request({user: user.id});
+                    } else {
+                        return null;
+                    }
+                }],
                 news: ['api.models.news', '$rootScope', 'bar', function(News, $rootScope, bar) {
                     News.clear();
                     return News.request({bar: [bar.id, 'root']}).then(function (o) {
                         $rootScope.$broadcast('api.News.loaded');
+                        return o;
+                    });
+                }],
+                suggested_items: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
+                    suggested_items.clear();
+                    return suggested_items.request({bar: [bar.id, 'root']}).then(function (o) {
+                    	$rootScope.$broadcast('api.SuggestedItems.loaded');
                         return o;
                     });
                 }]
@@ -128,14 +142,18 @@ angular.module('bars.main', [
                 '@bar': {
                     templateUrl: "common/home.html",
                     controller: 'main.ctrl.bar'
+                },
+                'suggestions@bar': {//insert in the balise where ui-view="suggestions"
+                    templateUrl: "common/suggestions.html",
+                    controller: 'main.ctrl.suggestions'
                 }
             }
         });
 }])
 
 .controller('main.ctrl.base',
-    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user', 'api.models.sellitem',
-    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User, SellItem) {
+    ['$scope', '$rootScope', '$stateParams', '$modal', 'auth.user', 'sellitem', 'bar', 'accounts', '$timeout', '$state', 'api.models.user', 'api.models.sellitem', 'bar.infos',
+    function($scope, $rootScope, $stateParams, $modal, AuthUser, sellitem, bar, accounts, $timeout, $state, User, SellItem, BarInfos) {
         $rootScope.appLoaded = true;
 
         $scope.bar = {
@@ -147,6 +165,8 @@ angular.module('bars.main', [
             active: 'index',
             infos: bar.settings
         };
+        BarInfos.bar = bar;
+        BarInfos.id = $stateParams.bar;
 
         $scope.user = AuthUser;
         $scope.user_authenticated = function() {
@@ -194,13 +214,13 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news', 'auth.user', '$timeout',
-    function($scope, news, AuthUser, $timeout) {
+    ['$scope', 'news', 'auth.user', 'api.models.user', 'user', '$timeout', 
+    function($scope, news, AuthUser, User, user, $timeout) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
         };
-
+        
         function dateDiff(date1, date2){
             var diff = {}                           // Initialisation du retour
             var tmp = date2 - date1;
@@ -271,8 +291,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.userInfos',
-    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'rolesc', 'rolesg',
-    function($scope, AuthUser, Account, User, Role, Meal, user, account, rolesc, rolesg) {
+    ['$scope', 'auth.user', 'api.models.account', 'api.models.user', 'api.models.role', 'bars.meal', 'user', 'account', 'rolesc', 'rolesg', 'menus',
+    function($scope, AuthUser, Account, User, Role, Meal, user, account, rolesc, rolesg, menus) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
         } else {
@@ -282,6 +302,7 @@ angular.module('bars.main', [
         if (user) {
             AuthUser.account = account;
             AuthUser.user = user;
+            AuthUser.menus = menus;
             if (Array.isArray(rolesc) && Array.isArray(rolesg)) {
                 AuthUser.roles = rolesc.concat(rolesg);
                 AuthUser.computePerms();
@@ -293,6 +314,43 @@ angular.module('bars.main', [
         $scope.meal = Meal;
     }])
 
+.controller(
+    'main.ctrl.suggestions',
+    ['$scope', 'user', 'api.models.suggested_items', 'suggested_items', 
+    function($scope, user, SuggestedItem, suggested_items) {
+        var refresh = function() {
+            $scope.list_suggested_items = function () {
+                var list = _.sortBy(_.reject(suggested_items, 'already_added'), function(i){
+                    return -i.voters_list.length;
+                    });//return the list of suggested items, ordered by the voters' number
+                var returned_list = Array();
+                for(var k = 0; k<Math.floor((list.length+1)/2);k++) {//couples suggested items to match a better design
+                    returned_list.push({'first' : list[2*k],'last' : list[2*k+1]});
+                    }
+                $scope.print_list_suggested_items = returned_list;//return the list of couple in the scope
+            };
+            $scope.suggested_items = suggested_items;
+            $scope.list_suggested_items();//instanciate the formatted list of suggested items
+            $scope.suggested_item = SuggestedItem.create();
+            $scope.suggested_item.already_added = false;
+            $scope.suggested_item.voters_list = new Array(user);//add the current user to the voters' list
+            $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
+                item.name = item.name == '' ? 'Intitulé' : item.name;
+                item.$save().then(function(sitem) {
+                    $scope.suggested_items.push(sitem);//add a suggestion to the displayed list
+                    $scope.$emit("REFRESH");//send the REFRESh event
+                });
+            };
+            $scope.convertBarcode = function (e) {
+                if (e.which === 13) {//on press on 'Enter', save the suggestion
+                    $scope.saveSuggestedItem();
+                }
+            };
+        };
+        refresh();
+        $scope.$on("REFRESH", refresh);//catch the REFRESH event, and refresh only a part of the page
+    }])
+    
 .directive(
     'selectOnClick',
     function () {

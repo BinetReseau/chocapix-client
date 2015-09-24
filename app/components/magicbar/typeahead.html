@@ -3,9 +3,11 @@
         <span ng-switch-when="punish">Mettre une amende</span>
         <span ng-switch-when="appro">Approvisionner</span>
         <span ng-switch-when="buy">Acheter</span>
+		<span ng-switch-when="buymenu">Acheter</span>
         <span ng-switch-when="give">Donner</span>
         <span ng-switch-when="throw">Jeter</span>
 		<span ng-switch-when="add">Ajouter</span>
+		<span ng-switch-when="addmenu">Ajouter</span>
 		<span ng-switch-when="inventory">Indiquer qu'il reste</span>
 		<span ng-switch-when="deposit">Créditer</span>
         <span ng-switch-when="refund">Rembourser</span>
@@ -13,6 +15,12 @@
         <span ng-switch-default>{{ match.model.type }}</span>
     </ng:switch>
     <span ng-switch on="match.model.type">
+		<span ng-switch-when="buymenu">
+            {{ match.model.qty | number }} {{ 'menu' | affs:match.model.qty }} {{ match.model.menu.name }} pour {{ match.model.menu | menuPrice:match.model.qty | currency }}
+        </span>
+		<span ng-switch-when="addmenu">
+            {{ match.model.qty | number }} {{ 'menu' | affs:match.model.qty }} {{ match.model.menu.name }} pour {{ match.model.menu | menuPrice:match.model.qty | currency }}
+        </span>
         <span ng-switch-when="give">
             {{ match.model.qty | currency }} à <bars:account account="match.model.account"></bars:account>
         </span>

@@ -32,6 +32,11 @@ body {
 .text-capitalizefirst:first-letter {
     text-transform: uppercase;
 }
+.text-ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 
 .form-control.right {
     float: right;
@@ -43,7 +48,7 @@ body {
 table.max {
     width: 100%;
 }
-a.link {
+.link {
     cursor: pointer;
 }
 .atooltip:hover {
@@ -205,6 +210,10 @@ dl.no-margin {
     display: inline-block;
     width: 60px;
 }
+.mqty {
+    display: inline-block;
+    width: 100px;
+}
 .margin-left {
     margin-left: 1em;
 }
@@ -240,6 +249,9 @@ hr.derrierebtn {
 }
 .meal .popover-title {
     text-align: center;
+}
+.Header__User {
+    max-width: 220px;
 }
 
 .morris-chart svg {
@@ -389,3 +401,13 @@ hr.derrierebtn {
 .clear-par {
     clear: both;
 }
+
+.suggested-item-left {
+    border-right: 1px solid #DDD;
+    width : 48%;
+    display : inline-block;
+}
+.suggested-item-right {
+    width : 48%;
+    display : inline-block;
+

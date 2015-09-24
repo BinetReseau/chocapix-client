@@ -95,8 +95,8 @@ angular.module('bars.meal', [
                 this.customersList.splice(this.customersList.indexOf(cstmr), 1);
                 this.recomputeAmount();
             },
-            addItem: function(item, qty) {
-                if (!this.in()) {
+            addItem: function(item, qty, keepClose) {
+                if (!this.in() && !keepClose) {
                     $rootScope.$broadcast('meal.begin');
                 }
                 if (!qty) {
@@ -116,6 +116,9 @@ angular.module('bars.meal', [
             },
             filterAccounts: function(o) {
                 return o.filter(this.accountToAdd);
+            },
+            isValidatable: function() {
+                return this.totalPrice > 0 && this.customersList.length > 0 && this.itemsList.length > 0;
             },
             validate: function() {
                 this.inRequest = true;
