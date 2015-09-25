@@ -404,10 +404,12 @@ hr.derrierebtn {
 
 .suggested-item-left {
     border-right: 1px solid #DDD;
-    width : 48%;
+    width : 46%;
     display : inline-block;
+    margin : 1%;
 }
 .suggested-item-right {
-    width : 48%;
+    width : 46%;
     display : inline-block;
+    margin : 1%;
 
