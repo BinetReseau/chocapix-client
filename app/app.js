@@ -21,6 +21,7 @@ angular.module('barsApp', [
   'bars.settings',
   'bars.stats',
   'bars.ranking',
+  'bars.sugive',
 
   'APIModel',
   'OpenFoodFacts',
