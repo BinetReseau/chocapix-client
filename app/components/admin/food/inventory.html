@@ -36,16 +36,22 @@
                 <table class="table table-striped table-hover" ng-show="(inventory.itemsList | filter:filterl).length > 0">
                     <tr>
                         <th>Nom</th>
-                        <th>Quantité présente</th>
-                        <th>Quantité théorique</th>
-                        <th>Différence</th>
+                        <th>
+                            <span tooltip="Quantité présente">Qté présente</span>
+                        </th>
+                        <th>
+                            <span tooltip="Quantité théorique">Qté th.</span>
+                        </th>
+                        <th>
+                            <span tooltip="Différence">Diff</span>
+                        </th>
                         <th> </th>
                     </tr>
                     <tr ng-repeat="item in inventory.itemsList | orderBy:'nb':'true' | filter:filterl">
                         <td class="vmiddle"><bars:stockitem item="item.stockitem"></bars:stockitem></td>
                         <td class="vmiddle">
                             <input type="number" step="any" min="0" ng-model="item.qty" class="form-control input-sm pqty" tabindex="50" ng-change="inventory.recomputeAmount()" />
-                            <select ng-model="item.sell_to_buy" ng-change="inventory.recomputeAmount()">
+                            <select ng-model="item.sell_to_buy" ng-change="inventory.recomputeAmount()" style="max-width: 100px;">
                                 <option value="{{ item.stockitem.sell_to_buy }}">{{ item.stockitem.sellitem.unit_name || item.stockitem.sellitem.name }}</option>
                                 <option value="1">
                                     x

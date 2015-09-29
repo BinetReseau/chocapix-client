@@ -278,7 +278,7 @@ angular.module('bars.api.food', [
             $scope.query = {
                 qty: 1,
                 type: Meal.in() && 'add' || 'buy',
-                stockitem: $scope.food_item.stockitems[0],
+                stockitem: $scope.food_item.stockitems[0].id,
                 buyitemprice: $scope.buy_item_prices[0].buyitem.id,
                 unit_choice: stockItemUnits(food_item),
                 unit: 'sellitem'
@@ -295,11 +295,11 @@ angular.module('bars.api.food', [
                         $scope.query.qty = 1;
                     });
                 } else if (type == 'throw') {
-                    APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty}).then(function() {
+                    APIAction[type]({stockitem: $scope.query.stockitem, qty: qty}).then(function() {
                         $scope.query.qty = 1;
                     })
                 } else if (type == 'inventory') {
-                    APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty}]}).then(function() {
+                    APIAction[type]({items: [{stockitem: $scope.query.stockitem, qty: qty}]}).then(function() {
                         $scope.query.qty = 1;
                     })
                 } else if (type == 'appro') {

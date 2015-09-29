@@ -40,7 +40,7 @@
                 <td ng-if="user.can('change_sellitem')">
                     {{ si.price*si.qty*(1+f.tax) | currency }}
                     <span ng-if="f.fuzzy_qty != 0 && f.fuzzy_price != 0">
-                        ({{ si.price*si.qty/f.fuzzy_price/f.fuzzy_qty*100*(1+f.tax) | number }} %)
+                        ({{ si.price*si.qty/f.fuzzy_price/f.fuzzy_qty*100*(1+f.tax) | number:0 }} %)
                     </span>
                 </td>
             </tr>

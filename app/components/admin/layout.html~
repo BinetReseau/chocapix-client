@@ -10,7 +10,10 @@
             <ul class="dropdown-menu" role="menu">
                 <li><a ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_itemdetails') && user.can('add_sellitem')">Ajouter un aliment</a></li>
                 <li><a ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a></li>
-                <!--<li><a ui-sref="bar.admin.food.suggested_items_list.list({ bar: bar.id })" ng-if="user.can('change_suggested_items')">Aliments suggérés</a></li>-->
+<<<<<<< HEAD
+                <li><a ui-sref="bar.admin.food.suggested_items_list.list({ bar: bar.id })" ng-if="user.can('change_suggested_items')">Aliments suggérés</a></li>
+=======
+>>>>>>> develop
                 <li><a ui-sref="bar.admin.food.approhelper({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Estimation des quantités à acheter</a></li>
                 <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                 <li><a ui-sref="bar.admin.food.stockitems_list({ bar: bar.id })" ng-if="user.can('add_sellitem')">Liste des aliments achetés</a></li>
