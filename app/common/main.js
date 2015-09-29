@@ -109,6 +109,13 @@ angular.module('bars.main', [
                         $rootScope.$broadcast('api.News.loaded');
                         return o;
                     });
+                }],
+                SuggestedItem: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
+                    suggested_items.clear();
+                    return suggested_items.request({bar: [bar.id]}).then(function (o) {
+                    	$rootScope.$broadcast('api.SuggestedItems.loaded');
+                        return o;
+                    });
                 }]
             },
             views: {
@@ -135,6 +142,10 @@ angular.module('bars.main', [
                 '@bar': {
                     templateUrl: "common/home.html",
                     controller: 'main.ctrl.bar'
+                },
+                'suggestions@bar': {//insert in the balise where ui-view="suggestions"
+                    templateUrl: "common/suggestions.html",
+                    controller: 'main.ctrl.suggestions'
                 }
             }
         });
@@ -203,13 +214,13 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news', 'auth.user', '$timeout',
-    function($scope, news, AuthUser, $timeout) {
+    ['$scope', 'news', 'auth.user', 'api.models.user', 'user', '$timeout', 
+    function($scope, news, AuthUser, User, user, $timeout) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
         };
-
+        
         function dateDiff(date1, date2){
             var diff = {}                           // Initialisation du retour
             var tmp = date2 - date1;
@@ -303,6 +314,43 @@ angular.module('bars.main', [
         $scope.meal = Meal;
     }])
 
+.controller(
+    'main.ctrl.suggestions',
+    ['$scope', 'user', 'api.models.suggested_items', 'suggested_items', 
+    function($scope, user, SuggestedItem, suggested_items) {
+        function refresh() {
+            $scope.list_suggested_items = function () {
+                var list = _.sortBy(_.reject(suggested_items, 'already_added'), function(i){
+                    return -i.voters_list.length;
+                    });//return the list of suggested items, ordered by the voters' number
+                var returned_list = [];
+                for(var k = 0; k<Math.floor((list.length+1)/2);k++) {//couples suggested items to match a better design
+                    returned_list.push({'first' : list[2*k],'last' : list[2*k+1]});
+                    }
+                $scope.print_list_suggested_items = returned_list;//return the list of couple in the scope
+            };
+            $scope.suggested_items = suggested_items;
+            $scope.list_suggested_items();//instanciate the formatted list of suggested items
+            $scope.suggested_item = SuggestedItem.create();
+            $scope.suggested_item.already_added = false;
+            $scope.suggested_item.voters_list = new Array(user);//add the current user to the voters' list
+            $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
+                item.name = item.name == '' ? 'Intitulé' : item.name;
+                item.$save().then(function(sitem) {
+                    $scope.suggested_items.push(sitem);//add a suggestion to the displayed list
+                    refresh();//reload the part of page
+                });
+            };
+            $scope.convertBarcode = function (e) {
+                if (e.which === 13) {//on press on 'Enter', save the suggestion
+                    $scope.saveSuggestedItem();
+                }
+            };
+        };
+        refresh();
+        $scope.$on("REFRESH", refresh);//catch the REFRESH event, and refresh only a part of the page
+    }])
+    
 .directive(
     'selectOnClick',
     function () {
