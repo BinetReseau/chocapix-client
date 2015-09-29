@@ -123,7 +123,7 @@ module.factory('APIInterface', ['$http', 'APIURL', 'BaseAPIEntity',
                 }
             }
             if (req.data && req.data['bar']) {
-                if (!req.params) {http://127.0.0.1:8000/suggested_items/
+                if (!req.params) {
                     req.params = {};
                 }
                 req.params['bar'] = req.data['bar'];

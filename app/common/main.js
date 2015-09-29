@@ -110,9 +110,9 @@ angular.module('bars.main', [
                         return o;
                     });
                 }],
-                suggested_items: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
+                SuggestedItem: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
                     suggested_items.clear();
-                    return suggested_items.request({bar: [bar.id, 'root']}).then(function (o) {
+                    return suggested_items.request({bar: [bar.id]}).then(function (o) {
                     	$rootScope.$broadcast('api.SuggestedItems.loaded');
                         return o;
                     });
@@ -318,12 +318,12 @@ angular.module('bars.main', [
     'main.ctrl.suggestions',
     ['$scope', 'user', 'api.models.suggested_items', 'suggested_items', 
     function($scope, user, SuggestedItem, suggested_items) {
-        var refresh = function() {
+        function refresh() {
             $scope.list_suggested_items = function () {
                 var list = _.sortBy(_.reject(suggested_items, 'already_added'), function(i){
                     return -i.voters_list.length;
                     });//return the list of suggested items, ordered by the voters' number
-                var returned_list = Array();
+                var returned_list = [];
                 for(var k = 0; k<Math.floor((list.length+1)/2);k++) {//couples suggested items to match a better design
                     returned_list.push({'first' : list[2*k],'last' : list[2*k+1]});
                     }
@@ -338,7 +338,7 @@ angular.module('bars.main', [
                 item.name = item.name == '' ? 'Intitulé' : item.name;
                 item.$save().then(function(sitem) {
                     $scope.suggested_items.push(sitem);//add a suggestion to the displayed list
-                    $scope.$emit("REFRESH");//send the REFRESh event
+                    refresh();//reload the part of page
                 });
             };
             $scope.convertBarcode = function (e) {
