@@ -112,7 +112,7 @@ angular.module('bars.main', [
                 }],
                 suggested_items: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
                     suggested_items.clear();
-                    return suggested_items.request({bar: [bar.id]}).then(function (o) {
+                    return suggested_items.request({bar: bar.id}).then(function (o) {
                     	$rootScope.$broadcast('api.SuggestedItems.loaded');
                         return o;
                     });
@@ -214,8 +214,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope', 'news', 'auth.user', 'api.models.user', 'user', '$timeout', 
-    function($scope, news, AuthUser, User, user, $timeout) {
+    ['$scope', 'news', 'auth.user', '$timeout', 
+    function($scope, news, AuthUser, $timeout) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
@@ -340,11 +340,6 @@ angular.module('bars.main', [
                     $scope.suggested_items.push(sitem);//add a suggestion to the displayed list
                     refresh();//reload the part of page
                 });
-            };
-            $scope.convertBarcode = function (e) {
-                if (e.which === 13) {//on press on 'Enter', save the suggestion
-                    $scope.saveSuggestedItem();
-                }
             };
         };
         refresh();

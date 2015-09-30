@@ -161,7 +161,7 @@ module.factory('MemoryEntityStore', [
                 var index = _.sortedIndex(this.entity_array, {'id': id}, "id");
                 this.entity_array.splice(index, 0, obj);
                 this._broadcast("add", obj);
-                //console.log(obj._type+'('+obj.id+')', obj);
+                console.log(obj._type+'('+obj.id+')', obj);
             }
             obj = this.get(id);
             return obj;
@@ -173,7 +173,7 @@ module.factory('MemoryEntityStore', [
                 if(orig !== obj) {
                     orig.$update(obj);
                     this._broadcast("update", orig);
-                    //console.log(obj._type+'('+id+')', obj);
+                    console.log(obj._type+'('+id+')', obj);
                 }
                 return orig;
             } else {
