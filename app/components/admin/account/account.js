@@ -49,13 +49,13 @@ angular.module('bars.admin.account', [
     function($scope, Account, User, APIAction, $state, user_list) {
         $scope.admin.active = 'account';
         $scope.nuser = User.create();
-        $scope.nuser.lastname = "";
-        $scope.nuser.firstname = "";
-        $scope.nuser.password = "";
-        $scope.nuser.passwordBis = "";
-        $scope.nuser.username = "";
-        $scope.nuser.pseudo = "";
-        $scope.nuser.email = "";
+        // $scope.nuser.lastname = "";
+        // $scope.nuser.firstname = "";
+        // $scope.nuser.password = "";
+        // $scope.nuser.passwordBis = "";
+        // $scope.nuser.username = "";
+        // $scope.nuser.pseudo = "";
+        // $scope.nuser.email = "";
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
         function checkUsername(username) {
