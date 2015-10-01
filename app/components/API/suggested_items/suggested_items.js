@@ -34,9 +34,7 @@ angular.module('bars.api.suggested_items', [
             $scope.more_wished = function(suggested_item) {
                 if(!_.some(suggested_item.voters_list, {'id' : AuthUser.user.id})){//si l'utilisateur connecté n'a pas encore voté
                     suggested_item.voters_list.push(AuthUser.user);//ajout l'utilisateur
-                    suggested_item.$save().then(function(){
-                        $scope.$emit("REFRESH");//envoie aux parents l'évènement REFRESH
-                    });
+                    suggested_item.$save();
                 }
             };
         }]

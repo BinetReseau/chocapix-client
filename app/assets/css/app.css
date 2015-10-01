@@ -402,6 +402,11 @@ hr.derrierebtn {
     clear: both;
 }
 
+.suggestion {
+    display: inline-block;
+    width: 50%;
+}
+
 .suggested-item-left {
     border-right: 1px solid #DDD;
     width : 46%;

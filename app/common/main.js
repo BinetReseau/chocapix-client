@@ -112,6 +112,7 @@ angular.module('bars.main', [
                 }],
                 SuggestedItems: ['api.models.suggested_items', '$rootScope', 'bar', function(SuggestedItems, $rootScope, bar) {
                     SuggestedItems.clear();
+                    SuggestedItems.reload();
                     return SuggestedItems.request({bar: bar.id}).then(function (o) {
                     	$rootScope.$broadcast('api.SuggestedItems.loaded');
                         return o;
@@ -318,32 +319,22 @@ angular.module('bars.main', [
     'main.ctrl.suggestions',
     ['$scope', 'user', 'api.models.suggested_items', 'SuggestedItems', 
     function($scope, user, SuggestedItem, SuggestedItems) {
-        function refresh() {
-            $scope.list_suggested_items = function () {
-                var list = _.sortBy(_.reject(SuggestedItems, 'already_added'), function(i){
-                    return -i.voters_list.length;
-                    });//return the list of suggested items, ordered by the voters' number
-                var returned_list = [];
-                for(var k = 0; k<Math.floor((list.length+1)/2);k++) {//couples suggested items to match a better design
-                    returned_list.push({'first' : list[2*k],'last' : list[2*k+1]});
-                    }
-                $scope.print_list_suggested_items = returned_list;//return the list of couple in the scope
-            };
-            $scope.SuggestedItems = SuggestedItems;
-            $scope.list_suggested_items();//instanciate the formatted list of suggested items
-            $scope.suggested_item = SuggestedItem.create();
-            $scope.suggested_item.already_added = false;
-            $scope.suggested_item.voters_list = new Array(user);//add the current user to the voters' list
-            $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
-                item.name = item.name == '' ? 'Intitulé' : item.name;
-                item.$save().then(function(sitem) {
-                    $scope.SuggestedItems.push(sitem);//add a suggestion to the displayed list
-                    refresh();//reload the part of page
-                });
-            };
+        $scope.list_suggested_items = function () {
+            return _.sortBy(_.reject(SuggestedItems, 'already_added'), function(i){
+                return -i.voters_list.length;
+                });//return the list of suggested items, ordered by the voters' number
         };
-        refresh();
-        $scope.$on("REFRESH", refresh);//catch the REFRESH event, and refresh only a part of the page
+        $scope.SuggestedItems = SuggestedItems;
+        $scope.suggested_item = SuggestedItem.create();
+        $scope.suggested_item.already_added = false;
+        $scope.suggested_item.voters_list = new Array(user);//add the current user to the voters' list
+        $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
+            item.name = item.name == '' ? 'Intitulé' : item.name;
+            item.$save().then(function(sitem) {
+                $scope.SuggestedItems.push(sitem);//add a suggestion to the displayed list
+                document.getElementById('nname').value="";
+            });
+        };
     }])
     
 .directive(
