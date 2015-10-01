@@ -110,9 +110,9 @@ angular.module('bars.main', [
                         return o;
                     });
                 }],
-                suggested_items: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
-                    suggested_items.clear();
-                    return suggested_items.request({bar: bar.id}).then(function (o) {
+                SuggestedItems: ['api.models.suggested_items', '$rootScope', 'bar', function(SuggestedItems, $rootScope, bar) {
+                    SuggestedItems.clear();
+                    return SuggestedItems.request({bar: bar.id}).then(function (o) {
                     	$rootScope.$broadcast('api.SuggestedItems.loaded');
                         return o;
                     });
@@ -316,11 +316,11 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.suggestions',
-    ['$scope', 'user', 'api.models.suggested_items', 'suggested_items', 
-    function($scope, user, SuggestedItem, suggested_items) {
+    ['$scope', 'user', 'api.models.suggested_items', 'SuggestedItems', 
+    function($scope, user, SuggestedItem, SuggestedItems) {
         function refresh() {
             $scope.list_suggested_items = function () {
-                var list = _.sortBy(_.reject(suggested_items, 'already_added'), function(i){
+                var list = _.sortBy(_.reject(SuggestedItems, 'already_added'), function(i){
                     return -i.voters_list.length;
                     });//return the list of suggested items, ordered by the voters' number
                 var returned_list = [];
@@ -329,7 +329,7 @@ angular.module('bars.main', [
                     }
                 $scope.print_list_suggested_items = returned_list;//return the list of couple in the scope
             };
-            $scope.suggested_items = suggested_items;
+            $scope.SuggestedItems = SuggestedItems;
             $scope.list_suggested_items();//instanciate the formatted list of suggested items
             $scope.suggested_item = SuggestedItem.create();
             $scope.suggested_item.already_added = false;
@@ -337,7 +337,7 @@ angular.module('bars.main', [
             $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
                 item.name = item.name == '' ? 'Intitulé' : item.name;
                 item.$save().then(function(sitem) {
-                    $scope.suggested_items.push(sitem);//add a suggestion to the displayed list
+                    $scope.SuggestedItems.push(sitem);//add a suggestion to the displayed list
                     refresh();//reload the part of page
                 });
             };
