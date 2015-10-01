@@ -6,11 +6,12 @@
         			<form class="navbar-form" ng-submit="saveSuggestedItem(suggested_item)">
             			<div class="form-group" style="width: 100%;">
             			      <input type="text" class="form-control" style="width: 100%;" id="nname" placeholder="Suggestion" ng-model="suggested_item.name">
+            			      <p class="already-suggested">Aliment déjà suggéré</p>
             			</div>
    					</form>
     			</div>
                	<ul class="list-group fixed-panel" id="lsuggested_item" style="max-height: 100px; overflow: auto;">
-                	<li ng-repeat="suggested_item in list_suggested_items() as disp_suggested_item" ng-if="disp_suggested_item.length > 0" class="list-group-item suggestion">
+                	<li ng-repeat="suggested_item in list_suggested_items() as disp_suggested_item track by $index" ng-if="disp_suggested_item.length > 0" class="list-group-item suggestion">
                 		<bars:suggested:items suggesteditem="suggested_item" ></bars:suggested:items>
                     </li>
                 	<li class="list-group-item" ng-if="disp_suggested_items.length == 0">

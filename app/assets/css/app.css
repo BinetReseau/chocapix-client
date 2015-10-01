@@ -407,14 +407,11 @@ hr.derrierebtn {
     width: 50%;
 }
 
-.suggested-item-left {
-    border-right: 1px solid #DDD;
-    width : 46%;
-    display : inline-block;
-    margin : 1%;
+.already-suggested {
+    display: none;
 }
-.suggested-item-right {
-    width : 46%;
-    display : inline-block;
-    margin : 1%;
 
+.has-error > .already-suggested {
+    display: inline-block;
+    color: red;
+}

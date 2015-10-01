@@ -68,20 +68,6 @@ angular.module('bars.admin.food', [
                 }]
             }
         })
-        .state('bar.admin.food.suggested_items_list.add', {
-            url: '/add',
-            templateUrl: "components/admin/food/suggested-item-form.html",
-            controller: 'admin.ctrl.food.suggested_items_list.add',
-            resolve: {
-                user: ['api.models.user', 'auth.service', function(User, AuthService) {//user will be the authenticated user
-                    if (AuthService.isAuthenticated()) {
-                        return User.me();
-                    } else {
-                        return null;
-                    }
-                }],
-            }
-        })
         .state('bar.admin.food.suggested_items_list.edit', {//allow administrator to edit suggestions
             url: '/edit/:id',
             templateUrl: "components/admin/food/suggested-item-form.html",
@@ -1010,33 +996,12 @@ angular.module('bars.admin.food', [
         $scope.admin.active = 'suggested_item';
     }]
 )
-.controller('admin.ctrl.food.suggested_items_list.add',
-    ['$scope', 'api.models.suggested_items', 'api.models.user', 'user', '$state',
-    function($scope, SuggestedItem, User, user, $state) {
-        $scope.formType = 'add';
-        $scope.suggested_item = SuggestedItem.create();
-        $scope.saveSuggestedItem = function() {
-            $scope.suggested_item.name = $scope.suggested_item.name == '' ? 'Intitulé' : $scope.suggested_item.name;
-            $scope.suggested_item.already_added = false;
-            $scope.suggested_item.voters_list = new Array(user);
-            $scope.suggested_item.$save().then(function(newSuggestedItem) {
-                $state.go('bar.admin.food.suggested_items_list.list');
-            }, function(errors) {
-                // TODO: display form errors
-            });
-        };
-    }
-])
 .controller('admin.ctrl.food.suggested_items_list.list',
     ['$scope', 'api.models.suggested_items', 'api.models.user', 'suggested_items',
     function($scope, SuggestedItem, User, suggested_items) {
         $scope.admin.active = 'suggested_item';
         $scope.suggested_items = suggested_items;
-        for(var k=0;k<suggested_items.length;k++){
-            console.log(suggested_items[k].name+' : '+ (-suggested_items[k].voters_list.length+(suggested_items.length*suggested_items[k].already_added)));
-        };
         $scope.list_order = 'name';
-        $scope.reverse = false;
         $scope.trash = function(suggested_item) {
             suggested_item.already_added = true;
             suggested_item.$save();
@@ -1044,11 +1009,6 @@ angular.module('bars.admin.food', [
         $scope.untrash = function(suggested_item) {
             suggested_item.already_added = false;
             suggested_item.$save();
-        };
-        $scope.upSuggestedItem = function(suggested_item) {
-            suggested_item.$save().then(function() {
-                $scope.suggested_items = SuggestedItem.all();
-            });
         };
     }
 ])

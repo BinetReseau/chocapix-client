@@ -319,19 +319,29 @@ angular.module('bars.main', [
     'main.ctrl.suggestions',
     ['$scope', 'user', 'api.models.suggested_items', 'SuggestedItems', 
     function($scope, user, SuggestedItem, SuggestedItems) {
+        $scope.SuggestedItems = SuggestedItem.all();
         $scope.list_suggested_items = function () {
-            return _.sortBy(_.reject(SuggestedItems, 'already_added'), function(i){
+            return _.sortBy(_.reject($scope.SuggestedItems, 'already_added'), function(i){
                 return -i.voters_list.length;
                 });//return the list of suggested items, ordered by the voters' number
         };
-        $scope.SuggestedItems = SuggestedItems;
         $scope.suggested_item = SuggestedItem.create();
         $scope.suggested_item.already_added = false;
         $scope.suggested_item.voters_list = new Array(user);//add the current user to the voters' list
         $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
             item.name = item.name == '' ? 'Intitulé' : item.name;
+            //verify that the new suggestion doesn't already exist
+            for(var k in $scope.SuggestedItems) {
+                if($scope.SuggestedItems[k].name == item.name) {
+                    document.getElementById('nname').value="";
+                    document.getElementById('nname').parentNode.classList.add("has-error");
+                    setTimeout(function(){
+                        document.getElementById('nname').parentNode.classList.remove("has-error");
+                    },2500);
+                    return ;
+                }
+            };
             item.$save().then(function(sitem) {
-                $scope.SuggestedItems.push(sitem);//add a suggestion to the displayed list
                 document.getElementById('nname').value="";
             });
         };
