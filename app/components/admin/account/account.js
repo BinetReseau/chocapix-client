@@ -49,13 +49,6 @@ angular.module('bars.admin.account', [
     function($scope, Account, User, APIAction, $state, user_list) {
         $scope.admin.active = 'account';
         $scope.nuser = User.create();
-        // $scope.nuser.lastname = "";
-        // $scope.nuser.firstname = "";
-        // $scope.nuser.password = "";
-        // $scope.nuser.passwordBis = "";
-        // $scope.nuser.username = "";
-        // $scope.nuser.pseudo = "";
-        // $scope.nuser.email = "";
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
         function checkUsername(username) {
@@ -64,7 +57,8 @@ angular.module('bars.admin.account', [
             }).length == 0;
         }
         $scope.checkUsername = checkUsername;
-        $scope.isValidUser = function() {
+        // A modifier
+        $scope.isValidUser = function(usr,act) {
             var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
             var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
             var emailTest = $scope.nuser.email && $scope.nuser.email.length > 0;
@@ -72,6 +66,10 @@ angular.module('bars.admin.account', [
             var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
             var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
+        };
+        $scope.isValidEmail = function(email){
+            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return re.test(email);
         };
         // Import an user in the current bar
         // Retrieve the bars' users
@@ -99,7 +97,7 @@ angular.module('bars.admin.account', [
                     APIAction.deposit({account: a.id, amount: money}).then(function() {
                         $state.go('bar.account.details', {id: a.id});
                     }, function(errors) {
-                        console.log("Erreur dépôt chèque.")
+                       //Mettre une alerte ici console.log("Erreur dépôt chèque.")
                     });
                 }
             }, function(errors) {
@@ -114,7 +112,7 @@ angular.module('bars.admin.account', [
                 $scope.nuser.$save().then(function(u) {
                     $scope.createAccount(u,$scope.naccount.amoney);
                 }, function(errors) {
-                    console.log("Erreur création User.");
+                    // Mettre une alerte ici aussi console.log("Erreur création User.");
                 });
             } else {
                 $scope.password = '';
@@ -122,6 +120,7 @@ angular.module('bars.admin.account', [
                 console.log("Mots de passe différents");
             }
         };
+        
     }
 ])
 .controller('admin.ctrl.account.import',
