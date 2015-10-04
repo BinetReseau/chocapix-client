@@ -51,26 +51,28 @@ angular.module('bars.admin.account', [
         $scope.nuser = User.create();
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
-        function checkUsername(username) {
+        $scope.errorMessage = false;
+        function checkUsername(usr) {
             return _.filter(user_list, function (u) {
-                return u.username.toLocaleLowerCase() == username.toLocaleLowerCase();
+                return u.usr.toLocaleLowerCase() == usr.toLocaleLowerCase();
             }).length == 0;
         }
-        $scope.checkUsername = checkUsername;
-        // A modifier
-        $scope.isValidUser = function(usr,act) {
-            var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
-            var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
-            var emailTest = $scope.nuser.email && $scope.nuser.email.length > 0;
-            var usernameTest = $scope.nuser.username.length > 0 && checkUsername($scope.nuser.username);
-            var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
-            var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
-            return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
-        };
         $scope.isValidEmail = function(email){
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
         };
+        $scope.checkUsername = checkUsername;
+        // A modifier
+        $scope.isValidUser = function(usr,acnt) {
+            var lastnameTest = usr.lastname && usr.lastname.length > 0;
+            var firstnameTest = usr.firstname && usr.firstname.length > 0;
+            var emailTest = usr.email && usr.email.length > 0;
+            var usernameTest = usr.username.length > 0 && checkUsername(usr.username);
+            var pwdTest = usr.passwordBis && usr.password.length > 0 && usr.password == usr.passwordBis;
+            var moneyTest = acnt.amoney !== '' && acnt.amoney >= 0;
+            return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
+        };
+
         // Import an user in the current bar
         // Retrieve the bars' users
         var barUsers = {};
@@ -97,22 +99,22 @@ angular.module('bars.admin.account', [
                     APIAction.deposit({account: a.id, amount: money}).then(function() {
                         $state.go('bar.account.details', {id: a.id});
                     }, function(errors) {
-                       //Mettre une alerte ici console.log("Erreur dépôt chèque.")
+                       $scope.errorMessage = true;
                     });
                 }
             }, function(errors) {
-                console.log("Erreur création Account.");
+                $scope.errorMessage = true;
             });
         };
         $scope.createUser = function() {
             if ($scope.nuser.password == $scope.nuser.passwordBis) {
                 $scope.nuser.firstname = _.capitalize(_.trim($scope.nuser.firstname));
                 $scope.nuser.lastname = _.trim($scope.nuser.lastname);
-                delete $scope.nuser.passwordBis;
+                //delete $scope.nuser.passwordBis;
                 $scope.nuser.$save().then(function(u) {
                     $scope.createAccount(u,$scope.naccount.amoney);
                 }, function(errors) {
-                    // Mettre une alerte ici aussi console.log("Erreur création User.");
+                    $scope.errorMessage = true;
                 });
             } else {
                 $scope.password = '';
