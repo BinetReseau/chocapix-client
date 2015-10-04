@@ -65,6 +65,12 @@ angular.module('bars.api.account', [
                 'method': 'GET',
                 'params': params});
         };
+        model.coheze_ranking = function(params) {
+            return APIInterface.request({
+                'url': 'account/coheze_ranking',
+                'method': 'GET',
+                'params': params});
+        };
 
         return model;
     }])
