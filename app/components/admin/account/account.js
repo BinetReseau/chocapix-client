@@ -62,8 +62,7 @@ angular.module('bars.admin.account', [
             return re.test(email);
         };
         $scope.checkUsername = checkUsername;
-        // A modifier
-        $scope.isValidUser = function(usr,acnt) {
+        $scope.isValidUser = function(usr, acnt) {
             var lastnameTest = usr.lastname && usr.lastname.length > 0;
             var firstnameTest = usr.firstname && usr.firstname.length > 0;
             var emailTest = usr.email && usr.email.length > 0;
@@ -91,7 +90,7 @@ angular.module('bars.admin.account', [
         $scope.account = Account.create();
         $scope.money = 0;
 
-        $scope.createAccount = function(usr,money) {
+        $scope.createAccount = function(usr, money) {
             $scope.naccount.owner = usr.id;
             delete $scope.naccount.amoney;
             $scope.naccount.$save().then(function(a) {
@@ -106,12 +105,11 @@ angular.module('bars.admin.account', [
                 $scope.errorMessage = true;
             });
         };
-        $scope.createUser = function() {
-            if ($scope.nuser.password == $scope.nuser.passwordBis) {
-                $scope.nuser.firstname = _.capitalize(_.trim($scope.nuser.firstname));
-                $scope.nuser.lastname = _.trim($scope.nuser.lastname);
-                //delete $scope.nuser.passwordBis;
-                $scope.nuser.$save().then(function(u) {
+        $scope.createUser = function(usr) {
+            if (usr.password == usr.passwordBis) {
+                usr.firstname = _.capitalize(_.trim(usr.firstname));
+                usr.lastname = _.trim(usr.lastname);
+                usr.$save().then(function(u) {
                     $scope.createAccount(u,$scope.naccount.amoney);
                 }, function(errors) {
                     $scope.errorMessage = true;
