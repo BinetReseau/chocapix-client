@@ -52,9 +52,9 @@ angular.module('bars.admin.account', [
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
         $scope.errorMessage = false;
-        function checkUsername(usrname) {
+        function checkUsername(uname) {
             return _.filter(user_list, function (u) {
-                return u.username.toLocaleLowerCase() == usrname.toLocaleLowerCase();
+                return u.username.toLocaleLowerCase() == uname.toLocaleLowerCase();
             }).length == 0;
         }
         $scope.isValidEmail = function(email){
