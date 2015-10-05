@@ -105,12 +105,12 @@ angular.module('bars.admin.account', [
                 $scope.errorMessage = true;
             });
         };
-        $scope.createUser = function(usr) {
+        $scope.createUser = function(usr, money) {
             if (usr.password == usr.passwordBis) {
                 usr.firstname = _.capitalize(_.trim(usr.firstname));
                 usr.lastname = _.trim(usr.lastname);
                 usr.$save().then(function(u) {
-                    $scope.createAccount(u,$scope.naccount.amoney);
+                    $scope.createAccount(u, money);
                 }, function(errors) {
                     $scope.errorMessage = true;
                 });
