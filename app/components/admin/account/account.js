@@ -45,7 +45,7 @@ angular.module('bars.admin.account', [
     }
 ])
 .controller('admin.ctrl.account.add',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 'user_list', 
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 'user_list',
     function($scope, Account, User, APIAction, $state, user_list) {
         $scope.admin.active = 'account';
         $scope.nuser = User.create();
@@ -100,6 +100,8 @@ angular.module('bars.admin.account', [
                     }, function(errors) {
                        $scope.errorMessage = true;
                     });
+                } else {
+                    $state.go('bar.account.details', {id: a.id});
                 }
             }, function(errors) {
                 $scope.errorMessage = true;
@@ -120,7 +122,7 @@ angular.module('bars.admin.account', [
                 console.log("Mots de passe différents");
             }
         };
-        
+
     }
 ])
 .controller('admin.ctrl.account.import',
