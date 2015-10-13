@@ -128,6 +128,12 @@ angular.module('bars.api.food', [
                             'url': 'sellitem/' + this.id + '/ranking',
                             'method': 'GET',
                             'params': params});
+                    },
+                    'set_global_tax': function(params) {
+                        return APIInterface.request({
+                            'url': 'sellitem/set_global_tax',
+                            'method': 'PUT',
+                            'params': params});
                     }
                 }
             });
