@@ -60,7 +60,7 @@ angular.module('bars.magicbar', [
 		};
 
 		$scope.convertBarcode = function (e) {
-			if (e.which === 13) {
+			if ((e.which === 13) && ($scope.bar.search != '')) {
 				var barcode = $scope.bar.search;
 				if (barcode && !isNaN(barcode)) {
 					var buy_item = _.find(BuyItem.all(), function (bi) {
