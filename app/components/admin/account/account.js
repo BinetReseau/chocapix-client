@@ -25,16 +25,6 @@ angular.module('bars.admin.account', [
             templateUrl: "components/admin/account/import.html",
             controller: 'admin.ctrl.account.import'
         })
-        .state('bar.admin.account.link', {
-            url: '/link',
-            templateUrl: "components/admin/account/link.html",
-            controller: 'admin.ctrl.account.link',
-            resolve: {
-                user_list: ['api.models.user', function(User) {
-                    return User.all();
-                }]
-            }
-        })
         .state('bar.admin.account.collectivePayment', {
             url: '/fist',
             templateUrl: "components/admin/account/collectivePayment.html",
@@ -55,66 +45,84 @@ angular.module('bars.admin.account', [
     }
 ])
 .controller('admin.ctrl.account.add',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 'user_list', 
+    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', '$state', 'user_list',
     function($scope, Account, User, APIAction, $state, user_list) {
         $scope.admin.active = 'account';
         $scope.nuser = User.create();
-        $scope.nuser.lastname = "";
-        $scope.nuser.firstname = "";
-        $scope.nuser.password = "";
-        $scope.nuser.passwordBis = "";
-        $scope.nuser.username = "";
-        $scope.nuser.pseudo = "";
-        $scope.nuser.email = "";
         $scope.naccount = Account.create();
         $scope.naccount.amoney = 0;
-        function checkUsername(username) {
+        $scope.errorMessage = false;
+        function checkUsername(uname) {
             return _.filter(user_list, function (u) {
-                return u.username.toLocaleLowerCase() == username.toLocaleLowerCase();
+                return u.username.toLocaleLowerCase() == uname.toLocaleLowerCase();
             }).length == 0;
         }
+        $scope.isValidEmail = function(email){
+            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return re.test(email);
+        };
         $scope.checkUsername = checkUsername;
-        $scope.isValidUser = function() {
-            var lastnameTest = $scope.nuser.lastname && $scope.nuser.lastname.length > 0;
-            var firstnameTest = $scope.nuser.firstname && $scope.nuser.firstname.length > 0;
-            var emailTest = $scope.nuser.email && $scope.nuser.email.length > 0;
-            var usernameTest = $scope.nuser.username.length > 0 && checkUsername($scope.nuser.username);
-            var pwdTest = $scope.nuser.passwordBis && $scope.nuser.password.length > 0 && $scope.nuser.password == $scope.nuser.passwordBis;
-            var moneyTest = $scope.naccount.amoney !== '' && $scope.naccount.amoney >= 0;
+        $scope.isValidUser = function(usr, acnt) {
+            var lastnameTest = usr.lastname && usr.lastname.length > 0;
+            var firstnameTest = usr.firstname && usr.firstname.length > 0;
+            var emailTest = usr.email && usr.email.length > 0;
+            var usernameTest = usr.username.length > 0 && checkUsername(usr.username);
+            var pwdTest = usr.passwordBis && usr.password.length > 0 && usr.password == usr.passwordBis;
+            var moneyTest = acnt.amoney !== '' && acnt.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
         };
-        $scope.createAccount = function() {
-            if ($scope.nuser.password == $scope.nuser.passwordBis) {
-                $scope.nuser.firstname = _.capitalize(_.trim($scope.nuser.firstname));
-                $scope.nuser.lastname = _.trim($scope.nuser.lastname);
-                delete $scope.nuser.passwordBis;
-                $scope.nuser.$save().then(function(u) {
-                    $scope.naccount.owner = u.id;
-                    $scope.amoney = $scope.naccount.amoney;
-                    delete $scope.naccount.amoney;
-                    $scope.naccount.$save().then(function(a) {
-                        if ($scope.amoney > 0) {
-                            APIAction.deposit({account: a.id, amount: $scope.amoney}).then(function() {
-                                $state.go('bar.account.details', {id: a.id});
-                            }, function(errors) {
-                                console.log("Erreur dépôt chèque.")
-                            });
-                        } else {
-                            $state.go('bar.account.details', {id: a.id});
-                        }
+
+        // Import an user in the current bar
+        // Retrieve the bars' users
+        var barUsers = {};
+        _.forEach(Account.all(), function(a) {
+            barUsers[a.owner.id] = true;
+        });
+        // Remove users already having an account in the current bar
+        var users_list = _.filter(user_list, function(u) {
+            return u.username != 'bar' && !barUsers[u.id];
+        });
+        $scope.users_list = users_list;
+        $scope.user = null;
+        $scope.findUser = function(usr) {
+            $scope.user = usr;
+        }
+        $scope.account = Account.create();
+        $scope.money = 0;
+
+        $scope.createAccount = function(usr, money) {
+            $scope.naccount.owner = usr.id;
+            delete $scope.naccount.amoney;
+            $scope.naccount.$save().then(function(a) {
+                if (money > 0) {
+                    APIAction.deposit({account: a.id, amount: money}).then(function() {
+                        $state.go('bar.account.details', {id: a.id});
                     }, function(errors) {
-                        console.log("Erreur création Account.");
+                       $scope.errorMessage = true;
                     });
+                } else {
+                    $state.go('bar.account.details', {id: a.id});
+                }
+            }, function(errors) {
+                $scope.errorMessage = true;
+            });
+        };
+        $scope.createUser = function(usr, money) {
+            if (usr.password == usr.passwordBis) {
+                usr.firstname = _.capitalize(_.trim(usr.firstname));
+                usr.lastname = _.trim(usr.lastname);
+                usr.$save().then(function(u) {
+                    $scope.createAccount(u, money);
                 }, function(errors) {
-                    console.log("Erreur création User.");
+                    $scope.errorMessage = true;
                 });
             } else {
                 $scope.password = '';
                 $scope.passwordBis = '';
                 console.log("Mots de passe différents");
             }
+        };
 
-        }
     }
 ])
 .controller('admin.ctrl.account.import',
@@ -149,35 +157,6 @@ angular.module('bars.admin.account', [
                 });
             });
         };
-    }
-])
-.controller('admin.ctrl.account.link',
-    ['$scope', 'api.models.account', 'api.models.user', 'api.services.action', 'user_list', '$state',
-    function($scope, Account, User, APIAction, user_list, $state) {
-        $scope.admin.active = 'account';
-        var users_list = _.filter(user_list, function(n) {
-            return n.username != 'bar';
-        });
-        $scope.users_list = users_list;
-        $scope.user = null;
-        $scope.findUser = function(usr) {
-            $scope.user = usr;
-        }
-        $scope.account = Account.create();
-        $scope.money = 0;
-        $scope.createAccount = function(usr) {
-            $scope.account.owner = $scope.user.id;
-            $scope.account.$save().then(function(account) {
-                APIAction.deposit({account: account.id, amount: $scope.money}).then(function() {
-                    $state.go('bar.account.details', {id: account.id});
-                }, function(errors) {
-                    console.log('Erreur dépôt chèque.')
-                });
-            }, function(errors) {
-                console.log('Erreur création Account.');
-                // [TODO] Form error
-            });
-        }
     }
 ])
 .controller('admin.ctrl.account.collectivePayment',
