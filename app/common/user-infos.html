@@ -25,7 +25,7 @@
             Rang global :
         </span>
         <span ng-class="'label label-info'">
-            {{ user.account.ranking}}
+            {{ user.account.rank}}
         </span>
     </li> 
     <li class="navbar-brand" ng-if="user.hasAccount()">
@@ -33,7 +33,7 @@
             Total dépensé :
         </span>
         <span ng-class="'label label-info'">
-            {{ -user.account.total_spent | currency}}
+            {{ -user.account.spent | currency}}
         </span>
     </li> 
 

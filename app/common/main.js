@@ -285,13 +285,13 @@ angular.module('bars.main', [
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
             account.total_spent().then(function(data){
-            account.total_spent = data.total_spent;
+                account.spent = data.total_spent;
             });
             Account.ranking().then(function(data){
                 var rankings = data.sort(function(a, b) {if (a.val < b.val) {return -1;} else if (a.val > b.val) {return 1;} else {return 0;}});
                 for (var i = 0 ; i < rankings.length ;  i++) {
                     if (rankings[i].id == account.id){
-                        account.ranking = i + 1;
+                        account.rank = i + 1;
                     }
                 }
             });
