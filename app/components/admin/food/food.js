@@ -1010,6 +1010,9 @@ angular.module('bars.admin.food', [
             suggested_item.already_added = false;
             suggested_item.$save();
         };
+        $scope.suggesteditem_delete = function(suggested_item) {
+            suggested_item.$delete();
+        };
     }
 ])
 .controller('admin.ctrl.food.suggested_items_list.edit',
@@ -1074,13 +1077,19 @@ angular.module('bars.admin.food', [
                             var stockitem = _.find(StockItem.all(), {'details': details});
                             if (stockitem) {
                                 if (stockitem.sellitem) {
-                                    this.itemsList.push({
-                                        buyitemprice: buyitemprice,
-                                        qty: qty,
-                                        old_qty: qty,
-                                        price: buyitemprice.price * qty,
-                                        nb: nb++});
                                     ok = true;
+                                    if (!stockitem.sellitem.deleted) {//si l'aliment est caché, renvoyer un message spécifique et ne pas l'ajouter à l'appro
+                                    //à voir : proposer de le "décacher" ??
+                                        this.itemsList.push({
+                                            buyitemprice: buyitemprice,
+                                            qty: qty,
+                                            old_qty: qty,
+                                            price: buyitemprice.price * qty,
+                                            nb: nb++});
+                                    }
+                                    else {
+                                        this.errors.push("Cet aliment a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                    }
                                 }
                             }
                         }
