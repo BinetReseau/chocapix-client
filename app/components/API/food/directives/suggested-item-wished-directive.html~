@@ -1,0 +1,3 @@
+<a ui-sref="bar.admin.food.suggested_items_list.edit({id: f.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <a ng-if="!f.already_added" ng-click="trash(f)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                <a ng-if="f.already_added" ng-click="untrash(f)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a>

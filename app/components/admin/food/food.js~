@@ -1018,7 +1018,7 @@ angular.module('bars.admin.food', [
         $scope.saveSuggestedItem = function() {
             $scope.suggested_item.name = $scope.suggested_item.name == '' ? 'Intitulé' : $scope.suggested_item.name;
             $scope.suggested_item.already_added = false;
-            $scope.suggested_item.voters_list = new Array(user);
+            $scope.suggested_item.voters_list = Array(user);
             $scope.suggested_item.$save().then(function(newSuggestedItem) {
                 $state.go('bar.admin.food.suggested_items_list.list');
             }, function(errors) {

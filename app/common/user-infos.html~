@@ -1,0 +1,31 @@
+<ul class="nav navbar-nav navbar-right">
+    <li ng-show="user.can('add_mealtransaction')" class="hidden-xs meal">
+        <a href ng-class="meal.in() && 'in-meal'"
+        popover-template="'components/meal/panel.html'"
+        popover-placement="bottom"
+        popover-title="Bouffe{{ meal.customersList.length > 1 && ' à plusieurs' || ''}}"
+        popover-trigger="open"
+        popover-meal>
+            <span class="badge badge-info" ng-if="meal.in()">
+                {{ meal.totalPrice | currency }}
+            </span>
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+        </a>
+    </li>
+    <li class="hidden-xs">
+        <a ui-sref="bar.account.details({ bar: bar.id, id: user.account.id })" class="text-ellipsis Header__User">{{ user.user.firstname + ' ' + user.user.lastname }}</a>
+    </li>
+    <li class="navbar-brand" ng-if="user.hasAccount()" ng-class="user.account.money < 0 && 'animated wobble' || (user.account.money < bar.infos.money_warning_threshold && 'animated rubberBand' || '')">
+        <span ng-class="user.account.money < 0 && 'label label-danger' || (user.account.money < bar.infos.money_warning_threshold && 'label label-warning' || 'label label-info')">
+            {{ user.account.money | currency }}
+        </span>
+    </li>
+    <li class="navbar-brand" ng-if="!user.hasAccount()">
+        - €
+    </li>
+    <li>
+        <a title="Déconnexion" ui-sref="bar({ bar: bar.id })" ng-click="user.logout()">
+            <span class="glyphicon glyphicon-off"></span>
+        </a>
+    </li>
+</p>

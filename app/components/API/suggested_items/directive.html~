@@ -1,0 +1,6 @@
+<h5 class="list-group-item-heading" ng-if="suggesteditem!=null">
+    {{ suggesteditem.name }}
+    <span class="pull-right">{{ suggesteditem.voters_list.length }}
+    	<a ng-if="!suggesteditem.already_added" ng-click="more_wished(suggesteditem)" class="btn btn-success btn-xs"> +1</a>
+    </span>
+</h5>

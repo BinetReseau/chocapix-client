@@ -103,7 +103,7 @@ angular.module('barsApp', [
     ['$rootScope', '$scope', '$timeout',
     function ($rootScope, $scope, $timeout) {
         $scope.percent = 0;
-        var step = 100/9;
+        var step = 100/8;
         $rootScope.$watch('appLoaded', function () {
             if ($scope.appLoaded) {
                 $scope.percent = 100;

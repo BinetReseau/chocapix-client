@@ -1,0 +1,25 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <h3>
+        <div class="pull-right">
+            <a class="btn btn-success btn-sm" ui-sref="bar.admin.food.suggested_items.add">Ajouter</a>
+        </div>
+        Liste des aliments suggérés
+    </h3>
+
+    <div ng-repeat="suggested_item in suggested_item_list | orderBy:'wished'" class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+                <a ui-sref="bar.admin.suggested_item.edit({id: suggested_item.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <a ng-if="!suggested_item.already_added" ng-click="trash(suggested_item)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                <a ng-if="suggested_item.already_added" ng-click="untrash(suggested_item)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a>
+            </div>
+            <h3 class="panel-title">
+                {{ suggested_item.name }} <span ng-if="suggested_item.deleted"><small><em>(supprimée)</em></small></span>
+            </h3>
+        </div>
+        <div class="panel-body" ng-bind-html="suggested_item.text | nl2br"></div>
+        <div class="panel-footer">
+            {{ news.author.firstname + ' ' + news.author.lastname }} • {{ news.last_modified | date:'EEE dd MMM yyyy, HH:mm' }}
+        </div>
+    </div>
+</div>
