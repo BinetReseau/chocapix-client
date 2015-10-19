@@ -110,9 +110,9 @@ angular.module('bars.main', [
                         return o;
                     });
                 }],
-                suggested_items: ['api.models.suggested_items', '$rootScope', 'bar', function(suggested_items, $rootScope, bar) {
-                    suggested_items.clear();
-                    return suggested_items.request({bar: [bar.id]}).then(function (o) {
+                suggested_items: ['api.models.suggested_items', '$rootScope', 'bar', function(SuggestedItems, $rootScope, bar) {
+                    SuggestedItems.clear();
+                    return SuggestedItems.request({bar: [bar.id]}).then(function (o) {
                     	$rootScope.$broadcast('api.SuggestedItems.loaded');
                         return o;
                     });
