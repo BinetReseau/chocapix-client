@@ -18,8 +18,8 @@ angular.module('bars.admin.settings', [
 }])
 
 .controller('admin.ctrl.settings',
-    ['$scope', 'api.models.bar', 'barsettings',
-    function($scope, APIBar, barsettings) {
+    ['$scope', 'api.models.bar', 'barsettings', 'api.models.sellitem', 
+    function($scope, APIBar, barsettings, SellItem) {
         $scope.admin.active = 'settings';
         // Seuil d'alerte
         $scope.moneyLimit = barsettings.money_warning_threshold;
@@ -55,6 +55,12 @@ angular.module('bars.admin.settings', [
                 }, function(errors) {
                     console.log('Erreur transaction_cancel_threshold...');
                 });
+            }
+        };
+        // Taxe pour tous les aliments
+        $scope.saveTaxForAll = function() {
+            if (($scope.defaultTax >= 0) && (confirm("Etes-vous sûr(e) de vouloir changer les taxes sur tous les aliments ?"))) {
+                SellItem.set_global_tax(tax=$scope.defaultTax/100);
             }
         };
         // Agios

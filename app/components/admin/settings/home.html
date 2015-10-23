@@ -54,8 +54,8 @@
             <h4 class="panel-title">Taxe par défaut</h4>
         </div>
         <div class="panel-body">
-            <p>Taxe par défaut pour les nouveaux aliments. Cela permet de pré-remplir le champ <b>Taxe</b> lors de la création d'un aliment, mais ne modifiera pas les taxes actuelles.</p>
-            <form class="form-horizontal" ng-submit="saveDefaultTax()">
+            <p>Taxe pour les aliments. Cela permet de pré-remplir le champ <b>Taxe</b> lors de la création d'un aliment, ou de modifier les taxes actuelles.</p>
+            <form class="form-horizontal">
                 <div class="form-group">
                     <label for="defaultTax" class="control-label col-sm-3">Taxe</label>
                     <div class="col-sm-9">
@@ -66,8 +66,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <input type="submit" class="btn btn-success" value="Enregistrer" ng-class="defaultTax < 0 && 'disabled'" />
+                    <div class="col-sm-offset-3">
+                        <input type="submit" class="btn btn-success" value="Enregistrer la taxe par défaut" ng-click="saveDefaultTax(); this.parent('form').submit();" ng-class="defaultTax < 0 && 'disabled'" />
+                        <input type="submit" class="btn btn-success" value="Enregistrer la taxe pour tous les aliments" ng-click="saveTaxForAll(); this.parent('form').submit();" ng-class="defaultTax < 0 && 'disabled'" />
                     </div>
                 </div>
             </form>
