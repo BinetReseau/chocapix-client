@@ -50,6 +50,29 @@ angular.module('bars.admin.food', [
                 }]
             }
         })
+        .state('bar.admin.food.suggested_items_list', {
+        	abstract: true,
+        	url: "/suggested-item",
+        	controller: 'admin.ctrl.food.suggested_items_list',
+        	template: '<ui-view />'
+    	})
+        .state('bar.admin.food.suggested_items_list.list', {
+            url: "/list",
+            templateUrl: "components/admin/food/suggested-items-list.html",
+            controller: 'admin.ctrl.food.suggested_items_list.list',
+            resolve: {
+                suggested_items: ['api.models.suggested_items', function(suggested_items) {
+                    suggested_items.clear();
+                    suggested_items.reload();
+                    return suggested_items.all();
+                }]
+            }
+        })
+        .state('bar.admin.food.suggested_items_list.edit', {//allow administrator to edit suggestions
+            url: '/edit/:id',
+            templateUrl: "components/admin/food/suggested-item-form.html",
+            controller: 'admin.ctrl.food.suggested_items_list.edit'
+        })
         .state('bar.admin.food.graphs', {
             url: "/graphs",
             templateUrl: "components/admin/food/graphs.html",
@@ -968,7 +991,46 @@ angular.module('bars.admin.food', [
         };
     }
 ])
-
+.controller('admin.ctrl.food.suggested_items_list',
+    ['$scope', function ($scope) {
+        $scope.admin.active = 'suggested_item';
+    }]
+)
+.controller('admin.ctrl.food.suggested_items_list.list',
+    ['$scope', 'api.models.suggested_items', 'api.models.user', 'suggested_items',
+    function($scope, SuggestedItem, User, suggested_items) {
+        $scope.admin.active = 'suggested_item';
+        $scope.suggested_items = suggested_items;
+        $scope.list_order = 'name';
+        $scope.trash = function(suggested_item) {
+            suggested_item.already_added = true;
+            suggested_item.$save();
+        };
+        $scope.untrash = function(suggested_item) {
+            suggested_item.already_added = false;
+            suggested_item.$save();
+        };
+        $scope.suggesteditem_delete = function(suggested_item) {
+            suggested_item.$delete();
+        };
+    }
+])
+.controller('admin.ctrl.food.suggested_items_list.edit',
+    ['$scope', 'api.models.suggested_items', 'api.models.user', '$stateParams', '$state',
+    function($scope, SuggestedItem, User, $stateParams, $state) {
+        $scope.formType = 'edit';
+        $scope.admin.active = 'suggested_item';
+        $scope.suggested_item = SuggestedItem.get($stateParams.id);
+        $scope.saveSuggestedItem = function() {
+            $scope.suggested_item.name = $scope.suggested_item.name == '' ? 'Informations' : $scope.suggested_item.name;
+            $scope.suggested_item.$save().then(function(newSuggestedItem) {
+                $state.go('bar.admin.food.suggested_items_list.list');
+            }, function(errors) {
+                    // TODO: display form errors
+            });
+        };
+    }]
+)
 .factory('admin.appro',
     ['api.models.stockitem', 'api.services.action',
     function (StockItem, APIAction) {
@@ -1015,13 +1077,19 @@ angular.module('bars.admin.food', [
                             var stockitem = _.find(StockItem.all(), {'details': details});
                             if (stockitem) {
                                 if (stockitem.sellitem) {
-                                    this.itemsList.push({
-                                        buyitemprice: buyitemprice,
-                                        qty: qty,
-                                        old_qty: qty,
-                                        price: buyitemprice.price * qty,
-                                        nb: nb++});
                                     ok = true;
+                                    if (!stockitem.sellitem.deleted) {//si l'aliment est caché, renvoyer un message spécifique et ne pas l'ajouter à l'appro
+                                    //à voir : proposer de le "décacher" ??
+                                        this.itemsList.push({
+                                            buyitemprice: buyitemprice,
+                                            qty: qty,
+                                            old_qty: qty,
+                                            price: buyitemprice.price * qty,
+                                            nb: nb++});
+                                    }
+                                    else {
+                                        this.errors.push("Cet aliment a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                    }
                                 }
                             }
                         }
