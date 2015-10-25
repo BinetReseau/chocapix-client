@@ -19,23 +19,7 @@
         <span ng-class="user.account.money < 0 && 'label label-danger' || (user.account.money < bar.infos.money_warning_threshold && 'label label-warning' || 'label label-info')">
             {{ user.account.money | currency }}
         </span>
-    </li> 
-    <li class="navbar-brand" ng-if="user.hasAccount()">
-        <span class="text-ellipsis">
-            Rang global :
-        </span>
-        <span ng-class="'label label-info'">
-            {{ user.account.rank}}
-        </span>
-    </li> 
-    <li class="navbar-brand" ng-if="user.hasAccount()">
-        <span class="text-ellipsis">
-            Total dépensé :
-        </span>
-        <span ng-class="'label label-info'">
-            {{ -user.account.spent | currency}}
-        </span>
-    </li> 
+    </li>
 
     </li>
     <li class="navbar-brand" ng-if="!user.hasAccount()">
