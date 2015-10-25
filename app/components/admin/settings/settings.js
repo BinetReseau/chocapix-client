@@ -18,7 +18,7 @@ angular.module('bars.admin.settings', [
 }])
 
 .controller('admin.ctrl.settings',
-    ['$scope', 'api.models.bar', 'barsettings', 'api.models.sellitem', 
+    ['$scope', 'api.models.bar', 'barsettings', 'api.models.sellitem',
     function($scope, APIBar, barsettings, SellItem) {
         $scope.admin.active = 'settings';
         // Seuil d'alerte
@@ -59,8 +59,9 @@ angular.module('bars.admin.settings', [
         };
         // Taxe pour tous les aliments
         $scope.saveTaxForAll = function() {
-            if (($scope.defaultTax >= 0) && (confirm("Etes-vous sûr(e) de vouloir changer les taxes sur tous les aliments ?"))) {
-                SellItem.set_global_tax(tax=$scope.defaultTax/100);
+            if (($scope.defaultTax >= 0) && (confirm("Etes-vous sûr(e) de vouloir modifier la taxe de tous les aliments ? Cette action est irréversible"))) {
+                $scope.saveDefaultTax();
+                SellItem.set_global_tax($scope.defaultTax/100);
             }
         };
         // Agios
