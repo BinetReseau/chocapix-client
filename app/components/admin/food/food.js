@@ -968,7 +968,6 @@ angular.module('bars.admin.food', [
         };
     }
 ])
-
 .factory('admin.appro',
     ['api.models.stockitem', 'api.services.action',
     function (StockItem, APIAction) {
@@ -1015,13 +1014,19 @@ angular.module('bars.admin.food', [
                             var stockitem = _.find(StockItem.all(), {'details': details});
                             if (stockitem) {
                                 if (stockitem.sellitem) {
-                                    this.itemsList.push({
-                                        buyitemprice: buyitemprice,
-                                        qty: qty,
-                                        old_qty: qty,
-                                        price: buyitemprice.price * qty,
-                                        nb: nb++});
                                     ok = true;
+                                    if (!stockitem.sellitem.deleted) {//si l'aliment est caché, renvoyer un message spécifique et ne pas l'ajouter à l'appro
+                                    //à voir : proposer de le "décacher" ??
+                                        this.itemsList.push({
+                                            buyitemprice: buyitemprice,
+                                            qty: qty,
+                                            old_qty: qty,
+                                            price: buyitemprice.price * qty,
+                                            nb: nb++});
+                                    }
+                                    else {
+                                        this.errors.push("Cet aliment a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                    }
                                 }
                             }
                         }
