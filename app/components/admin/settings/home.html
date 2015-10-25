@@ -66,9 +66,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-3">
-                        <input type="submit" class="btn btn-success" value="Enregistrer la taxe par défaut" ng-click="saveDefaultTax(); this.parent('form').submit();" ng-class="defaultTax < 0 && 'disabled'" />
-                        <input type="submit" class="btn btn-success" value="Enregistrer la taxe pour tous les aliments" ng-click="saveTaxForAll(); this.parent('form').submit();" ng-class="defaultTax < 0 && 'disabled'" />
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-success" value="Modifier la taxe par défaut pour les futurs aliments" ng-click="saveDefaultTax()" ng-class="defaultTax < 0 && 'disabled'" />
+                        <input type="submit" class="btn btn-warning" value="Modifier la taxe pour les aliments futurs et existants" ng-click="saveTaxForAll()" ng-class="defaultTax < 0 && 'disabled'" />
                     </div>
                 </div>
             </form>
