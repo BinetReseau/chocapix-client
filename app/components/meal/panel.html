@@ -20,7 +20,7 @@
             <table class="table table-condensed no-border">
                 <tr ng-repeat="customer in meal.customersList" class="animated meal no-border">
                     <td class="vmiddle qty"><input type="number" min="0" id="ratioCustomer{{ $index }}Input" class="form-control input-sm pqty" placeholder="1" ng-model="customer.ratio" ng-change="meal.recomputeAmount()"></td>
-                    <td class="vmiddle"><span class="form-control-static"><bars:account account="customer.account"></bars:account></span></td>
+                    <td class="vmiddle"><span class="form-control-static"><bars:account:oneway account="customer.account"></bars:account:oneway></span></td>
                     <td class="text-right"><span class="label label-info vbottom">{{ customer.amount | currency }}</span></td>
                     <td class="vmiddle text-right remove">
                         <a class="text-muted" ng-click="meal.removeCustomer(customer)"><span class="glyphicon glyphicon-remove"></span></a>
