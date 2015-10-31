@@ -105,7 +105,7 @@
                     <th>Dernier inventaire</th>
                     <th> </th>
                 </tr>
-                <tr ng-repeat-start="f in food_list | filter:filteri | orderBy:'oldest_inventory' | limitTo:30 track by f.id" ng-show="(f.stockitems | filter:filters).length > 0">
+                <tr ng-repeat-start="f in food_list | filter:filteri | orderBy:'oldest_inventory' | limitTo:30 track by f.id">
                     <td>
                         <a ng-click="collapse = !collapse" tooltip="Voir la liste des aliments achetés" href>
                             <span class="glyphicon" ng-class="collapse && 'glyphicon-collapse-up' || 'glyphicon-collapse-down'"></span>

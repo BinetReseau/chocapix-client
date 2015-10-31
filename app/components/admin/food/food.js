@@ -901,7 +901,8 @@ angular.module('bars.admin.food', [
         $scope.filteri = function(o) {
             return !o.deleted
             && o.filter($scope.searchi, true)
-            && new Date(o.oldest_inventory) >= firstDate;
+            && new Date(o.oldest_inventory) >= firstDate
+            && !o.inventoryComplete;
         };
         // Filtre sur les StockItem
         $scope.filters = function (o) {
@@ -1081,7 +1082,9 @@ angular.module('bars.admin.food', [
                 var _this = this;
                 _.forEach(sellitem.stockitems, function(si) {
                     _this.addStockItem(si, qty);
+                    si.inventoryAdded = true;
                 });
+                sellitem.inventoryComplete = true;
             },
             addStockItem: function(stockitem, qty) {
                 var other = this.find(stockitem);
@@ -1093,6 +1096,12 @@ angular.module('bars.admin.food', [
                     // et surtout le stockitem existent bien
                     this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
                 }
+
+                // For list filtering
+                stockitem.inventoryAdded = true;
+                if (_.filter(stockitem.sellitem.stockitems, {inventoryAdded: true}).length == stockitem.sellitem.stockitems.length) {
+                    stockitem.sellitem.inventoryComplete = true;
+                }
                 this.recomputeAmount();
             },
             find: function(stockitem) {
@@ -1100,6 +1109,8 @@ angular.module('bars.admin.food', [
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
+                item.stockitem.inventoryAdded = false;
+                item.stockitem.sellitem.inventoryComplete = false;
             },
             recomputeAmount: function() {
                 var totalPrice = 0;
