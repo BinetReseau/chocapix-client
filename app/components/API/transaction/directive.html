@@ -158,7 +158,7 @@
                             </span>
                         </td>
                         <td class="buttons">
-                            <span ng-if=":: transaction.can_cancel">
+                            <span ng-if="transaction.can_cancel">
                                 <a title="Annuler cette transaction" ng-if="!transaction.canceled" ng-click="transaction.cancel()" class="label label-warning">Annuler</a>
                                 <a title="Rétablir cette transaction" ng-if="transaction.canceled" ng-click="transaction.restore()" class="label label-warning">Rétablir</a>
                             </span>
