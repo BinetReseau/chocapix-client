@@ -215,13 +215,13 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope', 'news', 'auth.user', '$timeout', 
+    ['$scope', 'news', 'auth.user', '$timeout',
     function($scope, news, AuthUser, $timeout) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
         };
-        
+
         function dateDiff(date1, date2){
             var diff = {}                           // Initialisation du retour
             var tmp = date2 - date1;
@@ -317,36 +317,54 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.suggestions',
-    ['$scope', 'user', 'api.models.suggested_items', 'SuggestedItems', 
-    function($scope, user, SuggestedItem, SuggestedItems) {
-        $scope.SuggestedItems = SuggestedItem.all();
-        $scope.list_suggested_items = function () {
-            return _.sortBy(_.reject($scope.SuggestedItems, 'already_added'), function(i){
-                return -i.voters_list.length;
-                });//return the list of suggested items, ordered by the voters' number
-        };
-        $scope.suggested_item = SuggestedItem.create();
-        $scope.suggested_item.already_added = false;
-        $scope.suggested_item.voters_list = new Array(user);//add the current user to the voters' list
-        $scope.saveSuggestedItem = function(item) {//add a suggestion to the list
-            item.name = item.name == '' ? 'Intitulé' : item.name;
+    ['$scope', '$timeout', 'auth.user', 'api.models.suggested_items', 'SuggestedItems',
+    function($scope, $timeout, AuthUser, SuggestedItem, SuggestedItems) {
+        $scope.suggestion = {name: "", alreadyAdded: false};
+        $scope.suggestedItems = SuggestedItem.all();
+
+        function createNewSuggestedItem() {
+            var suggested_item = SuggestedItem.create();
+            suggested_item.already_added = false;
+            suggested_item.voters_list = [];
+            return suggested_item;
+        }
+
+        var suggested_item = createNewSuggestedItem();
+
+        $scope.saveSuggestedItem = function(suggestion) { //add a suggestion to the list
+            if (!suggestion) {
+                return;
+            }
+            suggested_item.name = suggestion;
+            suggested_item.voters_list.push(AuthUser.user);
             //verify that the new suggestion doesn't already exist
-            for(var k in $scope.SuggestedItems) {
-                if($scope.SuggestedItems[k].name == item.name) {
-                    document.getElementById('nname').value="";
-                    document.getElementById('nname').parentNode.classList.add("has-error");
-                    setTimeout(function(){
-                        document.getElementById('nname').parentNode.classList.remove("has-error");
-                    },2500);
-                    return ;
-                }
-            };
-            item.$save().then(function(sitem) {
-                document.getElementById('nname').value="";
-            });
+            if (_.find($scope.suggestedItems, function (item) {
+                return _.deburr(item.name.toLocaleLowerCase()) === _.deburr(suggested_item.name.toLocaleLowerCase());
+            })) {
+                $scope.suggestion.alreadyAdded = true;
+                $timeout(function () {
+                    $scope.suggestion.alreadyAdded = false;
+                }, 2500);
+            } else {
+                suggested_item.$save();
+                suggested_item = createNewSuggestedItem();
+                $scope.suggestion.alreadyAdded = false;
+            }
+
+            $scope.suggestion.name = "";
         };
+
+        $timeout(function() {
+            var $div = $('#lsuggested');
+            $div.on('mousewheel DOMMouseScroll', function(e) {
+                var d = e.originalEvent.wheelDelta || -e.originalEvent.detail,
+                    dir = d > 0 ? 'up' : 'down',
+                    stop = (dir == 'up' && this.scrollTop == 0) || (dir == 'down' && this.scrollTop == this.scrollHeight-this.offsetHeight);
+                stop && e.preventDefault();
+            });
+        }, 500);
     }])
-    
+
 .directive(
     'selectOnClick',
     function () {

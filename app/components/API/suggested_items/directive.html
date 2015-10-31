@@ -1,6 +1,9 @@
 <h5 class="list-group-item-heading">
     {{ suggesteditem.name }}
-    <span class="pull-right">{{ suggesteditem.voters_list.length }}
-    	<a ng-if="!suggesteditem.already_added" ng-click="more_wished(suggesteditem)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-thumbs-up"> +1</span></a>
+    <span class="pull-right">
+        {{ suggesteditem.voters_list.length }}
+        <a ng-show="!suggesteditem.already_added" ng-click="suggesteditem.addVoteByCurrentUser()" class="btn btn-success btn-xs" ng-class="suggesteditem.votedByCurrentUser() && 'disabled' || ''">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+        </a>
     </span>
 </h5>

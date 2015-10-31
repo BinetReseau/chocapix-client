@@ -406,12 +406,3 @@ hr.derrierebtn {
     display: inline-block;
     width: 50%;
 }
-
-.already-suggested {
-    display: none;
-}
-
-.has-error > .already-suggested {
-    display: inline-block;
-    color: red;
-}
