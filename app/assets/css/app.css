@@ -292,6 +292,21 @@ hr.derrierebtn {
     font-size: 30px;
 }
 
+.Suggestion {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+}
+.Suggestion__Name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 1.49;
+}
+.Suggestion__Votes {
+    white-space: nowrap;
+}
+
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {
     color: rgb(51, 122, 183);
