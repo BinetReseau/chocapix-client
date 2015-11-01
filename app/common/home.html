@@ -65,22 +65,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-group-item" ng-if="false">
+                <div class="list-group-item" ng-if="user.account">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Total dépensé</span></div>
                         <div class="col-sm-5 text-right">
                             <span class="h4">
-                                <span class="label label-info">{{ 635.2765 | currency }}</span>
+                                <span class="label label-info">{{ -user.account.spent | currency }}</span>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class="list-group-item" ng-if="false">
+                <div class="list-group-item" ng-if="user.account">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Classement</span></div>
                         <div class="col-sm-5 text-right">
                             <span class="h4">
-                                <span class="badge">6</span>
+                                <span class="badge">{{ user.account.rank }}</span>
                             </span>
                         </div>
                     </div>
