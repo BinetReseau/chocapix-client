@@ -7,7 +7,9 @@
                 <th>Stock</th>
                 <th>Prix</th>
                 <th>
-                    <a class="btn btn-xs btn-success" ng-click="rattachInit()" ng-if="user.can('change_sellitem')">Ajouter un article</a>
+                    <div style="display: inline-block;" tooltip="La quantité restante de {{ food_item.name }} doit être positive pour pouvoir y rattacher des aliments. Faîtes d'abord un inventaire." tooltip-enable="food_item.fuzzy_qty < 0">
+                        <a class="btn btn-xs btn-success" ng-click="rattachInit()" ng-if="user.can('change_sellitem')" ng-class="food_item.fuzzy_qty < 0 && 'disabled' || ''">Ajouter un article</a>
+                    </div>
                 </th>
             </tr>
         </thead>
@@ -21,13 +23,15 @@
                 <td>{{ (moment(si.last_inventory).isAfter('2015-03-01')) && (si.last_inventory | date:"short") || 'jamais'}}</td>
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
-                <td ng-if="user.can('change_sellitem')">
+                <td ng-show="user.can('change_sellitem')">
                     <a title="Modifier cet aliment" ng-click="enterEdit(si)" class="btn btn-xs btn-warning link" >
                         <span class="glyphicon glyphicon-edit"></span> Modifier
                     </a>
-                    <a title="Retirer cet aliment du groupe" ng-click="removeStockItem(si)" class="btn btn-xs btn-danger link">
-                        <span class="glyphicon glyphicon-trash"></span> Retirer
-                    </a>
+                    <div style="display: inline-block;" tooltip="Tous les aliments doivent avoir une quantité restante positive avant de pouvoir en retirer un" tooltip-enable="!removingAuthorized" tooltip-placement="left">
+                        <a title="Retirer cet aliment du groupe" ng-click="removeStockItem(si)" class="btn btn-xs btn-danger link" ng-class="!removingAuthorized && 'disabled' || ''">
+                            <span class="glyphicon glyphicon-trash"></span> Retirer
+                        </a>
+                    </div>
                 </td>
             </tr>
             <tr ng-repeat-end ng-if="si.edit" class="vmiddle">
