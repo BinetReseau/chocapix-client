@@ -82,6 +82,11 @@ angular.module('bars.admin.food', [
         $scope.sellitems_grp = [];
         $scope.searchl = "";
         $scope.searchll = "";
+        $scope.errors = [];
+        $scope.closeAlert = function (i) {
+            $scope.errors.splice(i, 1);
+        };
+
         $scope.sellitem_listf = function (t) {
             return _.filter(sellitem_list, function (o) {
                 return o.filter(t) && _.find($scope.sellitems_grp, function (s) {
@@ -94,7 +99,11 @@ angular.module('bars.admin.food', [
             return o.item.filter($scope.searchll);
         };
         $scope.addItem = function(item) {
-            $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            if (item.fuzzy_qty < 0) {
+                $scope.errors.push("L'aliment " + item.name + " a un stock négatif, vous devez l'inventorier avant de pouvoir l'ajouter");
+            } else {
+                $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            }
             $scope.searchl = "";
         };
         $scope.removeItem = function(item) {
