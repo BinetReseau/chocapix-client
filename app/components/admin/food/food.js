@@ -166,7 +166,7 @@ angular.module('bars.admin.food', [
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
-                if (!isNaN(Appro.itemToAdd)) {
+                if (Appro.itemToAdd && !isNaN(Appro.itemToAdd)) {
                     var modalNewFood = $modal.open({
                         templateUrl: 'components/admin/food/modalAdd.html',
                         controller: 'admin.ctrl.food.addModal',
