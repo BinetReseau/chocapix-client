@@ -77,7 +77,7 @@ angular.module('bars.bars', [
 
         AuthUser.user = user;
         $scope.user = AuthUser;
-        $scope.accounts = accounts;
+        $scope.accounts = _.reject(accounts, 'deleted');
         $scope.totalMoney = _.reduce(accounts, function (sum, o) {
             return sum + o.money;
         }, 0);
