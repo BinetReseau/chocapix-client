@@ -1,6 +1,7 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
     <h3>Faire un inventaire</h3>
     <div>
+        <alert type="danger" ng-if="inventory.validationError">Impossible de sauvegarder l'inventaire. Peut-être êtes vous déconnecté du réseau ? Réessayez une fois connecté</alert>
         <form class="form-horizontal">
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addInventoryItemInput">Ajouter</label>
@@ -23,7 +24,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-2">
-                    <input type="button" class="btn btn-primary" ng-disabled="!inventory.in()" ng-click="inventory.validate()" value="Valider l'inventaire" />
+                    <input type="button" class="btn btn-primary" ng-disabled="!inventory.in() || inventory.inRequest" ng-click="inventory.validate()" value="Valider l'inventaire" />
                 </div>
             </div>
         </form>
