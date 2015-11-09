@@ -150,6 +150,11 @@ angular.module('bars.meal', [
             restore: function() {
                 var sinfos = storage.get('meal')[AuthUser.user.id];
                 if (sinfos) {
+                    // Si la sauvegarde date d'il y a plus de 12h, on supprime
+                    if (moment(sinfos.date).isBefore(moment().subtract(12, 'hours'))) {
+                        delete storage.get('meal')[AuthUser.user.id];
+                        return;
+                    }
                     this.name = sinfos.name;
                     _.forEach(sinfos.items, function (item) {
                         this.itemsList.push({ item: SellItem.get(item.id), buy_qty: item.buy_qty });
@@ -166,7 +171,8 @@ angular.module('bars.meal', [
                 var data = {
                     name: this.name,
                     items: [],
-                    customers: []
+                    customers: [],
+                    date: new Date()
                 };
 
                 _.forEach(this.itemsList, function (item) {
