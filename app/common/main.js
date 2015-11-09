@@ -10,8 +10,9 @@ angular.module('bars.main', [
         .state('bar', {
             url: "/{bar:(?!home)[^/]+}",
             resolve: {
-                api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
+                api: ['APIInterface', 'storage.bar', '$stateParams', function(APIInterface, storage, $stateParams) {
                     APIInterface.setBar($stateParams.bar);
+                    storage.setBar($stateParams.bar);
                 }],
                 bar: ['api.models.bar', 'api.models.barsettings', '$stateParams', function(Bar, BarSettings, $stateParams) { // BarSettings necessary to register the model in APIModel
                     return Bar.get($stateParams.bar);
@@ -295,11 +296,7 @@ angular.module('bars.main', [
                     }
                 }
             });
-        } else {
-            account = null;
-        }
 
-        if (user) {
             AuthUser.account = account;
             AuthUser.user = user;
             AuthUser.menus = menus;
@@ -309,6 +306,9 @@ angular.module('bars.main', [
             }
             Meal.account = AuthUser.account;
             Meal.init();
+            Meal.restore();
+        } else {
+            account = null;
         }
 
         $scope.meal = Meal;
