@@ -20,6 +20,9 @@ angular.module('bars.storage', [
                     $localStorage[this.bar][key] = {};
                 }
                 return $localStorage[this.bar][key];
+            },
+            delete: function (key) {
+                delete $localStorage[this.bar][key];
             }
         };
     }
