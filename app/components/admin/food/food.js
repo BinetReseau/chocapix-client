@@ -1078,10 +1078,16 @@ angular.module('bars.admin.food', [
             itemsList: [],
             inRequest: false,
             totalPrice: 0,
+            validationError: false,
             init: function() {
+                _.forEach(this.itemsList, function (item) {
+                    delete item.stockitem.inventoryAdded;
+                    delete item.stockitem.sellitem.inventoryComplete;
+                });
                 this.itemsList = [];
                 this.inRequest = false;
                 this.totalPrice = 0;
+                this.validationError = false;
             },
             addSellItem: function(sellitem, qty) {
                 if (!qty) {
@@ -1138,18 +1144,22 @@ angular.module('bars.admin.food', [
             },
             validate: function() {
                 this.inRequest = true;
+                this.validationError = false;
+                var itemsToSend = [];
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.qty / item.stockitem.sell_to_buy * item.sell_to_buy;
-                    delete item.sell_to_buy;
-                    delete item.nb;
+                    itemsToSend.push({qty: item.qty / item.stockitem.sell_to_buy * item.sell_to_buy, stockitem: item.stockitem});
                 });
                 var refThis = this;
                 APIAction.inventory({
-                    items: this.itemsList
+                    items: itemsToSend
                 })
                 .then(function() {
                     refThis.init();
                     storage.delete('inventory');
+                })
+                .catch(function() {
+                    refThis.inRequest = false;
+                    refThis.validationError = true;
                 });
             },
             in: function() {
