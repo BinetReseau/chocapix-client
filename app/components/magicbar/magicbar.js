@@ -64,7 +64,7 @@ angular.module('bars.magicbar', [
 				var barcode = $scope.bar.search;
 				if (barcode && !isNaN(barcode)) {
 					var buy_item = _.find(BuyItem.all(), function (bi) {
-						return bi.filter(barcode);
+						return barcode == bi.barcode;
 					});
 					if (buy_item) {
 						$scope.bar.search = buy_item.details.stockitem.sellitem.name;
