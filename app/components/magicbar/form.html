@@ -3,7 +3,7 @@
         placeholder="(acheter) 120g pates • ajouter (à la bouffe à plusieurs) 3 tomates • (donner) 6€ Thomas • acheter 20cl lait / acheter 0.2l lait"
         style="width: 100%;"
         ng-keypress="convertBarcode($event)"
-        typeahead="'' as el for el in query.suggest | orderBy:urank | limitTo:7"
-        typeahead-template-url="components/magicbar/typeahead.html" typeahead-wait-ms="30"
+        typeahead="'' as el for el in analyse($viewValue) | orderBy:urank | limitTo:7"
+        typeahead-template-url="components/magicbar/typeahead.html"
         typeahead-on-select="executeQuery($item, $model, $label)" />
 </form>
