@@ -82,8 +82,8 @@ angular.module('barsApp', [
 }])
 
 .controller('index.update',
-    ['$scope', '$http', '$timeout',
-    function ($scope, $http, $timeout) {
+    ['$scope', '$http', '$interval',
+    function ($scope, $http, $interval) {
         var version;
         $scope.need_update = false;
         function checkVersion() {
@@ -95,9 +95,8 @@ angular.module('barsApp', [
                     $scope.need_update = true;
                 }
             });
-            $timeout(checkVersion, 60000);
         }
-        checkVersion();
+        $interval(checkVersion, 60000);
     }])
 .controller('index.splash',
     ['$rootScope', '$scope', '$timeout',
