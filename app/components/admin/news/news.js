@@ -41,6 +41,11 @@ angular.module('bars.admin.news', [
             templateUrl: "components/admin/news/form.html",
             controller: 'admin.ctrl.news.edit'
         })
+        .state('bar.admin.news.mail', {
+            url: '/mail',
+            templateUrl: "components/admin/news/mail.html",
+            controller: 'admin.ctrl.news.mail'
+        })
     ;
 }])
 
@@ -129,4 +134,18 @@ angular.module('bars.admin.news', [
         };
     }]
 )
+.controller('admin.ctrl.news.mail',
+    ['$scope', 'api.models.account',
+    function($scope, Account) {
+        $scope.admin.active = 'news';
+        var emails_list = _.map(
+            _.filter(Account.all(), function(a) { return !a.deleted && a.owner.is_active && a.owner.email; }),
+            function (a) {
+                return a.owner.email;
+            }
+        );
+
+        $scope.emails = emails_list.join(', ');
+    }
+])
 ;

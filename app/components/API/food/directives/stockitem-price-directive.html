@@ -1,1 +1,3 @@
-{{ (qty === undefined && price || price * qty) | currency }} <span ng-if="qty === undefined && unit_name"> / {{ unit_name }}</span>
+<span ng-if="qty !== undefined || price >= 0.01">{{ (qty === undefined && price || price * qty) | currency }}</span>
+<span ng-if="qty === undefined && price < 0.01">{{ price | currency:'€': 4 }}</span>
+<span ng-if="qty === undefined && unit_name"> / {{ unit_name }}</span>

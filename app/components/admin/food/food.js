@@ -82,6 +82,11 @@ angular.module('bars.admin.food', [
         $scope.sellitems_grp = [];
         $scope.searchl = "";
         $scope.searchll = "";
+        $scope.errors = [];
+        $scope.closeAlert = function (i) {
+            $scope.errors.splice(i, 1);
+        };
+
         $scope.sellitem_listf = function (t) {
             return _.filter(sellitem_list, function (o) {
                 return o.filter(t) && _.find($scope.sellitems_grp, function (s) {
@@ -94,7 +99,11 @@ angular.module('bars.admin.food', [
             return o.item.filter($scope.searchll);
         };
         $scope.addItem = function(item) {
-            $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            if (item.fuzzy_qty < 0) {
+                $scope.errors.push("L'aliment " + item.name + " a un stock négatif, vous devez l'inventorier avant de pouvoir l'ajouter");
+            } else {
+                $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            }
             $scope.searchl = "";
         };
         $scope.removeItem = function(item) {
@@ -157,7 +166,7 @@ angular.module('bars.admin.food', [
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
-                if (!isNaN(Appro.itemToAdd)) {
+                if (Appro.itemToAdd && !isNaN(Appro.itemToAdd)) {
                     var modalNewFood = $modal.open({
                         templateUrl: 'components/admin/food/modalAdd.html',
                         controller: 'admin.ctrl.food.addModal',
@@ -901,7 +910,8 @@ angular.module('bars.admin.food', [
         $scope.filteri = function(o) {
             return !o.deleted
             && o.filter($scope.searchi, true)
-            && new Date(o.oldest_inventory) >= firstDate;
+            && new Date(o.oldest_inventory) >= firstDate
+            && !o.inventoryComplete;
         };
         // Filtre sur les StockItem
         $scope.filters = function (o) {
@@ -930,12 +940,6 @@ angular.module('bars.admin.food', [
         $timeout(function () {
             document.getElementById("addInventoryItemInput").focus();
         }, 300);
-
-        $(window).bind('beforeunload', function() {
-            if (Inventory.in()) {
-                return "Attention, vous allez perdre l'inventaire en cours !"
-            }
-        });
 
         $scope.inventory = Inventory;
     }
@@ -968,7 +972,6 @@ angular.module('bars.admin.food', [
         };
     }
 ])
-
 .factory('admin.appro',
     ['api.models.stockitem', 'api.services.action',
     function (StockItem, APIAction) {
@@ -1015,13 +1018,19 @@ angular.module('bars.admin.food', [
                             var stockitem = _.find(StockItem.all(), {'details': details});
                             if (stockitem) {
                                 if (stockitem.sellitem) {
-                                    this.itemsList.push({
-                                        buyitemprice: buyitemprice,
-                                        qty: qty,
-                                        old_qty: qty,
-                                        price: buyitemprice.price * qty,
-                                        nb: nb++});
                                     ok = true;
+                                    if (!stockitem.sellitem.deleted) {//si l'aliment est caché, renvoyer un message spécifique et ne pas l'ajouter à l'appro
+                                    //à voir : proposer de le "décacher" ??
+                                        this.itemsList.push({
+                                            buyitemprice: buyitemprice,
+                                            qty: qty,
+                                            old_qty: qty,
+                                            price: buyitemprice.price * qty,
+                                            nb: nb++});
+                                    }
+                                    else {
+                                        this.errors.push("Cet aliment a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                    }
                                 }
                             }
                         }
@@ -1062,17 +1071,23 @@ angular.module('bars.admin.food', [
     }]
 )
 .factory('admin.inventory',
-    ['api.models.stockitem', 'api.services.action',
-    function (StockItem, APIAction) {
+    ['storage.bar', 'api.models.stockitem', 'api.services.action',
+    function (storage, StockItem, APIAction) {
         var nb = 0;
-        return {
+        var inventory = {
             itemsList: [],
             inRequest: false,
             totalPrice: 0,
+            validationError: false,
             init: function() {
+                _.forEach(this.itemsList, function (item) {
+                    delete item.stockitem.inventoryAdded;
+                    delete item.stockitem.sellitem.inventoryComplete;
+                });
                 this.itemsList = [];
                 this.inRequest = false;
                 this.totalPrice = 0;
+                this.validationError = false;
             },
             addSellItem: function(sellitem, qty) {
                 if (!qty) {
@@ -1081,7 +1096,9 @@ angular.module('bars.admin.food', [
                 var _this = this;
                 _.forEach(sellitem.stockitems, function(si) {
                     _this.addStockItem(si, qty);
+                    si.inventoryAdded = true;
                 });
+                sellitem.inventoryComplete = true;
             },
             addStockItem: function(stockitem, qty) {
                 var other = this.find(stockitem);
@@ -1093,13 +1110,24 @@ angular.module('bars.admin.food', [
                     // et surtout le stockitem existent bien
                     this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
                 }
+
+                this.updateStockItemAfterAdding(stockitem);
                 this.recomputeAmount();
+            },
+            updateStockItemAfterAdding: function (stockitem) {
+                // For list filtering
+                stockitem.inventoryAdded = true;
+                if (_.filter(stockitem.sellitem.stockitems, {inventoryAdded: true}).length === stockitem.sellitem.stockitems.length) {
+                    stockitem.sellitem.inventoryComplete = true;
+                }
             },
             find: function(stockitem) {
                 return _.find(this.itemsList, {'stockitem': stockitem});
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
+                item.stockitem.inventoryAdded = false;
+                item.stockitem.sellitem.inventoryComplete = false;
             },
             recomputeAmount: function() {
                 var totalPrice = 0;
@@ -1111,26 +1139,63 @@ angular.module('bars.admin.food', [
                 });
 
                 this.totalPrice = totalPrice;
+
+                this.save();
             },
             validate: function() {
                 this.inRequest = true;
+                this.validationError = false;
+                var itemsToSend = [];
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.qty / item.stockitem.sell_to_buy * item.sell_to_buy;
-                    delete item.sell_to_buy;
-                    delete item.nb;
+                    itemsToSend.push({qty: item.qty / item.stockitem.sell_to_buy * item.sell_to_buy, stockitem: item.stockitem});
                 });
                 var refThis = this;
                 APIAction.inventory({
-                    items: this.itemsList
+                    items: itemsToSend
                 })
                 .then(function() {
                     refThis.init();
+                    storage.delete('inventory');
+                })
+                .catch(function() {
+                    refThis.inRequest = false;
+                    refThis.validationError = true;
                 });
             },
             in: function() {
                 return this.itemsList.length > 0;
+            },
+            restore: function() {
+                var sinfos = storage.get('inventory');
+                if (sinfos) {
+                    // Si la sauvegarde date d'il y a plus de 7 jours, on supprime
+                    if (moment(sinfos.date).isBefore(moment().subtract(1, 'weeks'))) {
+                        storage.delete('inventory');
+                        return;
+                    }
+
+                    _.forEach(sinfos.items, function (item) {
+                        var stockitem = StockItem.get(item.stockitem);
+                        this.itemsList.push({ stockitem: stockitem, qty: item.qty, sell_to_buy: item.sell_to_buy, nb: item.nb });
+                        this.updateStockItemAfterAdding(stockitem);
+                    }, this);
+
+                    this.recomputeAmount();
+                }
+            },
+            save: function() {
+                storage.get('inventory').items = [];
+                storage.get('inventory').date = new Date();
+
+                _.forEach(this.itemsList, function (item) {
+                    storage.get('inventory').items.push({stockitem: item.stockitem.id, qty: item.qty, sell_to_buy: item.sell_to_buy, nb: item.nb});
+                });
             }
         };
+
+        inventory.restore();
+
+        return inventory;
     }]
 )
 ;
