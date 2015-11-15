@@ -104,7 +104,8 @@ angular.module('barsApp', [
         $scope.percent = 0;
         var step = 100/8;
         $rootScope.$watch('appLoaded', function () {
-            if ($scope.appLoaded) {
+            if ($rootScope.appLoaded) {
+                $scope.appLoaded = true;
                 $scope.percent = 100;
             }
         });
@@ -143,6 +144,10 @@ angular.module('barsApp', [
         $rootScope.$on('api.News.loaded', function () {
             $scope.percent += step;
             $scope.mleft = "News";
+        });
+        $rootScope.$on('api.News.error', function () {
+            $scope.percent += step;
+            $scope.mleft = "News : erreur";
         });
     }])
 ;

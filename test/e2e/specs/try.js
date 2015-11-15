@@ -1,12 +1,20 @@
 describe('angularjs homepage todo list', function() {
   it('should add a todo', function() {
-    browser.get('http://localhost:9000');
+    browser.manage().logs().get('browser').then(function(browserLog) {
+      console.log('log: ' + require('util').inspect(browserLog));
+    });
+    browser.get('http://localhost:9000/#/avironjone');
 
-    element(by.model('login.username')).sendKeys('ntag');
-    element(by.model('login.password')).sendKeys('ntag');
+    // browser.manage().logs().get('browser').then(function(browserLog) {
+    //   console.log('log: ' + require('util').inspect(browserLog));
+    // });
+
+    element(by.model('login.username')).sendKeys('admin');
+    element(by.model('login.password')).sendKeys('admin');
     element(by.buttonText('Connexion')).click();
 
-    var barsOfUser = element.all(by.repeater('account in accounts'));
-    expect(barsOfUser.count()).toEqual(2);
+    expect(element(by.buttonText('Connexion')).isDisplayed()).toBe(false);
+
+
   });
 });
