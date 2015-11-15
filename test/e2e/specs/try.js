@@ -9,24 +9,26 @@ describe('angularjs homepage todo list', function() {
     //   console.log('log: ' + require('util').inspect(browserLog));
     // });
 
+    // Connexion
     element(by.model('login.username')).sendKeys('admin');
     element(by.model('login.password')).sendKeys('admin');
     element(by.buttonText('Connexion')).click();
 
     expect(element(by.buttonText('Connexion')).isDisplayed()).toBe(false);
 
+    // Création d'un aliment
     element(by.partialLinkText('Administration')).click();
     element(by.id('admin-food')).click();
     element(by.linkText('Ajouter un aliment')).click();
 
     element(by.model('data.barcode')).sendKeys('123');
     element(by.model('data.id_name')).sendKeys('Coca-Cola');
-    element(by.model('data.id_container')).sendKeys('canette');
+    element(by.model('data.id_container')).sendKeys('Canette');
     element(by.model('data.id_container_plural')).sendKeys('s');
     element(by.model('data.id_unit')).sendKeys('cl');
     element(by.model('data.id_container_qty')).sendKeys('33');
 
-    expect(element(by.id('admin-food-id-preview')).getText()).toEqual("Appro de 4 canettes de 33 cl de Coca-Cola");
+    expect(element(by.id('admin-food-id-preview')).getText()).toEqual("Appro de 4 Canettes de 33 cl de Coca-Cola");
 
     element(by.model('data.sei_name')).sendKeys('Coca-Cola');
     element(by.model('data.sei_unit_name')).sendKeys('canette');
@@ -45,6 +47,17 @@ describe('angularjs homepage todo list', function() {
 
     expect(element(by.repeater('alert in alerts').row(0)).getText()).toMatch(/L'aliment a été correctement créé\./);
 
+    // Inventaire de l'aliment créé
+    element(by.id('admin-food')).click();
+    element(by.linkText('Faire un inventaire')).click();
+
+    element(by.linkText('Coca-Cola')).click();
+    element(by.linkText('Canette de 33 cl de Coca-Cola')).click();
+    expect(element(by.binding("inventory.totalPrice | currency")).getText()).toEqual("0,50 €");
+    element(by.buttonText("Valider l'inventaire")).click();
+    expect(element(by.binding("inventory.totalPrice | currency")).getText()).toEqual("0,00 €");
+
+    // Appro de l'aliment
     element(by.id('admin-food')).click();
     element(by.linkText('Faire une appro')).click();
 
@@ -52,11 +65,14 @@ describe('angularjs homepage todo list', function() {
 
     element(by.model('appro.itemToAdd')).sendKeys('123').sendKeys(protractor.Key.TAB);
 
-    expect(element(by.repeater("(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl").row(0)).getText()).toMatch(/1 canette de 33 cl de Coca-Cola/);
+    expect(element(by.repeater("(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl").row(0)).getText()).toMatch(/1 Canette de 33 cl de Coca-Cola/);
     expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,50 €");
 
     element(by.buttonText("Valider l'appro")).click();
 
     expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,00 €");
+
+    // element(by.model('bar.search')).sendKeys('2 coc').sendKeys(protractor.Key.ENTER);
+
   });
 });
