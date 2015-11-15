@@ -44,5 +44,19 @@ describe('angularjs homepage todo list', function() {
     element(by.buttonText('Ajouter')).click();
 
     expect(element(by.repeater('alert in alerts').row(0)).getText()).toMatch(/L'aliment a été correctement créé\./);
+
+    element(by.id('admin-food')).click();
+    element(by.linkText('Faire une appro')).click();
+
+    expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,00 €");
+
+    element(by.model('appro.itemToAdd')).sendKeys('123').sendKeys(protractor.Key.TAB);
+
+    expect(element(by.repeater("(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl").row(0)).getText()).toMatch(/1 canette de 33 cl de Coca-Cola/);
+    expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,50 €");
+
+    element(by.buttonText("Valider l'appro")).click();
+
+    expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,00 €");
   });
 });
