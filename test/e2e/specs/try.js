@@ -72,7 +72,12 @@ describe('angularjs homepage todo list', function() {
 
     expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,00 €");
 
-    // element(by.model('bar.search')).sendKeys('2 coc').sendKeys(protractor.Key.ENTER);
+    // Vérification de l'aliment créé
+    element(by.partialLinkText('Aliments')).click();
+    expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/Coca-Cola/);
+    expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/2 canettes/);
+    expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/0,60 € \/ canette/);
+    expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/1,20 €/);
 
   });
 });
