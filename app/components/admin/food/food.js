@@ -740,6 +740,7 @@ angular.module('bars.admin.food', [
                     if (stock_item.id > 0) {
                         promises.push(stock_item.$reload());
                         promises.push(item_details.$reload());
+                        promises.push(sell_item.$reload());
                     }
 
                     $q.all(promises).then(function() {
