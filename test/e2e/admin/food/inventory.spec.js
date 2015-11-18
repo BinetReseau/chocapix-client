@@ -3,7 +3,7 @@ var BarsAdminFoodInventoryPage = require('./inventory.po.js');
 describe('Inventory', function() {
     var barsAdminFoodInventoryPage = new BarsAdminFoodInventoryPage();
 
-    it('should add a stockitem via the list', function() {
+    it('should add stockitems via the list and validate', function() {
         barsAdminFoodInventoryPage.go();
 
         element(by.linkText('Coca-Cola')).click();
@@ -19,6 +19,15 @@ describe('Inventory', function() {
         barsAdminFoodInventoryPage.changeLastItemQty("5");
         expect(barsAdminFoodInventoryPage.getPrice()).toEqual("14,00 €");
 
+        barsAdminFoodInventoryPage.clickValidate();
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
+    });
+
+    it('should add a sellitem out of stock', function() {
+        barsAdminFoodInventoryPage.clickFirstItemOutOfStock();
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("-14,00 €");
+        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
+        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
         barsAdminFoodInventoryPage.clickValidate();
         expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
     });

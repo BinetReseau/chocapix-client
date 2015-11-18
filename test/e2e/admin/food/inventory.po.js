@@ -13,6 +13,21 @@ var BarsAdminFoodInventoryPage = function() {
 			return elements[0].sendKeys(qty);
 		});
 	};
+	this.countItemsInInventory = function(qty) {
+		return element.all(by.model('item.qty')).then(function (elements) {
+			return elements.length;
+		});
+	};
+	this.clickFirstItemOutOfStock = function() {
+		return element.all(by.linkText('Épuisé')).then(function (elements) {
+			return elements[elements.length-1].click();
+		});
+	};
+	this.countItemsNotInInventory = function() {
+		return element.all(by.linkText('Épuisé')).then(function (elements) {
+			return elements.length;
+		});
+	};
 	this.getPrice = function() {
 		return ePrice.getText();
 	};
