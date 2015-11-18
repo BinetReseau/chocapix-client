@@ -1,6 +1,7 @@
 var BarsAdminFoodInventoryPage = function() {
 	var ePrice = element(by.binding("inventory.totalPrice | currency"));
 	var bValidate = element(by.buttonText("Valider l'inventaire"));
+	var eBarcode = element(by.model('barcodei'));
 
 	this.go = function() {
 		element(by.partialLinkText('Administration')).click();
@@ -8,6 +9,9 @@ var BarsAdminFoodInventoryPage = function() {
         element(by.linkText('Faire un inventaire')).click();
 	};
 
+	this.enterBarcode = function(barcode) {
+		return eBarcode.sendKeys(barcode).sendKeys(protractor.Key.ENTER);
+	};
 	this.changeLastItemQty = function(qty) {
 		return element.all(by.model('item.qty')).then(function (elements) {
 			return elements[0].sendKeys(qty);

@@ -32,6 +32,25 @@ describe('Inventory', function() {
         expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
     });
 
+    it('should add a stockitem by barcode', function() {
+        barsAdminFoodInventoryPage.enterBarcode('123');
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,50 €");
+        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(3);
+        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(1);
+        barsAdminFoodInventoryPage.enterBarcode('123456');
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("1,10 €");
+        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
+        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
+        barsAdminFoodInventoryPage.enterBarcode('123456');
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("1,70 €");
+        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
+        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
+        barsAdminFoodInventoryPage.enterBarcode('123456789');
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("7,70 €");
+        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
+        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
+    });
+
     it('should verify the updated stock', function() {
         // element(by.partialLinkText('Aliments')).click();
         // expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/Coca-Cola/);
