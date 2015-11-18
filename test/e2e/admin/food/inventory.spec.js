@@ -4,14 +4,23 @@ describe('Inventory', function() {
     var barsAdminFoodInventoryPage = new BarsAdminFoodInventoryPage();
 
     it('should add a stockitem via the list', function() {
-        // element(by.id('admin-food')).click();
-        // element(by.linkText('Faire un inventaire')).click();
-        //
-        // element(by.linkText('Coca-Cola')).click();
-        // element(by.linkText('Canette de 33 cl de Coca-Cola')).click();
-        // expect(element(by.binding("inventory.totalPrice | currency")).getText()).toEqual("0,50 €");
-        // element(by.buttonText("Valider l'inventaire")).click();
-        // expect(element(by.binding("inventory.totalPrice | currency")).getText()).toEqual("0,00 €");
+        barsAdminFoodInventoryPage.go();
+
+        element(by.linkText('Coca-Cola')).click();
+        element(by.linkText('Canette de 33 cl de Coca-Cola')).click();
+
+
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,50 €");
+        barsAdminFoodInventoryPage.changeLastItemQty("0");
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("5,00 €");
+        // browser.pause();
+        element(by.linkText('Canette de 33 cl de Coca-Cola Light')).click();
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("5,60 €");
+        barsAdminFoodInventoryPage.changeLastItemQty("5");
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("14,00 €");
+
+        barsAdminFoodInventoryPage.clickValidate();
+        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
     });
 
     it('should verify the updated stock', function() {
