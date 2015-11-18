@@ -29,6 +29,31 @@ describe('Food creation', function() {
         expect(barsAdminFoodCreationPage.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
     });
 
+    it('should create a new item rattached to an existed SellItem', function() {
+        barsAdminFoodCreationPage.setBarcode('123456');
+        barsAdminFoodCreationPage.setItemDetailsName('Coca-Cola Light');
+        barsAdminFoodCreationPage.setItemDetailsContainer('Canette');
+        barsAdminFoodCreationPage.setItemDetailsContainerPlural('s');
+        barsAdminFoodCreationPage.setItemDetailsUnit('cl');
+        barsAdminFoodCreationPage.setItemDetailsContainerQty('33');
+
+        expect(barsAdminFoodCreationPage.getItemDetailsPreview()).toEqual('Appro de 4 Canettes de 33 cl de Coca-Cola Light');
+
+        barsAdminFoodCreationPage.clickAlreadySell();
+
+        barsAdminFoodCreationPage.setOldSellItem('Coc');
+        expect(barsAdminFoodCreationPage.getOldSellItem()).toEqual('Coca-Cola');
+
+        barsAdminFoodCreationPage.setStockItemSellToBuy('1');
+        barsAdminFoodCreationPage.setPrice('0.6');
+
+        expect(barsAdminFoodCreationPage.getSellItemPreview()).toEqual('Achat de 53 canettes de Coca-Cola pour 38,16 €');
+
+        barsAdminFoodCreationPage.clickValidate();
+
+        expect(barsAdminFoodCreationPage.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+    });
+
     // it('Should inventory the item', function() {
     //     // Inventaire de l'aliment créé
     //     element(by.id('admin-food')).click();
