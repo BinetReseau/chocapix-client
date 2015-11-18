@@ -11,6 +11,8 @@ var BarsAdminFoodCreationPage = function() {
     var eStockItemSellToBuy = element(by.model('data.sti_sell_to_buy'));
     var eBuyItemPricePrices = element.all(by.model('data.bip_price'));
     var eOldSellItem = element(by.model('oldSellItem'));
+    var eItemInPack = element(by.model('itemInPack'));
+    var eBuyItemQty = element.all(by.model('data.bi_itemqty'));
 
     var eItemDetailsPreview = element(by.id('admin-food-id-preview'));
     var eSellItemPreview = element(by.id('admin-food-sei-preview'));
@@ -29,6 +31,9 @@ var BarsAdminFoodCreationPage = function() {
         element(by.id('admin-food')).click();
         element(by.linkText('Ajouter un aliment')).click();
     };
+    this.clickPack = function() {
+        element(by.linkText("Il s'agit d'un pack")).click();
+    };
     this.clickAlreadySell = function() {
         element(by.linkText('Rattacher à un aliment déjà vendu')).click();
     };
@@ -43,6 +48,12 @@ var BarsAdminFoodCreationPage = function() {
         return eSellItemPreview.getText();
     };
 
+    this.setItemInPack = function(text) {
+        return eItemInPack.sendKeys(text).sendKeys(protractor.Key.ENTER);
+    };
+    this.getItemInPack = function() {
+        return eItemInPack.getAttribute('value');
+    };
     this.setOldSellItem = function(text) {
         return eOldSellItem.sendKeys(text).sendKeys(protractor.Key.ENTER);
     };
@@ -54,6 +65,15 @@ var BarsAdminFoodCreationPage = function() {
     };
     this.getLastAlert = function() {
         return fLastAlert().getText();
+    };
+    this.closeLastAlert = function() {
+        return element(by.partialButtonText('Close')).click();
+    };
+    this.getBuyItemQty = function() {
+        return eBuyItemQty.getAttribute('value');
+    };
+    this.setBuyItemQty = function(text) {
+        return eBuyItemQty.sendKeys(text);
     };
     this.getBarcode = function() {
         return eBarcode.getAttribute('value');

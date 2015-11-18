@@ -27,9 +27,10 @@ describe('Food creation', function() {
         barsAdminFoodCreationPage.clickValidate();
 
         expect(barsAdminFoodCreationPage.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        barsAdminFoodCreationPage.closeLastAlert();
     });
 
-    it('should create a new item rattached to an existed SellItem', function() {
+    it('should create a new item rattached to an existing SellItem', function() {
         barsAdminFoodCreationPage.setBarcode('123456');
         barsAdminFoodCreationPage.setItemDetailsName('Coca-Cola Light');
         barsAdminFoodCreationPage.setItemDetailsContainer('Canette');
@@ -52,6 +53,24 @@ describe('Food creation', function() {
         barsAdminFoodCreationPage.clickValidate();
 
         expect(barsAdminFoodCreationPage.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        barsAdminFoodCreationPage.closeLastAlert();
+    });
+
+    it('should create a pack for an existing item', function() {
+        barsAdminFoodCreationPage.setBarcode('123456789');
+
+        barsAdminFoodCreationPage.clickPack();
+
+        barsAdminFoodCreationPage.setBuyItemQty('10');
+        barsAdminFoodCreationPage.setItemInPack('Coc lig');
+        expect(barsAdminFoodCreationPage.getItemInPack()).toEqual('Coca-Cola Light');
+
+        barsAdminFoodCreationPage.setPrice('5');
+
+        barsAdminFoodCreationPage.clickValidate();
+
+        expect(barsAdminFoodCreationPage.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        barsAdminFoodCreationPage.closeLastAlert();
     });
 
     // it('Should inventory the item', function() {
