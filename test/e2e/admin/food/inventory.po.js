@@ -17,6 +17,11 @@ var BarsAdminFoodInventoryPage = function() {
 			return elements[0].sendKeys(qty);
 		});
 	};
+    this.removeLastItem = function(qty) {
+		return element.all(by.css('a[title="Supprimer de l\'appro cet aliment"]')).then(function (elements) {
+			return elements[0].click();
+		});
+	};
 	this.countItemsInInventory = function(qty) {
 		return element.all(by.model('item.qty')).then(function (elements) {
 			return elements.length;
