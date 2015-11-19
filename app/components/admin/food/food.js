@@ -1129,6 +1129,8 @@ angular.module('bars.admin.food', [
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
                 item.stockitem.inventoryAdded = false;
                 item.stockitem.sellitem.inventoryComplete = false;
+
+                this.recomputeAmount();
             },
             recomputeAmount: function() {
                 var totalPrice = 0;
