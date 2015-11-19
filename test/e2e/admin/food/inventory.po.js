@@ -1,4 +1,4 @@
-var BarsAdminFoodInventoryPage = function() {
+var AdminFoodInventory = function() {
 	var ePrice = element(by.binding("inventory.totalPrice | currency"));
 	var bValidate = element(by.buttonText("Valider l'inventaire"));
 	var eBarcode = element(by.model('barcodei'));
@@ -44,4 +44,4 @@ var BarsAdminFoodInventoryPage = function() {
 		return bValidate.click();
 	};
 };
-module.exports = BarsAdminFoodInventoryPage;
+module.exports = AdminFoodInventory;

@@ -1,72 +1,76 @@
-var BarsAdminFoodInventoryPage = require('./inventory.po.js');
+var AdminFoodInventory = require('./inventory.po.js');
+var FoodList = require('../../food/list.food.po.js');
 
 describe('Inventory', function() {
-    var barsAdminFoodInventoryPage = new BarsAdminFoodInventoryPage();
+    var adminFoodInventory = new AdminFoodInventory();
+    var foodList = new FoodList();
 
     it('should add stockitems via the list and validate', function() {
-        barsAdminFoodInventoryPage.go();
+        adminFoodInventory.go();
 
         element(by.linkText('Coca-Cola')).click();
         element(by.linkText('Canette de 33 cl de Coca-Cola')).click();
 
+        expect(adminFoodInventory.getPrice()).toEqual("0,50 €");
+        adminFoodInventory.changeLastItemQty("0"); // Comme de base il y a 1 dans le champ, là on rajoute simplement un 0 ce qui fait donc 10
+        expect(adminFoodInventory.getPrice()).toEqual("5,00 €");
 
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,50 €");
-        barsAdminFoodInventoryPage.changeLastItemQty("0");
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("5,00 €");
-        // browser.pause();
         element(by.linkText('Canette de 33 cl de Coca-Cola Light')).click();
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("5,60 €");
-        barsAdminFoodInventoryPage.changeLastItemQty("5");
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("14,00 €");
+        expect(adminFoodInventory.getPrice()).toEqual("5,60 €");
+        adminFoodInventory.changeLastItemQty("5"); // Là la quantité passe à 15
+        expect(adminFoodInventory.getPrice()).toEqual("14,00 €");
 
-        barsAdminFoodInventoryPage.clickValidate();
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
-    });
-
-    it('should add a sellitem out of stock', function() {
-        barsAdminFoodInventoryPage.clickFirstItemOutOfStock();
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("-14,00 €");
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
-        barsAdminFoodInventoryPage.clickValidate();
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
-    });
-
-    it('should add a stockitem by barcode', function() {
-        barsAdminFoodInventoryPage.enterBarcode('123');
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,50 €");
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(3);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(1);
-        barsAdminFoodInventoryPage.enterBarcode('123456');
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("1,10 €");
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
-        barsAdminFoodInventoryPage.enterBarcode('123456');
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("1,70 €");
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
-        barsAdminFoodInventoryPage.enterBarcode('123456789');
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("7,70 €");
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(2);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(2);
-    });
-
-    it('should remove a stockitem from the inventory', function() {
-        barsAdminFoodInventoryPage.removeLastItem();
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(3);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(1);
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,50 €");
-        barsAdminFoodInventoryPage.removeLastItem();
-        expect(barsAdminFoodInventoryPage.countItemsNotInInventory()).toBe(3);
-        expect(barsAdminFoodInventoryPage.countItemsInInventory()).toBe(0);
-        expect(barsAdminFoodInventoryPage.getPrice()).toEqual("0,00 €");
+        adminFoodInventory.clickValidate();
+        expect(adminFoodInventory.getPrice()).toEqual("0,00 €");
     });
 
     it('should verify the updated stock', function() {
-        // element(by.partialLinkText('Aliments')).click();
-        // expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/Coca-Cola/);
-        // expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/2 canettes/);
-        // expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/0,60 € \/ canette/);
-        // expect(element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(1)).getText()).toMatch(/1,20 €/);
+
+        foodList.go();
+        expect(foodList.getRowText(1)).toMatch(/Coca-Cola/);
+        expect(foodList.getRowText(1)).toMatch(/25 canettes/);
+        expect(foodList.getRowText(1)).toMatch(/0,67 € \/ canette/);
+        expect(foodList.getRowText(1)).toMatch(/16,80 €/);
+    });
+
+    it('should add a sellitem out of stock', function() {
+        adminFoodInventory.go();
+
+        adminFoodInventory.clickFirstItemOutOfStock();
+        expect(adminFoodInventory.getPrice()).toEqual("-14,00 €");
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(2);
+        adminFoodInventory.clickValidate();
+        expect(adminFoodInventory.getPrice()).toEqual("0,00 €");
+    });
+
+    it('should add a stockitem by barcode', function() {
+        adminFoodInventory.enterBarcode('123');
+        expect(adminFoodInventory.getPrice()).toEqual("0,50 €");
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(1);
+        adminFoodInventory.enterBarcode('123456');
+        expect(adminFoodInventory.getPrice()).toEqual("1,10 €");
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(2);
+        adminFoodInventory.enterBarcode('123456');
+        expect(adminFoodInventory.getPrice()).toEqual("1,70 €");
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(2);
+        adminFoodInventory.enterBarcode('123456789');
+        expect(adminFoodInventory.getPrice()).toEqual("7,70 €");
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(2);
+    });
+
+    it('should remove a stockitem from the inventory', function() {
+        adminFoodInventory.removeLastItem();
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(1);
+        expect(adminFoodInventory.getPrice()).toEqual("0,50 €");
+        adminFoodInventory.removeLastItem();
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
+        expect(adminFoodInventory.countItemsInInventory()).toBe(0);
+        expect(adminFoodInventory.getPrice()).toEqual("0,00 €");
     });
 });
