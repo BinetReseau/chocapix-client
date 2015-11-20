@@ -10,8 +10,8 @@ var AdminFoodCreation = function() {
     var eSellItemUnitNamePlural = element(by.model('data.sei_unit_name_plural'));
     var eStockItemSellToBuy = element(by.model('data.sti_sell_to_buy'));
     var eBuyItemPricePrices = element.all(by.model('data.bip_price'));
-    var eOldSellItem = element(by.model('oldSellItem'));
-    var eItemInPack = element(by.model('itemInPack'));
+    var eOldSellItem = element(by.model('data.oldSellItem'));
+    var eItemInPack = element(by.model('data.itemInPack'));
     var eBuyItemQty = element.all(by.model('data.bi_itemqty'));
     var eBarcodeError = element(by.id('admin-food-barcode-error'));
 

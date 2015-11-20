@@ -381,13 +381,13 @@ angular.module('bars.admin.food', [
                 sei_unit_name: '',
                 sei_unit_name_plural: '',
                 sei_tax: BarInfos.bar.settings.default_tax*100,
-                keywords: ''
+                keywords: '',
+                itemInPack: '',
+                oldSellItem: ''
             };
             oItemdetails = ItemDetails.create();
             $scope.data = data;
             $scope.allow_barcode_edit = true;
-            $scope.itemInPack = "";
-            $scope.oldSellItem = "";
             $timeout(function () {
                 document.getElementById("fbarcode").focus();
             }, 300);
