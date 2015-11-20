@@ -75,7 +75,6 @@ describe('Food creation', function() {
         expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
         adminFoodCreation.closeLastAlert();
 
-!
         adminFoodCreation.setBarcode('1234567890');
         expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
         adminFoodCreation.clickPack();
