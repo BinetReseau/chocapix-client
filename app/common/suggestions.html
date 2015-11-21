@@ -14,8 +14,8 @@
         </form>
     </div>
     <ul class="list-group fixed-panel" id="lsuggested" style="max-height: 100px; overflow: auto;">
-        <li ng-repeat="suggested_item in suggestedItems | filter: {already_added: false} | orderBy: '-timestamp'" ng-if="suggestedItems.length > 0" class="list-group-item suggestion">
-            <bars:suggested:items suggesteditem="suggested_item" ></bars:suggested:items>
+        <li ng-repeat="suggested_item in suggestedItems | filter: {already_added: false} | orderBy: '-voters_list.length'" ng-if="suggestedItems.length > 0" class="list-group-item suggestion">
+            <bars:suggested:items suggesteditem="suggested_item"></bars:suggested:items>
         </li>
         <li class="list-group-item" ng-if="disp_suggested_items.length == 0">
             <em>Aucun nouvel aliment n'est souhaité par la section</em>

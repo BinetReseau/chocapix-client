@@ -1,12 +1,16 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
-    <h3><span ng-if="formType == 'add'">Ajouter</span><span ng-if="formType == 'edit'">Modifier</span> une suggestion</h3>
+    <h3>Modifier une suggestion</h3>
 
     <div>
-        <form class="form-horizontal" ng-submit="saveSuggestedItem()">
+        <form class="form-horizontal" ng-submit="saveSuggestedItem(suggestion.name)">
             <div class="form-group">
                 <label for="nname" class="col-sm-3 control-label">Intitulé</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" id="nname" placeholder="Intitulé" ng-model="suggested_item.name">
+                  <input type="text" class="form-control" id="nname" placeholder="Intitulé" ng-model="suggestion.name">
+                </div>
+                <div ng-if="suggestion.alreadyAdded">
+                    <br />
+                    <alert type="danger" style="margin-bottom: 0px;">Aliment déjà suggéré</alert>
                 </div>
             </div>
             <div class="form-group">
