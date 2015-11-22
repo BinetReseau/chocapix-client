@@ -53,4 +53,19 @@ describe('Food creation inter-bars', function() {
         expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
         adminFoodCreation.closeLastAlert();
     });
+
+    it('should create a pack existing in an other bar, for an existing item in the current bar', function() {
+        // Code barre existant en aviron jone
+        adminFoodCreation.setBarcode('1234567890');
+        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
+
+        expect(adminFoodCreation.getBuyItemQty()).toEqual('10');
+        expect(adminFoodCreation.getItemInPack()).toEqual('Coca-Cola');
+        adminFoodCreation.setPrice('4');
+        
+        adminFoodCreation.clickValidate();
+
+        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        adminFoodCreation.closeLastAlert();
+    });
 });

@@ -113,7 +113,7 @@ var AdminFoodCreation = function() {
         return element(by.partialButtonText('Close')).click();
     };
     this.getBuyItemQty = function() {
-        return eBuyItemQty.getAttribute('value');
+        return eBuyItemQty.first().getAttribute('value');
     };
     this.isBuyItemQtyEnabled = function() {
         return eBuyItemQty.first().isEnabled();

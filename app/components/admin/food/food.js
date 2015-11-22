@@ -447,7 +447,7 @@ angular.module('bars.admin.food', [
             data.sei_unit_name = data.id_unit;
             data.sei_unit_name_plural = data.id_unit_plural;
             data.sti_sell_to_buy = data.id_container_qty;
-            $scope.itemInPack = buy_item.details.name;
+            data.itemInPack = buy_item.details.name;
             // A-t-on besoin de créer le StockItem ?
             var stockItem = _.find(StockItem.all(), function (i) {
                 return i.details.id == data.id_id;
@@ -483,7 +483,7 @@ angular.module('bars.admin.food', [
                         });
                         modalNewFood.result.then(function (buyItemPrice) {
                             $scope.choiceItemDetail(buyItemPrice);
-                            $scope.itemInPack = buyItemPrice.buyitem.details.name;
+                            data.itemInPack = buyItemPrice.buyitem.details.name;
                         }, function () {
                             console.log("Modal fermée ; c'est très mauvais");
                         });
@@ -547,7 +547,7 @@ angular.module('bars.admin.food', [
                 data.id_unit_plural = '';
                 data.id_container_qty = '';
                 data.id_brand = '';
-                $scope.itemInPack = '';
+                data.itemInPack = '';
             }
             if (basic) {
                 $scope.block = false;
@@ -606,14 +606,14 @@ angular.module('bars.admin.food', [
         $scope.createItemPack = function (e) {
             if (e.which === 13) {
                 e.preventDefault();
-                if (!isNaN($scope.itemInPack)) {
+                if (!isNaN(data.itemInPack)) {
                     var modalNewFood = $modal.open({
                         templateUrl: 'components/admin/food/modalAdd.html',
                         controller: 'admin.ctrl.food.addModal',
                         size: 'lg',
                         resolve: {
                             barcode: function () {
-                                return $scope.itemInPack;
+                                return data.itemInPack;
                             },
                             buy_item: function () {
                                 return undefined;
@@ -622,7 +622,7 @@ angular.module('bars.admin.food', [
                     });
                     modalNewFood.result.then(function (buyItemPrice) {
                             $scope.choiceItemDetail(buyItemPrice);
-                            $scope.itemInPack = buyItemPrice.buyitem.details.name;
+                            data.itemInPack = buyItemPrice.buyitem.details.name;
                         }, function () {
 
                     });
@@ -639,7 +639,7 @@ angular.module('bars.admin.food', [
                 return bip.buyitem.details;
             });
         };
-        $scope.itemInPack = "";
+        data.itemInPack = "";
         $scope.choiceItemDetail = function(item, model, label) {
             data.id_id = item.buyitem.details.id;
         };
