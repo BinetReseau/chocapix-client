@@ -1,11 +1,13 @@
 var AdminFoodCreation = function() {
     var eBarcode = element(by.model('data.barcode'));
     var eItemDetailsName = element(by.model('data.id_name'));
+    var eItemDetailsNamePlural = element(by.model('data.id_name_plural'));
     var eItemDetailsContainer = element(by.model('data.id_container'));
     var eItemDetailsContainerPlural = element(by.model('data.id_container_plural'));
     var eItemDetailsUnit = element(by.model('data.id_unit'));
     var eItemDetailsContainerQty = element(by.model('data.id_container_qty'));
     var eSellItemName = element(by.model('data.sei_name'));
+    var eSellItemNamePlural = element(by.model('data.sei_name_plural'));
     var eSellItemUnitName = element(by.model('data.sei_unit_name'));
     var eSellItemUnitNamePlural = element(by.model('data.sei_unit_name_plural'));
     var eStockItemSellToBuy = element(by.model('data.sti_sell_to_buy'));
@@ -123,10 +125,13 @@ var AdminFoodCreation = function() {
         return eBarcode.getAttribute('value');
     };
     this.setBarcode = function(text) {
-        return eBarcode.sendKeys(text);
+        return eBarcode.sendKeys(text).sendKeys(protractor.Key.ENTER);
     };
     this.getItemDetailsName = function() {
         return eItemDetailsName.getAttribute('value');
+    };
+    this.getItemDetailsNamePlural = function() {
+        return eItemDetailsNamePlural.getAttribute('value');
     };
     this.isItemDetailsNameEnabled = function() {
         return eItemDetailsName.isEnabled();
@@ -173,6 +178,9 @@ var AdminFoodCreation = function() {
     this.getSellItemName = function() {
         return eSellItemName.getAttribute('value');
     };
+    this.getSellItemNamePlural = function() {
+        return eSellItemNamePlural.getAttribute('value');
+    };
     this.isSellItemNameEnabled = function() {
         return eSellItemName.isEnabled();
     };
@@ -185,7 +193,13 @@ var AdminFoodCreation = function() {
     this.isSellItemUnitNameEnabled = function() {
         return eSellItemUnitName.isEnabled();
     };
-    this.setSellItemUnitName = function(text) {
+    this.setSellItemUnitName = function(text, erase) {
+        if (erase) {
+            return eSellItemUnitName
+                .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(text);
+        }
         return eSellItemUnitName.sendKeys(text);
     };
     this.getSellItemUnitNamePlural = function() {
@@ -194,7 +208,13 @@ var AdminFoodCreation = function() {
     this.isSellItemUnitNamePluralEnabled = function() {
         return eSellItemUnitNamePlural.isEnabled();
     };
-    this.setSellItemUnitNamePlural = function(text) {
+    this.setSellItemUnitNamePlural = function(text, erase) {
+        if (erase) {
+            return eSellItemUnitNamePlural
+                .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(text);
+        }
         return eSellItemUnitNamePlural.sendKeys(text);
     };
     this.getStockItemSellToBuy = function() {
@@ -203,7 +223,16 @@ var AdminFoodCreation = function() {
     this.isStockItemSellToBuyEnabled = function() {
         return eStockItemSellToBuy.isEnabled();
     };
-    this.setStockItemSellToBuy = function(text) {
+    this.setStockItemSellToBuy = function(text, erase) {
+        if (erase) {
+            return eStockItemSellToBuy
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(text);
+        }
         return eStockItemSellToBuy.sendKeys(text);
     };
     this.getBuyItemPricePrices = function() {

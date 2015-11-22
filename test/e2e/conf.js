@@ -9,7 +9,8 @@ exports.config = {
             'admin/init.js',
             'admin/food/newitem.spec.js',
             'admin/food/inventory.spec.js',
-            'admin/food/appro.spec.js'
+            'admin/food/appro.spec.js',
+            'admin/food/newitem-interbar.spec.js',
         ]
     },
     onPrepare: function() {

@@ -11,6 +11,10 @@ var BarsBarPage = function() {
     this.loadHomePage = function(bar) {
         browser.get('http://localhost:9000/#/' + bar);
     };
+    this.changeToBar = function(name) {
+        element(by.partialLinkText("Changer de bar")).click();
+        element(by.css('a[title="Aller dans le bar ' + name + '"]')).click();
+    };
 
     this.loginAsRespoBar = function() {
         eLoginUsername.sendKeys('admin');
