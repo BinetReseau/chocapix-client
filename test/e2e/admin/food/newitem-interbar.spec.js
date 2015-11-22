@@ -1,9 +1,11 @@
 var AdminFoodCreation = require('./newitem.po.js');
 var BarsBarPage = require('../../bar/bar.po.js');
+var FoodList = require('../../food/list.food.po.js');
 
 describe('Food creation inter-bars', function() {
     var adminFoodCreation = new AdminFoodCreation();
     var barsBarPage = new BarsBarPage();
+    var foodList = new FoodList();
 
     it('should create a simple food existing in an other bar', function() {
         barsBarPage.changeToBar('Natation Jône');
@@ -116,5 +118,29 @@ describe('Food creation inter-bars', function() {
 
         expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
         adminFoodCreation.closeLastAlert();
+    });
+
+    it('should verify the created items', function() {
+        foodList.go();
+
+        expect(foodList.getRowText(0)).toMatch(/Coca-Cola/);
+        expect(foodList.getRowText(0)).toMatch(/0 canette/);
+        expect(foodList.getRowText(0)).toMatch(/0,66 € \/ canette/);
+        expect(foodList.getRowText(0)).toMatch(/0,00 €/);
+
+        foodList.toggleRow(0);
+
+        expect(foodList.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(foodList.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(0, 1)).toMatch(/0 canette/);
+        expect(foodList.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
+        expect(foodList.getSubRowText(0, 1)).toMatch(/0,00 €/);
+
+        expect(foodList.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(0, 2)).toMatch(/0 canette/);
+        expect(foodList.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
+        expect(foodList.getSubRowText(0, 2)).toMatch(/0,00 €/);
+
+        foodList.toggleRow(0);
     });
 });

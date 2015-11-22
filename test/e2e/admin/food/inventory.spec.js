@@ -25,12 +25,26 @@ describe('Inventory', function() {
     });
 
     it('should verify the updated stock', function() {
-
         foodList.go();
         expect(foodList.getRowText(1)).toMatch(/Coca-Cola/);
         expect(foodList.getRowText(1)).toMatch(/25 canettes/);
         expect(foodList.getRowText(1)).toMatch(/0,67 € \/ canette/);
         expect(foodList.getRowText(1)).toMatch(/16,80 €/);
+
+        foodList.toggleRow(1);
+
+        expect(foodList.getSubRowText(1, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(foodList.getSubRowText(1, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(1, 1)).toMatch(/10 canettes/);
+        expect(foodList.getSubRowText(1, 1)).toMatch(/0,60 € \/ canette/);
+        expect(foodList.getSubRowText(1, 1)).toMatch(/6,00 €/);
+
+        expect(foodList.getSubRowText(1, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(1, 2)).toMatch(/15 canettes/);
+        expect(foodList.getSubRowText(1, 2)).toMatch(/0,72 € \/ canette/);
+        expect(foodList.getSubRowText(1, 2)).toMatch(/10,80 €/);
+
+        foodList.toggleRow(1);
     });
 
     it('should add a sellitem out of stock', function() {

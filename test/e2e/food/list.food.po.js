@@ -5,10 +5,19 @@ var FoodList = function() {
 	};
 
     this.getRow = function(n) {
-        return element(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(n));
+        return element.all(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(n));
+    };
+    this.toggleRow = function(n) {
+        return this.getRow(n).first().element(by.css('a.food-list-collapse')).click();
+    };
+    this.getSubRow = function(n, m) {
+        return this.getRow(n).get(m);
+    };
+    this.getSubRowText = function(n, m) {
+        return this.getSubRow(n, m).getText();
     };
     this.getRowText = function(n) {
-        return this.getRow(n).getText();
+        return this.getRow(n).first().getText();
     };
 };
 module.exports = FoodList;

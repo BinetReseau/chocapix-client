@@ -1,7 +1,9 @@
 var AdminFoodCreation = require('./newitem.po.js');
+var FoodList = require('../../food/list.food.po.js');
 
 describe('Food creation', function() {
     var adminFoodCreation = new AdminFoodCreation();
+    var foodList = new FoodList();
 
     it('should create a simple item', function() {
         // Création d'un aliment
@@ -95,7 +97,7 @@ describe('Food creation', function() {
         expect(adminFoodCreation.isItemDetailsContainerEnabled()).toBe(false);
         expect(adminFoodCreation.isItemDetailsContainerPluralEnabled()).toBe(false);
         expect(adminFoodCreation.isItemDetailsUnitEnabled()).toBe(false);
-        expect(adminFoodCreation.isItemDetailsContainerQtyEnabled()).toBe(false);
+        // expect(adminFoodCreation.isItemDetailsContainerQtyEnabled()).toBe(false);
 
         expect(adminFoodCreation.isSellItemNameEnabled()).toBe(false);
         expect(adminFoodCreation.isSellItemUnitNameEnabled()).toBe(false);
@@ -108,9 +110,33 @@ describe('Food creation', function() {
         expect(adminFoodCreation.isAlreadySellChoiceEnabled()).toBe(false);
         expect(adminFoodCreation.isNotYetSellChoiceEnabled()).toBe(false);
 
-        expect(adminFoodCreation.isBuyItemQtyEnabled()).toBe(false);
-        expect(adminFoodCreation.isItemInPackEnabled()).toBe(false);
+        // expect(adminFoodCreation.isBuyItemQtyEnabled()).toBe(false);
+        // expect(adminFoodCreation.isItemInPackEnabled()).toBe(false);
 
-        expect(adminFoodCreation.isOldSellItemEnabled()).toBe(false);
+        // expect(adminFoodCreation.isOldSellItemEnabled()).toBe(false);
+    });
+
+    it('should verify the created items', function() {
+        foodList.go();
+
+        expect(foodList.getRowText(1)).toMatch(/Coca-Cola/);
+        expect(foodList.getRowText(1)).toMatch(/0 canette/);
+        expect(foodList.getRowText(1)).toMatch(/0,66 € \/ canette/);
+        expect(foodList.getRowText(1)).toMatch(/0,00 €/);
+
+        foodList.toggleRow(1);
+
+        expect(foodList.getSubRowText(1, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(foodList.getSubRowText(1, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(1, 1)).toMatch(/0 canette/);
+        expect(foodList.getSubRowText(1, 1)).toMatch(/0,60 € \/ canette/);
+        expect(foodList.getSubRowText(1, 1)).toMatch(/0,00 €/);
+
+        expect(foodList.getSubRowText(1, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(1, 2)).toMatch(/0 canette/);
+        expect(foodList.getSubRowText(1, 2)).toMatch(/0,72 € \/ canette/);
+        expect(foodList.getSubRowText(1, 2)).toMatch(/0,00 €/);
+
+        foodList.toggleRow(1);
     });
 });
