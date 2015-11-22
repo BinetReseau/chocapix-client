@@ -1,30 +1,30 @@
 var AdminFoodCreation = function() {
-    var eBarcode = element(by.model('data.barcode'));
-    var eItemDetailsName = element(by.model('data.id_name'));
-    var eItemDetailsNamePlural = element(by.model('data.id_name_plural'));
-    var eItemDetailsContainer = element(by.model('data.id_container'));
-    var eItemDetailsContainerPlural = element(by.model('data.id_container_plural'));
-    var eItemDetailsUnit = element(by.model('data.id_unit'));
-    var eItemDetailsContainerQty = element(by.model('data.id_container_qty'));
-    var eSellItemName = element(by.model('data.sei_name'));
-    var eSellItemNamePlural = element(by.model('data.sei_name_plural'));
-    var eSellItemUnitName = element(by.model('data.sei_unit_name'));
-    var eSellItemUnitNamePlural = element(by.model('data.sei_unit_name_plural'));
-    var eStockItemSellToBuy = element(by.model('data.sti_sell_to_buy'));
+    var eBarcode = element.all(by.model('data.barcode')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemDetailsName = element.all(by.model('data.id_name')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemDetailsNamePlural = element.all(by.model('data.id_name_plural')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemDetailsContainer = element.all(by.model('data.id_container')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemDetailsContainerPlural = element.all(by.model('data.id_container_plural')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemDetailsUnit = element.all(by.model('data.id_unit')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemDetailsContainerQty = element.all(by.model('data.id_container_qty')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eSellItemName = element.all(by.model('data.sei_name')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eSellItemNamePlural = element.all(by.model('data.sei_name_plural')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eSellItemUnitName = element.all(by.model('data.sei_unit_name')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eSellItemUnitNamePlural = element.all(by.model('data.sei_unit_name_plural')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eStockItemSellToBuy = element.all(by.model('data.sti_sell_to_buy')).filter(function(e) { return e.isDisplayed(); }).first();
     var eBuyItemPricePrices = element.all(by.model('data.bip_price'));
-    var eOldSellItem = element(by.model('data.oldSellItem'));
-    var eItemInPack = element(by.model('data.itemInPack'));
-    var eBuyItemQty = element.all(by.model('data.bi_itemqty'));
+    var eOldSellItem = element.all(by.model('data.oldSellItem')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eItemInPack = element.all(by.model('data.itemInPack')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eBuyItemQty = element.all(by.model('data.bi_itemqty')).filter(function(e) { return e.isDisplayed(); }).first();
     var eBarcodeError = element(by.id('admin-food-barcode-error'));
 
-    var eItemDetailsPreview = element(by.id('admin-food-id-preview'));
-    var eSellItemPreview = element(by.id('admin-food-sei-preview'));
+    var eItemDetailsPreview = element.all(by.id('admin-food-id-preview')).filter(function(e) { return e.isDisplayed(); }).first();
+    var eSellItemPreview = element.all(by.id('admin-food-sei-preview')).filter(function(e) { return e.isDisplayed(); }).first();
 
-    var bValidate = element(by.buttonText('Ajouter'));
-    var bIsPack = element(by.linkText("Il s'agit d'un pack"));
-    var bIsNotPack = element(by.linkText("Il s'agit d'un aliment normal"));
-    var bAlreadySell = element(by.linkText('Rattacher à un aliment déjà vendu'));
-    var bNotYetSell = element(by.linkText('Le bar ne vend pas encore cet aliment'));
+    var bValidate = element.all(by.buttonText('Ajouter')).filter(function(e) { return e.isDisplayed(); }).last();
+    var bIsPack = element.all(by.linkText("Il s'agit d'un pack")).filter(function(e) { return e.isDisplayed(); }).last();
+    var bIsNotPack = element.all(by.linkText("Il s'agit d'un aliment normal")).filter(function(e) { return e.isDisplayed(); }).last();
+    var bAlreadySell = element.all(by.linkText('Rattacher à un aliment déjà vendu')).filter(function(e) { return e.isDisplayed(); }).last();
+    var bNotYetSell = element.all(by.linkText('Le bar ne vend pas encore cet aliment')).filter(function(e) { return e.isDisplayed(); }).last();
 
     var fPrice = function() {
         return eBuyItemPricePrices.filter(function(elem) {
@@ -113,7 +113,7 @@ var AdminFoodCreation = function() {
         return element(by.partialButtonText('Close')).click();
     };
     this.getBuyItemQty = function() {
-        return eBuyItemQty.first().getAttribute('value');
+        return eBuyItemQty.getAttribute('value');
     };
     this.isBuyItemQtyEnabled = function() {
         return eBuyItemQty.first().isEnabled();
