@@ -164,7 +164,11 @@ angular.module('bars.admin.account', [
     function($scope, APIAction, account_list) {
         $scope.admin.active = 'account';
         $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active && !a.deleted; });
-        $scope.account_list = _.forEach($scope.account_list, function(a) { a.pay = true; });
+        $scope.account_list = _.forEach($scope.account_list, function(a) {
+            a.pay = true;
+            a.payPreview = 0;
+            a.ratio = 1;
+        });
         $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
         $scope.searchl = "";
@@ -178,11 +182,31 @@ angular.module('bars.admin.account', [
                 o.pay = $scope.allSelected;
             });
         };
+        $scope.recomputeAmount = function() {
+            var nbParts = 0; // nombre de parts pour le calcul (somme des ratios)
+                _.forEach($scope.account_list, function(a) { 
+                    if (a.pay == true){
+                        nbParts += a.ratio;
+                    }
+                });
+                _.forEach($scope.account_list, function(a) {
+                    if (a.pay == true) {
+                        a.payPreview = $scope.amount * a.ratio / nbParts;
+                    }
+                    else {
+                        a.payPreview = 0;
+                    }
+                    
+                });
+        };
+        $scope.isValid = function() {
+            return $scope.amount && $scope.motive && _.filter($scope.account_list, {pay: true}).length > 0;
+        };
         $scope.collectivePay = function () {
             var accounts = _.map(_.filter($scope.account_list, function (a) {
                 return a.pay;
             }), function (a) {
-                return {account: a, ratio: 1};
+                return {account: a, ratio: a.ratio};
             });
             APIAction.collectivePayment({accounts: accounts, amount: $scope.amount, motive: $scope.motive}).then(function () {
                 $scope.amount = 0;
