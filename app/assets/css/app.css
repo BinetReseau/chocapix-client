@@ -258,6 +258,11 @@ hr.derrierebtn {
     width: 100%;
 }
 
+.tax-button {
+    max-width: 49%;
+    white-space: normal;
+}
+
 /* Ranking */
 .Ranking-Description {
     float: left;
