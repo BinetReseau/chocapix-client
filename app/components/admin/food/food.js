@@ -1010,6 +1010,9 @@ angular.module('bars.admin.food', [
             suggested_item.already_added = false;
             suggested_item.$save();
         };
+        $scope.delete = function(suggested_item) {
+            suggested_item.$delete();
+        };
     }
 ])
 .controller('admin.ctrl.food.suggested_items_list.edit',
