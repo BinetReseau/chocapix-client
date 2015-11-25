@@ -60,15 +60,15 @@
                     <label for="defaultTax" class="control-label col-sm-3">Taxe</label>
                     <div class="col-sm-9">
                         <div class="input-group">
-                            <input type="number" min="0" step="any" class="form-control" id="defaultTax" ng-model="defaultTax">
+                            <input type="number" min="0" max="100" step="any" class="form-control" id="defaultTax" ng-model="defaultTax">
                             <span class="input-group-addon">%</span>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-9">
-                        <input type="submit" class="btn btn-success tax-button" value="Modifier la taxe par défaut pour les futurs aliments" ng-click="saveDefaultTax()" ng-class="defaultTax < 0 && 'disabled'" />
-                        <input type="submit" class="btn btn-warning tax-button" value="Modifier la taxe pour les aliments futurs et existants" ng-click="saveTaxForAll()" ng-class="defaultTax < 0 && 'disabled'" />
+                        <input type="submit" class="btn btn-success tax-button" value="Modifier la taxe par défaut pour les futurs aliments" ng-click="saveDefaultTax()" ng-class="defaultTax == null && 'disabled' || ''" />
+                        <input type="submit" class="btn btn-warning tax-button" value="Modifier la taxe pour les aliments futurs et existants" ng-click="saveTaxForAll()" ng-class="defaultTax == null && 'disabled' || ''" />
                     </div>
                 </div>
             </form>

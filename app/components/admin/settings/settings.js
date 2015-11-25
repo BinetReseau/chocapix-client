@@ -59,9 +59,12 @@ angular.module('bars.admin.settings', [
         };
         // Taxe pour tous les aliments
         $scope.saveTaxForAll = function() {
-            if (($scope.defaultTax >= 0) && (confirm("Etes-vous sûr(e) de vouloir modifier la taxe de tous les aliments ? Cette action est irréversible"))) {
+            if (($scope.defaultTax >= 0) && (confirm("Etes-vous sûr(e) de vouloir modifier la taxe de ***tous*** les aliments du bar ? Cette action est irréversible."))) {
                 $scope.saveDefaultTax();
-                SellItem.set_global_tax($scope.defaultTax/100);
+                SellItem.set_global_tax($scope.defaultTax/100).then(function () {
+                    SellItem.clear();
+                    SellItem.reload();
+                });
             }
         };
         // Agios
