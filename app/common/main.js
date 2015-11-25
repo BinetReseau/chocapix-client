@@ -109,6 +109,8 @@ angular.module('bars.main', [
                     return News.request({bar: [bar.id, 'root']}).then(function (o) {
                         $rootScope.$broadcast('api.News.loaded');
                         return o;
+                    }, function (err) {
+                        $rootScope.$broadcast('api.News.error');
                     });
                 }]
             },

@@ -82,8 +82,8 @@ angular.module('barsApp', [
 }])
 
 .controller('index.update',
-    ['$scope', '$http', '$timeout',
-    function ($scope, $http, $timeout) {
+    ['$scope', '$http', '$interval',
+    function ($scope, $http, $interval) {
         var version;
         $scope.need_update = false;
         function checkVersion() {
@@ -95,9 +95,8 @@ angular.module('barsApp', [
                     $scope.need_update = true;
                 }
             });
-            $timeout(checkVersion, 60000);
         }
-        checkVersion();
+        $interval(checkVersion, 60000);
     }])
 .controller('index.splash',
     ['$rootScope', '$scope', '$timeout',
@@ -105,7 +104,8 @@ angular.module('barsApp', [
         $scope.percent = 0;
         var step = 100/8;
         $rootScope.$watch('appLoaded', function () {
-            if ($scope.appLoaded) {
+            if ($rootScope.appLoaded) {
+                $scope.appLoaded = true;
                 $scope.percent = 100;
             }
         });
@@ -144,6 +144,10 @@ angular.module('barsApp', [
         $rootScope.$on('api.News.loaded', function () {
             $scope.percent += step;
             $scope.mleft = "News";
+        });
+        $rootScope.$on('api.News.error', function () {
+            $scope.percent += step;
+            $scope.mleft = "News : erreur";
         });
     }])
 ;
