@@ -93,7 +93,7 @@ angular.module('bars.api.food', [
     }])
 .factory('api.models.sellitem', ['APIModel', 'APIInterface',
     function(APIModel, APIInterface) {
-        return new APIModel({
+        var model = new APIModel({
                 url: 'sellitem',
                 type: 'SellItem',
                 structure: {
@@ -131,6 +131,15 @@ angular.module('bars.api.food', [
                     }
                 }
             });
+
+        model.set_global_tax = function(newTax) {
+            return APIInterface.request({
+                'url': 'sellitem/set_global_tax',
+                'method': 'PUT',
+                'data': {tax: newTax}});
+        };
+
+        return model;
     }])
 
 .config(['$stateProvider', function($stateProvider) {
