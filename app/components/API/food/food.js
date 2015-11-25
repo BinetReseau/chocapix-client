@@ -318,6 +318,9 @@ angular.module('bars.api.food', [
     ['$scope', '$rootScope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
     function($scope, $rootScope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
         sellitem_list = _.without(sellitem_list, food_item);
+        $scope.removingAuthorized = _.every(food_item.stockitems, function (si) {
+            return si.qty >= 0;
+        });
         $scope.removeStockItem = function(si) {
             APIInterface.request({
                 'url': 'sellitem/' + food_item.id + '/remove',
@@ -344,12 +347,21 @@ angular.module('bars.api.food', [
                     $scope.food_item = food_item;
                     $scope.searchl = "";
                     $scope.itemToAttach = null;
+                    $scope.errors = [];
+                    $scope.closeAlert = function (i) {
+                        $scope.errors.splice(i, 1);
+                    };
+
                     $scope.filterItems = function(o) {
                         return o.filter($scope.searchl);
                     };
                     $scope.addItem = function(item) {
-                        $scope.itemToAttach = item;
-                        $scope.itemToAttach.unit_factor = 1;
+                        if (item.fuzzy_qty < 0) {
+                            $scope.errors.push("L'aliment " + item.name + " a un stock négatif, vous devez l'inventorier avant de pouvoir l'ajouter");
+                        } else {
+                            $scope.itemToAttach = item;
+                            $scope.itemToAttach.unit_factor = 1;
+                        }
                     };
                     $scope.validate = function() {
                         APIInterface.request({

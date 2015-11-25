@@ -55,6 +55,17 @@ angular.module('bars.auth', [
                             Account.ofUser(user.id).then(function(account) {
                                 if (account && account.length == 1) {
                                     account = Account.get(account[0].id);
+                                    account.total_spent({type: ['buy', 'meal']}).then(function(data){
+                                        account.spent = data.total_spent;
+                                    });
+                                    Account.ranking({type: ['buy', 'meal']}).then(function(data){
+                                        var rankings = data.sort(function(a, b) {if (a.val < b.val) {return -1;} else if (a.val > b.val) {return 1;} else {return 0;}});
+                                        for (var i = 0 ; i < rankings.length ;  i++) {
+                                            if (rankings[i].id == account.id){
+                                                account.rank = i + 1;
+                                            }
+                                        }
+                                    });
                                 } else {
                                     account = null;
                                 }

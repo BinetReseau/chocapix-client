@@ -14,6 +14,7 @@ angular.module('barsApp', [
   'bars.root',
   'bars.granking',
   'bars.bars',
+  'bars.storage',
   'bars.main',
   'bars.admin',
   'bars.magicbar',

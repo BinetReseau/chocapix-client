@@ -46,8 +46,8 @@ angular.module('bars.meal', [
   };
 })
 .factory('bars.meal',
-    ['$rootScope', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
-    function ($rootScope, SellItem, Account, APIAction, AuthUser) {
+    ['$rootScope', 'storage.bar', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
+    function ($rootScope, storage, SellItem, Account, APIAction, AuthUser) {
         var meal = {
             customersList: [],
             itemsList: [],
@@ -82,6 +82,10 @@ angular.module('bars.meal', [
                     customer.amount = totalPrice * customer.ratio / nbParts;
                 });
                 this.totalPrice = totalPrice;
+
+                // recomputeAmount is called with each change
+                // so we save at this time
+                this.save();
             },
             addCustomer: function(account, model, label) {
                 var other = _.find(this.customersList, {'account': account});
@@ -136,17 +140,56 @@ angular.module('bars.meal', [
                 .then(function() {
                     $rootScope.$broadcast('meal.hasBeenValidated');
                     refThis.init();
+                    delete storage.get('meal')[AuthUser.user.id];
                     document.getElementById("q_alim").focus();
                 });
             },
             in: function() {
                 return this.customersList.length > 1 || this.itemsList.length > 0;
+            },
+            restore: function() {
+                var sinfos = storage.get('meal')[AuthUser.user.id];
+                if (sinfos) {
+                    // Si la sauvegarde date d'il y a plus de 12h, on supprime
+                    if (moment(sinfos.date).isBefore(moment().subtract(12, 'hours'))) {
+                        delete storage.get('meal')[AuthUser.user.id];
+                        return;
+                    }
+                    this.name = sinfos.name;
+                    _.forEach(sinfos.items, function (item) {
+                        this.itemsList.push({ item: SellItem.get(item.id), buy_qty: item.buy_qty });
+                    }, this);
+                    this.customersList = [];
+                    _.forEach(sinfos.customers, function (customer) {
+                        this.customersList.push({ account: Account.get(customer.id), ratio: customer.ratio, amount: 0 });
+                    }, this);
+
+                    this.recomputeAmount();
+                }
+            },
+            save: function() {
+                var data = {
+                    name: this.name,
+                    items: [],
+                    customers: [],
+                    date: new Date()
+                };
+
+                _.forEach(this.itemsList, function (item) {
+                    data.items.push({id: item.item.id, buy_qty: item.buy_qty});
+                });
+                _.forEach(this.customersList, function (customer) {
+                    data.customers.push({id: customer.account.id, ratio: customer.ratio});
+                });
+
+                storage.get('meal')[AuthUser.user.id] = data;
             }
         };
 
         $rootScope.$on('auth.hasLoggedIn', function () {
             meal.account = AuthUser.account;
             meal.init();
+            meal.restore();
         });
         $rootScope.$on('auth.hasLoggedOut', function () {
             meal.init();

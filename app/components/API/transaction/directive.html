@@ -41,19 +41,19 @@
                                 </span>
 
                                 <span ng-switch-when="give">
-                                    {{ :: transaction.amount | currency }} à <bars:account account=":: transaction.account"></bars:account>
+                                    {{ :: transaction.amount | currency }} à <bars:account:oneway account=":: transaction.account"></bars:account:oneway>
                                 </span>
                                 <span ng-switch-when="deposit">
-                                    {{ :: transaction.amount | currency }} sur le compte de <bars:account account=":: transaction.account"></bars:account>
+                                    {{ :: transaction.amount | currency }} sur le compte de <bars:account:oneway account=":: transaction.account"></bars:account:oneway>
                                 </span>
                                 <span ng-switch-when="punish">
-                                    {{ :: transaction.amount | abs | currency }} mise à <bars:account account=":: transaction.account"></bars:account>
+                                    {{ :: transaction.amount | abs | currency }} mise à <bars:account:oneway account=":: transaction.account"></bars:account:oneway>
                                 </span>
                                 <span ng-switch-when="withdraw">
-                                    {{ :: transaction.amount | currency }} par <bars:account account=":: transaction.account"></bars:account>
+                                    {{ :: transaction.amount | currency }} par <bars:account:oneway account=":: transaction.account"></bars:account:oneway>
                                 </span>
                                 <span ng-switch-when="refund">
-                                    {{ :: transaction.amount | currency }} à <bars:account account=":: transaction.account"></bars:account>
+                                    {{ :: transaction.amount | currency }} à <bars:account:oneway account=":: transaction.account"></bars:account:oneway>
                                 </span>
                                 <span ng-switch-when="barInvestment">
                                     {{ :: transaction.amount | currency }}
@@ -124,7 +124,7 @@
                                 </a>
                                 <div ng-if="!(transaction.accounts.length > 1 && !transaction.detailsAccounts)">
                                     <div ng-repeat="x in :: transaction.accounts">
-                                        <bars:account account=":: x.account"></bars:account>
+                                        <bars:account:oneway account=":: x.account"></bars:account:oneway>
                                         <div class="pull-right" ng-if=":: (transaction.accounts.length > 1)">
                                             <span class="label" ng-class="transaction.canceled && 'label-default' || 'label-info'">{{ :: transaction.moneyflow*x.ratio | abs | currency }}</span>
                                         </div>
@@ -141,7 +141,7 @@
                                 </a>
                                 <div ng-if="!(transaction.accounts.length > 1 && !transaction.detailsAccounts)">
                                     <div ng-repeat="x in :: transaction.accounts">
-                                        <bars:account account=":: x.account"></bars:account>
+                                        <bars:account:oneway account=":: x.account"></bars:account:oneway>
                                         <div class="pull-right" ng-if=":: (transaction.accounts.length > 1)">
                                             <span class="label" ng-class="transaction.canceled && 'label-default' || 'label-info'">{{ :: transaction.moneyflow*x.ratio | abs | currency }}</span>
                                         </div>
@@ -158,7 +158,7 @@
                             </span>
                         </td>
                         <td class="buttons">
-                            <span ng-if=":: transaction.can_cancel">
+                            <span ng-if="transaction.can_cancel">
                                 <a title="Annuler cette transaction" ng-if="!transaction.canceled" ng-click="transaction.cancel()" class="label label-warning">Annuler</a>
                                 <a title="Rétablir cette transaction" ng-if="transaction.canceled" ng-click="transaction.restore()" class="label label-warning">Rétablir</a>
                             </span>

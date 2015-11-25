@@ -1,5 +1,5 @@
 <tr ng-repeat="a in ranking | orderBy: 'val'" ng-if="Account.get(a.id).owner.username != 'bar'">
     <td>#{{ $index+1 }}</td>
-    <td><bars:account account="Account.get(a.id)"></bars:account></td>
+    <td><bars:account:oneway account="Account.get(a.id)"></bars:account:oneway></td>
     <td>{{ -a.val|currency }}</td>
 </tr>

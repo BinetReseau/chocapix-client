@@ -284,4 +284,13 @@ angular.module('bars.api.account', [
         templateUrl: 'components/API/account/directive.html'
     };
 })
+.directive('barsAccountOneway', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            account: '=account'
+        },
+        templateUrl: 'components/API/account/directive-oneway.html'
+    };
+})
 ;
