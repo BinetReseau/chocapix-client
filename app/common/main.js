@@ -347,7 +347,7 @@ angular.module('bars.main', [
                 return;
             }
             suggested_item.name = suggestion;
-            suggested_item.voters_list.push(AuthUser.user);
+            suggested_item.vote();
             //verify that the new suggestion doesn't already exist
             if (_.find($scope.suggestedItems, function (item) {
                 return _.deburr(item.name.toLocaleLowerCase()) === _.deburr(suggested_item.name.toLocaleLowerCase());
