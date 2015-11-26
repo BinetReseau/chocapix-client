@@ -11,9 +11,9 @@
                 <th>Actions</th>
             </tr>
             <tr ng-repeat="f in suggested_items | orderBy:['already_added', '-voters_list.length']" ng-class="f.already_added && 'del'">
-                <td>{{ f.name }}</td>
-                <td>{{ f.voters_list.length }}</td>
-                <td><a ui-sref="bar.admin.food.suggested_items_list.edit({id: f.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <td class="col-sm-4">{{ f.name }}</td>
+                <td class="col-sm-3" style="text-align: center;">{{ f.voters_list.length }}</td>
+                <td style="text-align: center;"><a ui-sref="bar.admin.food.suggested_items_list.edit({id: f.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
                 <a ng-if="!f.already_added" ng-click="trash(f)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
                 <a ng-if="f.already_added" ng-click="untrash(f)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a>
                 <a ng-if="f.already_added" ng-click="delete(f)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer définitivement</a></td>

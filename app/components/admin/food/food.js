@@ -1005,7 +1005,7 @@ angular.module('bars.admin.food', [
     function($scope, SuggestedItem, User, suggested_items) {
         $scope.admin.active = 'suggested_item';
         $scope.suggested_items = suggested_items;
-        $scope.list_order = 'name';
+        $scope.list_order = '-voters_list.length';
         $scope.trash = function(suggested_item) {
             suggested_item.already_added = true;
             suggested_item.$save();
