@@ -4,8 +4,11 @@
     </div>
     <div class="Suggestion__Votes">
         {{ suggesteditem.voters_list.length }}
-        <a ng-show="!suggesteditem.already_added" ng-click="suggesteditem.addVoteByCurrentUser()" class="btn btn-success btn-xs" ng-class="suggesteditem.votedByCurrentUser() && 'disabled' || ''">
+        <a ng-show="!suggesteditem.already_added && !suggesteditem.votedByCurrentUser()" ng-click="alert(suggesteditem);vote(suggesteditem);" class="btn btn-success btn-xs">
             <span class="glyphicon glyphicon-thumbs-up"></span>
+        </a>
+        <a ng-show="!suggesteditem.already_added && suggesteditem.votedByCurrentUser()" ng-click="alert(suggesteditem); unvote(suggesteditem);" class="btn btn-danger btn-xs">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
         </a>
     </div>
 </h5>
