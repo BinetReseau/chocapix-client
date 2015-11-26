@@ -22,7 +22,7 @@
                     <th>Unité &ensp;<a href="" ng-click="ordre.revert = ordre.name == 'unit' ? !ordre.revert : false; ordre.name = 'unit'"><span class="glyphicon glyphicon-sort"></span></a></th>
                     <th>Marque &ensp;<a href="" ng-click="ordre.revert = ordre.name == 'brand' ? !ordre.revert : false; ordre.name = 'brand'"><span class="glyphicon glyphicon-sort"></span></a></th>
                 </tr>
-                <tr ng-repeat="item in itemdetails_list | filter:filterItems | orderBy:ordre.name:ordre.revert">
+                <tr ng-repeat="item in itemdetails_list | filter:filterItems | orderBy:ordre.name:ordre.revert | limitTo:40">
                     <td><a ui-sref="root.food.details({bar: 'root', id: item.id})">{{ item.name }}</a></td>
                     <td>{{ item.container }}</td>
                     <td>{{ item.unit }}</td>

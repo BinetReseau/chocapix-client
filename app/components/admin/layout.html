@@ -4,7 +4,7 @@
             <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> <span class="hidden-xs">Dashboard</span></a>
         </li>
         <li ng-class="admin.active == 'food' && 'active'" class="dropdown dropdownli" dropdown ng-if="user.can('add_sellitem')">
-            <a title="Aliments" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false">
+            <a title="Aliments" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false" id="admin-food">
                 <span class="glyphicon glyphicon-cutlery"></span> <span class="hidden-xs">Aliments</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">

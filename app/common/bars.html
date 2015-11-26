@@ -122,7 +122,7 @@
                 <table class="table">
                     <tr ng-repeat="bars in gbars" class="no-border">
                         <td ng-repeat="bar in bars">
-                            <a title="Accueil du bar" ui-sref="bar({bar: bar.id})" class="pull-left">
+                            <a title="Aller dans le bar {{ bar.name }}" ui-sref="bar({bar: bar.id})" class="pull-left">
                                 <img ng-src="assets/img/sections/{{ bar.id }}.png" class="logo petit" alt="{{ bar.name }}" />
                             </a>
                             <div class="pull-left margin-left">
