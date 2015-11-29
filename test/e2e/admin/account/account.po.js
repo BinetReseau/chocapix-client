@@ -1,7 +1,5 @@
 var UserCreation = function() {
-	// var ePrice = element(by.binding("inventory.totalPrice | currency"));
-	// var bValidate = element(by.buttonText("Valider l'inventaire"));
-	// var eBarcode = element(by.model('barcodei'));
+
 	var errorMessage = element(by.id('fail-creation'));
 
 	var importUsername = element(by.id('aowner'));
@@ -20,8 +18,6 @@ var UserCreation = function() {
 	var passwordDiv = element(by.id('upassword-div'));
 	var createSolde = element(by.id('amoney-create'));
 	var createBTN = element(by.id('validate-creation'));
-
-
 
 	this.go = function() {
 		element(by.partialLinkText('Administration')).click();
@@ -95,40 +91,5 @@ var UserCreation = function() {
 	this.validateCreation = function() {
 		return createBTN.click();
 	};
-
-	// this.enterBarcode = function(barcode) {
-	// 	return eBarcode.sendKeys(barcode).sendKeys(protractor.Key.ENTER);
-	// };
-	// this.changeLastItemQty = function(qty) {
-	// 	return element.all(by.model('item.qty')).then(function (elements) {
-	// 		return elements[0].sendKeys(qty);
-	// 	});
-	// };
- //    this.removeLastItem = function(qty) {
-	// 	return element.all(by.css('a[title="Supprimer de l\'appro cet aliment"]')).then(function (elements) {
-	// 		return elements[0].click();
-	// 	});
-	// };
-	// this.countItemsInInventory = function(qty) {
-	// 	return element.all(by.model('item.qty')).then(function (elements) {
-	// 		return elements.length;
-	// 	});
-	// };
-	// this.clickFirstItemOutOfStock = function() {
-	// 	return element.all(by.linkText('Épuisé')).then(function (elements) {
-	// 		return elements[elements.length-1].click();
-	// 	});
-	// };
-	// this.countItemsNotInInventory = function() {
-	// 	return element.all(by.linkText('Épuisé')).then(function (elements) {
-	// 		return elements.length;
-	// 	});
-	// };
-	// this.getPrice = function() {
-	// 	return ePrice.getText();
-	// };
-	// this.clickValidate = function() {
-	// 	return bValidate.click();
-	// };
 };
 module.exports = UserCreation;
