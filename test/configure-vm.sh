@@ -6,4 +6,4 @@ npm install -g protractor@2.5.1
 webdriver-manager update
 
 cd ~/chocapix-client
-bower install
+bower install -f
