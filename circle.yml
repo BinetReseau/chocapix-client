@@ -1,0 +1,19 @@
+checkout:
+    post:
+        - cd ~
+        - git clone git@github.com:BinetReseau/chocapix-server.git
+        - cd chocapix-server
+        - sudo pip install -r requirements.txt
+dependencies:
+    post:
+        - npm install -g protractor@2.5.1
+        - webdriver-manager update
+        - cd ~/chocapix-client
+        - bower install
+test:
+    override:
+        - cd ~/chocapix-client
+        - grunt serve:
+            background: true
+        - sleep 5
+        - ./test.sh run
