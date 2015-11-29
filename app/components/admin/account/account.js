@@ -53,10 +53,14 @@ angular.module('bars.admin.account', [
         $scope.naccount.amoney = 0;
         $scope.errorMessage = false;
         function checkUsername(uname) {
-            return _.filter(user_list, function (u) {
-                return u.username.toLocaleLowerCase() == uname.toLocaleLowerCase();
-            }).length == 0;
-        }
+            if (!uname) {
+                return true;
+            } else {
+                return _.filter(user_list, function (u) {
+                    return u.username.toLocaleLowerCase() == uname.toLocaleLowerCase();
+                }).length == 0;
+            }
+        };
         $scope.isValidEmail = function(email){
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
@@ -66,7 +70,7 @@ angular.module('bars.admin.account', [
             var lastnameTest = usr.lastname && usr.lastname.length > 0;
             var firstnameTest = usr.firstname && usr.firstname.length > 0;
             var emailTest = usr.email && usr.email.length > 0;
-            var usernameTest = usr.username.length > 0 && checkUsername(usr.username);
+            var usernameTest = usr.username && usr.username.length > 0 && checkUsername(usr.username);
             var pwdTest = usr.passwordBis && usr.password.length > 0 && usr.password == usr.passwordBis;
             var moneyTest = acnt.amoney !== '' && acnt.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
