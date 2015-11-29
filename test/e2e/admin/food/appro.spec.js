@@ -1,22 +1,53 @@
-var BarsAdminFoodApproPage = require('./appro.po.js');
+var AdminFoodAppro = require('./appro.po.js');
 
 describe('Appro', function() {
-    var barsAdminFoodApproPage = new BarsAdminFoodApproPage();
+    var adminFoodAppro = new AdminFoodAppro();
 
-    it('should add an item by name', function() {
-        // Appro de l'aliment
-        // element(by.id('admin-food')).click();
-        // element(by.linkText('Faire une appro')).click();
-        //
-        // expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,00 €");
-        //
-        // element(by.model('appro.itemToAdd')).sendKeys('123').sendKeys(protractor.Key.TAB);
-        //
-        // expect(element(by.repeater("(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl").row(0)).getText()).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        // expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,50 €");
-        //
-        // element(by.buttonText("Valider l'appro")).click();
-        //
-        // expect(element(by.binding("appro.totalPrice | currency")).getText()).toEqual("0,00 €");
+    it('should add items by barcode', function() {
+        adminFoodAppro.go();
+
+        expect(adminFoodAppro.getPrice()).toEqual("0,00 €");
+
+        adminFoodAppro.setSearch('123');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(adminFoodAppro.getPrice()).toEqual("0,50 €");
+
+        adminFoodAppro.setSearch('1234567890');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/10 Canettes de 33 cl de Coca-Cola/);
+        expect(adminFoodAppro.getPrice()).toEqual("4,50 €");
+
+        adminFoodAppro.setSearch('123456789');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/10 Canettes de 33 cl de Coca-Cola Light/);
+        expect(adminFoodAppro.getPrice()).toEqual("9,50 €");
+
+        adminFoodAppro.setSearch('123456789');
+        expect(adminFoodAppro.getPrice()).toEqual("14,50 €");
+
+        adminFoodAppro.validate();
+
+        expect(adminFoodAppro.getPrice()).toEqual("0,00 €");
+    });
+
+    it('should add items by name', function() {
+        adminFoodAppro.setSearch('123');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(adminFoodAppro.getPrice()).toEqual("0,50 €");
+
+        adminFoodAppro.setSearch('Coc Ligh');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(adminFoodAppro.getPrice()).toEqual("1,10 €");
+
+        adminFoodAppro.setSearch('Coc Ligh');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(adminFoodAppro.getPrice()).toEqual("1,70 €");
+
+        adminFoodAppro.setSearch('123');
+        expect(adminFoodAppro.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(adminFoodAppro.getRowText(1)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(adminFoodAppro.getPrice()).toEqual("2,20 €");
+
+        adminFoodAppro.validate();
+
+        expect(adminFoodAppro.getPrice()).toEqual("0,00 €");
     });
 });
