@@ -9,4 +9,4 @@ test:
         - grunt serve:
             background: true
         - sleep 5
-        - ./test.sh run
+        - ./test-in-vm.sh run
