@@ -7,7 +7,8 @@ exports.config = {
     suites: {
         adminUser: [
             'admin/init.js',
-            'admin/account/account.spec.js'
+            'admin/account/account.spec.js',
+            'admin/account/collective_payment.spec.js'
         ],
         adminFood: [
             'admin/init.js',

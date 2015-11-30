@@ -1,26 +1,54 @@
-var UserCreation = require('./account.po.js');
+var CollectivePayment = require('./collective_payment.po.js');
 
-describe('UserCreation', function() {
-    var userCreation = new UserCreation();
+describe('CollectivePayment', function() {
+    var cP = new CollectivePayment();
 
-    it('should create a new user without errors', function() {
-        userCreation.go();
+    it('should proceed to a collective payment without errors', function() {
+        cP.go();
 
-        expect(userCreation.errorMessage.toEqual());
+        expect(cP.getValidateBTNClass()).toMatch(/disabled/);
 
-        // element(by.linkText('Coca-Cola')).click();
-        // element(by.linkText('Canette de 33 cl de Coca-Cola')).click();
+        cP.setAmount(300);
+        expect(cP.getValidateBTNClass()).toMatch(/disabled/);
+        cP.setMotive('Test');
+        expect(cP.getValidateBTNClass()).not.toMatch(/disabled/);
 
-        // expect(adminFoodInventory.getPrice()).toEqual("0,50 €");
-        // adminFoodInventory.changeLastItemQty("0"); // Comme de base il y a 1 dans le champ, là on rajoute simplement un 0 ce qui fait donc 10
-        // expect(adminFoodInventory.getPrice()).toEqual("5,00 €");
+        for (i = 0; i < cP.getNumberOfRows(); i++) {
+            expect(cP.getCheckByNumber(i).isSelected()).toBeTruthy();
+            expect(cP.getPayPreviewByNumber(i)).toMatch(/42,86 €/);
+        };
 
-        // element(by.linkText('Canette de 33 cl de Coca-Cola Light')).click();
-        // expect(adminFoodInventory.getPrice()).toEqual("5,60 €");
-        // adminFoodInventory.changeLastItemQty("5"); // Là la quantité passe à 15
-        // expect(adminFoodInventory.getPrice()).toEqual("14,00 €");
+        cP.toggleCheckByNumber(0);
+        cP.toggleCheckByNumber(1);
 
-        // adminFoodInventory.clickValidate();
-        // expect(adminFoodInventory.getPrice()).toEqual("0,00 €");
+        for (i = 2; i < cP.getNumberOfRows(); i++) {
+            expect(cP.getCheckByNumber(i).isSelected()).toBeTruthy();
+            expect(cP.getPayPreviewByNumber(i)).toMatch(/60,00 €/);
+        };
+
+        cP.setRatio(2, 5);
+        cP.setRatio(3, 4);
+
+        expect(cP.getPayPreviewByNumber(2)).toMatch(/125,00 €/);
+        expect(cP.getPayPreviewByNumber(3)).toMatch(/100,00 €/);
+
+        cP.setAmount(250);
+
+        expect(cP.getPayPreviewByNumber(2)).toMatch(/104,17 €/);
+        expect(cP.getPayPreviewByNumber(3)).toMatch(/83,33 €/);
+        expect(cP.getPayPreviewByNumber(4)).toMatch(/20,83 €/);
+        expect(cP.getPayPreviewByNumber(5)).toMatch(/20,83 €/);
+        expect(cP.getPayPreviewByNumber(6)).toMatch(/20,83 €/);
+
+        cP.validatePayment();
+
+        expect(cP.getSoldeByNumber(0)).toMatch(/0,00 €/);
+        expect(cP.getSoldeByNumber(1)).toMatch(/-2,00 €/);
+        expect(cP.getSoldeByNumber(2)).toMatch(/2 395,83 €/);
+        expect(cP.getSoldeByNumber(3)).toMatch(/-38,33 €/);
+        expect(cP.getSoldeByNumber(4)).toMatch(/19,17 €/);
+        expect(cP.getSoldeByNumber(5)).toMatch(/-20,83 €/);
+        expect(cP.getSoldeByNumber(6)).toMatch(/-20,83 €/);
+
     });
 });

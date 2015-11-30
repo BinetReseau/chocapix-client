@@ -34,13 +34,13 @@
                                 <th>Solde &ensp;<a href="" ng-click="reverse = list_order == 'money' ? !reverse : false; list_order = 'money'"><span class="glyphicon glyphicon-sort"></span></a></th>
                             </tr>
                             <tr ng-repeat="a in account_list | filter:filterAccounts | orderBy:list_order:reverse" ng-class="a.money < 0 && 'danger'">
-                                <td>
-                                    <input type="checkbox" ng-model="a.pay" ng-change="recomputeAmount()"/>
+                                <td class="vmiddle">
+                                    <input style="margin-left: 12px" type="checkbox" ng-model="a.pay" ng-change="recomputeAmount()"/>
                                 </td>
-                                <td><bars:account:oneway account="a"></bars:account:oneway></td>
+                                <td class="vmiddle"><bars:account:oneway account="a" class="vmiddle"></bars:account:oneway></td>
                                 <td><input type="number" class="form-control input-sm pqty" ng-model="a.ratio" setp="any" min="0" ng-change="recomputeAmount()"></td>
-                                <td>{{ a.payPreview | currency}}</td>
-                                <td>{{ a.money | currency }}</td>
+                                <td class="vmiddle">{{ a.payPreview | currency}}</td>
+                                <td class="vmiddle">{{ a.money | currency }}</td>
                             </tr>
                         </table>
                         <div class="panel-body" ng-if="(account_list | filter:filterAccounts).length == 0">

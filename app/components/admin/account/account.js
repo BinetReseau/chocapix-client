@@ -176,6 +176,7 @@ angular.module('bars.admin.account', [
         $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
         $scope.searchl = "";
+        $scope.amount=0;
         $scope.filterAccounts = function(o) {
             return o.filter($scope.searchl);
         };
