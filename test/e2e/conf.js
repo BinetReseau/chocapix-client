@@ -5,13 +5,19 @@ exports.config = {
         'browserName': 'chrome'
     },
     suites: {
-        admin: [
+        adminUser: [
+            'admin/init.js',
+            'admin/account/account.spec.js',
+            'admin/account/collective_payment.spec.js'
+        ],
+        adminFood: [
             'admin/init.js',
             'admin/food/newitem.spec.js',
             'admin/food/inventory.spec.js',
             'admin/food/appro.spec.js',
             'admin/food/newitem-interbar.spec.js',
         ]
+
     },
     onPrepare: function() {
         // Disable animations so the splashscreen disappear...

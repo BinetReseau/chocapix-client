@@ -18,7 +18,7 @@
             </ul>
         </li>
         <li ng-class="admin.active == 'account' && 'active'" class="dropdown dropdownli" dropdown ng-if="user.can('add_account') || user.can('add_collectivePaymenttransaction')">
-            <a title="Utilisateurs" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false">
+            <a title="Utilisateurs" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false" id="admin-user">
                 <span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Utilisateurs</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
