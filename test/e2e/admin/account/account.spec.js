@@ -5,6 +5,7 @@ var UserList = require('../../user/list.user.po.js');
 describe('UserCreation', function() {
     var userCreation = new UserCreation();
     var userList = new UserList();
+    var barsBarPage = new BarsBarPage();
 
     it('should create a new user without errors', function() {
         userCreation.go();
@@ -65,11 +66,83 @@ describe('UserCreation', function() {
 
     });
 
-    // it('should import a new account from an existing user in another bar', function() {
-    //     barsBarPage.changeToBar('Natation Jône');
+    it('should create some accounts in Natation Jône', function() {
+        barsBarPage.changeToBar('Natation Jône');
+        userCreation.go();
 
-    //     userCreation.go();
-    //     expect(userCreation.isErrorMessagePresent()).toBe(false);
+        userCreation.setLastName("Dumas");
+        userCreation.setFirstName("Grégoire");
+        userCreation.setEmail("gregoire.dumas@polytechnique.edu");
+        userCreation.setPseudo("La Dum");
+        userCreation.setLogin("gms");
+        userCreation.setPassword("gms");
+        userCreation.setPasswordBis("gms");
+        userCreation.setCreateSolde(70);
 
-    // });
+        userCreation.validateCreation();
+
+        userCreation.go();
+
+        userCreation.setLastName("Lenormand");
+        userCreation.setFirstName("Augustin");
+        userCreation.setEmail("augustin.lenormand@polytechnique.edu");
+        userCreation.setPseudo("Toutatis");
+        userCreation.setLogin("gus");
+        userCreation.setPassword("gus");
+        userCreation.setPasswordBis("gus");
+        userCreation.setCreateSolde(50);        
+
+        userCreation.validateCreation();
+
+        userCreation.go();
+
+        expect(userCreation.getImportBTNClass()).toMatch(/disabled/);
+        userCreation.setImportUsername('claude');
+        expect(userCreation.getImportBTNClass()).not.toMatch(/disabled/);
+        userCreation.setImportSolde('25');
+
+        userCreation.validateImportation();
+        expect(userCreation.isErrorMessagePresent()).toBe(false);
+
+        userList.go();
+
+        var user = userList.getRowText(2);
+        expect(user).toMatch(/Germain Jean-Claude/);
+        expect(user).toMatch(/JC/);
+        expect(user).toMatch(/25,00 €/);
+    });
+
+    it('should import some account from Natation Jône to Aviron Jône', function() {
+        barsBarPage.changeToBar('Aviron Jône');
+
+        userCreation.go();
+
+        userCreation.setImportUsername('dumas');
+        userCreation.setImportSolde('2500');
+        userCreation.validateImportation();
+
+        userCreation.go();
+
+        userCreation.setImportUsername('aug');
+        userCreation.setImportSolde('40');
+        userCreation.validateImportation();
+
+        userList.go();
+
+        user = userList.getRowText(2);
+        expect(user).toMatch(/Dumas Grégoire/);
+        expect(user).toMatch(/La Dum/);
+        expect(user).toMatch(/2 500,00 €/);
+
+        user = userList.getRowText(3);
+        expect(user).toMatch(/Germain Jean-Claude/);
+        expect(user).toMatch(/JC/);
+        expect(user).toMatch(/45,00 €/);
+
+        user = userList.getRowText(4);
+        expect(user).toMatch(/Lenormand Augustin/);
+        expect(user).toMatch(/Toutatis/);
+        expect(user).toMatch(/40,00 €/);
+
+    });
 });

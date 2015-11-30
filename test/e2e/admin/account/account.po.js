@@ -29,17 +29,26 @@ var UserCreation = function() {
 		return errorMessage.isPresent();
 	};
 
+	// Importation
 	this.setImportUsername = function(entry) {
-		return importUsername.sendKeys(entry);
+		return importUsername
+		.sendKeys(entry)
+		.sendKeys(protractor.Key.ENTER);
 	};
 	this.setImportSolde = function(entry) {
-		return importSolde.sendKeys(entry);
+		return importSolde
+		.sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+        .sendKeys(protractor.Key.BACK_SPACE)
+		.sendKeys(entry);
 	};
-
 	this.getImportBTNClass = function() {
 		return importBTN.getAttribute("class");
 	};
+	this.validateImportation = function() {
+		return importBTN.click();
+	};
 
+	// Creation
 	this.setLastName = function(entry) {
 		return lastName.sendKeys(entry);
 	};
