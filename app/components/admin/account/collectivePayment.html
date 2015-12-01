@@ -37,9 +37,9 @@
                                 <td class="vmiddle">
                                     <input style="margin-left: 12px" type="checkbox" ng-model="a.pay" ng-change="recomputeAmount()"/>
                                 </td>
-                                <td class="vmiddle"><bars:account:oneway account="a" class="vmiddle"></bars:account:oneway></td>
+                                <td class="vmiddle"><bars:account:oneway account="a" fullname="true" class="vmiddle"></bars:account:oneway></td>
                                 <td><input type="number" class="form-control input-sm pqty" ng-model="a.ratio" setp="any" min="0" ng-change="recomputeAmount()"></td>
-                                <td class="vmiddle">{{ a.payPreview | currency}}</td>
+                                <td class="vmiddle">{{ a.payPreview | currency }}</td>
                                 <td class="vmiddle">{{ a.money | currency }}</td>
                             </tr>
                         </table>
