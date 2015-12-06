@@ -37,7 +37,14 @@
                 <tr>
                     <th>Nom</th>
                     <th>Quantité</th>
-                    <th>Total</th>
+                    <th>
+                        <span tooltip="Prix total">Prix</span>
+                    </th>
+                    <th>
+                        <span tooltip="Cocher cette case si ce changement de prix est permanent">
+                            Permanent
+                        </span>
+                    </th>
                     <th> </th>
                 </tr>
                 <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl">
@@ -47,6 +54,9 @@
                     </td>
                     <td class="vmiddle">
                         <input type="number" ng-model="item.price" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}2" />&nbsp;€
+                    </td>
+                    <td class="vmiddle">
+                        <input type="checkbox" ng-model="item.permanent" />
                     </td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="appro.removeItem(item)" class="link">
