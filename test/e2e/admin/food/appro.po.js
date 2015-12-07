@@ -21,6 +21,30 @@ var AdminFoodAppro = function() {
     this.getRowText = function(i) {
         return this.getRow(i).getText();
     };
+    this.getRowPrice = function(i) {
+        return this.getRow(i).element(by.model('item.price')).getAttribute('value');
+    };
+    this.setRowPrice = function(i, price) {
+        return this.getRow(i).element(by.model('item.price'))
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(price);
+    };
+    this.getRowQty = function(i) {
+        return this.getRow(i).element(by.model('item.qty')).getAttribute('value');
+    };
+    this.setRowQty = function(i, price) {
+        return this.getRow(i).element(by.model('item.qty'))
+        .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+        .sendKeys(protractor.Key.BACK_SPACE)
+        .sendKeys(price);
+    };
+    this.toggleRowPermanent = function(i) {
+        return this.getRow(i).element(by.model('item.permanent')).click();
+    };
+    this.removeRow = function(i) {
+        return this.getRow(i).element(by.css('a[title="Supprimer de l\'appro cet aliment"]')).click();
+    };
     this.validate = function() {
         return bValidate.click();
     };
