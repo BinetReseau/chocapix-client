@@ -1070,7 +1070,7 @@ angular.module('bars.admin.food', [
                     refThis.init();
                 }, function () {
                     console.log("Erreur lors de l'appro :///");
-                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas égé validée.");
+                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas été validée.");
                 });
             },
             in: function() {
