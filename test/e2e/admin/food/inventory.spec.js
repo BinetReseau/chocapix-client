@@ -52,7 +52,7 @@ describe('Inventory', function() {
 
         adminFoodInventory.clickFirstItemOutOfStock();
         expect(adminFoodInventory.getPrice()).toEqual("-14,00 €");
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
         expect(adminFoodInventory.countItemsInInventory()).toBe(2);
         adminFoodInventory.clickValidate();
         expect(adminFoodInventory.getPrice()).toEqual("0,00 €");
@@ -61,29 +61,29 @@ describe('Inventory', function() {
     it('should add a stockitem by barcode', function() {
         adminFoodInventory.enterBarcode('123');
         expect(adminFoodInventory.getPrice()).toEqual("0,50 €");
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(4);
         expect(adminFoodInventory.countItemsInInventory()).toBe(1);
         adminFoodInventory.enterBarcode('123456');
         expect(adminFoodInventory.getPrice()).toEqual("1,10 €");
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
         expect(adminFoodInventory.countItemsInInventory()).toBe(2);
         adminFoodInventory.enterBarcode('123456');
         expect(adminFoodInventory.getPrice()).toEqual("1,70 €");
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
         expect(adminFoodInventory.countItemsInInventory()).toBe(2);
         adminFoodInventory.enterBarcode('123456789');
         expect(adminFoodInventory.getPrice()).toEqual("7,70 €");
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(2);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
         expect(adminFoodInventory.countItemsInInventory()).toBe(2);
     });
 
     it('should remove a stockitem from the inventory', function() {
         adminFoodInventory.removeLastItem();
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(4);
         expect(adminFoodInventory.countItemsInInventory()).toBe(1);
         expect(adminFoodInventory.getPrice()).toEqual("0,50 €");
         adminFoodInventory.removeLastItem();
-        expect(adminFoodInventory.countItemsNotInInventory()).toBe(3);
+        expect(adminFoodInventory.countItemsNotInInventory()).toBe(4);
         expect(adminFoodInventory.countItemsInInventory()).toBe(0);
         expect(adminFoodInventory.getPrice()).toEqual("0,00 €");
     });

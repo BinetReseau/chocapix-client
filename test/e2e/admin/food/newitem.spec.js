@@ -116,6 +116,33 @@ describe('Food creation', function() {
         // expect(adminFoodCreation.isOldSellItemEnabled()).toBe(false);
     });
 
+    it('should create a more complet item', function() {
+        // Création d'un aliment
+        adminFoodCreation.go();
+
+        adminFoodCreation.setBarcode('12321');
+        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
+        adminFoodCreation.setItemDetailsName('Pringles');
+        adminFoodCreation.setItemDetailsContainer('Boite');
+        adminFoodCreation.setItemDetailsContainerPlural('s');
+        adminFoodCreation.setItemDetailsUnit('g');
+        adminFoodCreation.setItemDetailsContainerQty('160');
+
+        expect(adminFoodCreation.getItemDetailsPreview()).toEqual('Appro de 4 Boites de 160 g de Pringles');
+
+        adminFoodCreation.setSellItemName('Pringles');
+        adminFoodCreation.setSellItemUnitName('g');
+        adminFoodCreation.setStockItemSellToBuy('160');
+        adminFoodCreation.setPrice('1.60');
+
+        expect(adminFoodCreation.getSellItemPreview()).toEqual('Achat de 53 g de Pringles pour 0,64 €');
+
+        adminFoodCreation.clickValidate();
+
+        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        adminFoodCreation.closeLastAlert();
+    });
+
     it('should verify the created items', function() {
         foodList.go();
 
@@ -138,5 +165,10 @@ describe('Food creation', function() {
         expect(foodList.getSubRowText(1, 2)).toMatch(/0,00 €/);
 
         foodList.toggleRow(1);
+
+        expect(foodList.getRowText(3)).toMatch(/Pringles/);
+        expect(foodList.getRowText(3)).toMatch(/0 g/);
+        expect(foodList.getRowText(3)).toMatch(/0,01 € \/ g/);
+        expect(foodList.getRowText(3)).toMatch(/0,00 €/);
     });
 });
