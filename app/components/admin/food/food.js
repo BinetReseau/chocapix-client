@@ -381,6 +381,11 @@ angular.module('bars.admin.food', [
                 sei_unit_name: '',
                 sei_unit_name_plural: '',
                 sei_tax: BarInfos.bar.settings.default_tax*100,
+                old_sei_name: '',
+                old_sei_name_plural: '',
+                old_sei_unit_name: '',
+                old_sei_unit_name_plural: '',
+                old_sei_tax: 0,
                 keywords: '',
                 itemInPack: '',
                 oldSellItem: ''
@@ -639,7 +644,6 @@ angular.module('bars.admin.food', [
                 return bip.buyitem.details;
             });
         };
-        data.itemInPack = "";
         $scope.choiceItemDetail = function(item, model, label) {
             data.id_id = item.buyitem.details.id;
         };
@@ -650,13 +654,13 @@ angular.module('bars.admin.food', [
                 return o.filter(v);
             });
         };
-        $scope.oldSellItem = "";
         $scope.choiceSellItem = function(item, model, label) {
             data.sei_id = item.id;
-            data.sei_name = item.name;
-            data.sei_name_plural = item.name_plural;
-            data.sei_unit_name = item.unit_name;
-            data.sei_unit_name_plural = item.unit_name_plural;
+            data.old_sei_name = item.name;
+            data.old_sei_name_plural = item.name_plural;
+            data.old_sei_unit_name = item.unit_name;
+            data.old_sei_unit_name_plural = item.unit_name_plural;
+            data.old_sei_tax = item.tax;
             data.keywords = item.keywords;
         };
 
@@ -700,7 +704,7 @@ angular.module('bars.admin.food', [
                 buy_item.details = data.id_id;
                 stock_item.details = data.id_id;
             }
-            if (!data.sei_id) {
+            if (data.new_sell) {
                 sell_item.name = data.sei_name;
                 sell_item.name_plural = data.sei_name_plural;
                 sell_item.keywords = data.keywords;
@@ -786,7 +790,7 @@ angular.module('bars.admin.food', [
                 }
             }
             function saveSellItem() {
-                if (!data.sei_id) {
+                if (data.new_sell) {
                     sell_item.$save().then(function (sei) {
                         sell_item = sei;
                         stock_item.sellitem = sei.id;
@@ -819,9 +823,9 @@ angular.module('bars.admin.food', [
                     (data.is_pack // C'est un pack
                         && data.bi_itemqty && data.id_id) ||
                     (!data.is_pack // Ce n'est pas un pack
-                        && (
-                            (data.new_sell // C'est un nouvel aliment
-                                && data.id_name && data.id_name_plural
+                        && (data.bi_id // Aliment acheté existant
+                            || (data.id_name && data.id_name_plural)) // Nouvel aliment acheté
+                        && ((data.new_sell // C'est un nouvel aliment vendu
                                 && data.sei_name && data.sei_name_plural && (data.sei_tax === 0 || data.sei_tax > 0)
                                 && data.sti_sell_to_buy
                             ) ||
