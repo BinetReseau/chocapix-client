@@ -335,7 +335,7 @@ angular.module('bars.api.food', [
                 'url': 'sellitem/' + food_item.id + '/remove',
                 'method': 'PUT',
                 'data': {'stockitem': si.id}
-            }).then(function(si) {
+            }).then(function(sei) {
                 food_item.$reload();
                 si.$reload();
             });
