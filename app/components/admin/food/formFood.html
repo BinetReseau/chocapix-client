@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
                     <div class="col-sm-3">
-                        <input type="number" step="any" class="form-control" id="fpqty" placeholder="6" ng-model="data.bi_itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.bi_id || block">
+                        <input type="number" step="any" min="0" class="form-control" id="fpqty" placeholder="6" ng-model="data.bi_itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.bi_id || block">
                     </div>
                     <div class="col-sm-7">
                         <div class="input-group">
