@@ -428,8 +428,8 @@ angular.module('bars.api.food', [
     }]
 )
 .controller('api.ctrl.food_details.edit',
-    ['$scope', '$rootScope', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
-    function($scope, $rootScope, $stateParams, food_item, AuthUser, APIAction) {
+    ['$scope', '$rootScope', '$q', '$stateParams', 'food_item', 'auth.user', 'api.services.action',
+    function($scope, $rootScope, $q, $stateParams, food_item, AuthUser, APIAction) {
         $scope.toggleDeleted = function() {
             $scope.food_item.deleted = !$scope.food_item.deleted;
             $scope.food_item.$save();
@@ -462,11 +462,16 @@ angular.module('bars.api.food', [
             food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
             food_item.keywords = $scope.newFood_item.keywords;
-            food_item.$save();
-            _.forEach(food_item.stockitems, function (s) {
-                s.sell_to_buy = s.sell_to_buy * $scope.newFood_item.unit_factor;
-                s.price = s.price * $scope.newFood_item.unit_factor;
-                s.$save();
+            var promises = [];
+            if ($scope.newFood_item.unit_factor != 1) {
+                _.forEach(food_item.stockitems, function (s) {
+                    s.sell_to_buy = s.sell_to_buy * $scope.newFood_item.unit_factor;
+                    s.price = s.price * $scope.newFood_item.unit_factor;
+                    promises.push(s.$save());
+                });
+            }
+            $q.all(promises).then(function() {
+                return food_item.$save();
             });
             $scope.resetFood();
             $rootScope.$broadcast('api.model.transaction.reload');
