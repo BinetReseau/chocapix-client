@@ -1031,6 +1031,7 @@ angular.module('bars.admin.food', [
                                             qty: qty,
                                             old_qty: qty,
                                             price: buyitemprice.price * qty,
+                                            permanent: true,
                                             nb: nb++});
                                     }
                                     else {
@@ -1057,16 +1058,23 @@ angular.module('bars.admin.food', [
                     item.qty = item.qty;
                     item.buy_price = item.price / (item.qty);
                     item.buyitem = item.buyitemprice.buyitem;
+                    item.occasional = !item.permanent;
                 });
                 var refThis = this;
                 APIAction.appro({
                     items: this.itemsList
                 })
                 .then(function() {
+                    _.forEach(refThis.itemsList, function(item) {
+                        if (item.permanent) {
+                            item.buyitemprice.$reload();
+                        }
+                    });
+
                     refThis.init();
                 }, function () {
                     console.log("Erreur lors de l'appro :///");
-                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas égé validée.");
+                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas été validée.");
                 });
             },
             in: function() {
