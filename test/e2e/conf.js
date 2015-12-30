@@ -16,6 +16,7 @@ exports.config = {
             'admin/food/inventory.spec.js',
             'admin/food/appro.spec.js',
             'admin/food/newitem-interbar.spec.js',
+            'food/edition.food.spec.js',
         ]
 
     },

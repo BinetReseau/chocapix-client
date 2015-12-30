@@ -19,5 +19,8 @@ var FoodList = function() {
     this.getRowText = function(n) {
         return this.getRow(n).first().getText();
     };
+    this.goFood = function(n) {
+        return this.getRow(n).first().element(by.css('a[title="Voir la fiche de cet aliment"]')).click();
+    };
 };
 module.exports = FoodList;

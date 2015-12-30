@@ -64,10 +64,10 @@
     <div class="row">
         <div class="col-sm-12">
             <tabset>
-                <tab heading="Infos">
+                <tab heading="Infos" id="food-tab-infos">
                     <div class="row" ui-view="infos"></div>
                 </tab>
-                <tab heading="Stocks">
+                <tab heading="Stocks" id="food-tab-stocks">
                     <div ui-view="stocks"></div>
                 </tab>
                 <tab heading="Graphiques" active="gactive">
@@ -76,7 +76,7 @@
                 <tab heading="Classement">
                     <div ui-view="ranking"></div>
                 </tab>
-                <tab heading="Modifier l'aliment vendu" ng-if="user.can('change_sellitem')">
+                <tab heading="Modifier l'aliment vendu" ng-if="user.can('change_sellitem')" id="food-tab-edition">
                     <div class="row" ui-view="edit"></div>
                 </tab>
             </tabset>
