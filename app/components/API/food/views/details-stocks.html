@@ -35,7 +35,7 @@
                 </td>
             </tr>
             <tr ng-repeat-end ng-if="si.edit" class="vmiddle">
-                <td class="vmiddle"><bars:stockitem item="si" qty="1/si.sell_to_buy" out="'buy'"></bars:stockitem> = </td>
+                <td class="vmiddle" colspan="2"><bars:stockitem item="si" qty="1/si.sell_to_buy" out="'buy'"></bars:stockitem> = </td>
                 <td>
                     <form class="form-inline">
                         <input type="number" min="0" step="any" ng-model="si.sell_to_buy_inv" class="form-control input-sm pqty" /> &times;
@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     <form class="form-inline">
-                        <input type="number" min="0" step="any" ng-model="si.buy_price" class="form-control input-sm pqty" /> € /
+                        <input type="number" min="0" step="any" ng-model="si.buy_price" class="form-control input-sm pqty" /> € <span tooltip="Prix sans la taxe du bar">HT</span> /
                         <bars:stockitem item="si" out="'buy'"></bars:stockitem>
                     </form>
                 </td>
