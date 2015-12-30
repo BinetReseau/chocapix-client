@@ -26,7 +26,10 @@ var AdminFoodAppro = function() {
     };
     this.setRowPrice = function(i, price) {
         return this.getRow(i).element(by.model('item.price'))
-            .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(price);
     };
@@ -35,7 +38,10 @@ var AdminFoodAppro = function() {
     };
     this.setRowQty = function(i, price) {
         return this.getRow(i).element(by.model('item.qty'))
-        .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+        .sendKeys(protractor.Key.BACK_SPACE)
+        .sendKeys(protractor.Key.BACK_SPACE)
+        .sendKeys(protractor.Key.BACK_SPACE)
+        .sendKeys(protractor.Key.BACK_SPACE)
         .sendKeys(protractor.Key.BACK_SPACE)
         .sendKeys(price);
     };
