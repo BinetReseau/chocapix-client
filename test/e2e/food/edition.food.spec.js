@@ -10,8 +10,8 @@ describe('Food edition', function() {
         foodList.goFood(1);
 
         expect(foodDetails.getTitle()).toBe('Coca-Cola');
-        expect(foodDetails.getPrice()).toBe('0,68 € / canette');
-        expect(foodDetails.getStock()).toBe('35 canettes');
+        expect(foodDetails.getPrice()).toBe('0,75 € / canette');
+        expect(foodDetails.getStock()).toBe('41 canettes');
     });
 
     it('should edit the SellItem', function() {
@@ -32,7 +32,23 @@ describe('Food edition', function() {
         foodDetails.goInfos();
 
         expect(foodDetails.getTitle()).toBe('Coca Cola');
-        expect(foodDetails.getPrice()).toBe('0,39 € / petite canette');
-        expect(foodDetails.getStock()).toBe('70 petites canettes');
+        expect(foodDetails.getPrice()).toBe('0,44 € / petite canette');
+        expect(foodDetails.getStock()).toBe('82 petites canettes');
+    });
+
+    it('should edit the StockItems prices', function() {
+        foodDetails.goStocks();
+
+        foodDetails.editStockItem(0);
+        foodDetails.setStockItemPrice(0, '1');
+        foodDetails.validateStockItem(0);
+
+        foodDetails.editStockItem(1);
+        foodDetails.setStockItemPrice(1, '2');
+        foodDetails.validateStockItem(1);
+
+        foodDetails.goInfos();
+
+        expect(foodDetails.getPrice()).toBe('1,13 € / petite canette');
     });
 });

@@ -13,7 +13,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="food-stocks-table">
             <tr ng-repeat-start="si in food_item.stockitems" ng-if="!si.edit">
                 <td>
                   <a title="Voir la fiche globale de cet aliment" ui-sref="bar.food.item_details({ bar: '{{ :: si.bar.id }}', id: '{{ :: si.details.id }}' })">
@@ -24,7 +24,7 @@
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
                 <td ng-show="user.can('change_sellitem')">
-                    <a title="Modifier cet aliment" ng-click="enterEdit(si)" class="btn btn-xs btn-warning link" >
+                    <a title="Modifier cet aliment" ng-click="enterEdit(si)" class="btn btn-xs btn-warning link">
                         <span class="glyphicon glyphicon-edit"></span> Modifier
                     </a>
                     <div style="display: inline-block;" tooltip="Tous les aliments doivent avoir une quantité restante positive avant de pouvoir en retirer un" tooltip-enable="!removingAuthorized" tooltip-placement="left">
