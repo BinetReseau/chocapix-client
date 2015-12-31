@@ -51,4 +51,48 @@ describe('Food edition', function() {
 
         expect(foodDetails.getPrice()).toBe('1,13 € / petite canette');
     });
+
+    it('should edit the StockItems ratio', function() {
+        foodDetails.goStocks();
+
+        foodDetails.editStockItem(0);
+        foodDetails.setStockItemSellToBuy(0, '1');
+        foodDetails.validateStockItem(0);
+
+        foodDetails.goInfos();
+
+        expect(foodDetails.getPrice()).toBe('1,40 € / petite canette');
+        expect(foodDetails.getStock()).toBe('66 petites canettes');
+
+        foodDetails.goStocks();
+
+        foodDetails.editStockItem(1);
+        foodDetails.setStockItemSellToBuy(1, '1');
+        foodDetails.validateStockItem(1);
+
+        foodDetails.goInfos();
+
+        expect(foodDetails.getPrice()).toBe('2,25 € / petite canette');
+        expect(foodDetails.getStock()).toBe('41 petites canettes');
+    });
+
+    it('should re-edit the SellItem', function() {
+        foodDetails.goEdition();
+
+        foodDetails.setSellItemName('Coca-Cola');
+        foodDetails.setSellItemNamePlural('Coca-Cola');
+
+        foodDetails.setSellItemUnit('canette');
+        foodDetails.setSellItemUnitPlural('canettes');
+
+        foodDetails.setSellItemTax('20');
+
+        foodDetails.validateEdition();
+
+        foodDetails.goInfos();
+
+        expect(foodDetails.getTitle()).toBe('Coca-Cola');
+        expect(foodDetails.getPrice()).toBe('1,93 € / canette');
+        expect(foodDetails.getStock()).toBe('41 canettes');
+    });
 });
