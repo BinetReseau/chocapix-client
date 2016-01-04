@@ -524,8 +524,7 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            qty: '=?qty',
-            tax: '=?tax'
+            qty: '=?qty'
         },
         templateUrl: 'components/API/food/directives/sellitem-price-directive.html',
         controller: ['$scope', function($scope) {
@@ -576,8 +575,7 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            qty: '=?qty',
-            tax: '=?tax'
+            qty: '=?qty'
         },
         templateUrl: 'components/API/food/directives/sellitem-price-oneway-directive.html',
         controller: ['$scope', function($scope) {
