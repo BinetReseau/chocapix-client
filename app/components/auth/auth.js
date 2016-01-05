@@ -4,6 +4,10 @@ angular.module('bars.auth', [
     'ngStorage'
 ])
 
+/**
+ * Gère la base de l'authentification
+ * Ne pas utiliser directement ce service pour se connecter, utiliser plutôt auth.user
+ */
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
 .factory('auth.service',
     ['$injector', '$localStorage', '$q', 'APIURL',
@@ -46,6 +50,11 @@ angular.module('bars.auth', [
             roles: [],
             perms: [],
             menus: [],
+            /**
+             * Essaie de se connecter avec les identifiants passés en paramètre,
+             * et si cela réussi, alors récupère le compte de l'utilisateur,
+             * ses classements, ses permissions, ses menus
+             */
             login: function(credentials) {
                 var self = this;
                 return AuthService.login(credentials).then(
@@ -105,6 +114,10 @@ angular.module('bars.auth', [
                     }
                 );
             },
+
+            /**
+             * Déconnecte l'utilisateur et supprime ses données stockées
+             */
             logout: function() {
                 AuthService.logout();
                 this.user = null;
@@ -145,6 +158,9 @@ angular.module('bars.auth', [
         };
     }])
 
+/**
+ * Intercepte toutes les requêtes pour y ajouter le token de l'utilisateur connecté
+ */
 .factory('auth.interceptor', ['auth.service', '$q',
     function (AuthService, $q) {
         return {

@@ -56,6 +56,10 @@ angular.module('bars.meal', [
             account: null,
             inRequest: false,
             name: "",
+            /**
+             * Initialise la bouffe à plusieurs
+             * Elle ne contient pas d'aliment, et uniquement l'utilisateur courant
+             */
             init: function() {
                 this.customersList = [ { account: this.account, ratio: 1, amount: 0 } ];
                 this.itemsList = [];
@@ -64,6 +68,12 @@ angular.module('bars.meal', [
                 this.inRequest = false;
                 this.name = "";
             },
+            /**
+             * Calcule le montant total de la bouffe à plusieurs,
+             * le montant payé par chaque utilisateur,
+             * et la valeur de chaque aliment,
+             * et stocke tout ça
+             */
             recomputeAmount: function() {
                 var nbParts = 0; // nombre de parts pour le calcul (somme des ratios)
                 _.forEach(this.customersList, function(customer) {
@@ -87,6 +97,12 @@ angular.module('bars.meal', [
                 // so we save at this time
                 this.save();
             },
+            /**
+             * Ajoute un utilisateur à la bouffe à plusieurs
+             * @param account Objet Account de la personne à ajouter
+             * Les autres paramètres sont utilisés par ui-bootstrap typehead qui
+             * appelle cette fonction, mais on ne les utilise pas
+             */
             addCustomer: function(account, model, label) {
                 var other = _.find(this.customersList, {'account': account});
                 if (!other) {
@@ -95,10 +111,22 @@ angular.module('bars.meal', [
                 this.accountToAdd = '';
                 this.recomputeAmount();
             },
+            /**
+             * Supprime un utilisateur de la bouffe à plusieurs
+             * @param cstmr Objet Account de la personne à retirer
+             */
             removeCustomer: function(cstmr) {
                 this.customersList.splice(this.customersList.indexOf(cstmr), 1);
                 this.recomputeAmount();
             },
+            /**
+             * Ajoute un aliment à la bouffe à plusieurs
+             * @param item Objet SellItem à ajouter
+             * @param qty float Quantité
+             * @param keepClose boolean true=ne pas afficher le panel de la bouffe
+             * à plusieurs si ça n'est pas déjà le cas, false=afficher le panel
+             * de la bouffe à plusieurs si ça n'est pas déjà le cas
+             */
             addItem: function(item, qty, keepClose) {
                 if (!this.in() && !keepClose) {
                     $rootScope.$broadcast('meal.begin');
@@ -114,6 +142,10 @@ angular.module('bars.meal', [
                 }
                 this.recomputeAmount();
             },
+            /**
+             * Retirer un aliment de la bouffe à plusieurs
+             * @param item Objet SellItem à retirer
+             */
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
                 this.recomputeAmount();
@@ -124,6 +156,9 @@ angular.module('bars.meal', [
             isValidatable: function() {
                 return this.totalPrice > 0 && this.customersList.length > 0 && this.itemsList.length > 0;
             },
+            /**
+             * Envoie la bouffe à plusieurs au serveur et la réinitialise
+             */
             validate: function() {
                 this.inRequest = true;
                 _.forEach(this.itemsList, function(item, i) {
@@ -144,9 +179,17 @@ angular.module('bars.meal', [
                     document.getElementById("q_alim").focus();
                 });
             },
+            /**
+             * Retourne true si on est en train de faire une bouffe à plusieurs,
+             * false sinon
+             */
             in: function() {
                 return this.customersList.length > 1 || this.itemsList.length > 0;
             },
+            /**
+             * Restaurer la bouffe à plusieurs à partir des données sauvegardées
+             * dans le localStorage du navigateur
+             */
             restore: function() {
                 var sinfos = storage.get('meal')[AuthUser.user.id];
                 if (sinfos) {
@@ -167,6 +210,10 @@ angular.module('bars.meal', [
                     this.recomputeAmount();
                 }
             },
+            /**
+             * Sauvegarde la bouffe à plusieurs courante dans le localStorage
+             * du navigateur. On peut stocker une bouffe par utilisateur par bar
+             */
             save: function() {
                 var data = {
                     name: this.name,
