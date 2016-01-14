@@ -5,6 +5,10 @@
             <input type="text" id="mealTitleInput" class="form-control space-below" placeholder="Titre de la bouffe" ng-model="meal.name" ng-change="meal.save()" />
         </form>
         <button class="btn btn-success btn-block" ng-class="!meal.isValidatable() && 'disabled' || ''" ng-click="meal.validate()" tabindex="6">Valider <span ng-if="meal.totalPrice > 0">pour <strong>{{ meal.totalPrice | currency }}</strong></span></button>
+        <p class="text-danger text-center" ng-if="meal.errorMessage">
+            <br />
+            <span class="glyphicon glyphicon-exclamation-sign"> {{ meal.errorMessage }}</span>
+        </p>
     </div>
     <div class="list-group-item">
         <h5 class="list-group-item-heading text-center">Participants</h5>

@@ -46,8 +46,8 @@ angular.module('bars.meal', [
   };
 })
 .factory('bars.meal',
-    ['$rootScope', 'storage.bar', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
-    function ($rootScope, storage, SellItem, Account, APIAction, AuthUser) {
+    ['$rootScope', '$timeout', 'storage.bar', 'api.models.sellitem', 'api.models.account', 'api.services.action', 'auth.user',
+    function ($rootScope, $timeout, storage, SellItem, Account, APIAction, AuthUser) {
         var meal = {
             customersList: [],
             itemsList: [],
@@ -56,6 +56,7 @@ angular.module('bars.meal', [
             account: null,
             inRequest: false,
             name: "",
+            errorMessage: "",
             /**
              * Initialise la bouffe à plusieurs
              * Elle ne contient pas d'aliment, et uniquement l'utilisateur courant
@@ -67,6 +68,7 @@ angular.module('bars.meal', [
                 this.accountToAdd = "";
                 this.inRequest = false;
                 this.name = "";
+                this.errorMessage = "";
             },
             /**
              * Calcule le montant total de la bouffe à plusieurs,
@@ -161,23 +163,42 @@ angular.module('bars.meal', [
              */
             validate: function() {
                 this.inRequest = true;
-                _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.buy_qty;
-                    item.sellitem = item.item;
-                    delete item.item;
-                });
-                var refThis = this;
-                APIAction.meal({
-                    items: this.itemsList,
+                var data = {
+                    items: [],
                     accounts: this.customersList,
                     name: this.name
-                })
+                };
+                _.forEach(this.itemsList, function(item, i) {
+                    data.items.push({
+                        qty: item.buy_qty,
+                        sellitem: item.item
+                    });
+                });
+                var refThis = this;
+                APIAction.meal(data)
                 .then(function() {
                     $rootScope.$broadcast('meal.hasBeenValidated');
                     refThis.init();
                     delete storage.get('meal')[AuthUser.user.id];
                     document.getElementById("q_alim").focus();
+                })
+                .catch(function() {
+                    refThis.error("Impossible d'enregistrer la bouffe à plusieurs");
                 });
+            },
+            /**
+             * Affiche une erreur pendant 3 secondes
+             * @param message string Message à afficher
+             * @param duration int (facultatif, default = 4000) Nombre de
+             * millisecondes pendant lesquelles afficher le message
+             */
+            error: function(message, duration) {
+                var _this = this;
+                _this.errorMessage = message;
+                duration = duration || 4000;
+                $timeout(function () {
+                    _this.errorMessage = "";
+                }, duration);
             },
             /**
              * Retourne true si on est en train de faire une bouffe à plusieurs,
