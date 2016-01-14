@@ -156,7 +156,13 @@ angular.module('bars.meal', [
                 return o.filter(this.accountToAdd);
             },
             isValidatable: function() {
-                return this.totalPrice > 0 && this.customersList.length > 0 && this.itemsList.length > 0;
+                return this.totalPrice > 0 &&
+                _.find(this.customersList, function (customer) {
+                    return customer.ratio > 0;
+                }) &&
+                _.find(this.itemsList, function (item) {
+                    return item.buy_qty > 0;
+                });
             },
             /**
              * Envoie la bouffe à plusieurs au serveur et la réinitialise
@@ -165,14 +171,16 @@ angular.module('bars.meal', [
                 this.inRequest = true;
                 var data = {
                     items: [],
-                    accounts: this.customersList,
+                    accounts: _.filter(this.customersList, function(customer) { return customer.ratio > 0; }),
                     name: this.name
                 };
-                _.forEach(this.itemsList, function(item, i) {
-                    data.items.push({
-                        qty: item.buy_qty,
-                        sellitem: item.item
-                    });
+                _.forEach(this.itemsList, function(item) {
+                    if (item.buy_qty > 0) {
+                        data.items.push({
+                            qty: item.buy_qty,
+                            sellitem: item.item
+                        });
+                    }
                 });
                 var refThis = this;
                 APIAction.meal(data)
