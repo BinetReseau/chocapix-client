@@ -112,6 +112,15 @@ angular.module('bars.main', [
                     }, function (err) {
                         $rootScope.$broadcast('api.News.error');
                     });
+                }],
+                suggesteditems: ['api.models.suggesteditem', '$rootScope', function(SuggestedItem, $rootScope) {
+                    SuggestedItem.clear();
+                    return SuggestedItem.reload().then(function (o) {
+                        $rootScope.$broadcast('api.SuggestedItem.loaded');
+                        return o;
+                    }, function (err) {
+                        $rootScope.$broadcast('api.SuggestedItem.error');
+                    });
                 }]
             },
             views: {
@@ -206,8 +215,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news', 'auth.user', '$timeout',
-    function($scope, news, AuthUser, $timeout) {
+    ['$scope', 'news', 'auth.user', '$timeout', 'suggesteditems',
+    function($scope, news, AuthUser, $timeout, suggesteditems) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
@@ -245,6 +254,8 @@ angular.module('bars.main', [
         var now = new Date();
         var dateAppro = new Date($scope.bar.infos.next_scheduled_appro);
         $scope.thereIsAnAppro = dateAppro >= now;
+
+        $scope.suggestions = suggesteditems;
 
         $timeout(function() {
             var $div = $('#lnews');
