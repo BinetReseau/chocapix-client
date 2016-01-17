@@ -5,7 +5,8 @@ angular.module('bars.admin', [
     'bars.admin.account',
     'bars.admin.news',
     'bars.admin.compta',
-    'bars.admin.settings'
+    'bars.admin.settings',
+    'bars.admin.suggesteditem',
 ])
 
 .config(['$stateProvider', function($stateProvider) {

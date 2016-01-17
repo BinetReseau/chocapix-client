@@ -14,6 +14,7 @@
                 <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                 <li><a ui-sref="bar.admin.food.stockitems_list({ bar: bar.id })" ng-if="user.can('add_sellitem')">Liste des aliments achetés</a></li>
                 <li><a ui-sref="bar.admin.food.regroup({ bar: bar.id })" ng-if="user.can('add_sellitem')">Regrouper des articles</a></li>
+                <li><a ui-sref="bar.admin.suggesteditem.list({ bar: bar.id })" ng-if="user.can('change_suggesteditem')">Aliments suggérés</a></li>
                 <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })" ng-if="false">Graphiques</a></li>
             </ul>
         </li>
