@@ -1,0 +1,12 @@
+checkout:
+    post:
+        - git clone git@github.com:BinetReseau/chocapix-server.git ../chocapix-server
+dependencies:
+    post:
+        - ./test/configure-vm.sh
+test:
+    override:
+        - grunt serve:
+            background: true
+        - sleep 5
+        - ./test-in-vm.sh run

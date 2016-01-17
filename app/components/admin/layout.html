@@ -14,11 +14,12 @@
                 <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                 <li><a ui-sref="bar.admin.food.stockitems_list({ bar: bar.id })" ng-if="user.can('add_sellitem')">Liste des aliments achetés</a></li>
                 <li><a ui-sref="bar.admin.food.regroup({ bar: bar.id })" ng-if="user.can('add_sellitem')">Regrouper des articles</a></li>
+                <li><a ui-sref="bar.admin.suggesteditem.list({ bar: bar.id })" ng-if="user.can('change_suggesteditem')">Aliments suggérés</a></li>
                 <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })" ng-if="false">Graphiques</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'account' && 'active'" class="dropdown dropdownli" dropdown ng-if="user.can('add_account') || user.can('add_collectivePaymenttransaction')">
-            <a title="Utilisateurs" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false">
+            <a title="Utilisateurs" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false" id="admin-user">
                 <span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Utilisateurs</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">

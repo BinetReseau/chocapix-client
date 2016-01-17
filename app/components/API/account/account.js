@@ -279,7 +279,8 @@ angular.module('bars.api.account', [
     return {
         restrict: 'E',
         scope: {
-            account: '=account'
+            account: '=account',
+            fullname: '=?'
         },
         templateUrl: 'components/API/account/directive.html'
     };
@@ -288,7 +289,8 @@ angular.module('bars.api.account', [
     return {
         restrict: 'E',
         scope: {
-            account: '=account'
+            account: '=account',
+            fullname: '=?'
         },
         templateUrl: 'components/API/account/directive-oneway.html'
     };

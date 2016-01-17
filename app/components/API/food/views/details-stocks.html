@@ -13,7 +13,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="food-stocks-table">
             <tr ng-repeat-start="si in food_item.stockitems" ng-if="!si.edit">
                 <td>
                   <a title="Voir la fiche globale de cet aliment" ui-sref="bar.food.item_details({ bar: '{{ :: si.bar.id }}', id: '{{ :: si.details.id }}' })">
@@ -24,7 +24,7 @@
                 <td><bars:stockitem:qty item="si" qty="si.qty" out="'buy'"></bars:stockitem:qty></td>
                 <td><bars:stockitem:price item="si"></bars:stockitem:price></td>
                 <td ng-show="user.can('change_sellitem')">
-                    <a title="Modifier cet aliment" ng-click="enterEdit(si)" class="btn btn-xs btn-warning link" >
+                    <a title="Modifier cet aliment" ng-click="enterEdit(si)" class="btn btn-xs btn-warning link">
                         <span class="glyphicon glyphicon-edit"></span> Modifier
                     </a>
                     <div style="display: inline-block;" tooltip="Tous les aliments doivent avoir une quantité restante positive avant de pouvoir en retirer un" tooltip-enable="!removingAuthorized" tooltip-placement="left">
@@ -35,7 +35,7 @@
                 </td>
             </tr>
             <tr ng-repeat-end ng-if="si.edit" class="vmiddle">
-                <td class="vmiddle"><bars:stockitem item="si" qty="1/si.sell_to_buy" out="'buy'"></bars:stockitem> = </td>
+                <td class="vmiddle" colspan="2"><bars:stockitem item="si" qty="1/si.sell_to_buy" out="'buy'"></bars:stockitem> = </td>
                 <td>
                     <form class="form-inline">
                         <input type="number" min="0" step="any" ng-model="si.sell_to_buy_inv" class="form-control input-sm pqty" /> &times;
@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     <form class="form-inline">
-                        <input type="number" min="0" step="any" ng-model="si.buy_price" class="form-control input-sm pqty" /> € /
+                        <input type="number" min="0" step="any" ng-model="si.buy_price" class="form-control input-sm pqty" /> € <span tooltip="Prix sans la taxe du bar">HT</span> /
                         <bars:stockitem item="si" out="'buy'"></bars:stockitem>
                     </form>
                 </td>

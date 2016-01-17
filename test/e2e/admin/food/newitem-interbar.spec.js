@@ -142,5 +142,7 @@ describe('Food creation inter-bars', function() {
         expect(foodList.getSubRowText(0, 2)).toMatch(/0,00 €/);
 
         foodList.toggleRow(0);
+
+        barsBarPage.changeToBar('Aviron Jône');
     });
 });

@@ -18,6 +18,7 @@ RUN bower install --allow-root
 
 ADD . /app
 RUN sed -i 's/\(APIURL.url\).\+$/\1 = "api";/' app/app.js && \
+    sed -i 's/\(OFFURL.url\).\+$/\1 = "off";/' app/app.js && \
     gulp build
 
 VOLUME /srv/client

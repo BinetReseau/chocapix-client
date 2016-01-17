@@ -53,10 +53,14 @@ angular.module('bars.admin.account', [
         $scope.naccount.amoney = 0;
         $scope.errorMessage = false;
         function checkUsername(uname) {
-            return _.filter(user_list, function (u) {
-                return u.username.toLocaleLowerCase() == uname.toLocaleLowerCase();
-            }).length == 0;
-        }
+            if (!uname) {
+                return true;
+            } else {
+                return _.filter(user_list, function (u) {
+                    return u.username.toLocaleLowerCase() == uname.toLocaleLowerCase();
+                }).length == 0;
+            }
+        };
         $scope.isValidEmail = function(email){
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
@@ -66,7 +70,7 @@ angular.module('bars.admin.account', [
             var lastnameTest = usr.lastname && usr.lastname.length > 0;
             var firstnameTest = usr.firstname && usr.firstname.length > 0;
             var emailTest = usr.email && usr.email.length > 0;
-            var usernameTest = usr.username.length > 0 && checkUsername(usr.username);
+            var usernameTest = usr.username && usr.username.length > 0 && checkUsername(usr.username);
             var pwdTest = usr.passwordBis && usr.password.length > 0 && usr.password == usr.passwordBis;
             var moneyTest = acnt.amoney !== '' && acnt.amoney >= 0;
             return lastnameTest && firstnameTest && usernameTest && emailTest && pwdTest && moneyTest;
@@ -164,10 +168,15 @@ angular.module('bars.admin.account', [
     function($scope, APIAction, account_list) {
         $scope.admin.active = 'account';
         $scope.account_list = _.filter(account_list, function(a) { return a.owner.is_active && !a.deleted; });
-        $scope.account_list = _.forEach($scope.account_list, function(a) { a.pay = true; });
+        $scope.account_list = _.forEach($scope.account_list, function(a) {
+            a.pay = true;
+            a.payPreview = 0;
+            a.ratio = 1;
+        });
         $scope.list_order = 'owner.lastname';
         $scope.reverse = false;
         $scope.searchl = "";
+        $scope.amount=0;
         $scope.filterAccounts = function(o) {
             return o.filter($scope.searchl);
         };
@@ -178,11 +187,31 @@ angular.module('bars.admin.account', [
                 o.pay = $scope.allSelected;
             });
         };
+        $scope.recomputeAmount = function() {
+            var nbParts = 0; // nombre de parts pour le calcul (somme des ratios)
+                _.forEach($scope.account_list, function(a) { 
+                    if (a.pay == true){
+                        nbParts += a.ratio;
+                    }
+                });
+                _.forEach($scope.account_list, function(a) {
+                    if (a.pay == true) {
+                        a.payPreview = $scope.amount * a.ratio / nbParts;
+                    }
+                    else {
+                        a.payPreview = 0;
+                    }
+                    
+                });
+        };
+        $scope.isValid = function() {
+            return $scope.amount && $scope.motive && _.filter($scope.account_list, {pay: true}).length > 0;
+        };
         $scope.collectivePay = function () {
             var accounts = _.map(_.filter($scope.account_list, function (a) {
                 return a.pay;
             }), function (a) {
-                return {account: a, ratio: 1};
+                return {account: a, ratio: a.ratio};
             });
             APIAction.collectivePayment({accounts: accounts, amount: $scope.amount, motive: $scope.motive}).then(function () {
                 $scope.amount = 0;

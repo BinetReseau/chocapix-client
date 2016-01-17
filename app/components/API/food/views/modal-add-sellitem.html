@@ -19,7 +19,7 @@
             <label class="col-sm-3 control-label" for="unitFactorInput">1 {{ food_item.unit_name && food_item.unit_name + ' de ' }}{{ food_item.name }} = </label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input type="number" ng-model="itemToAttach.unit_factor" class="form-control input-sm pqty" />
+                    <input type="number" min="0" step="any" ng-model="itemToAttach.unit_factor" class="form-control input-sm pqty" />
                     <span class="input-group-addon">{{ (itemToAttach.unit_factor > 1 && itemToAttach.unit_name_plural) && itemToAttach.unit_name_plural || itemToAttach.unit_name }} de {{ itemToAttach.name }}</span>
                 </div>
             </div>

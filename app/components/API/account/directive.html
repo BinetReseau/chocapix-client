@@ -1,3 +1,4 @@
 <a title="En savoir plus sur {{ account.owner.firstname }}" tooltip="{{ (account.owner.pseudo && account.owner.firstname + ' ' + account.owner.lastname || '') }}" ui-sref="bar.account.details({ bar: '{{ account.bar.id }}', id: '{{ account.id }}' })">
-    {{ (account.owner.pseudo || account.owner.firstname + ' ' + account.owner.lastname) }}
+	<span ng-if="fullname">{{ account.owner.firstname + ' ' + account.owner.lastname }}</span>
+	<span ng-if="!fullname">{{ account.owner.pseudo || account.owner.firstname + ' ' + account.owner.lastname }}</span>
 </a>

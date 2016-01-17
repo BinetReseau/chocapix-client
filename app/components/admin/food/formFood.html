@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="fpqty" class="col-sm-2 control-label">Un pack contient</label>
                     <div class="col-sm-3">
-                        <input type="number" step="any" class="form-control" id="fpqty" placeholder="6" ng-model="data.bi_itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.bi_id || block">
+                        <input type="number" step="any" min="0" class="form-control" id="fpqty" placeholder="6" ng-model="data.bi_itemqty" tooltip="Nombre de produits dans un pack" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.bi_id || block">
                     </div>
                     <div class="col-sm-7">
                         <div class="input-group">
@@ -145,24 +145,24 @@
                 <div class="form-group">
                     <label for="fsname" class="col-sm-2 control-label">Nom de vente</label>
                     <div class="col-sm-4">
-                      <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-model="data.sei_name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
+                      <input type="text" class="form-control" id="fsname" placeholder="Nutella" ng-model="data.sei_name" tooltip="Au singulier si cet aliment n'a pas d'unité" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled=" block">
                     </div>
                     <label for="fsname_plural" class="col-sm-2 control-label">Pluriel</label>
                     <div class="col-sm-4">
-                      <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-model="data.sei_name_plural" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
+                      <input type="text" class="form-control" id="fsname_plural" placeholder="Nutella" ng-model="data.sei_name_plural" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="funit" class="col-sm-2 control-label">Unité de vente</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="funit" placeholder="g" ng-model="data.sei_unit_name" tooltip="g, ml, tranche, etc..., ou rien" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="data.sei_id || block">
+                        <input type="text" class="form-control" id="funit" placeholder="g" ng-model="data.sei_unit_name" tooltip="g, ml, tranche, etc..., ou rien" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
                         <span class="help-block">
                             Laisser <b>vide</b> si l'aliment se vend à l'unité, de manière indivisible (pizzas, pains au chocolat...).
                         </span>
                     </div>
                     <label for="funit_plural" class="col-sm-2 control-label">Pluriel</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="data.sei_unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="sell_item.id || block">
+                        <input type="text" class="form-control" id="funit_plural" placeholder="g" ng-model="data.sei_unit_name_plural" tooltip="" tooltip-trigger="focus" tooltip-placement="bottom" ng-disabled="block">
                     </div>
                 </div>
             </div>
@@ -179,8 +179,11 @@
                 <div class="col-sm-10">
                     <div class="input-group">
                         <input type="number" step="any" min="0" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="data.sti_sell_to_buy" ng-disabled="data.sti_id || block">
-                        <div class="input-group-addon">
+                        <div class="input-group-addon" ng-if="data.new_sell">
                             {{ (data.sei_unit_name_plural && data.sti_sell_to_buy > 1) && data.sei_unit_name_plural || (data.sei_unit_name || ((data.sei_name_plural && data.sti_sell_to_buy > 1) && data.sei_name_plural || data.sei_name)) }}
+                        </div>
+                        <div class="input-group-addon" ng-if="!data.new_sell">
+                            {{ (data.old_sei_unit_name_plural && data.sti_sell_to_buy > 1) && data.old_sei_unit_name_plural || (data.old_sei_unit_name || ((data.old_sei_name_plural && data.sti_sell_to_buy > 1) && data.old_sei_name_plural || data.old_sei_name)) }}
                         </div>
                     </div>
                 </div>
@@ -200,7 +203,7 @@
                 <label for="tax" class="col-sm-2 control-label">Taxe</label>
                 <div class="col-sm-10">
                     <div class="input-group">
-                        <input type="number" step="any" min="0" class="form-control" id="tax" placeholder="20" ng-model="data.sei_tax" ng-disabled="data.sei_id || block">
+                        <input type="number" step="any" min="0" class="form-control" id="tax" placeholder="20" ng-model="data.sei_tax" ng-disabled="block">
                         <span class="input-group-addon">%</span>
                     </div>
                 </div>
@@ -208,14 +211,17 @@
             <div class="form-group">
                 <label for="fkeywords" class="col-sm-2 control-label">Mots clés</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="(data.id_id && data.sei_id)  || block" ng-model="data.keywords">
+                    <input type="text" class="form-control" id="fkeywords" placeholder="séparés par des espaces" ng-disabled="(data.id_id && !data.new_sell)  || block" ng-model="data.keywords">
                 </div>
             </div>
             <div class="form-group" ng-if="isValid()">
                 <label class="col-sm-2 control-label">Aperçu</label>
-                <div class="col-sm-10">
-                    <p class="form-control-static" id="admin-food-sei-preview">
+                <div class="col-sm-10" id="admin-food-sei-preview">
+                    <p class="form-control-static" ng-if="data.new_sell">
                         Achat de 53 <span ng-if="data.sei_unit_name">{{ data.sei_unit_name_plural || data.sei_unit_name }} de {{ data.sei_name }}</span> <span ng-if="!data.sei_unit_name">{{ data.sei_name_plural || data.sei_name }}</span> pour {{ data.bip_price*(1+data.sei_tax/100)/data.sti_sell_to_buy*53 | currency }}
+                    </p>
+                    <p class="form-control-static" ng-if="!data.new_sell">
+                        Achat de 53 <span ng-if="data.old_sei_unit_name">{{ data.old_sei_unit_name_plural || data.old_sei_unit_name }} de {{ data.old_sei_name }}</span> <span ng-if="!data.old_sei_unit_name">{{ data.old_sei_name_plural || data.old_sei_name }}</span> pour {{ data.bip_price*(1+data.old_sei_tax)/data.sti_sell_to_buy*53 | currency }}
                     </p>
                 </div>
             </div>
