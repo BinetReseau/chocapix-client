@@ -57,7 +57,7 @@
                         <small ng-bind="mleft"></small>
                     </div>
                     <div class="pull-right">
-                        <small ng-bind="percent + '%'"></small>
+                        <small ng-bind="(percent|number:0) + '%'"></small>
                     </div>
                 </div>
             </div>
@@ -113,6 +113,7 @@
     <script src="components/API/food/food.js"></script>
     <script src="components/API/transaction/transaction.js"></script>
     <script src="components/API/news/news.js"></script>
+    <script src="components/API/suggested_items/suggested_items.js"></script>
     <script src="components/API/role/role.js"></script>
     <script src="components/API/bug/bug.js"></script>
     <script src="components/API/menu/menu.module.js"></script>

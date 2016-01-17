@@ -1,0 +1,24 @@
+<div class="panel panel-default" ng-if="user.user !== null">
+    <div class="panel-heading">
+        <h3 class="panel-title">Nouveaux aliments souhaités</h3>
+    </div>
+    <div class="panel-body">
+        <form ng-submit="saveSuggestedItem(suggestion.name)">
+            <div class="form-group" style="margin-bottom: 0px;">
+                <input type="text" class="form-control" placeholder="Suggestion" ng-model="suggestion.name" />
+                <div ng-if="suggestion.alreadyAdded">
+                    <br />
+                    <alert type="danger" style="margin-bottom: 0px;">Aliment déjà suggéré</alert>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ul class="list-group fixed-panel" id="lsuggested" style="max-height: 100px; overflow: auto;">
+        <li ng-repeat="suggested_item in suggestedItems | filter: {already_added: false} | orderBy: '-voters_list.length'" ng-if="suggestedItems.length > 0" class="list-group-item suggestion">
+            <bars:suggested:items suggesteditem="suggested_item"></bars:suggested:items>
+        </li>
+        <li class="list-group-item" ng-if="disp_suggested_items.length == 0">
+            <em>Aucun nouvel aliment n'est souhaité par la section</em>
+        </li>
+    </ul>
+</div>

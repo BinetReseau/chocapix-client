@@ -1,0 +1,26 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <h3>
+        Liste des aliments suggérés
+    </h3>
+
+    <div class="panel panel-default">
+        <table class="table table-striped table-hover" ng-if="suggested_items.length > 0">
+            <tr>
+                <th>Nom &ensp;<a href="" ng-click="list_order = list_order == 'name' ? '-name' : 'name';"><span class="glyphicon glyphicon-sort"></span></a></th>
+                <th>Nombre de personnes souhaitant avoir cet aliment &ensp;<a href="" ng-click="list_order = list_order == '-voters_list.length' ? 'voters_list.length' : '-voters_list.length';"><span class="glyphicon glyphicon-sort"></span></a></th>
+                <th>Actions</th>
+            </tr>
+            <tr ng-repeat="f in suggested_items | orderBy:['already_added', '-voters_list.length']" ng-class="f.already_added && 'del'">
+                <td class="col-sm-4">{{ f.name }}</td>
+                <td class="col-sm-3" style="text-align: center;">{{ f.voters_list.length }}</td>
+                <td style="text-align: center;"><a ui-sref="bar.admin.food.suggested_items_list.edit({id: f.id})" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span> Modifier</a>
+                <a ng-if="!f.already_added" ng-click="trash(f)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                <a ng-if="f.already_added" ng-click="untrash(f)" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Rétablir</a>
+                <a ng-if="f.already_added" ng-click="delete(f)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Supprimer définitivement</a></td>
+            </tr>
+        </table>
+        <div class="panel-body" ng-if="suggested_items.length == 0">
+            <em>Aucun aliment ne correspond à votre recherche.</em>
+        </div>
+    </div>
+</div>

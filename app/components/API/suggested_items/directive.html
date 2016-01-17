@@ -1,0 +1,14 @@
+<h5 class="list-group-item-heading Suggestion">
+    <div class="Suggestion__Name" title="{{ suggesteditem.name }}">
+        {{ suggesteditem.name }}
+    </div>
+    <div class="Suggestion__Votes">
+        {{ suggesteditem.voters_list.length }}
+        <a ng-show="!suggesteditem.already_added && !suggesteditem.votedByCurrentUser()" ng-click="vote(suggesteditem)" class="btn btn-success btn-xs">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+        </a>
+        <a ng-show="!suggesteditem.already_added && suggesteditem.votedByCurrentUser()" ng-click="unvote(suggesteditem)" class="btn btn-danger btn-xs">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+        </a>
+    </div>
+</h5>

@@ -296,6 +296,34 @@ hr.derrierebtn {
     font-size: 30px;
 }
 
+.suggestion {
+    display: inline-block;
+    width: 50%;
+}
+.Suggestion {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+}
+.Suggestion__Name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 1.49;
+}
+.Suggestion__Votes {
+    white-space: nowrap;
+}
+.suggestion:nth-child(2n+1) {
+    border-right: 1px #DDD solid !important;
+}
+.suggestion:nth-child(n+3) {
+    border-top: none;
+}
+.suggestion:nth-last-child(2):nth-child(2n+1) {
+    border-bottom: none;
+}
+
 /* Beautiful theme colors */
 .colors span:nth-child(7n+1) {
     color: rgb(51, 122, 183);
