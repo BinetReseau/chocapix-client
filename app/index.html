@@ -57,7 +57,7 @@
                         <small ng-bind="mleft"></small>
                     </div>
                     <div class="pull-right">
-                        <small>{{ percent | number:0 }} %</small>
+                        <small ng-bind="(percent | number:0) + ' %'"></small>
                     </div>
                 </div>
             </div>
