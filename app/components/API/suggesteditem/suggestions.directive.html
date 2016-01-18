@@ -5,7 +5,7 @@
     <div class="panel-body">
         <form ng-submit="saveSuggestedItem(suggestion.name)">
             <div class="form-group" style="margin-bottom: 0px;">
-                <input type="text" class="form-control" placeholder="Suggestion" ng-model="suggestion.name" />
+                <input type="text" class="form-control" placeholder="Suggestion" ng-model="suggestion.name" maxlength="100" />
                 <div ng-if="suggestion.added">
                     <br />
                     <alert type="danger" style="margin-bottom: 0px;">Aliment déjà suggéré</alert>
