@@ -462,9 +462,7 @@ angular.module('bars.api.food', [
             food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
             food_item.keywords = $scope.newFood_item.keywords;
-            if ($scope.newFood_item.unit_factor != 1) {
-                food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
-            }
+            food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
 
             food_item.$save().then(function() {
                 _.forEach(food_item.stockitems, function (s) {
