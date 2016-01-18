@@ -7,8 +7,8 @@
         <a ng-show="!suggesteditem.added && !suggesteditem.votedByCurrentUser()" ng-click="suggesteditem.vote()" class="btn btn-success btn-xs">
             <span class="glyphicon glyphicon-thumbs-up"></span>
         </a>
-        <a ng-show="!suggesteditem.added && suggesteditem.votedByCurrentUser()" ng-click="suggesteditem.unvote()" class="btn btn-danger btn-xs">
-            <span class="glyphicon glyphicon-thumbs-down"></span>
+        <a ng-show="!suggesteditem.added && suggesteditem.votedByCurrentUser()" ng-click="suggesteditem.unvote()" class="btn btn-success btn-xs active">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
         </a>
     </div>
 </h5>
