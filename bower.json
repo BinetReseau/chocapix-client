@@ -21,7 +21,7 @@
     "animate.css": "*",
     "html5-boilerplate": "*",
     "jquery": "*",
-    "lodash": "*",
+    "lodash": "3.10.1",
     "moment": "*",
     "moment-range": "*",
     "ngstorage": "*",
