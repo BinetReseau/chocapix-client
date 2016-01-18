@@ -35,6 +35,7 @@ angular.module('barsApp', [
   'bars.api.role',
   'bars.api.bug',
   'bars.api.menu',
+  'bars.api.suggesteditem',
 ])
 
 .config(['APIURLProvider', 'OFFURLProvider', function(APIURL, OFFURL) {
@@ -102,7 +103,7 @@ angular.module('barsApp', [
     ['$rootScope', '$scope', '$timeout',
     function ($rootScope, $scope, $timeout) {
         $scope.percent = 0;
-        var step = 100/8;
+        var step = 100/9;
         $rootScope.$watch('appLoaded', function () {
             if ($rootScope.appLoaded) {
                 $scope.appLoaded = true;
@@ -148,6 +149,14 @@ angular.module('barsApp', [
         $rootScope.$on('api.News.error', function () {
             $scope.percent += step;
             $scope.mleft = "News : erreur";
+        });
+        $rootScope.$on('api.SuggestedItem.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "SuggestedItem";
+        });
+        $rootScope.$on('api.SuggestedItem.error', function () {
+            $scope.percent += step;
+            $scope.mleft = "SuggestedItem : erreur";
         });
     }])
 ;
