@@ -150,6 +150,10 @@ angular.module('barsApp', [
             $scope.percent += step;
             $scope.mleft = "News : erreur";
         });
+        $rootScope.$on('api.SuggestedItem.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "SuggestedItem";
+        });
         $rootScope.$on('api.SuggestedItem.error', function () {
             $scope.percent += step;
             $scope.mleft = "SuggestedItem : erreur";
