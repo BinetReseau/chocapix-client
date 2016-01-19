@@ -1,14 +1,14 @@
 <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title" id="myModalLabel">Signaler un bug</h4>
+    <h4 class="modal-title" id="myModalLabel">Faire une remarque</h4>
 </div>
 <div class="modal-body">
     <div class="row">
         <form class="form-horiontal" ng-if="!bugSignaled">
             <div class="form-group">
-                <label class="control-label col-sm-3">Description du bug</label>
+                <label class="control-label col-sm-3">Ton message</label>
                 <div class="col-sm-9">
-                    <textarea class="form-control" rows="3" placeholder="Décris ce qui te semble dysfonctionner de la façon la plus précise possible." ng-model="bug.message"></textarea>
+                    <textarea class="form-control" rows="3" placeholder="Il peut s'agir d'une suggestion, d'un bug (décris le le plus précisément possible), d'un message de remerciement, d'une inquiétude, d'une question..." ng-model="bug.message"></textarea>
                 </div>
             </div>
         </form>
