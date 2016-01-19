@@ -86,9 +86,8 @@ angular.module('bars.auth', [
                                     }
                                 }, 300);
 
-                                Menu.request({user: self.user.id}).then(function(menus) {
+                                self.updateMenus().then(function() {
                                     $rootScope.$broadcast('auth.hasLoggedIn');
-                                    self.menus = menus;
                                 });
                             }, function (error) {
                                 self.account = null;
@@ -154,6 +153,12 @@ angular.module('bars.auth', [
             },
             hasAccount: function() {
                 return this.account != null;
+            },
+            updateMenus: function() {
+                var self = this;
+                return Menu.request({user: self.user.id}).then(function(menus) {
+                    self.menus = menus;
+                });
             }
         };
     }])

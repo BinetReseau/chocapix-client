@@ -465,6 +465,7 @@ angular.module('bars.api.food', [
             food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
 
             food_item.$save().then(function() {
+                AuthUser.updateMenus();
                 _.forEach(food_item.stockitems, function (s) {
                     s.$reload();
                 });
