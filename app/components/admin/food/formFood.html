@@ -96,7 +96,7 @@
                     <label for="fcontainer_qty" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
                     <div class="col-sm-10">
                         <div class="input-group">
-                            <input type="number" step="any" min="0" class="form-control" id="fcontainer_qty" placeholder="1000" ng-model="data.id_container_qty" ng-disabled="data.id_id || block">
+                            <input type="number" step="any" min="0" class="form-control" id="fcontainer_qty" placeholder="1000" ng-model="data.id_container_qty" ng-disabled="data.id_id || block" style="min-width: 100px;">
                             <div class="input-group-addon">
                                 {{ (data.id_unit_plural && data.id_container_qty > 1) && data.id_unit_plural || (data.id_unit || ((data.id_name_plural && data.id_container_qty > 1) && data.id_name_plural || data.id_name)) }}
                             </div>
@@ -178,7 +178,7 @@
                 <label for="fsell_to_buy" class="col-sm-2 control-label">1 {{ data.id_container || data.id_name }} = </label>
                 <div class="col-sm-10">
                     <div class="input-group">
-                        <input type="number" step="any" min="0" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="data.sti_sell_to_buy" ng-disabled="data.sti_id || block">
+                        <input type="number" step="any" min="0" class="form-control" id="fsell_to_buy" placeholder="1000" ng-model="data.sti_sell_to_buy" ng-disabled="data.sti_id || block" style="min-width: 100px;">
                         <div class="input-group-addon" ng-if="data.new_sell">
                             {{ (data.sei_unit_name_plural && data.sti_sell_to_buy > 1) && data.sei_unit_name_plural || (data.sei_unit_name || ((data.sei_name_plural && data.sti_sell_to_buy > 1) && data.sei_name_plural || data.sei_name)) }}
                         </div>
@@ -192,7 +192,7 @@
                 <label for="fprice" class="col-sm-2 control-label">Prix</label>
                 <div class="col-sm-10">
                     <div class="input-group">
-                        <input type="number" step="any" min="0" class="form-control" id="fprice" placeholder="2.34" ng-model="data.bip_price" ng-disabled="data.bip_id || block">
+                        <input type="number" step="any" min="0" class="form-control" id="fprice" placeholder="2.34" ng-model="data.bip_price" ng-disabled="data.bip_id || block" style="min-width: 100px;">
                         <div class="input-group-addon">
                             € / 1 <bars:itemdetails qty="1" itemdetails="overviewItemdetails()"></bars:itemdetails>
                         </div>
