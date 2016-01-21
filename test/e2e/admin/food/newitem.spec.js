@@ -146,29 +146,29 @@ describe('Food creation', function() {
     it('should verify the created items', function() {
         foodList.go();
 
-        expect(foodList.getRowText(1)).toMatch(/Coca-Cola/);
-        expect(foodList.getRowText(1)).toMatch(/0 canette/);
-        expect(foodList.getRowText(1)).toMatch(/0,66 € \/ canette/);
+        expect(foodList.getRowText(0)).toMatch(/Coca-Cola/);
+        expect(foodList.getRowText(0)).toMatch(/0 canette/);
+        expect(foodList.getRowText(0)).toMatch(/0,66 € \/ canette/);
+        expect(foodList.getRowText(0)).toMatch(/0,00 €/);
+
+        foodList.toggleRow(0);
+
+        expect(foodList.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(foodList.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(0, 1)).toMatch(/0 canette/);
+        expect(foodList.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
+        expect(foodList.getSubRowText(0, 1)).toMatch(/0,00 €/);
+
+        expect(foodList.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(foodList.getSubRowText(0, 2)).toMatch(/0 canette/);
+        expect(foodList.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
+        expect(foodList.getSubRowText(0, 2)).toMatch(/0,00 €/);
+
+        foodList.toggleRow(0);
+
+        expect(foodList.getRowText(1)).toMatch(/Pringles/);
+        expect(foodList.getRowText(1)).toMatch(/0 g/);
+        expect(foodList.getRowText(1)).toMatch(/0,01 € \/ g/);
         expect(foodList.getRowText(1)).toMatch(/0,00 €/);
-
-        foodList.toggleRow(1);
-
-        expect(foodList.getSubRowText(1, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
-        expect(foodList.getSubRowText(1, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(foodList.getSubRowText(1, 1)).toMatch(/0 canette/);
-        expect(foodList.getSubRowText(1, 1)).toMatch(/0,60 € \/ canette/);
-        expect(foodList.getSubRowText(1, 1)).toMatch(/0,00 €/);
-
-        expect(foodList.getSubRowText(1, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(foodList.getSubRowText(1, 2)).toMatch(/0 canette/);
-        expect(foodList.getSubRowText(1, 2)).toMatch(/0,72 € \/ canette/);
-        expect(foodList.getSubRowText(1, 2)).toMatch(/0,00 €/);
-
-        foodList.toggleRow(1);
-
-        expect(foodList.getRowText(3)).toMatch(/Pringles/);
-        expect(foodList.getRowText(3)).toMatch(/0 g/);
-        expect(foodList.getRowText(3)).toMatch(/0,01 € \/ g/);
-        expect(foodList.getRowText(3)).toMatch(/0,00 €/);
     });
 });

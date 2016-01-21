@@ -7,7 +7,7 @@ describe('Food edition', function() {
 
     it('should verify the food details page', function() {
         foodList.go();
-        foodList.goFood(1);
+        foodList.goFood(0);
 
         expect(foodDetails.getTitle()).toBe('Coca-Cola');
         expect(foodDetails.getPrice()).toBe('0,75 € / canette');
