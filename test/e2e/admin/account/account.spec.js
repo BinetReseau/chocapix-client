@@ -47,7 +47,7 @@ describe('UserCreation', function() {
         uC.setPasswordBis("grm");
         expect(uC.getPasswordClass()).not.toMatch(/has-error/);
         expect(uC.getCreateBTNClass()).not.toMatch(/disabled/);
-        
+
         uC.setCreateSolde(0);
         expect(uC.getCreateBTNClass()).not.toMatch(/disabled/);
 
@@ -59,7 +59,7 @@ describe('UserCreation', function() {
 
         // go check if the new user is created
         uL.go();
-        var user = uL.getRowText(2);
+        var user = uL.getRowText(0);
         expect(user).toMatch(/Germain Jean-Claude/);
         expect(user).toMatch(/JC/);
         expect(user).toMatch(/45,00 €/);
@@ -90,7 +90,7 @@ describe('UserCreation', function() {
         uC.setLogin("gus");
         uC.setPassword("gus");
         uC.setPasswordBis("gus");
-        uC.setCreateSolde(50);        
+        uC.setCreateSolde(50);
 
         uC.validateCreation();
 
@@ -106,7 +106,7 @@ describe('UserCreation', function() {
 
         uL.go();
 
-        var user = uL.getRowText(2);
+        var user = uL.getRowText(1);
         expect(user).toMatch(/Germain Jean-Claude/);
         expect(user).toMatch(/JC/);
         expect(user).toMatch(/25,00 €/);
@@ -129,17 +129,17 @@ describe('UserCreation', function() {
 
         uL.go();
 
-        user = uL.getRowText(2);
+        user = uL.getRowText(0);
         expect(user).toMatch(/Dumas Grégoire/);
         expect(user).toMatch(/La Dum/);
         expect(user).toMatch(/2 500,00 €/);
 
-        user = uL.getRowText(3);
+        user = uL.getRowText(1);
         expect(user).toMatch(/Germain Jean-Claude/);
         expect(user).toMatch(/JC/);
         expect(user).toMatch(/45,00 €/);
 
-        user = uL.getRowText(4);
+        user = uL.getRowText(2);
         expect(user).toMatch(/Lenormand Augustin/);
         expect(user).toMatch(/Toutatis/);
         expect(user).toMatch(/40,00 €/);

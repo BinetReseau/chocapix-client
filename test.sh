@@ -28,7 +28,7 @@ then
     sed -i '.save' 's/bars_django\.settings\.dev_local/bars_django.settings.test/' bars_django/wsgi.py
     sed -i '.save' 's/bars_django\.settings\.dev_local/bars_django.settings.test/' manage.py
 
-    yes "yes" | ./resetdb.sh
+    yes "yes" | ./resetdb_test.sh
     ./manage.py runserver &
     sleep 5
 

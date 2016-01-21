@@ -26,7 +26,7 @@ then
     echo "Lancement des tests"
     cd ../chocapix-server
 
-    yes "yes" | ./resetdb.sh
+    yes "yes" | ./resetdb_test.sh
     ./manage.py runserver &
     sleep 5
 

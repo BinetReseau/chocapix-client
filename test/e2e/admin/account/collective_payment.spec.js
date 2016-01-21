@@ -19,36 +19,28 @@ describe('CollectivePayment', function() {
         };
 
         cP.toggleCheckByNumber(0);
-        cP.toggleCheckByNumber(1);
 
-        for (i = 2; i < cP.getNumberOfRows(); i++) {
+        for (i = 1; i < cP.getNumberOfRows(); i++) {
             expect(cP.getCheckByNumber(i).isSelected()).toBeTruthy();
-            expect(cP.getPayPreviewByNumber(i)).toMatch(/60,00 €/);
+            expect(cP.getPayPreviewByNumber(i)).toMatch(/150,00 €/);
         };
 
-        cP.setRatio(2, 5);
-        cP.setRatio(3, 4);
+        cP.setRatio(1, 6);
+        cP.setRatio(2, 4);
 
-        expect(cP.getPayPreviewByNumber(2)).toMatch(/125,00 €/);
-        expect(cP.getPayPreviewByNumber(3)).toMatch(/100,00 €/);
+        expect(cP.getPayPreviewByNumber(1)).toMatch(/180,00 €/);
+        expect(cP.getPayPreviewByNumber(2)).toMatch(/120,00 €/);
 
         cP.setAmount(250);
 
-        expect(cP.getPayPreviewByNumber(2)).toMatch(/104,17 €/);
-        expect(cP.getPayPreviewByNumber(3)).toMatch(/83,33 €/);
-        expect(cP.getPayPreviewByNumber(4)).toMatch(/20,83 €/);
-        expect(cP.getPayPreviewByNumber(5)).toMatch(/20,83 €/);
-        expect(cP.getPayPreviewByNumber(6)).toMatch(/20,83 €/);
+        expect(cP.getPayPreviewByNumber(1)).toMatch(/150,00 €/);
+        expect(cP.getPayPreviewByNumber(2)).toMatch(/100,00 €/);
 
         cP.validatePayment();
 
-        expect(cP.getSoldeByNumber(0)).toMatch(/0,00 €/);
-        expect(cP.getSoldeByNumber(1)).toMatch(/-2,00 €/);
-        expect(cP.getSoldeByNumber(2)).toMatch(/2 395,83 €/);
-        expect(cP.getSoldeByNumber(3)).toMatch(/-38,33 €/);
-        expect(cP.getSoldeByNumber(4)).toMatch(/19,17 €/);
-        expect(cP.getSoldeByNumber(5)).toMatch(/-20,83 €/);
-        expect(cP.getSoldeByNumber(6)).toMatch(/-20,83 €/);
+        expect(cP.getSoldeByNumber(0)).toMatch(/2 500,00 €/);
+        expect(cP.getSoldeByNumber(1)).toMatch(/-105,00 €/);
+        expect(cP.getSoldeByNumber(2)).toMatch(/-60,00 €/);
 
     });
 });
