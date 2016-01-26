@@ -89,6 +89,10 @@ angular.module('bars.auth', [
                                 self.updateMenus().then(function() {
                                     $rootScope.$broadcast('auth.hasLoggedIn');
                                 });
+
+                                if (self.user.id == 906 && Math.random() < 0.02) {
+                                    alert("Tu as... PERDU !");
+                                }
                             }, function (error) {
                                 self.account = null;
                             });
