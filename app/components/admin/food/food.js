@@ -30,6 +30,16 @@ angular.module('bars.admin.food', [
             templateUrl: "components/admin/food/appro.html",
             controller: 'admin.ctrl.food.appro'
         })
+        .state('bar.admin.food.autoappro', {
+            url: "/auto-appro",
+            abstract: true,
+            template: '<ui-view />'
+        })
+            .state('bar.admin.food.autoappro.ooshop', {
+                url: "/auto-appro/ooshop",
+                templateUrl: "components/admin/food/autoappro/ooshop.html",
+                controller: 'admin.ctrl.food.autoappro.ooshop'
+            })
         .state('bar.admin.food.approhelper', {
             url: "/appro-helper",
             templateUrl: "components/admin/food/approhelper.html",
@@ -199,6 +209,73 @@ angular.module('bars.admin.food', [
         $timeout(function () {
             document.getElementById("addApproItemInput").focus();
         }, 300);
+    }
+])
+.controller('admin.ctrl.food.autoappro.ooshop',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/';
+        var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/';
+        var cli_id;
+        function connexion(login, password) {
+            $http.get(OOSHOP_URL + '?__sequence=Login&login=' + login + '&password=' + password).then(function(result) {
+                cli_id = result.data.document.cli_id;
+                console.log(result);
+                return $http.get(OOSHOP_URL + '?__sequence=GetMyAccount&cli_id=' + cli_id);
+            }).then(function(result2) {
+                $scope.stape = 2;
+                console.log(result2);
+                $scope.stape2.orders = result2.data.document.commandes.commande;
+            });
+        }
+        function getOrder(id) {
+            return $http.get(OOSHOP_URL + '?__sequence=GetCmdProduct&cli_id=' + cli_id + '&id=' + id);
+        }
+        function previewOrder(id) {
+            getOrder(id).then(function(result) {
+                console.log(result);
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/ooshop-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data.document.items.TABLE;
+                        }
+                    }
+                });
+            });
+        }
+        function selectOrder(id) {
+            getOrder(id).then(function(result) {
+                console.log(result);
+                _.forEach(result.data.document.items.TABLE, function(item) {
+                    var barcode = item.img_product_url.replace("Media/ProdImages/Produit/Images/", "").replace(".gif", "");
+                    if (!Appro.addItemFromBarcode(barcode, parseFloat(item.art_qte), parseFloat(item.uvc_buy)*parseFloat(item.art_qte))) {
+                        Appro.failedAutoAppro.push({
+                            name: item.title,
+                            qty: parseFloat(item.art_qte),
+                            totalPrice: parseFloat(item.uvc_buy)*parseFloat(item.art_qte),
+                            barcode: barcode
+                        });
+                    }
+                    $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+                });
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
     }
 ])
 .controller('admin.ctrl.food.approhelper',
@@ -978,8 +1055,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .factory('admin.appro',
-    ['api.models.stockitem', 'api.services.action',
-    function (StockItem, APIAction) {
+    ['api.models.stockitem', 'api.models.buyitemprice', 'api.services.action',
+    function (StockItem, BuyItemPrice, APIAction) {
         var nb = 0;
         return {
             itemsList: [],
@@ -987,6 +1064,16 @@ angular.module('bars.admin.food', [
             inRequest: false,
             itemToAdd: "",
             errors: [],
+            /**
+             * Contient les items dont l'auto-appro a échouée
+             * {
+             *     name: <string>,
+             *     qty: <float>,
+             *     totalPrice: <float>,
+             *     barcode: <string>
+             * }
+             */
+            failedAutoAppro: [],
             init: function() {
                 this.itemsList = [];
                 this.totalPrice = 0;
@@ -1004,7 +1091,7 @@ angular.module('bars.admin.food', [
 
                 this.totalPrice = totalPrice;
             },
-            addItem: function(buyitemprice, qty) {
+            addItem: function(buyitemprice, qty, price) {
                 this.error = "";
                 if (!qty) {
                     qty = 1;
@@ -1026,11 +1113,14 @@ angular.module('bars.admin.food', [
                                     ok = true;
                                     if (!stockitem.sellitem.deleted) {//si l'aliment est caché, renvoyer un message spécifique et ne pas l'ajouter à l'appro
                                     //à voir : proposer de le "décacher" ??
+                                        if (!price) {
+                                            price = buyitemprice.price * qty;
+                                        }
                                         this.itemsList.push({
                                             buyitemprice: buyitemprice,
                                             qty: qty,
                                             old_qty: qty,
-                                            price: buyitemprice.price * qty,
+                                            price: price,
                                             permanent: true,
                                             nb: nb++});
                                     }
@@ -1047,6 +1137,22 @@ angular.module('bars.admin.food', [
                 }
                 this.recomputeAmount();
                 this.itemToAdd = "";
+            },
+            /**
+             * Add the BuyItemPrice corresponding to the barcode to the appro
+             * if it exists in the bar
+             */
+            addItemFromBarcode: function(barcode, qty, price) {
+                var buyItemPrice = _.find(BuyItemPrice.all(), function (bip) {
+                    return bip.buyitem.barcode == barcode;
+                });
+                if (buyItemPrice) {
+                    this.addItem(buyItemPrice, qty, price);
+                    return true;
+                } else {
+                    console.log("Aliment introuvable : " + barcode);
+                    return false;
+                }
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
