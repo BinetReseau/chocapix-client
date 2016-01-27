@@ -40,16 +40,22 @@
                     <tr>
                         <th>Date</th>
                         <th>Numéro de commande</th>
-                        <th>Prévisualiser</th>
-                        <th>Sélectionner</th>
+                        <th class="text-center">Prévisualiser</th>
+                        <th class="text-center">Sélectionner</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="order in stape2.orders">
                         <td>{{ order.date | amParse:'DD/MM/YYYY' | amCalendar }}</td>
                         <td>{{ order.id }}</td>
-                        <td><a href ng-click="stape2.preview(order.id)">Prévisualiser</a></td>
-                        <td><a href ng-click="stape2.select(order.id)">Sélectionner</a></td>
+                        <td class="text-center">
+                            <a href ng-click="stape2.preview(order)" ng-show="!order.loadingp">Prévisualiser</a>
+                            <span class="glyphicon-refresh-animate glyphicon glyphicon-refresh" ng-if="order.loadingp"></span>
+                        </td>
+                        <td class="text-center">
+                            <a href ng-click="stape2.select(order)" ng-show="!order.loadings">Sélectionner</a>
+                            <span class="glyphicon-refresh-animate glyphicon glyphicon-refresh" ng-if="order.loadings"></span>
+                        </td>
                     </tr>
                 </tbody>
             </table>

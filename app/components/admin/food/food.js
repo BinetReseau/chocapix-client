@@ -237,9 +237,10 @@ angular.module('bars.admin.food', [
         function getOrder(id) {
             return $http.get(OOSHOP_URL + '?__sequence=GetCmdProduct&cli_id=' + cli_id + '&id=' + id);
         }
-        function previewOrder(id) {
-            getOrder(id).then(function(result) {
-                console.log(result);
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.id).then(function(result) {
+                order.loadingp = false;
                 var modalOrder = $modal.open({
                     templateUrl: 'components/admin/food/autoappro/ooshop-modal-order.html',
                     controller: ['$scope', 'items', function ($scope, items) {
@@ -254,9 +255,9 @@ angular.module('bars.admin.food', [
                 });
             });
         }
-        function selectOrder(id) {
-            getOrder(id).then(function(result) {
-                console.log(result);
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.id).then(function(result) {
                 _.forEach(result.data.document.items.TABLE, function(item) {
                     var barcode = item.img_product_url.replace("Media/ProdImages/Produit/Images/", "").replace(".gif", "");
                     if (!Appro.addItemFromBarcode(barcode, parseFloat(item.art_qte), parseFloat(item.uvc_buy)*parseFloat(item.art_qte))) {
@@ -267,6 +268,7 @@ angular.module('bars.admin.food', [
                             barcode: barcode
                         });
                     }
+                    order.loadings = false;
                     $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
                 });
             });
