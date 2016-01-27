@@ -30,9 +30,12 @@ angular.module('bars.magicbar', [
 				});
 			});
 		}
-		updateRanking();
-		$rootScope.$on('auth.hasLoggedIn', updateRanking);
-		$rootScope.$on('auth.hasLoggedOut', updateRanking);
+        updateRanking();
+        $rootScope.$on('auth.hasLoggedIn', updateRanking);
+        $rootScope.$on('auth.hasLoggedOut', updateRanking);
+        $rootScope.$on('auth.hasLoggedOut', function() {
+            $scope.bar.search = "";
+        });
 
 
         $scope.query = {
