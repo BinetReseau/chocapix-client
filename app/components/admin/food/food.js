@@ -265,7 +265,9 @@ angular.module('bars.admin.food', [
                             name: item.title,
                             qty: parseFloat(item.art_qte),
                             totalPrice: parseFloat(item.uvc_buy)*parseFloat(item.art_qte),
-                            barcode: barcode
+                            barcode: barcode,
+                            container: item.contenance,
+                            link: "http://www.ooshop.com/courses-en-ligne/ContentNavigation.aspx?NOEUD_IDFO=" + item.id
                         });
                     }
                     order.loadings = false;
@@ -1079,7 +1081,9 @@ angular.module('bars.admin.food', [
              *     name: <string>,
              *     qty: <float>,
              *     totalPrice: <float>,
-             *     barcode: <string>
+             *     barcode: <string>,
+             *     container: <string>,
+             *     link: <string>
              * }
              */
             failedAutoAppro: [],

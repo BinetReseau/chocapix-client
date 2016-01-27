@@ -51,7 +51,13 @@
                         <tbody>
                             <tr ng-repeat="(k, item) in appro.failedAutoAppro">
                                 <td>{{ :: item.barcode }}</td>
-                                <td>{{ :: item.name }}</td>
+                                <td>
+                                    <a href="{{ :: item.link }}" target="_blank">
+                                        {{ :: item.name }}
+                                    </a>
+                                    <br />
+                                    {{ :: item.container }}
+                                </td>
                                 <td>{{ :: item.qty }}</td>
                                 <td>{{ :: item.totalPrice | currency }}</td>
                                 <td class="vmiddle">
