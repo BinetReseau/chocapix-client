@@ -21,7 +21,9 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-4 col-md-8 col-lg-10 col-lg-offset-2">
-                        <input type="submit" class="btn btn-success" value="Connexion à Ooshop" />
+                        <button type="submit" class="btn btn-success" ng-class="stape1.loading && 'disabled' || ''">
+                            Connexion à Ooshop <span class="glyphicon-refresh-animate glyphicon glyphicon-refresh" ng-show="stape1.loading"></span>
+                        </button>
                     </div>
                 </div>
             </form>

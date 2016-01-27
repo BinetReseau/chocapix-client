@@ -214,18 +214,24 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.ooshop',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/';
+        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json';
         var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/';
         var cli_id;
         function connexion(login, password) {
+            $scope.stape1.loading = true;
             $http.get(OOSHOP_URL + '?__sequence=Login&login=' + login + '&password=' + password).then(function(result) {
+                if (result.data.document.isLogged == "false") {
+                    throw("Wrong Ooshop password");
+                }
                 cli_id = result.data.document.cli_id;
-                console.log(result);
                 return $http.get(OOSHOP_URL + '?__sequence=GetMyAccount&cli_id=' + cli_id);
             }).then(function(result2) {
                 $scope.stape = 2;
-                console.log(result2);
+                $scope.stape1.loading = false;
                 $scope.stape2.orders = result2.data.document.commandes.commande;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
             });
         }
         function getOrder(id) {
@@ -269,7 +275,8 @@ angular.module('bars.admin.food', [
         $scope.stape1 = {
             login: '',
             password: '',
-            validate: connexion
+            validate: connexion,
+            loading: false
         };
         $scope.stape2 = {
             orders: [],
