@@ -14,7 +14,7 @@ angular.module('bars.magicbar', [
 			});
 			_.forEach(AuthUser.menus, function (menu) {
 				menu.urank = 0;
-			})
+			});
 		}
 		function updateRanking() {
 			if (!AuthUser.account) {
@@ -182,7 +182,7 @@ angular.module('bars.magicbar', [
 					delete humanTypes[k];
 				}
 			});
-			humanTypes['add'] = 'ajouter';
+			humanTypes.add = 'ajouter';
 
 	        var units = [
 	            'g',
@@ -395,8 +395,8 @@ angular.module('bars.magicbar', [
 						} else {
 							res.type = res.type || 'buy';
 						}
-						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory')
-								|| res.unit_name === "€"){
+						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory') ||
+							res.unit_name === "€") {
 							return []; // Discard
 						}
 						if (res.unit_name) {
