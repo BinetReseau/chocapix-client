@@ -214,8 +214,9 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.ooshop',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json';
-        var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/';
+        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json'; // Original URL but no Access-Control-Origin header
+        // var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/'; // Reverse proxy by ntag
+        var OOSHOP_URL = 'http://chocapix/ooshop/.json'; // Reverse proxy in the school
         var cli_id;
         function connexion(login, password) {
             $scope.stape1.loading = true;
