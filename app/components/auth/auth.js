@@ -175,7 +175,7 @@ angular.module('bars.auth', [
         return {
             request: function(config) {
                 config.headers = config.headers || {};
-                if (AuthService.isAuthenticated() && !/\/off\//.test(config.url) && !/\/ooshop\//.test(config.url) && !/fr\.openfoodfacts\.org/.test(config.url)) {
+                if (AuthService.isAuthenticated() && !/\/off\//.test(config.url) && !/\/ooshop\//.test(config.url) && !/\/autoappro\//.test(config.url) && !/fr\.openfoodfacts\.org/.test(config.url)) {
                     config.headers.Authorization = 'JWT ' + AuthService.getToken();
                 }
 
