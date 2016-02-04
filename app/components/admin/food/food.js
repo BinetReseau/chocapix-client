@@ -40,6 +40,11 @@ angular.module('bars.admin.food', [
                 templateUrl: "components/admin/food/autoappro/ooshop.html",
                 controller: 'admin.ctrl.food.autoappro.ooshop'
             })
+            .state('bar.admin.food.autoappro.intermarche', {
+                url: "/auto-appro/intermarche",
+                templateUrl: "components/admin/food/autoappro/intermarche.html",
+                controller: 'admin.ctrl.food.autoappro.intermarche'
+            })
         .state('bar.admin.food.approhelper', {
             url: "/appro-helper",
             templateUrl: "components/admin/food/approhelper.html",
@@ -216,7 +221,7 @@ angular.module('bars.admin.food', [
     function($scope, $http, $modal, $state, Appro) {
         // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json'; // Original URL but no Access-Control-Origin header
         // var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/'; // Reverse proxy by ntag
-        var OOSHOP_URL = 'http://chocapix/ooshop/.json'; // Reverse proxy in the school
+        var OOSHOP_URL = 'http://chocapix/autoappro/ooshop/.json'; // Reverse proxy in the school
         var cli_id;
         function connexion(login, password) {
             $scope.stape1.loading = true;
@@ -269,6 +274,83 @@ angular.module('bars.admin.food', [
                             barcode: barcode,
                             container: item.contenance,
                             link: "http://www.ooshop.com/courses-en-ligne/ContentNavigation.aspx?NOEUD_IDFO=" + item.id
+                        });
+                    }
+                    order.loadings = false;
+                    $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+                });
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
+    }
+])
+.controller('admin.ctrl.food.autoappro.intermarche',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        var INTERMARCHE_URL = 'http://chocapix/autoappro/intermarche'; // Reverse proxy in the school
+        var token;
+        function connexion(login, password) {
+            $scope.stape1.loading = true;
+            $http.post(INTERMARCHE_URL + '/login', {email: login, mdp: password}).then(function(result) {
+                console.log(result);
+                if (!result.data.ecomToken) {
+                    throw("Wrong Intermarché password");
+                }
+                token = result.data.ecomToken;
+                return $http.get(INTERMARCHE_URL + '/orders?token=' + token);
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.orders = result2.data.Commandes;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+
+        function previewOrder(order) {
+            var modalOrder = $modal.open({
+                templateUrl: 'components/admin/food/autoappro/intermarche-modal-order.html',
+                controller: ['$scope', 'items', function ($scope, items) {
+                    $scope.items = items;
+                }],
+                size: 'lg',
+                resolve: {
+                    items: function () {
+                        return order.ListeCommandeArticles;
+                    }
+                }
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            var ids = _.map(order.ListeCommandeArticles, 'IdProduit');
+            $http.post(INTERMARCHE_URL + '/details', ids).then(function(result) {
+                var barcodes = {};
+                _.forEach(result.data, function(item) {
+                    barcodes[item.id] = item.gtin.replace(/^0+/, '');
+                });
+                _.forEach(order.ListeCommandeArticles, function(item) {
+                    var barcode = barcodes[item.IdProduit];
+                    if (!Appro.addItemFromBarcode(barcode, item.Quantite, item.PrixUnitaire*item.Quantite)) {
+                        Appro.failedAutoAppro.push({
+                            name: item.LibelleCourt,
+                            qty: item.Quantite,
+                            totalPrice: item.PrixUnitaire*item.Quantite,
+                            barcode: barcode,
+                            container: "",
+                            link: "https://ws-mz-prd.mousquetaires.com/repo/produit/mcom/images/produits/" + item.NomImage
                         });
                     }
                     order.loadings = false;
