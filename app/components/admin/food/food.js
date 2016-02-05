@@ -45,6 +45,11 @@ angular.module('bars.admin.food', [
                 templateUrl: "components/admin/food/autoappro/intermarche.html",
                 controller: 'admin.ctrl.food.autoappro.intermarche'
             })
+            .state('bar.admin.food.autoappro.picard', {
+                url: "/auto-appro/picard",
+                templateUrl: "components/admin/food/autoappro/picard.html",
+                controller: 'admin.ctrl.food.autoappro.picard'
+            })
         .state('bar.admin.food.approhelper', {
             url: "/appro-helper",
             templateUrl: "components/admin/food/approhelper.html",
@@ -276,9 +281,9 @@ angular.module('bars.admin.food', [
                             link: "http://www.ooshop.com/courses-en-ligne/ContentNavigation.aspx?NOEUD_IDFO=" + item.id
                         });
                     }
-                    order.loadings = false;
-                    $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
                 });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
             });
         }
         $scope.stape = 1;
@@ -353,9 +358,94 @@ angular.module('bars.admin.food', [
                             link: "https://ws-mz-prd.mousquetaires.com/repo/produit/mcom/images/produits/" + item.NomImage
                         });
                     }
-                    order.loadings = false;
-                    $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
                 });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
+    }
+])
+.controller('admin.ctrl.food.autoappro.picard',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        var PICARD_URL = 'http://chocapix/autoappro/picard'; // Reverse proxy in the school
+        var token;
+        function connexion(login, password) {
+            $scope.stape1.loading = true;
+            $http.post(PICARD_URL + '/login', {username: login, password: password}).then(function(result) {
+                if (result.data.error == "error") {
+                    throw("Wrong Picard password");
+                }
+                token = result.data.session;
+                return $http.get(PICARD_URL + '/orders', {headers: {'Authorization': token}});
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.orders = result2.data.data;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+        function getOrder(id) {
+            return $http.get(PICARD_URL + '/orders/' + id, {headers: {'Authorization': token}});
+        }
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.order_no).then(function(result) {
+                order.loadingp = false;
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/picard-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data.product_items;
+                        }
+                    }
+                });
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.order_no).then(function(result) {
+                _.forEach(result.data.product_items, function(item) {
+                    var barcodes = item.details.ean.split(' ');
+                    var success = false;
+                    for (var i = 0; i < barcodes.length; i++) {
+                        var barcode = barcodes[i];
+                        if (Appro.addItemFromBarcode(barcode, item.c_facturationQuantite, item.c_facturationPrixTTC)) {
+                            success = true;
+                            break;
+                        }
+                    }
+                    if (!success) {
+                        Appro.failedAutoAppro.push({
+                            name: item.item_text + " - " + item.details.manufacturer_name,
+                            qty: item.c_facturationQuantite,
+                            totalPrice: item.c_facturationPrixTTC,
+                            barcode: item.details.ean,
+                            container: $('<textarea />').html(item.details.c_conditionnement).text(),
+                            link: "http://www.picard.fr/produits/prouit-" + item.product_id + ".html"
+                        });
+                    }
+                });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
             });
         }
         $scope.stape = 1;
