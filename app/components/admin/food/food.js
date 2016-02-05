@@ -36,19 +36,24 @@ angular.module('bars.admin.food', [
             template: '<ui-view />'
         })
             .state('bar.admin.food.autoappro.ooshop', {
-                url: "/auto-appro/ooshop",
+                url: "/ooshop",
                 templateUrl: "components/admin/food/autoappro/ooshop.html",
                 controller: 'admin.ctrl.food.autoappro.ooshop'
             })
             .state('bar.admin.food.autoappro.intermarche', {
-                url: "/auto-appro/intermarche",
+                url: "/intermarche",
                 templateUrl: "components/admin/food/autoappro/intermarche.html",
                 controller: 'admin.ctrl.food.autoappro.intermarche'
             })
             .state('bar.admin.food.autoappro.picard', {
-                url: "/auto-appro/picard",
+                url: "/picard",
                 templateUrl: "components/admin/food/autoappro/picard.html",
                 controller: 'admin.ctrl.food.autoappro.picard'
+            })
+            .state('bar.admin.food.autoappro.houra', {
+                url: "/houra",
+                templateUrl: "components/admin/food/autoappro/houra.html",
+                controller: 'admin.ctrl.food.autoappro.houra'
             })
         .state('bar.admin.food.approhelper', {
             url: "/appro-helper",
@@ -457,6 +462,98 @@ angular.module('bars.admin.food', [
         };
         $scope.stape2 = {
             orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
+    }
+])
+.controller('admin.ctrl.food.autoappro.houra',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        var HOURA_URL = 'http://chocapix/autoappro/houra'; // Reverse proxy in the school
+        var auth;
+        function connexion(login, password, zipcode) {
+            $scope.stape1.loading = true;
+            auth = {
+                login: login,
+                password: sha1(password)
+            };
+            $http.post(HOURA_URL + '/login.php', {"postal-code": zipcode, authentication: auth}).then(function(result) {
+                if (result.data.status.code != 0) {
+                    throw("Wrong Houra password");
+                }
+                auth.userid = result.data.userId;
+                return $http.post(HOURA_URL + '/lists.php', {authentication: auth});
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.glists = result2.data.list;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+        function getOrder(id) {
+            return $http.post(HOURA_URL + '/list.php', {id: id,"cart-id": id,cartId: id, authentication: auth}).then(function(r) {
+                _.forEach(r.data.products, function (p) {
+                    p.price = parseFloat(p.uprice.replace('€', '').replace(',', '.'));
+                    p.amount = parseFloat(p.amount);
+                    p.total_price = p.price*p.amount;
+                    if (p.images.length > 0) {
+                        p.barcode = p.images[0].replace(/^.*([0-9]{13}).*$/, '$1');
+                    }
+                });
+                return r;
+            });
+        }
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.id).then(function(result) {
+                console.log(result);
+                order.loadingp = false;
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/houra-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data.products;
+                        }
+                    }
+                });
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.id).then(function(result) {
+                _.forEach(result.data.products, function(item) {
+                    if (!Appro.addItemFromBarcode(item.barcode, item.amount, item.total_price)) {
+                        Appro.failedAutoAppro.push({
+                            name: item.name + " - " + item.brand,
+                            qty: item.amount,
+                            totalPrice: item.total_price,
+                            barcode: item.barcode,
+                            container: item.size,
+                            link: "http://www.houra.fr/catalogue/?id_article=" + item.id
+                        });
+                    }
+                });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            zipcode: '91120',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            glists: [],
             preview: previewOrder,
             select: selectOrder
         };
