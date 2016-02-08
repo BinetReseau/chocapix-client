@@ -20,6 +20,8 @@ then
     echo "3. Installer chocapix-server dans le dossier parent (chocapix-client et chocapix-server doivent être au même niveau)"
     echo "   Il est impératif que vous puissiez lancer le serveur via ./managy.py runserver"
     echo ""
+    echo "/!\\ Si vous utilisez un virtualenv pour la partie serveur, il faut d'abord l'activer, puis lancer les tests dans le même shell !"
+    echo ""
     echo "Une fois ceci effectué, vous pouvez lancer les tests simplement via ./test.sh run"
 elif [ $1 = "run" ]
 then
