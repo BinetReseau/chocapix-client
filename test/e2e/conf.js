@@ -20,6 +20,9 @@ exports.config = {
         ]
 
     },
+    jasmineNodeOpts: {
+        defaultTimeoutInterval: 60000
+    },
     onPrepare: function() {
         // Disable animations so the splashscreen disappear...
         var disableNgAnimate = function() {
