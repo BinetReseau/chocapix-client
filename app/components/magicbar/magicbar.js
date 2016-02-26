@@ -73,7 +73,7 @@ angular.module('bars.magicbar', [
 					});
 					if (buy_item) {
 						$scope.bar.search = buy_item.details.stockitem.sellitem.name;
-						$('#q_alim').eq(0).val(buy_item.details.stockitem.sellitem.name + " ").trigger("input");
+						$('#magic_bar').eq(0).val(buy_item.details.stockitem.sellitem.name + " ").trigger("input");
 					}
 				}
 			}
@@ -125,7 +125,7 @@ angular.module('bars.magicbar', [
 							APIAction[type](req).then(function() {
 								$modalInstance.close();
 								$timeout(function () {
-									document.getElementById('q_alim').focus();
+									document.getElementById('magic_bar').focus();
 								}, 500);
 			                });
 	                    };

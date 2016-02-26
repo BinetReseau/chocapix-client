@@ -247,7 +247,7 @@ angular.module('bars.main', [
         };
 
         if (AuthUser.isAuthenticated()) {
-            document.getElementById("q_alim").focus();
+            document.getElementById("magic_bar").focus();
         } else {
             document.getElementById("floginc").focus();
         }

@@ -81,8 +81,8 @@ angular.module('bars.auth', [
 
                                 self.account = account;
                                 $timeout(function() {
-                                    if(document.getElementById("q_alim")) {
-                                        document.getElementById("q_alim").focus();
+                                    if(document.getElementById("magic_bar")) {
+                                        document.getElementById("magic_bar").focus();
                                     }
                                 }, 300);
 

@@ -188,7 +188,7 @@ angular.module('bars.meal', [
                     $rootScope.$broadcast('meal.hasBeenValidated');
                     refThis.init();
                     delete storage.get('meal')[AuthUser.user.id];
-                    document.getElementById("q_alim").focus();
+                    document.getElementById("magic_bar").focus();
                 })
                 .catch(function() {
                     refThis.error("Impossible d'enregistrer la bouffe à plusieurs");
