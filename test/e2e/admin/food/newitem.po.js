@@ -125,7 +125,11 @@ var AdminFoodCreation = function() {
         return eBarcode.getAttribute('value');
     };
     this.setBarcode = function(text) {
-        return eBarcode.sendKeys(text).sendKeys(protractor.Key.ENTER);
+        return eBarcode
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(text)
+            .sendKeys(protractor.Key.ENTER);
     };
     this.getItemDetailsName = function() {
         return eItemDetailsName.getAttribute('value');
@@ -196,7 +200,7 @@ var AdminFoodCreation = function() {
     this.setSellItemUnitName = function(text, erase) {
         if (erase) {
             return eSellItemUnitName
-                .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+                .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
                 .sendKeys(protractor.Key.BACK_SPACE)
                 .sendKeys(text);
         }
@@ -211,7 +215,7 @@ var AdminFoodCreation = function() {
     this.setSellItemUnitNamePlural = function(text, erase) {
         if (erase) {
             return eSellItemUnitNamePlural
-                .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+                .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
                 .sendKeys(protractor.Key.BACK_SPACE)
                 .sendKeys(text);
         }
@@ -226,10 +230,7 @@ var AdminFoodCreation = function() {
     this.setStockItemSellToBuy = function(text, erase) {
         if (erase) {
             return eStockItemSellToBuy
-                .sendKeys(protractor.Key.BACK_SPACE)
-                .sendKeys(protractor.Key.BACK_SPACE)
-                .sendKeys(protractor.Key.BACK_SPACE)
-                .sendKeys(protractor.Key.BACK_SPACE)
+                .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
                 .sendKeys(protractor.Key.BACK_SPACE)
                 .sendKeys(text);
         }

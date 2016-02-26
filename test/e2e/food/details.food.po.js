@@ -29,20 +29,14 @@ var FoodDetails = function() {
     };
     this.setStockItemSellToBuy = function(n, text) {
         return this.getRow(n).element(by.model('si.sell_to_buy_inv'))
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+        		.sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.setStockItemPrice = function(n, text) {
         return this.getRow(n).element(by.model('si.buy_price'))
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+        		.sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.validateStockItem = function(n) {
@@ -52,43 +46,37 @@ var FoodDetails = function() {
     // Edition tab
     this.setSellItemName = function(text) {
         return element(by.model('newFood_item.name'))
-            .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
             .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.setSellItemNamePlural = function(text) {
         return element(by.model('newFood_item.name_plural'))
-            .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
             .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.setSellItemUnit = function(text) {
         return element(by.model('newFood_item.unit_name'))
-            .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
             .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.setSellItemUnitPlural = function(text) {
         return element(by.model('newFood_item.unit_name_plural'))
-            .sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
             .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.setSellItemUnitFactor = function(text) {
         return element(by.model('newFood_item.unit_factor'))
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+        		.sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };
     this.setSellItemTax = function(text) {
         return element(by.model('newFood_item.tax'))
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
-            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
             .sendKeys(protractor.Key.BACK_SPACE)
             .sendKeys(text);
     };

@@ -37,7 +37,7 @@ var UserCreation = function() {
 	};
 	this.setImportSolde = function(entry) {
 		return importSolde
-		.sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+		.sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
         .sendKeys(protractor.Key.BACK_SPACE)
 		.sendKeys(entry);
 	};
@@ -63,7 +63,7 @@ var UserCreation = function() {
 	};
 	this.setLogin = function(entry) {
 		return login
-		.sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+		.sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
         .sendKeys(protractor.Key.BACK_SPACE)
 		.sendKeys(entry);
 	};
@@ -72,13 +72,13 @@ var UserCreation = function() {
 	};
 	this.setPasswordBis = function(entry) {
 		return passwordBis
-		.sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+		.sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
         .sendKeys(protractor.Key.BACK_SPACE)
 		.sendKeys(entry);
 	};
 	this.setCreateSolde = function(entry) {
 		return createSolde
-		.sendKeys(protractor.Key.SHIFT, protractor.Key.ARROW_UP, protractor.Key.NULL)
+		.sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
         .sendKeys(protractor.Key.BACK_SPACE)
 		.sendKeys(entry);
 	};

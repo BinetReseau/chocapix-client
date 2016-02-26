@@ -21,7 +21,8 @@ var CollectivePayment = function() {
 	};
 	this.setAmount = function(entry) {
 		return amount
-		.sendKeys(protractor.Key.BACK_SPACE, protractor.Key.BACK_SPACE, protractor.Key.BACK_SPACE)
+		.sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+		.sendKeys(protractor.Key.BACK_SPACE)
 		.sendKeys(entry);
 	};
 	this.setRatio = function(n, entry) {
@@ -50,7 +51,7 @@ var CollectivePayment = function() {
     this.getNumberOfChecked = function() {
     	return element.all(by.model('a.pay')).filter(function(e) { return e.isSelected(); }).then(function(e) { return e.length; });
     };
-    
+
 
 
 
