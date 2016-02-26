@@ -120,7 +120,7 @@ describe('Food creation', function() {
         // Création d'un aliment
         aFD.go();
 
-        aFD.setBarcode('12321');
+        aFD.setBarcode('99990');
         expect(aFD.isBarcodeErrorDisplayed()).toBe(false);
         aFD.setItemDetailsName('Pringles Nature');
         aFD.setItemDetailsContainer('Boite');
