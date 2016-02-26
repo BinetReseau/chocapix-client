@@ -2,173 +2,173 @@ var AdminFoodCreation = require('./newitem.po.js');
 var FoodList = require('../../food/list.food.po.js');
 
 describe('Food creation', function() {
-    var adminFoodCreation = new AdminFoodCreation();
-    var foodList = new FoodList();
+    var aFD = new AdminFoodCreation();
+    var fL = new FoodList();
 
     it('should create a simple item', function() {
         // Création d'un aliment
-        adminFoodCreation.go();
+        aFD.go();
 
-        adminFoodCreation.setBarcode('123');
-        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
-        adminFoodCreation.setItemDetailsName('Coca-Cola');
-        adminFoodCreation.setItemDetailsContainer('Canette');
-        adminFoodCreation.setItemDetailsContainerPlural('s');
-        adminFoodCreation.setItemDetailsUnit('cl');
-        adminFoodCreation.setItemDetailsContainerQty('33');
+        aFD.setBarcode('123');
+        expect(aFD.isBarcodeErrorDisplayed()).toBe(false);
+        aFD.setItemDetailsName('Coca-Cola');
+        aFD.setItemDetailsContainer('Canette');
+        aFD.setItemDetailsContainerPlural('s');
+        aFD.setItemDetailsUnit('cl');
+        aFD.setItemDetailsContainerQty('33');
 
-        expect(adminFoodCreation.getItemDetailsPreview()).toEqual('Appro de 4 Canettes de 33 cl de Coca-Cola');
+        expect(aFD.getItemDetailsPreview()).toEqual('Appro de 4 Canettes de 33 cl de Coca-Cola');
 
-        adminFoodCreation.setSellItemName('Coca-Cola');
-        adminFoodCreation.setSellItemUnitName('canette');
-        adminFoodCreation.setSellItemUnitNamePlural('s');
-        adminFoodCreation.setStockItemSellToBuy('1');
-        adminFoodCreation.setPrice('0.5');
+        aFD.setSellItemName('Coca-Cola');
+        aFD.setSellItemUnitName('canette');
+        aFD.setSellItemUnitNamePlural('s');
+        aFD.setStockItemSellToBuy('1');
+        aFD.setPrice('0.5');
 
-        expect(adminFoodCreation.getSellItemPreview()).toEqual('Achat de 53 canettes de Coca-Cola pour 31,80 €');
+        expect(aFD.getSellItemPreview()).toEqual('Achat de 53 canettes de Coca-Cola pour 31,80 €');
 
-        adminFoodCreation.clickValidate();
+        aFD.clickValidate();
 
-        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
-        adminFoodCreation.closeLastAlert();
+        expect(aFD.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        aFD.closeLastAlert();
     });
 
     it('should create a new item rattached to an existing SellItem', function() {
-        adminFoodCreation.setBarcode('123456');
-        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
-        adminFoodCreation.setItemDetailsName('Coca-Cola Light');
-        adminFoodCreation.setItemDetailsContainer('Canette');
-        adminFoodCreation.setItemDetailsContainerPlural('s');
-        adminFoodCreation.setItemDetailsUnit('cl');
-        adminFoodCreation.setItemDetailsContainerQty('33');
+        aFD.setBarcode('123456');
+        expect(aFD.isBarcodeErrorDisplayed()).toBe(false);
+        aFD.setItemDetailsName('Coca-Cola Light');
+        aFD.setItemDetailsContainer('Canette');
+        aFD.setItemDetailsContainerPlural('s');
+        aFD.setItemDetailsUnit('cl');
+        aFD.setItemDetailsContainerQty('33');
 
-        expect(adminFoodCreation.getItemDetailsPreview()).toEqual('Appro de 4 Canettes de 33 cl de Coca-Cola Light');
+        expect(aFD.getItemDetailsPreview()).toEqual('Appro de 4 Canettes de 33 cl de Coca-Cola Light');
 
-        adminFoodCreation.clickAlreadySell();
+        aFD.clickAlreadySell();
 
-        adminFoodCreation.setOldSellItem('Coc');
-        expect(adminFoodCreation.getOldSellItem()).toEqual('Coca-Cola');
+        aFD.setOldSellItem('Coc');
+        expect(aFD.getOldSellItem()).toEqual('Coca-Cola');
 
-        adminFoodCreation.setStockItemSellToBuy('1');
-        adminFoodCreation.setPrice('0.6');
+        aFD.setStockItemSellToBuy('1');
+        aFD.setPrice('0.6');
 
-        expect(adminFoodCreation.getSellItemPreview()).toEqual('Achat de 53 canettes de Coca-Cola pour 38,16 €');
+        expect(aFD.getSellItemPreview()).toEqual('Achat de 53 canettes de Coca-Cola pour 38,16 €');
 
-        adminFoodCreation.clickValidate();
+        aFD.clickValidate();
 
-        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
-        adminFoodCreation.closeLastAlert();
+        expect(aFD.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        aFD.closeLastAlert();
     });
 
     it('should create a pack for an existing item', function() {
-        adminFoodCreation.setBarcode('123456789');
-        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
+        aFD.setBarcode('123456789');
+        expect(aFD.isBarcodeErrorDisplayed()).toBe(false);
 
-        adminFoodCreation.clickPack();
+        aFD.clickPack();
 
-        adminFoodCreation.setBuyItemQty('10');
-        adminFoodCreation.setItemInPack('Coc lig');
-        expect(adminFoodCreation.getItemInPack()).toEqual('Coca-Cola Light');
+        aFD.setBuyItemQty('10');
+        aFD.setItemInPack('Coc lig');
+        expect(aFD.getItemInPack()).toEqual('Coca-Cola Light');
 
-        adminFoodCreation.setPrice('5');
+        aFD.setPrice('5');
 
-        adminFoodCreation.clickValidate();
+        aFD.clickValidate();
 
-        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
-        adminFoodCreation.closeLastAlert();
+        expect(aFD.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        aFD.closeLastAlert();
 
-        adminFoodCreation.setBarcode('1234567890');
-        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
-        adminFoodCreation.clickPack();
-        adminFoodCreation.setBuyItemQty('10');
-        adminFoodCreation.setItemInPack('Coc');
-        expect(adminFoodCreation.getItemInPack()).toEqual('Coca-Cola');
-        adminFoodCreation.setPrice('4');
-        adminFoodCreation.clickValidate();
-        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
-        adminFoodCreation.closeLastAlert();
+        aFD.setBarcode('1234567890');
+        expect(aFD.isBarcodeErrorDisplayed()).toBe(false);
+        aFD.clickPack();
+        aFD.setBuyItemQty('10');
+        aFD.setItemInPack('Coc');
+        expect(aFD.getItemInPack()).toEqual('Coca-Cola');
+        aFD.setPrice('4');
+        aFD.clickValidate();
+        expect(aFD.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        aFD.closeLastAlert();
     });
 
     it('should not be able to add a barcode already in the bar', function() {
-        adminFoodCreation.setBarcode('123456');
-        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(true);
+        aFD.setBarcode('123456');
+        expect(aFD.isBarcodeErrorDisplayed()).toBe(true);
 
-        expect(adminFoodCreation.isItemDetailsNameEnabled()).toBe(false);
-        expect(adminFoodCreation.isItemDetailsContainerEnabled()).toBe(false);
-        expect(adminFoodCreation.isItemDetailsContainerPluralEnabled()).toBe(false);
-        expect(adminFoodCreation.isItemDetailsUnitEnabled()).toBe(false);
-        // expect(adminFoodCreation.isItemDetailsContainerQtyEnabled()).toBe(false);
+        expect(aFD.isItemDetailsNameEnabled()).toBe(false);
+        expect(aFD.isItemDetailsContainerEnabled()).toBe(false);
+        expect(aFD.isItemDetailsContainerPluralEnabled()).toBe(false);
+        expect(aFD.isItemDetailsUnitEnabled()).toBe(false);
+        // expect(aFD.isItemDetailsContainerQtyEnabled()).toBe(false);
 
-        expect(adminFoodCreation.isSellItemNameEnabled()).toBe(false);
-        expect(adminFoodCreation.isSellItemUnitNameEnabled()).toBe(false);
-        expect(adminFoodCreation.isSellItemUnitNamePluralEnabled()).toBe(false);
-        expect(adminFoodCreation.isStockItemSellToBuyEnabled()).toBe(false);
+        expect(aFD.isSellItemNameEnabled()).toBe(false);
+        expect(aFD.isSellItemUnitNameEnabled()).toBe(false);
+        expect(aFD.isSellItemUnitNamePluralEnabled()).toBe(false);
+        expect(aFD.isStockItemSellToBuyEnabled()).toBe(false);
 
-        expect(adminFoodCreation.isValidateEnabled()).toBe(false);
-        expect(adminFoodCreation.isPackChoiceEnabled()).toBe(false);
-        expect(adminFoodCreation.isNotPackChoiceEnabled()).toBe(false);
-        expect(adminFoodCreation.isAlreadySellChoiceEnabled()).toBe(false);
-        expect(adminFoodCreation.isNotYetSellChoiceEnabled()).toBe(false);
+        expect(aFD.isValidateEnabled()).toBe(false);
+        expect(aFD.isPackChoiceEnabled()).toBe(false);
+        expect(aFD.isNotPackChoiceEnabled()).toBe(false);
+        expect(aFD.isAlreadySellChoiceEnabled()).toBe(false);
+        expect(aFD.isNotYetSellChoiceEnabled()).toBe(false);
 
-        // expect(adminFoodCreation.isBuyItemQtyEnabled()).toBe(false);
-        // expect(adminFoodCreation.isItemInPackEnabled()).toBe(false);
+        // expect(aFD.isBuyItemQtyEnabled()).toBe(false);
+        // expect(aFD.isItemInPackEnabled()).toBe(false);
 
-        // expect(adminFoodCreation.isOldSellItemEnabled()).toBe(false);
+        // expect(aFD.isOldSellItemEnabled()).toBe(false);
     });
 
     it('should create a more complet item', function() {
         // Création d'un aliment
-        adminFoodCreation.go();
+        aFD.go();
 
-        adminFoodCreation.setBarcode('12321');
-        expect(adminFoodCreation.isBarcodeErrorDisplayed()).toBe(false);
-        adminFoodCreation.setItemDetailsName('Pringles');
-        adminFoodCreation.setItemDetailsContainer('Boite');
-        adminFoodCreation.setItemDetailsContainerPlural('s');
-        adminFoodCreation.setItemDetailsUnit('g');
-        adminFoodCreation.setItemDetailsContainerQty('160');
+        aFD.setBarcode('12321');
+        expect(aFD.isBarcodeErrorDisplayed()).toBe(false);
+        aFD.setItemDetailsName('Pringles Nature');
+        aFD.setItemDetailsContainer('Boite');
+        aFD.setItemDetailsContainerPlural('s');
+        aFD.setItemDetailsUnit('g');
+        aFD.setItemDetailsContainerQty('160');
 
-        expect(adminFoodCreation.getItemDetailsPreview()).toEqual('Appro de 4 Boites de 160 g de Pringles');
+        expect(aFD.getItemDetailsPreview()).toEqual('Appro de 4 Boites de 160 g de Pringles Nature');
 
-        adminFoodCreation.setSellItemName('Pringles');
-        adminFoodCreation.setSellItemUnitName('g');
-        adminFoodCreation.setStockItemSellToBuy('160');
-        adminFoodCreation.setPrice('1.60');
+        aFD.setSellItemName('Pringles Nature');
+        aFD.setSellItemUnitName('g');
+        aFD.setStockItemSellToBuy('160');
+        aFD.setPrice('1.60');
 
-        expect(adminFoodCreation.getSellItemPreview()).toEqual('Achat de 53 g de Pringles pour 0,64 €');
+        expect(aFD.getSellItemPreview()).toEqual('Achat de 53 g de Pringles Nature pour 0,64 €');
 
-        adminFoodCreation.clickValidate();
+        aFD.clickValidate();
 
-        expect(adminFoodCreation.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
-        adminFoodCreation.closeLastAlert();
+        expect(aFD.getLastAlert()).toMatch(/L'aliment a été correctement créé\./);
+        aFD.closeLastAlert();
     });
 
     it('should verify the created items', function() {
-        foodList.go();
+        fL.go();
 
-        expect(foodList.getRowText(0)).toMatch(/Coca-Cola/);
-        expect(foodList.getRowText(0)).toMatch(/0 canette/);
-        expect(foodList.getRowText(0)).toMatch(/0,66 € \/ canette/);
-        expect(foodList.getRowText(0)).toMatch(/0,00 €/);
+        expect(fL.getRowText(0)).toMatch(/Coca-Cola/);
+        expect(fL.getRowText(0)).toMatch(/0 canette/);
+        expect(fL.getRowText(0)).toMatch(/0,66 € \/ canette/);
+        expect(fL.getRowText(0)).toMatch(/0,00 €/);
 
-        foodList.toggleRow(0);
+        fL.toggleRow(0);
 
-        expect(foodList.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
-        expect(foodList.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(foodList.getSubRowText(0, 1)).toMatch(/0 canette/);
-        expect(foodList.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
-        expect(foodList.getSubRowText(0, 1)).toMatch(/0,00 €/);
+        expect(fL.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(fL.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(fL.getSubRowText(0, 1)).toMatch(/0 canette/);
+        expect(fL.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
+        expect(fL.getSubRowText(0, 1)).toMatch(/0,00 €/);
 
-        expect(foodList.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(foodList.getSubRowText(0, 2)).toMatch(/0 canette/);
-        expect(foodList.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
-        expect(foodList.getSubRowText(0, 2)).toMatch(/0,00 €/);
+        expect(fL.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(fL.getSubRowText(0, 2)).toMatch(/0 canette/);
+        expect(fL.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
+        expect(fL.getSubRowText(0, 2)).toMatch(/0,00 €/);
 
-        foodList.toggleRow(0);
+        fL.toggleRow(0);
 
-        expect(foodList.getRowText(1)).toMatch(/Pringles/);
-        expect(foodList.getRowText(1)).toMatch(/0 g/);
-        expect(foodList.getRowText(1)).toMatch(/0,01 € \/ g/);
-        expect(foodList.getRowText(1)).toMatch(/0,00 €/);
+        expect(fL.getRowText(1)).toMatch(/Pringles Nature/);
+        expect(fL.getRowText(1)).toMatch(/0 g/);
+        expect(fL.getRowText(1)).toMatch(/0,01 € \/ g/);
+        expect(fL.getRowText(1)).toMatch(/0,00 €/);
     });
 });
