@@ -99,8 +99,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .controller('admin.ctrl.food.regroup',
-    ['$scope', 'api.models.sellitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list', 'APIInterface',
-    function($scope, SellItem, StockItem, APIAction, sellitem_list, APIInterface) {
+    ['$scope', '$q', 'api.models.sellitem', 'api.models.stockitem', 'api.services.action', 'sellitem_list', 'APIInterface',
+    function($scope, $q, SellItem, StockItem, APIAction, sellitem_list, APIInterface) {
         document.getElementById("sellitemNameInput").focus();
         $scope.sell_item = SellItem.create();
         $scope.sellitem_list = sellitem_list;
@@ -137,32 +137,36 @@ angular.module('bars.admin.food', [
         };
         $scope.validate = function() {
             // Modification du premier SellItem
-            $scope.sell_item_ref = $scope.sellitems_grp.shift().item;
-            $scope.sell_item_ref.name = $scope.sell_item.name;
-            $scope.sell_item_ref.unit_name = $scope.sell_item.unit_name;
-            $scope.sell_item_ref.name_plural = $scope.sell_item.name_plural;
-            $scope.sell_item_ref.unit_name_plural = $scope.sell_item.unit_name_plural;
-            $scope.sell_item_ref.tax = $scope.sell_item.tax/100;
-            var refId = $scope.sell_item_ref.id;
-            var unit_factor = 1/$scope.sell_item_ref.unit_factor;
+            var newSellItem = $scope.sellitems_grp.shift().item;
+            newSellItem.name = $scope.sell_item.name;
+            newSellItem.unit_name = $scope.sell_item.unit_name;
+            newSellItem.name_plural = $scope.sell_item.name_plural;
+            newSellItem.unit_name_plural = $scope.sell_item.unit_name_plural;
+            newSellItem.tax = $scope.sell_item.tax/100;
+            var refId = newSellItem.id;
+            var unit_factor = 1/newSellItem.unit_factor;
             var nb = $scope.sellitems_grp.length;
-            $scope.sell_item_ref.$save().then(function(newSellItem) {
+            var queries = [];
+            newSellItem.$save().then(function(newSellItem) {
                 while ($scope.sellitems_grp.length > 0) {
                     var itemToMerge = $scope.sellitems_grp.shift();
-                    unit_factor = itemToMerge.unit_factor;
-                    APIInterface.request({
+                    unit_factor = 1/itemToMerge.unit_factor;
+                    queries.push(APIInterface.request({
                         'url': 'sellitem/' + refId + '/merge',
                         'method': 'PUT',
                         'data': {'sellitem': itemToMerge.item.id, 'unit_factor': unit_factor}
-                    }).then(function () {
-                        nb--;
-                        if (nb == 0) {
-                            $scope.sell_item_ref.$reload();
-                            $scope.sell_item = SellItem.create();
-                        }
-                    });
+                    }));
                     itemToMerge.item.$remove();
                 }
+
+                $q.all(queries).then(function() {
+                    $scope.sell_item = SellItem.create();
+                    return newSellItem.$reload();
+                }).then(function() {
+                    _.forEach(newSellItem.stockitems, function (sti) {
+                        sti.$reload();
+                    });
+                });
             });
 
         };
