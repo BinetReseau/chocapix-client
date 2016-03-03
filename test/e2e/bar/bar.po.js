@@ -7,6 +7,7 @@ var BarsBarPage = function() {
     var eLoginUsername = element(by.model('login.username'));
     var eLoginPassword = element(by.model('login.password'));
     var bConnexion = element(by.buttonText('Connexion'));
+    var magicBar = element(by.id('magic_bar'));
 
     this.loadHomePage = function(bar) {
         browser.get('http://localhost:9000/#/' + bar);
@@ -22,6 +23,18 @@ var BarsBarPage = function() {
         bConnexion.click();
 
         expect(bConnexion.isDisplayed()).toBe(false);
+    };
+    this.setMagicBarText = function(text) {
+        return magicBar
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(text);
+    };
+    this.getTypeAheads = function(type) {
+        return element.all(by.partialLinkText(type));
+    };
+    this.getTypeAhead = function(type, number) {
+        return element.all(by.partialLinkText(type)).get(number);
     };
 };
 module.exports = BarsBarPage;

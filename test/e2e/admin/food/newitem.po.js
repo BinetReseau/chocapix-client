@@ -31,7 +31,7 @@ var AdminFoodCreation = function() {
            return elem.isDisplayed();
         });
     };
-    var fLastAlert = function() {
+    var FLastAlert = function() {
         return element(by.repeater('alert in alerts').row(0));
     }
 
@@ -107,7 +107,7 @@ var AdminFoodCreation = function() {
         return fPrice().sendKeys(text);
     };
     this.getLastAlert = function() {
-        return fLastAlert().getText();
+        return FLastAlert().getText();
     };
     this.closeLastAlert = function() {
         return element(by.partialButtonText('Close')).click();
@@ -134,14 +134,21 @@ var AdminFoodCreation = function() {
     this.getItemDetailsName = function() {
         return eItemDetailsName.getAttribute('value');
     };
+    this.setItemDetailsName = function(text) {
+        return eItemDetailsName.sendKeys(text);
+    };
     this.getItemDetailsNamePlural = function() {
         return eItemDetailsNamePlural.getAttribute('value');
     };
+    this.setItemDetailsNamePlural = function(text) {
+        return eItemDetailsNamePlural
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(text)
+            .sendKeys(protractor.Key.ENTER);
+    };
     this.isItemDetailsNameEnabled = function() {
         return eItemDetailsName.isEnabled();
-    };
-    this.setItemDetailsName = function(text) {
-        return eItemDetailsName.sendKeys(text);
     };
     this.getItemDetailsContainer = function() {
         return eItemDetailsContainer.getAttribute('value');
@@ -184,6 +191,13 @@ var AdminFoodCreation = function() {
     };
     this.getSellItemNamePlural = function() {
         return eSellItemNamePlural.getAttribute('value');
+    };
+    this.setSellItemNamePlural = function(text) {
+        return eSellItemNamePlural
+            .sendKeys(protractor.Key.SHIFT, protractor.Key.HOME, protractor.Key.NULL)
+            .sendKeys(protractor.Key.BACK_SPACE)
+            .sendKeys(text)
+            .sendKeys(protractor.Key.ENTER);
     };
     this.isSellItemNameEnabled = function() {
         return eSellItemName.isEnabled();

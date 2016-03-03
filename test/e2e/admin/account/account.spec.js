@@ -3,63 +3,63 @@ var BarsBarPage = require('../../bar/bar.po.js');
 var UserList = require('../../user/list.user.po.js');
 
 describe('UserCreation', function() {
-    var uC = new UserCreation();
-    var uL = new UserList();
+    var UC = new UserCreation();
+    var UL = new UserList();
     var barsBarPage = new BarsBarPage();
 
     it('should create a new user without errors', function() {
-        uC.go();
+        UC.go();
 
-        expect(uC.isErrorMessagePresent()).toBe(false);
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        expect(UC.isErrorMessagePresent()).toBe(false);
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setLastName("Germain");
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setLastName("Germain");
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setFirstName("Jean-Claude");
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
-        expect(uC.getEmailClass()).toMatch(/has-error/);
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setFirstName("Jean-Claude");
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
+        expect(UC.getEmailClass()).toMatch(/has-error/);
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setEmail("jean-claude.germain@polytechnique.edu");
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
-        expect(uC.getEmailClass()).not.toMatch(/has-error/);
+        UC.setEmail("jean-claude.germain@polytechnique.edu");
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
+        expect(UC.getEmailClass()).not.toMatch(/has-error/);
 
-        uC.setPseudo("JC");
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setPseudo("JC");
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setLogin("admin");
-        expect(uC.getLoginClass()).toMatch(/has-error/);
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setLogin("admin");
+        expect(UC.getLoginClass()).toMatch(/has-error/);
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setLogin("grm");
-        expect(uC.getLoginClass()).not.toMatch(/has-error/);
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setLogin("grm");
+        expect(UC.getLoginClass()).not.toMatch(/has-error/);
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setPassword("grm");
-        expect(uC.getPasswordClass()).toMatch(/has-error/);
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setPassword("grm");
+        expect(UC.getPasswordClass()).toMatch(/has-error/);
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setPasswordBis("caca");
-        expect(uC.getPasswordClass()).toMatch(/has-error/);
-        expect(uC.getCreateBTNClass()).toMatch(/disabled/);
+        UC.setPasswordBis("caca");
+        expect(UC.getPasswordClass()).toMatch(/has-error/);
+        expect(UC.getCreateBTNClass()).toMatch(/disabled/);
 
-        uC.setPasswordBis("grm");
-        expect(uC.getPasswordClass()).not.toMatch(/has-error/);
-        expect(uC.getCreateBTNClass()).not.toMatch(/disabled/);
+        UC.setPasswordBis("grm");
+        expect(UC.getPasswordClass()).not.toMatch(/has-error/);
+        expect(UC.getCreateBTNClass()).not.toMatch(/disabled/);
 
-        uC.setCreateSolde(0);
-        expect(uC.getCreateBTNClass()).not.toMatch(/disabled/);
+        UC.setCreateSolde(0);
+        expect(UC.getCreateBTNClass()).not.toMatch(/disabled/);
 
-        uC.setCreateSolde(45);
-        expect(uC.getCreateBTNClass()).not.toMatch(/disabled/);
+        UC.setCreateSolde(45);
+        expect(UC.getCreateBTNClass()).not.toMatch(/disabled/);
 
-        uC.validateCreation();
-        expect(uC.isErrorMessagePresent()).toBe(false);
+        UC.validateCreation();
+        expect(UC.isErrorMessagePresent()).toBe(false);
 
         // go check if the new user is created
-        uL.go();
-        var user = uL.getRowText(0);
+        UL.go();
+        var user = UL.getRowText(0);
         expect(user).toMatch(/Germain Jean-Claude/);
         expect(user).toMatch(/JC/);
         expect(user).toMatch(/45,00 €/);
@@ -68,45 +68,45 @@ describe('UserCreation', function() {
 
     it('should create some accounts in Natation Jône', function() {
         barsBarPage.changeToBar('Natation Jône');
-        uC.go();
+        UC.go();
 
-        uC.setLastName("Dumas");
-        uC.setFirstName("Grégoire");
-        uC.setEmail("gregoire.dumas@polytechnique.edu");
-        uC.setPseudo("La Dum");
-        uC.setLogin("gms");
-        uC.setPassword("gms");
-        uC.setPasswordBis("gms");
-        uC.setCreateSolde(70);
+        UC.setLastName("Dumas");
+        UC.setFirstName("Grégoire");
+        UC.setEmail("gregoire.dumas@polytechnique.edu");
+        UC.setPseudo("La Dum");
+        UC.setLogin("gms");
+        UC.setPassword("gms");
+        UC.setPasswordBis("gms");
+        UC.setCreateSolde(70);
 
-        uC.validateCreation();
+        UC.validateCreation();
 
-        uC.go();
+        UC.go();
 
-        uC.setLastName("Lenormand");
-        uC.setFirstName("Augustin");
-        uC.setEmail("augustin.lenormand@polytechnique.edu");
-        uC.setPseudo("Toutatis");
-        uC.setLogin("gus");
-        uC.setPassword("gus");
-        uC.setPasswordBis("gus");
-        uC.setCreateSolde(50);
+        UC.setLastName("Lenormand");
+        UC.setFirstName("Augustin");
+        UC.setEmail("augustin.lenormand@polytechnique.edu");
+        UC.setPseudo("Toutatis");
+        UC.setLogin("gus");
+        UC.setPassword("gus");
+        UC.setPasswordBis("gus");
+        UC.setCreateSolde(50);
 
-        uC.validateCreation();
+        UC.validateCreation();
 
-        uC.go();
+        UC.go();
 
-        expect(uC.getImportBTNClass()).toMatch(/disabled/);
-        uC.setImportUsername('claude');
-        expect(uC.getImportBTNClass()).not.toMatch(/disabled/);
-        uC.setImportSolde('25');
+        expect(UC.getImportBTNClass()).toMatch(/disabled/);
+        UC.setImportUsername('claude');
+        expect(UC.getImportBTNClass()).not.toMatch(/disabled/);
+        UC.setImportSolde('25');
 
-        uC.validateImportation();
-        expect(uC.isErrorMessagePresent()).toBe(false);
+        UC.validateImportation();
+        expect(UC.isErrorMessagePresent()).toBe(false);
 
-        uL.go();
+        UL.go();
 
-        var user = uL.getRowText(1);
+        var user = UL.getRowText(1);
         expect(user).toMatch(/Germain Jean-Claude/);
         expect(user).toMatch(/JC/);
         expect(user).toMatch(/25,00 €/);
@@ -115,31 +115,31 @@ describe('UserCreation', function() {
     it('should import some account from Natation Jône to Aviron Jône', function() {
         barsBarPage.changeToBar('Aviron Jône');
 
-        uC.go();
+        UC.go();
 
-        uC.setImportUsername('dumas');
-        uC.setImportSolde('2500');
-        uC.validateImportation();
+        UC.setImportUsername('dumas');
+        UC.setImportSolde('2500');
+        UC.validateImportation();
 
-        uC.go();
+        UC.go();
 
-        uC.setImportUsername('aug');
-        uC.setImportSolde('40');
-        uC.validateImportation();
+        UC.setImportUsername('aug');
+        UC.setImportSolde('40');
+        UC.validateImportation();
 
-        uL.go();
+        UL.go();
 
-        user = uL.getRowText(0);
+        user = UL.getRowText(0);
         expect(user).toMatch(/Dumas Grégoire/);
         expect(user).toMatch(/La Dum/);
         expect(user).toMatch(/2 500,00 €/);
 
-        user = uL.getRowText(1);
+        user = UL.getRowText(1);
         expect(user).toMatch(/Germain Jean-Claude/);
         expect(user).toMatch(/JC/);
         expect(user).toMatch(/45,00 €/);
 
-        user = uL.getRowText(2);
+        user = UL.getRowText(2);
         expect(user).toMatch(/Lenormand Augustin/);
         expect(user).toMatch(/Toutatis/);
         expect(user).toMatch(/40,00 €/);

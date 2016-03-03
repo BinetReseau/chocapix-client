@@ -1,9 +1,8 @@
 var FoodList = function() {
 
-	this.go = function() {
-		return element(by.partialLinkText('Aliments')).click();
-	};
-
+		this.go = function() {
+			return element(by.partialLinkText('Aliments')).click();
+		};
     this.getRow = function(n) {
         return element.all(by.repeater("f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id").row(n));
     };

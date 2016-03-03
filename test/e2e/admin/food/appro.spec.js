@@ -3,54 +3,54 @@ var FoodList = require('../../food/list.food.po.js');
 var foodList = new FoodList();
 
 describe('Appro', function() {
-    var aFA = new AdminFoodAppro();
+    var AFA = new AdminFoodAppro();
 
     it('should add items by barcode', function() {
-        aFA.go();
+        AFA.go();
 
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        expect(AFA.getPrice()).toEqual("0,00 €");
 
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("0,50 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("0,50 €");
 
-        aFA.setSearch('1234567890');
-        expect(aFA.getRowText(0)).toMatch(/10 Canettes de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("4,50 €");
+        AFA.setSearch('1234567890');
+        expect(AFA.getRowText(0)).toMatch(/10 Canettes de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("4,50 €");
 
-        aFA.setSearch('123456789');
-        expect(aFA.getRowText(0)).toMatch(/10 Canettes de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("9,50 €");
+        AFA.setSearch('123456789');
+        expect(AFA.getRowText(0)).toMatch(/10 Canettes de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("9,50 €");
 
-        aFA.setSearch('123456789');
-        expect(aFA.getPrice()).toEqual("14,50 €");
+        AFA.setSearch('123456789');
+        expect(AFA.getPrice()).toEqual("14,50 €");
 
-        aFA.validate();
+        AFA.validate();
 
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        expect(AFA.getPrice()).toEqual("0,00 €");
     });
 
     it('should add items by name', function() {
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("0,50 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("0,50 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("1,10 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("1,10 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("1,70 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("1,70 €");
 
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getRowText(1)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("2,20 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getRowText(1)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("2,20 €");
 
-        aFA.validate();
+        AFA.validate();
 
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        expect(AFA.getPrice()).toEqual("0,00 €");
     });
 
     it('should see correct stocks', function() {
@@ -78,48 +78,48 @@ describe('Appro', function() {
     });
 
     it('should add items by name with new temporary prices', function() {
-        aFA.go();
+        AFA.go();
 
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("0,50 €");
-        aFA.setRowPrice(0, "1");
-        aFA.toggleRowPermanent(0);
-        expect(aFA.getPrice()).toEqual("1,00 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("0,50 €");
+        AFA.setRowPrice(0, "1");
+        AFA.toggleRowPermanent(0);
+        expect(AFA.getPrice()).toEqual("1,00 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        aFA.setRowPrice(0, "2");
-        aFA.toggleRowPermanent(0);
-        expect(aFA.getPrice()).toEqual("3,00 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        AFA.setRowPrice(0, "2");
+        AFA.toggleRowPermanent(0);
+        expect(AFA.getPrice()).toEqual("3,00 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("5,00 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("5,00 €");
 
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getRowText(1)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("6,00 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getRowText(1)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("6,00 €");
 
-        aFA.validate();
+        AFA.validate();
 
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        expect(AFA.getPrice()).toEqual("0,00 €");
 
 
         // Check that buyitemprices have not been updated
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("0,50 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("0,50 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("1,10 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("1,10 €");
 
         // And we remove items
-        aFA.removeRow(0);
-        aFA.removeRow(0);
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        AFA.removeRow(0);
+        AFA.removeRow(0);
+        expect(AFA.getPrice()).toEqual("0,00 €");
     });
 
     it('should see correct stocks and prices', function() {
@@ -147,35 +147,35 @@ describe('Appro', function() {
     });
 
     it('should add items with new permanent prices', function() {
-        aFA.go();
+        AFA.go();
 
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("0,50 €");
-        aFA.setRowPrice(0, "1");
-        expect(aFA.getPrice()).toEqual("1,00 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("0,50 €");
+        AFA.setRowPrice(0, "1");
+        expect(AFA.getPrice()).toEqual("1,00 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        aFA.setRowPrice(0, "2");
-        expect(aFA.getPrice()).toEqual("3,00 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        AFA.setRowPrice(0, "2");
+        expect(AFA.getPrice()).toEqual("3,00 €");
 
-        aFA.validate();
+        AFA.validate();
 
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        expect(AFA.getPrice()).toEqual("0,00 €");
 
         // Check that buyitemprices have been updated
-        aFA.setSearch('123');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
-        expect(aFA.getPrice()).toEqual("1,00 €");
+        AFA.setSearch('123');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola/);
+        expect(AFA.getPrice()).toEqual("1,00 €");
 
-        aFA.setSearch('Coc Ligh');
-        expect(aFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
-        expect(aFA.getPrice()).toEqual("3,00 €");
+        AFA.setSearch('Coc Ligh');
+        expect(AFA.getRowText(0)).toMatch(/1 Canette de 33 cl de Coca-Cola Light/);
+        expect(AFA.getPrice()).toEqual("3,00 €");
 
         // And we remove items
-        aFA.removeRow(0);
-        aFA.removeRow(0);
-        expect(aFA.getPrice()).toEqual("0,00 €");
+        AFA.removeRow(0);
+        AFA.removeRow(0);
+        expect(AFA.getPrice()).toEqual("0,00 €");
     });
 });

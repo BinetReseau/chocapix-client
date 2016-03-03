@@ -2,97 +2,97 @@ var FoodList = require('./list.food.po.js');
 var FoodDetails = require('./details.food.po.js');
 
 describe('Food edition', function() {
-    var fL = new FoodList();
-    var fD = new FoodDetails();
+    var FL = new FoodList();
+    var FD = new FoodDetails();
 
     it('should verify the food details page', function() {
-        fL.go();
-        fL.goFood(0);
+        FL.go();
+        FL.goFood(0);
 
-        expect(fD.getTitle()).toBe('Coca-Cola');
-        expect(fD.getPrice()).toBe('0,75 € / canette');
-        expect(fD.getStock()).toBe('41 canettes');
+        expect(FD.getTitle()).toBe('Coca-Cola');
+        expect(FD.getPrice()).toBe('0,75 € / canette');
+        expect(FD.getStock()).toBe('41 canettes');
     });
 
     it('should edit the SellItem', function() {
-        fD.goEdition();
+        FD.goEdition();
 
-        fD.setSellItemName('Coca Cola');
-        fD.setSellItemNamePlural('Coca Cola');
+        FD.setSellItemName('Coca Cola');
+        FD.setSellItemNamePlural('Coca Cola');
 
-        fD.setSellItemUnit('petite canette');
-        fD.setSellItemUnitPlural('petites canettes');
+        FD.setSellItemUnit('petite canette');
+        FD.setSellItemUnitPlural('petites canettes');
 
-        fD.setSellItemUnitFactor('0.5');
+        FD.setSellItemUnitFactor('0.5');
 
-        fD.setSellItemTax('40');
+        FD.setSellItemTax('40');
 
-        fD.validateEdition();
+        FD.validateEdition();
 
-        fD.goInfos();
+        FD.goInfos();
 
-        expect(fD.getTitle()).toBe('Coca Cola');
-        expect(fD.getPrice()).toBe('0,44 € / petite canette');
-        expect(fD.getStock()).toBe('82 petites canettes');
+        expect(FD.getTitle()).toBe('Coca Cola');
+        expect(FD.getPrice()).toBe('0,44 € / petite canette');
+        expect(FD.getStock()).toBe('82 petites canettes');
     });
 
     it('should edit the StockItems prices', function() {
-        fD.goStocks();
+        FD.goStocks();
 
-        fD.editStockItem(0);
-        fD.setStockItemPrice(0, '1');
-        fD.validateStockItem(0);
+        FD.editStockItem(0);
+        FD.setStockItemPrice(0, '1');
+        FD.validateStockItem(0);
 
-        fD.editStockItem(1);
-        fD.setStockItemPrice(1, '2');
-        fD.validateStockItem(1);
+        FD.editStockItem(1);
+        FD.setStockItemPrice(1, '2');
+        FD.validateStockItem(1);
 
-        fD.goInfos();
+        FD.goInfos();
 
-        expect(fD.getPrice()).toBe('1,13 € / petite canette');
+        expect(FD.getPrice()).toBe('1,13 € / petite canette');
     });
 
     it('should edit the StockItems ratio', function() {
-        fD.goStocks();
+        FD.goStocks();
 
-        fD.editStockItem(0);
-        fD.setStockItemSellToBuy(0, '1');
-        fD.validateStockItem(0);
+        FD.editStockItem(0);
+        FD.setStockItemSellToBuy(0, '1');
+        FD.validateStockItem(0);
 
-        fD.goInfos();
+        FD.goInfos();
 
-        expect(fD.getPrice()).toBe('1,40 € / petite canette');
-        expect(fD.getStock()).toBe('66 petites canettes');
+        expect(FD.getPrice()).toBe('1,40 € / petite canette');
+        expect(FD.getStock()).toBe('66 petites canettes');
 
-        fD.goStocks();
+        FD.goStocks();
 
-        fD.editStockItem(1);
-        fD.setStockItemSellToBuy(1, '1');
-        fD.validateStockItem(1);
+        FD.editStockItem(1);
+        FD.setStockItemSellToBuy(1, '1');
+        FD.validateStockItem(1);
 
-        fD.goInfos();
+        FD.goInfos();
 
-        expect(fD.getPrice()).toBe('2,25 € / petite canette');
-        expect(fD.getStock()).toBe('41 petites canettes');
+        expect(FD.getPrice()).toBe('2,25 € / petite canette');
+        expect(FD.getStock()).toBe('41 petites canettes');
     });
 
     it('should re-edit the SellItem', function() {
-        fD.goEdition();
+        FD.goEdition();
 
-        fD.setSellItemName('Coca-Cola');
-        fD.setSellItemNamePlural('Coca-Cola');
+        FD.setSellItemName('Coca-Cola');
+        FD.setSellItemNamePlural('Coca-Cola');
 
-        fD.setSellItemUnit('canette');
-        fD.setSellItemUnitPlural('canettes');
+        FD.setSellItemUnit('canette');
+        FD.setSellItemUnitPlural('canettes');
 
-        fD.setSellItemTax('20');
+        FD.setSellItemTax('20');
 
-        fD.validateEdition();
+        FD.validateEdition();
 
-        fD.goInfos();
+        FD.goInfos();
 
-        expect(fD.getTitle()).toBe('Coca-Cola');
-        expect(fD.getPrice()).toBe('1,93 € / canette');
-        expect(fD.getStock()).toBe('41 canettes');
+        expect(FD.getTitle()).toBe('Coca-Cola');
+        expect(FD.getPrice()).toBe('1,93 € / canette');
+        expect(FD.getStock()).toBe('41 canettes');
     });
 });
