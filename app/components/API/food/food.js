@@ -325,8 +325,7 @@ angular.module('bars.api.food', [
 )
 .controller('api.ctrl.food_details.stocks',
     ['$scope', '$rootScope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
-    function($scope, $rootScope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
-        sellitem_list = _.without(sellitem_list, food_item);
+    function($scope, $rootScope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface) {
         $scope.removingAuthorized = _.every(food_item.stockitems, function (si) {
             return si.qty >= 0;
         });
@@ -335,9 +334,11 @@ angular.module('bars.api.food', [
                 'url': 'sellitem/' + food_item.id + '/remove',
                 'method': 'PUT',
                 'data': {'stockitem': si.id}
-            }).then(function(sei) {
+            }).then(function(sei_old) {
                 food_item.$reload();
-                si.$reload();
+                si.$reload().then(function() {
+                    si.sellitem.$reload();
+                });
             });
         };
         $scope.rattachInit = function() {
@@ -348,7 +349,7 @@ angular.module('bars.api.food', [
                         return food_item;
                     },
                     sellitem_list: function() {
-                        return sellitem_list;
+                        return _.without(sellitem_list, food_item);
                     }
                 },
                 controller: ['$scope', '$modalInstance', 'food_item', 'sellitem_list', function ($scope, $modalInstance, food_item, sellitem_list) {
@@ -361,8 +362,10 @@ angular.module('bars.api.food', [
                         $scope.errors.splice(i, 1);
                     };
 
-                    $scope.filterItems = function(o) {
-                        return o.filter($scope.searchl);
+                    $scope.sellitem_list_filtered = function(search) {
+                        return _.filter(sellitem_list, function (o) {
+                            return o.filter(search);
+                        });
                     };
                     $scope.addItem = function(item) {
                         if (item.fuzzy_qty < 0) {
@@ -377,9 +380,13 @@ angular.module('bars.api.food', [
                             'url': 'sellitem/' + food_item.id + '/merge',
                             'method': 'PUT',
                             'data': {'sellitem': $scope.itemToAttach.id, 'unit_factor': 1/$scope.itemToAttach.unit_factor}
-                        }).then(function(si) {
+                        }).then(function(sei_old) {
                             $scope.itemToAttach.$remove();
-                            food_item.$reload();
+                            food_item.$reload().then(function() {
+                                _.forEach(food_item.stockitems, function (sti) {
+                                    sti.$reload();
+                                });
+                            });
                         });
                         $modalInstance.close();
                     };

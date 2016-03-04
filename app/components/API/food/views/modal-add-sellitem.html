@@ -10,7 +10,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label" for="itemToAttachInput">Aliment à attacher</label>
             <div class="col-sm-9">
-                <input type="text" id="itemToAttachInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list | filter:{deleted: false} | filter:filterItems | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" />
+                <input type="text" id="itemToAttachInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list_filtered($viewValue) | filter:{deleted: false} | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" />
 
                 <p class="help-block"><strong>Attention :</strong> vous ne pouvez pas attacher un aliment dont le stock est négatif.</p>
             </div>
