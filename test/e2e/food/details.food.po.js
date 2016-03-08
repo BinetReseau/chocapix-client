@@ -20,9 +20,18 @@ var FoodDetails = function() {
         return element(by.id('food-tab-edition')).click();
     };
 
+    this.addStockItemBy = function (text) {
+
+    };
+
     // Stocks tab
     this.getRow = function(n) {
         return element.all(by.css('#food-stocks-table tr')).get(n);
+    };
+    this.getNumberOfStockItems = function () {
+        return element.all(by.css('#food-stocks-table tr')).then( function (elements) {
+            return elements.length;
+        });
     };
     this.editStockItem = function(n) {
         return this.getRow(n).element(by.css('a[title="Modifier cet aliment"]')).click();
@@ -41,6 +50,9 @@ var FoodDetails = function() {
     };
     this.validateStockItem = function(n) {
         return this.getRow(n).element(by.css('a[title="Valider les modifications"]')).click();
+    };
+    this.deleteStockItem = function (n) {
+        return this.getRow(n).element(by.css('a[title="Retirer cet aliment du groupe"]')).click();
     };
 
     // Edition tab

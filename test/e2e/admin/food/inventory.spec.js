@@ -26,25 +26,25 @@ describe('Inventory', function() {
 
     it('should verify the updated stock', function() {
         FL.go();
-        expect(FL.getRowText(0)).toMatch(/Coca-Cola/);
-        expect(FL.getRowText(0)).toMatch(/25 canettes/);
-        expect(FL.getRowText(0)).toMatch(/0,67 € \/ canette/);
-        expect(FL.getRowText(0)).toMatch(/16,80 €/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/Coca-Cola/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/25 canettes/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0,67 € \/ canette/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/16,80 €/);
 
-        FL.toggleRow(0);
+        FL.toggleRowByNumber(0);
 
-        expect(FL.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
-        expect(FL.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/10 canettes/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/6,00 €/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(FL.getSubRowTextByNumber(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/10 canettes/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0,60 € \/ canette/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/6,00 €/);
 
-        expect(FL.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/15 canettes/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/10,80 €/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/15 canettes/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0,72 € \/ canette/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/10,80 €/);
 
-        FL.toggleRow(0);
+        FL.toggleRowByNumber(0);
     });
 
     it('should add a sellitem out of stock', function() {
@@ -91,24 +91,24 @@ describe('Inventory', function() {
 
     it('should verify the empty stock', function() {
         FL.go();
-        expect(FL.getRowText(0)).toMatch(/Coca-Cola/);
-        expect(FL.getRowText(0)).toMatch(/0 canette/);
-        expect(FL.getRowText(0)).toMatch(/0,66 € \/ canette/);
-        expect(FL.getRowText(0)).toMatch(/0,00 €/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/Coca-Cola/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0 canette/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0,66 € \/ canette/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0,00 €/);
 
-        FL.toggleRow(0);
+        FL.toggleRowByNumber(0);
 
-        expect(FL.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
-        expect(FL.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0 canette/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0,00 €/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(FL.getSubRowTextByNumber(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0 canette/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0,60 € \/ canette/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0,00 €/);
 
-        expect(FL.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0 canette/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0,00 €/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0 canette/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0,72 € \/ canette/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0,00 €/);
 
-        FL.toggleRow(0);
+        FL.toggleRowByNumber(0);
     });
 });

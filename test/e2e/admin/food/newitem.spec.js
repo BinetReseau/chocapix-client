@@ -146,29 +146,29 @@ describe('Food creation', function() {
     it('should verify the created items', function() {
         FL.go();
 
-        expect(FL.getRowText(0)).toMatch(/Coca-Cola/);
-        expect(FL.getRowText(0)).toMatch(/0 canette/);
-        expect(FL.getRowText(0)).toMatch(/0,66 € \/ canette/);
-        expect(FL.getRowText(0)).toMatch(/0,00 €/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/Coca-Cola/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0 canette/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0,66 € \/ canette/);
+        expect(FL.getRowTextByNumber(0)).toMatch(/0,00 €/);
 
-        FL.toggleRow(0);
+        FL.toggleRowByNumber(0);
 
-        expect(FL.getSubRowText(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
-        expect(FL.getSubRowText(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0 canette/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0,60 € \/ canette/);
-        expect(FL.getSubRowText(0, 1)).toMatch(/0,00 €/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/Canette de 33 cl de Coca-Cola/);
+        expect(FL.getSubRowTextByNumber(0, 1)).not.toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0 canette/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0,60 € \/ canette/);
+        expect(FL.getSubRowTextByNumber(0, 1)).toMatch(/0,00 €/);
 
-        expect(FL.getSubRowText(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0 canette/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0,72 € \/ canette/);
-        expect(FL.getSubRowText(0, 2)).toMatch(/0,00 €/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/Canette de 33 cl de Coca-Cola Light/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0 canette/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0,72 € \/ canette/);
+        expect(FL.getSubRowTextByNumber(0, 2)).toMatch(/0,00 €/);
 
-        FL.toggleRow(0);
+        FL.toggleRowByNumber(0);
 
-        expect(FL.getRowText(1)).toMatch(/Pringles Nature/);
-        expect(FL.getRowText(1)).toMatch(/0 g/);
-        expect(FL.getRowText(1)).toMatch(/0,01 € \/ g/);
-        expect(FL.getRowText(1)).toMatch(/0,00 €/);
+        expect(FL.getRowTextByNumber(1)).toMatch(/Pringles Nature/);
+        expect(FL.getRowTextByNumber(1)).toMatch(/0 g/);
+        expect(FL.getRowTextByNumber(1)).toMatch(/0,01 € \/ g/);
+        expect(FL.getRowTextByNumber(1)).toMatch(/0,00 €/);
     });
 });
