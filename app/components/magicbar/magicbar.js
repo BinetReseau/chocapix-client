@@ -411,6 +411,9 @@ angular.module('bars.magicbar', [
 								}
 							}
 						}
+						if (!res.food.sell_fraction) {
+						    res.qty = Math.ceil(res.qty);
+						}
 					}
 					res.qty = res.qty || 1;
 					return [res];
