@@ -22,6 +22,15 @@
                 <input type="text" class="form-control" id="funit_plural" placeholder="" ng-model="newFood_item.unit_name_plural">
             </div>
         </div>
+        <div class="form-group">
+            <label for="sell_fraction" class="col-sm-3 control-label">Autoriser le fractionnement</label>
+            <div class="col-sm-9">
+                <div class="input-group" style="float: left;">
+                    <input type="checkbox" class="form-control" id="sell_fraction" ng-model="newFood_item.sell_fraction" ng-attr-checked="{{ newFood_item.sell_fraction && 'checked' || undefined }}">
+                </div>
+                <p class="help-block col-sm-9">Autoriser les unités à être vendues par fractions (0.5 pizza, 121.43g de riz, ...)</p>
+            </div>
+        </div>
         <div class="form-group" ng-show="newFood_item.unit_name != food_item.unit_name">
             <label for="unit_factor" class="col-sm-3 control-label">1 {{ newFood_item.unit_name || food_item.details.name }} = </label>
             <div class="col-sm-9">

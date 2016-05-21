@@ -463,6 +463,7 @@ angular.module('bars.api.food', [
             food_item.tax = $scope.newFood_item.tax/100;
             food_item.keywords = $scope.newFood_item.keywords;
             food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
+            food_item.sell_fraction = $scope.newFood_item.sell_fraction;
 
             food_item.$save().then(function() {
                 AuthUser.updateMenus();
