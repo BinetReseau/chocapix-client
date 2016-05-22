@@ -14,6 +14,7 @@
                     </li>
                 </ul>
             </div>
+            <list:negative:sellitems list="list" ng-if="user.can('add_role');"></list:negative:sellitems>
         </div>
 
         <div class="col-sm-6">
@@ -89,6 +90,5 @@
             <bars:suggestions suggestions="suggestions" ng-if="user.account"></bars:suggestions>
         </div>
     </div>
-
     <bars:history filter="{user: user.user.id}" page-size="10" ng-show="user_authenticated()" daily-total="true"></bars:history>
 </div>

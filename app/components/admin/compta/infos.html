@@ -1,6 +1,6 @@
 <div class="col-sm-12">
     <h3>État du bar</h3>
-    <div class="row">
+    <div class="row hidden">
         <div class="col-sm-4 col-sm-offset-4">
             <h2 class="text-center">
                 <span class="label" ng-class="soldeBar + foodValue() - accountsValue >= 0 && 'label-success' || 'label-danger'">{{ soldeBar + foodValue() - accountsValue | currency }}</span>
@@ -9,19 +9,19 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <h2 class="text-center">
                 <span class="label label-info">{{ accountsValue | currency }}</span>
                 <br /><small>sur les comptes non supprimés</small>
             </h2>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <h2 class="text-center">
                 <span class="label label-info">{{ foodValue() | currency }}</span>
                 <br /><small>valeur des aliments non supprimés</small>
             </h2>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 hidden">
             <h2 class="text-center">
                 <span class="label label-info">{{ soldeBar | currency }}</span>
                 <br /><small>sur le compte bancaire du bar (théorique)</small>
