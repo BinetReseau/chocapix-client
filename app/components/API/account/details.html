@@ -138,7 +138,7 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a title="Retirer ce rôle" class="link" ng-click="removeRole(role)">
+                                                    <a title="Retirer ce rôle" class="link" ng-click="removeRole(role)" ng-if="rolesNameAuthorized.hasOwnProperty(role.name)">
                                                         <span class="glyphicon glyphicon-remove"></span>
                                                     </a>
                                                 </td>
