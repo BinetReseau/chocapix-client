@@ -246,6 +246,31 @@ angular.module('bars.api.food', [
         }, 300);
     }]
 )
+.controller('api.ctrl.food_list_negative_sellitems',
+    ['$scope', '$timeout',
+    function($scope, $timeout) {
+        $scope.isNegative = function(o) {
+            return o.fuzzy_qty < 0;
+        };
+        $scope.list_order = 'name';
+        $scope.reverse = false;
+
+        $scope.limit = {nb: 30};
+        $scope.showMore = function () {
+            $scope.limit.nb += 5;
+        };
+    }]
+)
+.directive('listNegativeSellitems', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            list: '=',
+        },
+        templateUrl: 'components/API/food/directives/list-negative-sellitems-directive.html',
+        controller: 'api.ctrl.food_list_negative_sellitems'
+    };
+})
 .controller('api.ctrl.food_details',
     ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.models.buyitemprice', 'api.services.action', 'bars.meal',
     function($scope, $stateParams, food_item, AuthUser, BuyItemPrice, APIAction, Meal) {
