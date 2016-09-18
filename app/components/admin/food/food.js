@@ -1408,14 +1408,14 @@ angular.module('bars.admin.food', [
                                             nb: nb++});
                                     }
                                     else {
-                                        this.errors.push("Cet aliment a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                        this.errors.push("L'aliment «"+stockitem.sellitem.name+"» a été caché : vous ne pouvez pas l'ajouter à l'appro.");
                                     }
                                 }
                             }
                         }
                     }
                     if (!ok) {
-                        this.errors.push("Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
+                        this.errors.push("L'aliment de code-barre "+buyitemprice.buyitem.barcode+" n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
                     }
                 }
                 this.recomputeAmount();
