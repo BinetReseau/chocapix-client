@@ -121,6 +121,9 @@ angular.module('bars.main', [
                     }, function (err) {
                         $rootScope.$broadcast('api.SuggestedItem.error');
                     });
+                }],
+                food_list: ['api.models.sellitem', function(SellItem) {
+                    return SellItem.all();
                 }]
             },
             views: {
@@ -215,8 +218,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope', 'news', 'auth.user', '$timeout', 'suggesteditems',
-    function($scope, news, AuthUser, $timeout, suggesteditems) {
+    ['$scope', 'news', 'auth.user', '$timeout', 'suggesteditems', 'food_list',
+    function($scope, news, AuthUser, $timeout, suggesteditems, food_list) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
@@ -256,6 +259,8 @@ angular.module('bars.main', [
         $scope.thereIsAnAppro = dateAppro >= now;
 
         $scope.suggestions = suggesteditems;
+
+        $scope.list = food_list;
 
         $timeout(function() {
             var $div = $('#lnews');

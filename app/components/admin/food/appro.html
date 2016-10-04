@@ -1,7 +1,7 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
     <h3>Faire une appro</h3>
     <div>
-        <alert ng-repeat="alert in appro.errors" type="danger" close="closeAlert($index)">{{ alert }}</alert>
+        <alert ng-repeat="alert in appro.errors track by $index" type="danger" close="closeAlert($index)">{{ alert }}</alert>
         <form class="form-horizontal">
             <div class="form-group">
                 <label class="col-sm-2 control-label">Importer depuis</label>

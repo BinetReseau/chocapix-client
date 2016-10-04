@@ -231,7 +231,7 @@ angular.module('bars.admin.food', [
     function($scope, $http, $modal, $state, Appro) {
         // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json'; // Original URL but no Access-Control-Origin header
         // var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/'; // Reverse proxy by ntag
-        var OOSHOP_URL = 'http://chocapix/autoappro/ooshop/.json'; // Reverse proxy in the school
+        var OOSHOP_URL = AUTOAPPRO_URL + '/ooshop/.json'; // Reverse proxy in the school
         var cli_id;
         function connexion(login, password) {
             $scope.stape1.loading = true;
@@ -308,7 +308,7 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.intermarche',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        var INTERMARCHE_URL = 'http://chocapix/autoappro/intermarche'; // Reverse proxy in the school
+        var INTERMARCHE_URL = AUTOAPPRO_URL + '/intermarche'; // Reverse proxy in the school
         var token;
         function connexion(login, password) {
             $scope.stape1.loading = true;
@@ -385,7 +385,7 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.picard',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        var PICARD_URL = 'http://chocapix/autoappro/picard'; // Reverse proxy in the school
+        var PICARD_URL = AUTOAPPRO_URL + '/picard'; // Reverse proxy in the school
         var token;
         function connexion(login, password) {
             $scope.stape1.loading = true;
@@ -470,7 +470,7 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.houra',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        var HOURA_URL = 'http://chocapix/autoappro/houra'; // Reverse proxy in the school
+        var HOURA_URL = AUTOAPPRO_URL + '/houra'; // Reverse proxy in the school
         var auth;
         function connexion(login, password, zipcode) {
             $scope.stape1.loading = true;
@@ -1408,14 +1408,14 @@ angular.module('bars.admin.food', [
                                             nb: nb++});
                                     }
                                     else {
-                                        this.errors.push("Cet aliment a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                        this.errors.push("L'aliment «"+stockitem.sellitem.name+"» a été caché : vous ne pouvez pas l'ajouter à l'appro.");
                                     }
                                 }
                             }
                         }
                     }
                     if (!ok) {
-                        this.errors.push("Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
+                        this.errors.push("L'aliment de code-barre "+buyitemprice.buyitem.barcode+" n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
                     }
                 }
                 this.recomputeAmount();
