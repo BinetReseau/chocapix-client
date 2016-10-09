@@ -44,6 +44,7 @@ angular.module('bars.api.transaction', [
                     'restore': function() {
                         var self = this;
                         self.canceled = false;
+                        self.uncanceled = true;
                         APIInterface.request({
                             'url': "transaction/"+self.id+"/restore",
                             'method': 'PUT',
