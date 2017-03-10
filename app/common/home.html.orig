@@ -1,0 +1,109 @@
+<div class="col-sm-12">
+    <div class="row" ng-show="user.can('add_givetransaction')">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <bars:sugive></bars:sugive>
+                </div>
+            </div>
+            <list:negative:sellitems list="list" ng-if="user.can('add_role');"></list:negative:sellitems>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="list-group">
+                <div class="list-group-item" ng-if="thereIsAnAppro">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Prochaine appro</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span class="h4">
+                                <span class="label label-info">{{ bar.infos.next_scheduled_appro | date:'EEEE dd/MM à HH:mm' }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.account">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Total dépensé</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span class="h4">
+                                <span class="label label-info">{{ -user.account.spent | currency }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.account">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Classement</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span class="h4">
+                                <span class="badge">{{ user.account.rank }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.user !== null">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Dernière connexion</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span>{{ user.user.previous_login | date:"EEEE dd/MM à HH:mm" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.account.money < bar.infos.money_warning_threshold">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Prochain chèque</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span class="h4">
+                                <span class="label animated" ng-class="user.account.money > 0 && 'label-warning shake' || 'label-danger tada'">Très vite !</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.can('change_sellitem') || user.can('add_approtransaction') || user.can('add_inventorytransaction')">
+                    <div class="row">
+                        <div class="col-sm-4 text-left">
+                            <span class="h4">
+                                <a class="btn btn-primary btn-xs" ui-sref="bar.admin.food.appro({ bar: bar.id })" ng-if="user.can('add_approtransaction')">Faire une appro</a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <span class="h4">
+                                <a class="btn btn-info btn-xs" ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <span class="h4">
+                                <a class="btn btn-success btn-xs" ui-sref="bar.admin.food.add({ bar: bar.id })" ng-if="user.can('add_itemdetails') && user.can('add_sellitem')">Ajouter un aliment</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<<<<<<< HEAD
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Actualités</h3>
+                </div>
+                <ul class="list-group fixed-panel" id="lnews" style="max-height: 200px; overflow: auto;">
+                    <li ng-repeat="news in list_news() | orderBy:'-last_modified' as disp_news" ng-if="disp_news.length > 0" class="list-group-item" ng-class="news_recente(disp_news[$index]) && 'list-group-item-info' || ''" >
+                        <bars:news news="news"></bars:news>
+                    </li>
+                    <li class="list-group-item" ng-if="disp_news.length == 0">
+                        <em>Aucune actualité...</em>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-6" ng-show="user.can('add_mealtransaction')">
+            <div class="panel panel-default">
+                <bars:meal></bars:meal>
+            </div>
+=======
+            <bars:suggestions suggestions="suggestions" ng-if="user.account"></bars:suggestions>
+>>>>>>> origin/develop
+        </div>
+    </div>
+    <bars:history filter="{user: user.user.id}" page-size="10" ng-show="user_authenticated()" daily-total="true"></bars:history>
+</div>

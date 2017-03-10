@@ -30,6 +30,31 @@ angular.module('bars.admin.food', [
             templateUrl: "components/admin/food/appro.html",
             controller: 'admin.ctrl.food.appro'
         })
+        .state('bar.admin.food.autoappro', {
+            url: "/auto-appro",
+            abstract: true,
+            template: '<ui-view />'
+        })
+            .state('bar.admin.food.autoappro.ooshop', {
+                url: "/ooshop",
+                templateUrl: "components/admin/food/autoappro/ooshop.html",
+                controller: 'admin.ctrl.food.autoappro.ooshop'
+            })
+            .state('bar.admin.food.autoappro.intermarche', {
+                url: "/intermarche",
+                templateUrl: "components/admin/food/autoappro/intermarche.html",
+                controller: 'admin.ctrl.food.autoappro.intermarche'
+            })
+            .state('bar.admin.food.autoappro.picard', {
+                url: "/picard",
+                templateUrl: "components/admin/food/autoappro/picard.html",
+                controller: 'admin.ctrl.food.autoappro.picard'
+            })
+            .state('bar.admin.food.autoappro.houra', {
+                url: "/houra",
+                templateUrl: "components/admin/food/autoappro/houra.html",
+                controller: 'admin.ctrl.food.autoappro.houra'
+            })
         .state('bar.admin.food.approhelper', {
             url: "/appro-helper",
             templateUrl: "components/admin/food/approhelper.html",
@@ -82,6 +107,11 @@ angular.module('bars.admin.food', [
         $scope.sellitems_grp = [];
         $scope.searchl = "";
         $scope.searchll = "";
+        $scope.errors = [];
+        $scope.closeAlert = function (i) {
+            $scope.errors.splice(i, 1);
+        };
+
         $scope.sellitem_listf = function (t) {
             return _.filter(sellitem_list, function (o) {
                 return o.filter(t) && _.find($scope.sellitems_grp, function (s) {
@@ -94,7 +124,11 @@ angular.module('bars.admin.food', [
             return o.item.filter($scope.searchll);
         };
         $scope.addItem = function(item) {
-            $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            if (item.fuzzy_qty < 0) {
+                $scope.errors.push("L'aliment " + item.name + " a un stock négatif, vous devez l'inventorier avant de pouvoir l'ajouter");
+            } else {
+                $scope.sellitems_grp.push({unit_factor: 1, item: item});
+            }
             $scope.searchl = "";
         };
         $scope.removeItem = function(item) {
@@ -157,7 +191,7 @@ angular.module('bars.admin.food', [
 
         $scope.newItem = function (e) {
             if (e.which === 13) {
-                if (!isNaN(Appro.itemToAdd)) {
+                if (Appro.itemToAdd && !isNaN(Appro.itemToAdd)) {
                     var modalNewFood = $modal.open({
                         templateUrl: 'components/admin/food/modalAdd.html',
                         controller: 'admin.ctrl.food.addModal',
@@ -190,6 +224,339 @@ angular.module('bars.admin.food', [
         $timeout(function () {
             document.getElementById("addApproItemInput").focus();
         }, 300);
+    }
+])
+.controller('admin.ctrl.food.autoappro.ooshop',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json'; // Original URL but no Access-Control-Origin header
+        // var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/'; // Reverse proxy by ntag
+        var OOSHOP_URL = AUTOAPPRO_URL + '/ooshop/.json'; // Reverse proxy in the school
+        var cli_id;
+        function connexion(login, password) {
+            $scope.stape1.loading = true;
+            $http.get(OOSHOP_URL + '?__sequence=Login&login=' + login + '&password=' + password).then(function(result) {
+                if (result.data.document.isLogged == "false") {
+                    throw("Wrong Ooshop password");
+                }
+                cli_id = result.data.document.cli_id;
+                return $http.get(OOSHOP_URL + '?__sequence=GetMyAccount&cli_id=' + cli_id);
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.orders = result2.data.document.commandes.commande;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+        function getOrder(id) {
+            return $http.get(OOSHOP_URL + '?__sequence=GetCmdProduct&cli_id=' + cli_id + '&id=' + id);
+        }
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.id).then(function(result) {
+                order.loadingp = false;
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/ooshop-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data.document.items.TABLE;
+                        }
+                    }
+                });
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.id).then(function(result) {
+                _.forEach(result.data.document.items.TABLE, function(item) {
+                    var barcode = item.img_product_url.replace("Media/ProdImages/Produit/Images/", "").replace(".gif", "");
+                    if (!Appro.addItemFromBarcode(barcode, parseFloat(item.art_qte), parseFloat(item.uvc_buy)*parseFloat(item.art_qte))) {
+                        Appro.failedAutoAppro.push({
+                            name: item.title,
+                            qty: parseFloat(item.art_qte),
+                            totalPrice: parseFloat(item.uvc_buy)*parseFloat(item.art_qte),
+                            barcode: barcode,
+                            container: item.contenance,
+                            link: "http://www.ooshop.com/courses-en-ligne/ContentNavigation.aspx?NOEUD_IDFO=" + item.id
+                        });
+                    }
+                });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
+    }
+])
+.controller('admin.ctrl.food.autoappro.intermarche',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        var INTERMARCHE_URL = AUTOAPPRO_URL + '/intermarche'; // Reverse proxy in the school
+        var token;
+        function connexion(login, password) {
+            $scope.stape1.loading = true;
+            $http.post(INTERMARCHE_URL + '/login', {email: login, mdp: password}).then(function(result) {
+                console.log(result);
+                if (!result.data.ecomToken) {
+                    throw("Wrong Intermarché password");
+                }
+                token = result.data.ecomToken;
+                return $http.get(INTERMARCHE_URL + '/orders?token=' + token);
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.orders = result2.data.Commandes;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+
+        function previewOrder(order) {
+            var modalOrder = $modal.open({
+                templateUrl: 'components/admin/food/autoappro/intermarche-modal-order.html',
+                controller: ['$scope', 'items', function ($scope, items) {
+                    $scope.items = items;
+                }],
+                size: 'lg',
+                resolve: {
+                    items: function () {
+                        return order.ListeCommandeArticles;
+                    }
+                }
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            var ids = _.map(order.ListeCommandeArticles, 'IdProduit');
+            $http.post(INTERMARCHE_URL + '/details', ids).then(function(result) {
+                var barcodes = {};
+                _.forEach(result.data, function(item) {
+                    barcodes[item.id] = item.gtin.replace(/^0+/, '');
+                });
+                _.forEach(order.ListeCommandeArticles, function(item) {
+                    var barcode = barcodes[item.IdProduit];
+                    if (!Appro.addItemFromBarcode(barcode, item.Quantite, item.PrixUnitaire*item.Quantite)) {
+                        Appro.failedAutoAppro.push({
+                            name: item.LibelleCourt,
+                            qty: item.Quantite,
+                            totalPrice: item.PrixUnitaire*item.Quantite,
+                            barcode: barcode,
+                            container: "",
+                            link: "https://ws-mz-prd.mousquetaires.com/repo/produit/mcom/images/produits/" + item.NomImage
+                        });
+                    }
+                });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
+    }
+])
+.controller('admin.ctrl.food.autoappro.picard',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        var PICARD_URL = AUTOAPPRO_URL + '/picard'; // Reverse proxy in the school
+        var token;
+        function connexion(login, password) {
+            $scope.stape1.loading = true;
+            $http.post(PICARD_URL + '/login', {username: login, password: password}).then(function(result) {
+                if (result.data.error == "error") {
+                    throw("Wrong Picard password");
+                }
+                token = result.data.session;
+                return $http.get(PICARD_URL + '/orders', {headers: {'Authorization': token}});
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.orders = result2.data.data;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+        function getOrder(id) {
+            return $http.get(PICARD_URL + '/orders/' + id, {headers: {'Authorization': token}});
+        }
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.order_no).then(function(result) {
+                order.loadingp = false;
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/picard-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data.product_items;
+                        }
+                    }
+                });
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.order_no).then(function(result) {
+                _.forEach(result.data.product_items, function(item) {
+                    var barcodes = item.details.ean.split(' ');
+                    var success = false;
+                    for (var i = 0; i < barcodes.length; i++) {
+                        var barcode = barcodes[i];
+                        if (Appro.addItemFromBarcode(barcode, item.c_facturationQuantite, item.c_facturationPrixTTC)) {
+                            success = true;
+                            break;
+                        }
+                    }
+                    if (!success) {
+                        Appro.failedAutoAppro.push({
+                            name: item.item_text + " - " + item.details.manufacturer_name,
+                            qty: item.c_facturationQuantite,
+                            totalPrice: item.c_facturationPrixTTC,
+                            barcode: item.details.ean,
+                            container: $('<textarea />').html(item.details.c_conditionnement).text(),
+                            link: "http://www.picard.fr/produits/prouit-" + item.product_id + ".html"
+                        });
+                    }
+                });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
+    }
+])
+.controller('admin.ctrl.food.autoappro.houra',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        var HOURA_URL = AUTOAPPRO_URL + '/houra'; // Reverse proxy in the school
+        var auth;
+        function connexion(login, password, zipcode) {
+            $scope.stape1.loading = true;
+            auth = {
+                login: login,
+                password: sha1(password)
+            };
+            $http.post(HOURA_URL + '/login.php', {"postal-code": zipcode, authentication: auth}).then(function(result) {
+                if (result.data.status.code != 0) {
+                    throw("Wrong Houra password");
+                }
+                auth.userid = result.data.userId;
+                return $http.post(HOURA_URL + '/lists.php', {authentication: auth});
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.glists = result2.data.list;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+        function getOrder(id) {
+            return $http.post(HOURA_URL + '/list.php', {id: id,"cart-id": id,cartId: id, authentication: auth}).then(function(r) {
+                _.forEach(r.data.products, function (p) {
+                    p.price = parseFloat(p.uprice.replace('€', '').replace(',', '.'));
+                    p.amount = parseFloat(p.amount);
+                    p.total_price = p.price*p.amount;
+                    if (p.images.length > 0) {
+                        p.barcode = p.images[0].replace(/^.*([0-9]{13}).*$/, '$1');
+                    }
+                });
+                return r;
+            });
+        }
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.id).then(function(result) {
+                console.log(result);
+                order.loadingp = false;
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/houra-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data.products;
+                        }
+                    }
+                });
+            });
+        }
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.id).then(function(result) {
+                _.forEach(result.data.products, function(item) {
+                    if (!Appro.addItemFromBarcode(item.barcode, item.amount, item.total_price)) {
+                        Appro.failedAutoAppro.push({
+                            name: item.name + " - " + item.brand,
+                            qty: item.amount,
+                            totalPrice: item.total_price,
+                            barcode: item.barcode,
+                            container: item.size,
+                            link: "http://www.houra.fr/catalogue/?id_article=" + item.id
+                        });
+                    }
+                });
+                order.loadings = false;
+                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+            });
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            zipcode: '91120',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            glists: [],
+            preview: previewOrder,
+            select: selectOrder
+        };
     }
 ])
 .controller('admin.ctrl.food.approhelper',
@@ -372,13 +739,18 @@ angular.module('bars.admin.food', [
                 sei_unit_name: '',
                 sei_unit_name_plural: '',
                 sei_tax: BarInfos.bar.settings.default_tax*100,
-                keywords: ''
+                old_sei_name: '',
+                old_sei_name_plural: '',
+                old_sei_unit_name: '',
+                old_sei_unit_name_plural: '',
+                old_sei_tax: 0,
+                keywords: '',
+                itemInPack: '',
+                oldSellItem: ''
             };
             oItemdetails = ItemDetails.create();
             $scope.data = data;
             $scope.allow_barcode_edit = true;
-            $scope.itemInPack = "";
-            $scope.oldSellItem = "";
             $timeout(function () {
                 document.getElementById("fbarcode").focus();
             }, 300);
@@ -438,7 +810,7 @@ angular.module('bars.admin.food', [
             data.sei_unit_name = data.id_unit;
             data.sei_unit_name_plural = data.id_unit_plural;
             data.sti_sell_to_buy = data.id_container_qty;
-            $scope.itemInPack = buy_item.details.name;
+            data.itemInPack = buy_item.details.name;
             // A-t-on besoin de créer le StockItem ?
             var stockItem = _.find(StockItem.all(), function (i) {
                 return i.details.id == data.id_id;
@@ -474,7 +846,7 @@ angular.module('bars.admin.food', [
                         });
                         modalNewFood.result.then(function (buyItemPrice) {
                             $scope.choiceItemDetail(buyItemPrice);
-                            $scope.itemInPack = buyItemPrice.buyitem.details.name;
+                            data.itemInPack = buyItemPrice.buyitem.details.name;
                         }, function () {
                             console.log("Modal fermée ; c'est très mauvais");
                         });
@@ -538,7 +910,7 @@ angular.module('bars.admin.food', [
                 data.id_unit_plural = '';
                 data.id_container_qty = '';
                 data.id_brand = '';
-                $scope.itemInPack = '';
+                data.itemInPack = '';
             }
             if (basic) {
                 $scope.block = false;
@@ -597,14 +969,14 @@ angular.module('bars.admin.food', [
         $scope.createItemPack = function (e) {
             if (e.which === 13) {
                 e.preventDefault();
-                if (!isNaN($scope.itemInPack)) {
+                if (!isNaN(data.itemInPack)) {
                     var modalNewFood = $modal.open({
                         templateUrl: 'components/admin/food/modalAdd.html',
                         controller: 'admin.ctrl.food.addModal',
                         size: 'lg',
                         resolve: {
                             barcode: function () {
-                                return $scope.itemInPack;
+                                return data.itemInPack;
                             },
                             buy_item: function () {
                                 return undefined;
@@ -613,7 +985,7 @@ angular.module('bars.admin.food', [
                     });
                     modalNewFood.result.then(function (buyItemPrice) {
                             $scope.choiceItemDetail(buyItemPrice);
-                            $scope.itemInPack = buyItemPrice.buyitem.details.name;
+                            data.itemInPack = buyItemPrice.buyitem.details.name;
                         }, function () {
 
                     });
@@ -630,7 +1002,6 @@ angular.module('bars.admin.food', [
                 return bip.buyitem.details;
             });
         };
-        $scope.itemInPack = "";
         $scope.choiceItemDetail = function(item, model, label) {
             data.id_id = item.buyitem.details.id;
         };
@@ -641,13 +1012,13 @@ angular.module('bars.admin.food', [
                 return o.filter(v);
             });
         };
-        $scope.oldSellItem = "";
         $scope.choiceSellItem = function(item, model, label) {
             data.sei_id = item.id;
-            data.sei_name = item.name;
-            data.sei_name_plural = item.name_plural;
-            data.sei_unit_name = item.unit_name;
-            data.sei_unit_name_plural = item.unit_name_plural;
+            data.old_sei_name = item.name;
+            data.old_sei_name_plural = item.name_plural;
+            data.old_sei_unit_name = item.unit_name;
+            data.old_sei_unit_name_plural = item.unit_name_plural;
+            data.old_sei_tax = item.tax;
             data.keywords = item.keywords;
         };
 
@@ -691,7 +1062,7 @@ angular.module('bars.admin.food', [
                 buy_item.details = data.id_id;
                 stock_item.details = data.id_id;
             }
-            if (!data.sei_id) {
+            if (data.new_sell) {
                 sell_item.name = data.sei_name;
                 sell_item.name_plural = data.sei_name_plural;
                 sell_item.keywords = data.keywords;
@@ -731,6 +1102,7 @@ angular.module('bars.admin.food', [
                     if (stock_item.id > 0) {
                         promises.push(stock_item.$reload());
                         promises.push(item_details.$reload());
+                        promises.push(sell_item.$reload());
                     }
 
                     $q.all(promises).then(function() {
@@ -776,7 +1148,7 @@ angular.module('bars.admin.food', [
                 }
             }
             function saveSellItem() {
-                if (!data.sei_id) {
+                if (data.new_sell) {
                     sell_item.$save().then(function (sei) {
                         sell_item = sei;
                         stock_item.sellitem = sei.id;
@@ -809,9 +1181,9 @@ angular.module('bars.admin.food', [
                     (data.is_pack // C'est un pack
                         && data.bi_itemqty && data.id_id) ||
                     (!data.is_pack // Ce n'est pas un pack
-                        && (
-                            (data.new_sell // C'est un nouvel aliment
-                                && data.id_name && data.id_name_plural
+                        && (data.bi_id // Aliment acheté existant
+                            || (data.id_name && data.id_name_plural)) // Nouvel aliment acheté
+                        && ((data.new_sell // C'est un nouvel aliment vendu
                                 && data.sei_name && data.sei_name_plural && (data.sei_tax === 0 || data.sei_tax > 0)
                                 && data.sti_sell_to_buy
                             ) ||
@@ -901,7 +1273,8 @@ angular.module('bars.admin.food', [
         $scope.filteri = function(o) {
             return !o.deleted
             && o.filter($scope.searchi, true)
-            && new Date(o.oldest_inventory) >= firstDate;
+            && new Date(o.oldest_inventory) >= firstDate
+            && !o.inventoryComplete;
         };
         // Filtre sur les StockItem
         $scope.filters = function (o) {
@@ -930,12 +1303,6 @@ angular.module('bars.admin.food', [
         $timeout(function () {
             document.getElementById("addInventoryItemInput").focus();
         }, 300);
-
-        $(window).bind('beforeunload', function() {
-            if (Inventory.in()) {
-                return "Attention, vous allez perdre l'inventaire en cours !"
-            }
-        });
 
         $scope.inventory = Inventory;
     }
@@ -968,10 +1335,9 @@ angular.module('bars.admin.food', [
         };
     }
 ])
-
 .factory('admin.appro',
-    ['api.models.stockitem', 'api.services.action',
-    function (StockItem, APIAction) {
+    ['api.models.stockitem', 'api.models.buyitemprice', 'api.services.action',
+    function (StockItem, BuyItemPrice, APIAction) {
         var nb = 0;
         return {
             itemsList: [],
@@ -979,6 +1345,18 @@ angular.module('bars.admin.food', [
             inRequest: false,
             itemToAdd: "",
             errors: [],
+            /**
+             * Contient les items dont l'auto-appro a échouée
+             * {
+             *     name: <string>,
+             *     qty: <float>,
+             *     totalPrice: <float>,
+             *     barcode: <string>,
+             *     container: <string>,
+             *     link: <string>
+             * }
+             */
+            failedAutoAppro: [],
             init: function() {
                 this.itemsList = [];
                 this.totalPrice = 0;
@@ -996,7 +1374,7 @@ angular.module('bars.admin.food', [
 
                 this.totalPrice = totalPrice;
             },
-            addItem: function(buyitemprice, qty) {
+            addItem: function(buyitemprice, qty, price) {
                 this.error = "";
                 if (!qty) {
                     qty = 1;
@@ -1015,23 +1393,49 @@ angular.module('bars.admin.food', [
                             var stockitem = _.find(StockItem.all(), {'details': details});
                             if (stockitem) {
                                 if (stockitem.sellitem) {
-                                    this.itemsList.push({
-                                        buyitemprice: buyitemprice,
-                                        qty: qty,
-                                        old_qty: qty,
-                                        price: buyitemprice.price * qty,
-                                        nb: nb++});
                                     ok = true;
+                                    if (!stockitem.sellitem.deleted) {//si l'aliment est caché, renvoyer un message spécifique et ne pas l'ajouter à l'appro
+                                    //à voir : proposer de le "décacher" ??
+                                        if (!price) {
+                                            price = buyitemprice.price * qty;
+                                        }
+                                        this.itemsList.push({
+                                            buyitemprice: buyitemprice,
+                                            qty: qty,
+                                            old_qty: qty,
+                                            price: price,
+                                            permanent: true,
+                                            nb: nb++});
+                                    }
+                                    else {
+                                        this.errors.push("L'aliment «"+stockitem.sellitem.name+"» a été caché : vous ne pouvez pas l'ajouter à l'appro.");
+                                    }
                                 }
                             }
                         }
                     }
                     if (!ok) {
-                        this.errors.push("Cet aliment n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
+                        this.errors.push("L'aliment de code-barre "+buyitemprice.buyitem.barcode+" n'a pas été correctement créé dans votre bar et ne peut pas être ajouté à l'appro.");
                     }
                 }
                 this.recomputeAmount();
                 this.itemToAdd = "";
+            },
+            /**
+             * Add the BuyItemPrice corresponding to the barcode to the appro
+             * if it exists in the bar
+             */
+            addItemFromBarcode: function(barcode, qty, price) {
+                var buyItemPrice = _.find(BuyItemPrice.all(), function (bip) {
+                    return bip.buyitem.barcode == barcode;
+                });
+                if (buyItemPrice) {
+                    this.addItem(buyItemPrice, qty, price);
+                    return true;
+                } else {
+                    console.log("Aliment introuvable : " + barcode);
+                    return false;
+                }
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
@@ -1043,16 +1447,23 @@ angular.module('bars.admin.food', [
                     item.qty = item.qty;
                     item.buy_price = item.price / (item.qty);
                     item.buyitem = item.buyitemprice.buyitem;
+                    item.occasional = !item.permanent;
                 });
                 var refThis = this;
                 APIAction.appro({
                     items: this.itemsList
                 })
                 .then(function() {
+                    _.forEach(refThis.itemsList, function(item) {
+                        if (item.permanent) {
+                            item.buyitemprice.$reload();
+                        }
+                    });
+
                     refThis.init();
                 }, function () {
                     console.log("Erreur lors de l'appro :///");
-                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas égé validée.");
+                    refThis.errors.push("Une erreur s'est produite lors de l'appro, celle-ci n'a pas été validée.");
                 });
             },
             in: function() {
@@ -1062,17 +1473,23 @@ angular.module('bars.admin.food', [
     }]
 )
 .factory('admin.inventory',
-    ['api.models.stockitem', 'api.services.action',
-    function (StockItem, APIAction) {
+    ['storage.bar', 'api.models.stockitem', 'api.services.action',
+    function (storage, StockItem, APIAction) {
         var nb = 0;
-        return {
+        var inventory = {
             itemsList: [],
             inRequest: false,
             totalPrice: 0,
+            validationError: false,
             init: function() {
+                _.forEach(this.itemsList, function (item) {
+                    delete item.stockitem.inventoryAdded;
+                    delete item.stockitem.sellitem.inventoryComplete;
+                });
                 this.itemsList = [];
                 this.inRequest = false;
                 this.totalPrice = 0;
+                this.validationError = false;
             },
             addSellItem: function(sellitem, qty) {
                 if (!qty) {
@@ -1081,7 +1498,9 @@ angular.module('bars.admin.food', [
                 var _this = this;
                 _.forEach(sellitem.stockitems, function(si) {
                     _this.addStockItem(si, qty);
+                    si.inventoryAdded = true;
                 });
+                sellitem.inventoryComplete = true;
             },
             addStockItem: function(stockitem, qty) {
                 var other = this.find(stockitem);
@@ -1093,13 +1512,26 @@ angular.module('bars.admin.food', [
                     // et surtout le stockitem existent bien
                     this.itemsList.push({ stockitem: stockitem, qty: qty, sell_to_buy: 1, nb: nb++, qty_diff: 0 });
                 }
+
+                this.updateStockItemAfterAdding(stockitem);
                 this.recomputeAmount();
+            },
+            updateStockItemAfterAdding: function (stockitem) {
+                // For list filtering
+                stockitem.inventoryAdded = true;
+                if (_.filter(stockitem.sellitem.stockitems, {inventoryAdded: true}).length === stockitem.sellitem.stockitems.length) {
+                    stockitem.sellitem.inventoryComplete = true;
+                }
             },
             find: function(stockitem) {
                 return _.find(this.itemsList, {'stockitem': stockitem});
             },
             removeItem: function(item) {
                 this.itemsList.splice(this.itemsList.indexOf(item), 1);
+                item.stockitem.inventoryAdded = false;
+                item.stockitem.sellitem.inventoryComplete = false;
+
+                this.recomputeAmount();
             },
             recomputeAmount: function() {
                 var totalPrice = 0;
@@ -1111,26 +1543,63 @@ angular.module('bars.admin.food', [
                 });
 
                 this.totalPrice = totalPrice;
+
+                this.save();
             },
             validate: function() {
                 this.inRequest = true;
+                this.validationError = false;
+                var itemsToSend = [];
                 _.forEach(this.itemsList, function(item, i) {
-                    item.qty = item.qty / item.stockitem.sell_to_buy * item.sell_to_buy;
-                    delete item.sell_to_buy;
-                    delete item.nb;
+                    itemsToSend.push({qty: item.qty / item.stockitem.sell_to_buy * item.sell_to_buy, stockitem: item.stockitem});
                 });
                 var refThis = this;
                 APIAction.inventory({
-                    items: this.itemsList
+                    items: itemsToSend
                 })
                 .then(function() {
                     refThis.init();
+                    storage.delete('inventory');
+                })
+                .catch(function() {
+                    refThis.inRequest = false;
+                    refThis.validationError = true;
                 });
             },
             in: function() {
                 return this.itemsList.length > 0;
+            },
+            restore: function() {
+                var sinfos = storage.get('inventory');
+                if (sinfos) {
+                    // Si la sauvegarde date d'il y a plus de 7 jours, on supprime
+                    if (moment(sinfos.date).isBefore(moment().subtract(1, 'weeks'))) {
+                        storage.delete('inventory');
+                        return;
+                    }
+
+                    _.forEach(sinfos.items, function (item) {
+                        var stockitem = StockItem.get(item.stockitem);
+                        this.itemsList.push({ stockitem: stockitem, qty: item.qty, sell_to_buy: item.sell_to_buy, nb: item.nb });
+                        this.updateStockItemAfterAdding(stockitem);
+                    }, this);
+
+                    this.recomputeAmount();
+                }
+            },
+            save: function() {
+                storage.get('inventory').items = [];
+                storage.get('inventory').date = new Date();
+
+                _.forEach(this.itemsList, function (item) {
+                    storage.get('inventory').items.push({stockitem: item.stockitem.id, qty: item.qty, sell_to_buy: item.sell_to_buy, nb: item.nb});
+                });
             }
         };
+
+        inventory.restore();
+
+        return inventory;
     }]
 )
 ;

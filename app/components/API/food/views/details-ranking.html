@@ -10,7 +10,7 @@
         <tbody>
             <tr ng-repeat="a in best_ever | orderBy:'val':true" ng-if="Account.get(a.id).owner.username != 'bar'">
                 <td>#{{ $index+1 }}</td>
-                <td><bars:account account="Account.get(a.id)"></bars:account></td>
+                <td><bars:account:oneway account="Account.get(a.id)"></bars:account:oneway></td>
                 <td><bars:sellitem:qty item="food_item" qty="a.val"></bars:sellitem:qty></td>
             </tr>
         </tbody>

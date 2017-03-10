@@ -1,12 +1,11 @@
 /* app css stylesheet */
-html,
-body {
+html {
   height: 100%;
   width: 100%;
 }
 body {
     padding-top: 70px;
-    padding-bottom: 50px;
+    padding-bottom: 70px;
 }
 .logo.petit {
     width: 64px;
@@ -233,6 +232,53 @@ tr.condensed td {
 td.alinea {
     padding-left: 48px !important;
 }
+li.condensed div {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    font-size: 0.8em;
+}
+div.alinea {
+    padding-left: 48px !important;
+}
+li.danger {
+    background-color: #f2dede;
+}
+li.danger:hover {
+    background-color: #ebcccc;
+}
+li.warning {
+    background-color: #fcf8e3;
+}
+li.warning:hover {
+    background-color: #faf2cc;
+}
+li.info {
+    background-color: #d9edf7;
+}
+li.info:hover {
+    background-color: #c4e3f3;
+}
+.div-in-list {
+    display: inline-block;
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+}
+.div-head-list {
+    display: inline-block;
+    padding: 8px;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+.div-list-right {
+    width: 35%;
+}
+.div-list-left {
+    width: 64%;
+}
+.div-head-list > * {
+    font-weight: bold;
+}
 
 hr.derrierebtn {
     position: relative;
@@ -256,6 +302,11 @@ hr.derrierebtn {
 
 .morris-chart svg {
     width: 100%;
+}
+
+.tax-button {
+    max-width: 49%;
+    white-space: normal;
 }
 
 /* Ranking */
@@ -290,6 +341,36 @@ hr.derrierebtn {
 }
 .Ranking-Total__Qty {
     font-size: 30px;
+}
+
+/* Suggestions */
+.suggestion {
+    display: inline-block;
+    width: 50%;
+    border-bottom: 0px;
+}
+.Suggestion {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+}
+.Suggestion__Name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 1.49;
+}
+.Suggestion__Votes {
+    white-space: nowrap;
+}
+.suggestion:nth-child(2n+1) {
+    border-right: 1px #DDD solid !important;
+}
+.suggestion:nth-child(n+3) {
+    border-top: none;
+}
+.suggestion:nth-last-child(2):nth-child(2n+1) {
+    border-bottom: none;
 }
 
 /* Beautiful theme colors */
@@ -348,6 +429,7 @@ hr.derrierebtn {
     bottom: 0px;
     left: 0px;
     width: 100%;
+    z-index: 9000;
 }
 #new-version .alert {
     margin: 0px;

@@ -57,7 +57,7 @@
                         <small ng-bind="mleft"></small>
                     </div>
                     <div class="pull-right">
-                        <small ng-bind="percent + '%'"></small>
+                        <small ng-bind="(percent | number:0) + ' %'"></small>
                     </div>
                 </div>
             </div>
@@ -89,20 +89,23 @@
     <script src="bower_components/angular-moment/angular-moment.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
-    <script src="bower_components/moment-range/dist/moment-range.js"></script>
     <script src="bower_components/ngstorage/ngStorage.js"></script>
-    <script src="bower_components/raphael/raphael.js"></script>
+    <script src="bower_components/eve-raphael/eve.js"></script>
+    <script src="bower_components/raphael/raphael.min.js"></script>
     <script src="bower_components/mocha/mocha.js"></script>
     <script src="bower_components/morris.js/morris.js"></script>
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/js-sha1/build/sha1.min.js"></script>
     <!-- endbower -->
     <script src="../bower_components/moment/locale/fr.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="assets/js/angular-locale_fr-fr.js"></script>
+
+    <script src="config.js"></script>
 
     <script src="components/API/APIModel.js"></script>
     <script src="components/API/OpenFoodFacts.js"></script>
@@ -118,6 +121,9 @@
     <script src="components/API/menu/menu.module.js"></script>
     <script src="components/API/menu/menu.factory.js"></script>
     <script src="components/API/menu/menu-price.filter.js"></script>
+    <script src="components/API/suggesteditem/suggesteditem.js"></script>
+    <script src="components/API/suggesteditem/suggesteditem.directive.js"></script>
+    <script src="components/API/suggesteditem/suggestions.directive.js"></script>
 
     <script src="components/auth/auth.js"></script>
     <script src="components/display.js"></script>
@@ -126,6 +132,7 @@
     <script src="components/sugive/sugive.js"></script>
     <script src="components/settings/settings.js"></script>
     <script src="components/stats/stats.js"></script>
+    <script src="components/storage/storage.bar.factory.js"></script>
 
     <!-- Ranking -->
     <script src="components/ranking/ranking.config.js"></script>
@@ -151,6 +158,7 @@
     <script src="components/admin/news/news.js"></script>
     <script src="components/admin/compta/compta.js"></script>
     <script src="components/admin/settings/settings.js"></script>
+    <script src="components/admin/suggesteditem/suggesteditem.js"></script>
 
     <!-- Root pages -->
     <script src="components/root/common/root.js"></script>

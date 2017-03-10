@@ -2,7 +2,7 @@
     <tbody>
         <tr>
             <td class="h4 title">Prix</td>
-            <td class="end-of-column text-right value">
+            <td class="end-of-column text-right value" id="food-details-price">
                 <span class="h4"><span class="label label-info">
                     <bars:sellitem:price item="food_item" in="'sell'" tax="true"></bars:sellitem:price>
                 </span></span>
@@ -18,7 +18,7 @@
             <td class="h4">Stock<span ng-if="food_item.stockitems.length > 1"> total</span></td>
             <td class="end-of-column text-right" ng-mouseenter="in = true" ng-mouseleave="in = false">
                 <span class="h4" ng-hidef="in">
-                    <span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'">
+                    <span class="label" ng-class="food_item.qty > 0 && 'label-primary' || 'label-warning'" id="food-details-stock">
                         <bars:sellitem:qty item="food_item" qty="food_item.fuzzy_qty" out="'sell'"></bars:sellitem:qty>
                     </span>
                 </span>

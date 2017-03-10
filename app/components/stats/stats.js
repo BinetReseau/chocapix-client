@@ -198,7 +198,7 @@ angular.module('bars.stats', [
                     } else if (interval == "days_of_week") {
                         fnp = function(x) { return dict_days[x]; };
                     } else {
-                        fnp = function(x) {return dict_months[x]; };
+                        fnp = function(x) {return dict_months[x-1]; };
                     }
                     $scope.dateFormat = fnp;
                     $scope.xlabelformat = fnp;

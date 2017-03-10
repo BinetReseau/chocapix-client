@@ -1,61 +1,87 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
-    <h3>Ajouter un utilisateur</h3>
+    <alert id="fail-creation" type="danger" ng-if="errorMessage">La création ou l'import du compte a échoué.</alert>
+
+    <h3>Importer un utilisateur d'un autre bar</h3>
 
     <div>
-        <form class="form-horizontal" ng-submit="createAccount()">
+        <form class="form-horizontal" ng-submit="createAccount(user, money)">
             <div class="form-group">
-                <label for="ulastname" class="col-sm-3 control-label">Nom</label>
-                <div class="col-sm-9">
+                <label for="aowner" class="col-sm-2 control-label">Utilisateur</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="aowner" placeholder="Taper un nom" ng-model="usert" typeahead="usr.firstname + ' ' + usr.lastname for usr in users_list | filter:$viewValue | limitTo:10" autocomplete="off" typeahead-on-select="findUser($item)">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="amoney-import" class="col-sm-2 control-label">Solde</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="amoney-import" placeholder="Solde initial" ng-model="money" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" id="validate-importation" class="btn btn-success" value="Ajouter" ng-class="(user && usert) && ' ' || 'disabled'" />
+                </div>
+              </div>
+        </form>
+    </div>
+    <h3>Ajouter un utilisateur</h3>
+
+    <p><strong>Attention</strong> : vérifiez que l'utilisateur n'existe pas déjà dans un autre bar avant de le créer.</p>
+    <div>
+        <form class="form-horizontal" ng-submit="createUser(nuser, naccount.amoney)">
+            <div class="form-group">
+                <label for="ulastname" class="col-sm-2 control-label">Nom</label>
+                <div class="col-sm-10">
                   <input type="text" class="form-control" id="ulastname" placeholder="Nom" ng-model="nuser.lastname" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="ufirstname" class="col-sm-3 control-label">Prénom</label>
-                <div class="col-sm-9">
+                <label for="ufirstname" class="col-sm-2 control-label">Prénom</label>
+                <div class="col-sm-10">
                   <input type="text" class="form-control" id="ufirstname" placeholder="Prénom" ng-model="nuser.firstname" />
                 </div>
             </div>
-            <div class="form-group">
-                <label for="uemail" class="col-sm-3 control-label">Email</label>
-                <div class="col-sm-9">
+            <div class="form-group" id="email-div" ng-class="!isValidEmail(nuser.email) && 'has-error' || ''">
+                <label for="uemail" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-10">
                   <input type="email" class="form-control" id="uemail" placeholder="Adresse email" ng-model="nuser.email" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="upseudo" class="col-sm-3 control-label">Pseudo</label>
-                <div class="col-sm-9">
+                <label for="upseudo" class="col-sm-2 control-label">Pseudo</label>
+                <div class="col-sm-10">
                   <input type="text" class="form-control" id="upseudo" placeholder="Pour l'affichage" ng-model="nuser.pseudo" />
                 </div>
             </div>
-            <div class="form-group" ng-class="!checkUsername(nuser.username) && 'has-error' || ''">
-                <label for="uusername" class="col-sm-3 control-label">Login</label>
-                <div class="col-sm-9">
+            <div class="form-group" id="uusername-div" ng-class="!checkUsername(nuser.username) && 'has-error' || ''">
+                <label for="uusername" class="col-sm-2 control-label">Login</label>
+                <div class="col-sm-10">
                   <input type="text" class="form-control" id="uusername" placeholder="Pour se connecter" ng-model="nuser.username" />
                   <span class="help-block" ng-if="!checkUsername(nuser.username)">Ce login existe déjà.</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="upassword" class="col-sm-3 control-label">Mot de passe</label>
-                <div class="col-sm-9">
+                <label for="upassword" class="col-sm-2 control-label">Mot de passe</label>
+                <div class="col-sm-10">
                   <input type="password" class="form-control" id="upassword" ng-model="nuser.password" />
                 </div>
             </div>
-            <div class="form-group" ng-class="(nuser.password != nuser.passwordBis) && 'has-error' || ''">
-                <label for="upasswordBis" class="col-sm-3 control-label">Confirmer</label>
-                <div class="col-sm-9">
+            <div class="form-group" id="upassword-div" ng-class="(nuser.password != nuser.passwordBis) && 'has-error' || ''">
+                <label for="upasswordBis" class="col-sm-2 control-label">Confirmer</label>
+                <div class="col-sm-10">
                   <input type="password" class="form-control" id="upasswordBis" ng-model="nuser.passwordBis" />
                   <span class="help-block" ng-if="password != passwordBis">Les mots de passe sont différents.</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="amoney" class="col-sm-3 control-label">Solde initial</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="amoney" placeholder="40" ng-model="naccount.amoney" />
+                <label for="amoney-create" class="col-sm-2 control-label">Solde initial</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="amoney-create" placeholder="40" ng-model="naccount.amoney" />
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <input type="submit" class="btn btn-success" value="Ajouter" ng-class="!isValidUser() && 'disabled' || ''" />
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" id="validate-creation" class="btn btn-success" value="Ajouter" ng-class="!isValidUser(nuser,naccount) && 'disabled' || ''" />
                 </div>
               </div>
         </form>

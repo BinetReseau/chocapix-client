@@ -14,6 +14,7 @@ angular.module('barsApp', [
   'bars.root',
   'bars.granking',
   'bars.bars',
+  'bars.storage',
   'bars.main',
   'bars.admin',
   'bars.magicbar',
@@ -35,16 +36,13 @@ angular.module('barsApp', [
   'bars.api.role',
   'bars.api.bug',
   'bars.api.menu',
+  'bars.api.suggesteditem',
 ])
 
 .config(['APIURLProvider', 'OFFURLProvider', function(APIURL, OFFURL) {
-    APIURL.url = "http://bars.nadrieril.fr/api";
-    OFFURL.url = "http://bars.nadrieril.fr/off";
-    // APIURL.url = "http://127.0.0.1:8000";
-    // OFFURL.url = "http://fr.openfoodfacts.org/api/v0/produit";
-    // APIURL.url = "http://chocapix/api";
-    // OFFURL.url = "http://chocapix/off";
-
+    //Defined in app/config.js
+    APIURL.url = API_URL;
+    OFFURL.url = OFF_URL;
 }])
 
 .config(['$httpProvider', '$compileProvider', '$tooltipProvider',
@@ -82,8 +80,8 @@ angular.module('barsApp', [
 }])
 
 .controller('index.update',
-    ['$scope', '$http', '$timeout',
-    function ($scope, $http, $timeout) {
+    ['$scope', '$http', '$interval',
+    function ($scope, $http, $interval) {
         var version;
         $scope.need_update = false;
         function checkVersion() {
@@ -95,17 +93,17 @@ angular.module('barsApp', [
                     $scope.need_update = true;
                 }
             });
-            $timeout(checkVersion, 60000);
         }
-        checkVersion();
+        $interval(checkVersion, 60000);
     }])
 .controller('index.splash',
     ['$rootScope', '$scope', '$timeout',
     function ($rootScope, $scope, $timeout) {
         $scope.percent = 0;
-        var step = 100/8;
+        var step = 100/9;
         $rootScope.$watch('appLoaded', function () {
-            if ($scope.appLoaded) {
+            if ($rootScope.appLoaded) {
+                $scope.appLoaded = true;
                 $scope.percent = 100;
             }
         });
@@ -144,6 +142,18 @@ angular.module('barsApp', [
         $rootScope.$on('api.News.loaded', function () {
             $scope.percent += step;
             $scope.mleft = "News";
+        });
+        $rootScope.$on('api.News.error', function () {
+            $scope.percent += step;
+            $scope.mleft = "News : erreur";
+        });
+        $rootScope.$on('api.SuggestedItem.loaded', function () {
+            $scope.percent += step;
+            $scope.mleft = "SuggestedItem";
+        });
+        $rootScope.$on('api.SuggestedItem.error', function () {
+            $scope.percent += step;
+            $scope.mleft = "SuggestedItem : erreur";
         });
     }])
 ;

@@ -10,15 +10,13 @@
     </div>
     <div class="row">
         <div class="col-sm-6">
+	    <div class="panel panel-default">
+		<bars:meal></bars:meal>
+	    </div>
+        </div>
+
+        <div class="col-sm-6">
             <div class="list-group">
-                <div class="list-group-item" ng-if="user.user !== null">
-                    <div class="row">
-                        <div class="col-sm-7"><span class="h4">Dernière connexion</span></div>
-                        <div class="col-sm-5 text-right">
-                            <span>{{ user.user.previous_login | date:"EEEE dd/MM à HH:mm" }}</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="list-group-item" ng-if="thereIsAnAppro">
                     <div class="row">
                         <div class="col-sm-7"><span class="h4">Prochaine appro</span></div>
@@ -26,6 +24,34 @@
                             <span class="h4">
                                 <span class="label label-info">{{ bar.infos.next_scheduled_appro | date:'EEEE dd/MM à HH:mm' }}</span>
                             </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.account">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Total dépensé</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span class="h4">
+                                <span class="label label-info">{{ -user.account.spent | currency }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.account">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Classement</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span class="h4">
+                                <span class="badge">{{ user.account.rank }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item" ng-if="user.user !== null">
+                    <div class="row">
+                        <div class="col-sm-7"><span class="h4">Dernière connexion</span></div>
+                        <div class="col-sm-5 text-right">
+                            <span>{{ user.user.previous_login | date:"EEEE dd/MM à HH:mm" }}</span>
                         </div>
                     </div>
                 </div>
@@ -94,11 +120,6 @@
             </div>
         </div>
 
-        <div class="col-sm-6" ng-show="user.can('add_mealtransaction')">
-            <div class="panel panel-default">
-                <bars:meal></bars:meal>
-            </div>
-        </div>
     </div>
 
     <bars:history filter="{user: user.user.id}" page-size="10" ng-show="user_authenticated()" daily-total="true"></bars:history>

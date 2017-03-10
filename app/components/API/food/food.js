@@ -93,7 +93,7 @@ angular.module('bars.api.food', [
     }])
 .factory('api.models.sellitem', ['APIModel', 'APIInterface',
     function(APIModel, APIInterface) {
-        return new APIModel({
+        var model = new APIModel({
                 url: 'sellitem',
                 type: 'SellItem',
                 structure: {
@@ -131,6 +131,15 @@ angular.module('bars.api.food', [
                     }
                 }
             });
+
+        model.set_global_tax = function(newTax) {
+            return APIInterface.request({
+                'url': 'sellitem/set_global_tax',
+                'method': 'PUT',
+                'data': {tax: newTax}});
+        };
+
+        return model;
     }])
 
 .config(['$stateProvider', function($stateProvider) {
@@ -237,6 +246,31 @@ angular.module('bars.api.food', [
         }, 300);
     }]
 )
+.controller('api.ctrl.food_list_negative_sellitems',
+    ['$scope', '$timeout',
+    function($scope, $timeout) {
+        $scope.isNegative = function(o) {
+            return o.fuzzy_qty < 0;
+        };
+        $scope.list_order = 'name';
+        $scope.reverse = false;
+
+        $scope.limit = {nb: 30};
+        $scope.showMore = function () {
+            $scope.limit.nb += 5;
+        };
+    }]
+)
+.directive('listNegativeSellitems', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            list: '=',
+        },
+        templateUrl: 'components/API/food/directives/list-negative-sellitems-directive.html',
+        controller: 'api.ctrl.food_list_negative_sellitems'
+    };
+})
 .controller('api.ctrl.food_details',
     ['$scope', '$stateParams', 'food_item', 'auth.user', 'api.models.buyitemprice', 'api.services.action', 'bars.meal',
     function($scope, $stateParams, food_item, AuthUser, BuyItemPrice, APIAction, Meal) {
@@ -278,7 +312,7 @@ angular.module('bars.api.food', [
             $scope.query = {
                 qty: 1,
                 type: Meal.in() && 'add' || 'buy',
-                stockitem: $scope.food_item.stockitems[0],
+                stockitem: $scope.food_item.stockitems[0].id,
                 buyitemprice: $scope.buy_item_prices[0].buyitem.id,
                 unit_choice: stockItemUnits(food_item),
                 unit: 'sellitem'
@@ -295,11 +329,11 @@ angular.module('bars.api.food', [
                         $scope.query.qty = 1;
                     });
                 } else if (type == 'throw') {
-                    APIAction[type]({stockitem: $scope.query.stockitem.id, qty: qty}).then(function() {
+                    APIAction[type]({stockitem: $scope.query.stockitem, qty: qty}).then(function() {
                         $scope.query.qty = 1;
                     })
                 } else if (type == 'inventory') {
-                    APIAction[type]({items: [{stockitem: $scope.query.stockitem.id, qty: qty}]}).then(function() {
+                    APIAction[type]({items: [{stockitem: $scope.query.stockitem, qty: qty}]}).then(function() {
                         $scope.query.qty = 1;
                     })
                 } else if (type == 'appro') {
@@ -318,12 +352,15 @@ angular.module('bars.api.food', [
     ['$scope', '$rootScope', '$stateParams', '$modal', 'food_item', 'auth.user', 'api.services.action', 'sellitem_list', 'APIInterface',
     function($scope, $rootScope, $stateParams, $modal, food_item, AuthUser, APIAction, sellitem_list, APIInterface){
         sellitem_list = _.without(sellitem_list, food_item);
+        $scope.removingAuthorized = _.every(food_item.stockitems, function (si) {
+            return si.qty >= 0;
+        });
         $scope.removeStockItem = function(si) {
             APIInterface.request({
                 'url': 'sellitem/' + food_item.id + '/remove',
                 'method': 'PUT',
                 'data': {'stockitem': si.id}
-            }).then(function(si) {
+            }).then(function(sei) {
                 food_item.$reload();
                 si.$reload();
             });
@@ -344,12 +381,21 @@ angular.module('bars.api.food', [
                     $scope.food_item = food_item;
                     $scope.searchl = "";
                     $scope.itemToAttach = null;
+                    $scope.errors = [];
+                    $scope.closeAlert = function (i) {
+                        $scope.errors.splice(i, 1);
+                    };
+
                     $scope.filterItems = function(o) {
                         return o.filter($scope.searchl);
                     };
                     $scope.addItem = function(item) {
-                        $scope.itemToAttach = item;
-                        $scope.itemToAttach.unit_factor = 1;
+                        if (item.fuzzy_qty < 0) {
+                            $scope.errors.push("L'aliment " + item.name + " a un stock négatif, vous devez l'inventorier avant de pouvoir l'ajouter");
+                        } else {
+                            $scope.itemToAttach = item;
+                            $scope.itemToAttach.unit_factor = 1;
+                        }
                     };
                     $scope.validate = function() {
                         APIInterface.request({
@@ -441,11 +487,14 @@ angular.module('bars.api.food', [
             food_item.name_plural = $scope.newFood_item.name_plural;
             food_item.tax = $scope.newFood_item.tax/100;
             food_item.keywords = $scope.newFood_item.keywords;
-            food_item.$save();
-            _.forEach(food_item.stockitems, function (s) {
-                s.sell_to_buy = s.sell_to_buy * $scope.newFood_item.unit_factor;
-                s.price = s.price * $scope.newFood_item.unit_factor;
-                s.$save();
+            food_item.unit_factor = 1/$scope.newFood_item.unit_factor;
+            food_item.sell_fraction = $scope.newFood_item.sell_fraction;
+
+            food_item.$save().then(function() {
+                AuthUser.updateMenus();
+                _.forEach(food_item.stockitems, function (s) {
+                    s.$reload();
+                });
             });
             $scope.resetFood();
             $rootScope.$broadcast('api.model.transaction.reload');
@@ -498,8 +547,7 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            qty: '=?qty',
-            tax: '=?tax'
+            qty: '=?qty'
         },
         templateUrl: 'components/API/food/directives/sellitem-price-directive.html',
         controller: ['$scope', function($scope) {
@@ -550,8 +598,7 @@ angular.module('bars.api.food', [
         restrict: 'E',
         scope: {
             item: '=item',
-            qty: '=?qty',
-            tax: '=?tax'
+            qty: '=?qty'
         },
         templateUrl: 'components/API/food/directives/sellitem-price-oneway-directive.html',
         controller: ['$scope', function($scope) {

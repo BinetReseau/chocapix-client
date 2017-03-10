@@ -16,7 +16,7 @@
             </tr>
             <tr ng-repeat-start="f in food_list | filter:filterItems | orderBy:list_order:reverse | limitTo: limit.nb track by f.id" ng-class="f.deleted && 'del' || (f.fuzzy_qty < 0 && 'danger' || (f.stockitems.length == 0 && 'warning' || '')) ">
                 <td>
-                    <a ng-click="collapse = !collapse" tooltip="Voir la liste des aliments achetés" href><span class="glyphicon" ng-class="collapse && 'glyphicon-collapse-up' || 'glyphicon-collapse-down'"></span></a>
+                    <a ng-click="collapse = !collapse" tooltip="Voir la liste des aliments achetés" href class="food-list-collapse"><span class="glyphicon" ng-class="collapse && 'glyphicon-collapse-up' || 'glyphicon-collapse-down'"></span></a>
                     <bars:sellitem:oneway item=":: f"></bars:sellitem:oneway>
                 </td>
                 <td><bars:sellitem:qty:oneway item=":: f" qty=":: f.fuzzy_qty" out="'sell'"></bars:sellitem:qty:oneway></td>
@@ -40,7 +40,7 @@
                 <td ng-if="user.can('change_sellitem')">
                     {{ si.price*si.qty*(1+f.tax) | currency }}
                     <span ng-if="f.fuzzy_qty != 0 && f.fuzzy_price != 0">
-                        ({{ si.price*si.qty/f.fuzzy_price/f.fuzzy_qty*100*(1+f.tax) | number }} %)
+                        ({{ si.price*si.qty/f.fuzzy_price/f.fuzzy_qty*100*(1+f.tax) | number:0 }} %)
                     </span>
                 </td>
             </tr>

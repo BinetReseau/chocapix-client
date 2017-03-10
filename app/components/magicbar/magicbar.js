@@ -14,7 +14,7 @@ angular.module('bars.magicbar', [
 			});
 			_.forEach(AuthUser.menus, function (menu) {
 				menu.urank = 0;
-			})
+			});
 		}
 		function updateRanking() {
 			if (!AuthUser.account) {
@@ -30,9 +30,12 @@ angular.module('bars.magicbar', [
 				});
 			});
 		}
-		updateRanking();
-		$rootScope.$on('auth.hasLoggedIn', updateRanking);
-		$rootScope.$on('auth.hasLoggedOut', updateRanking);
+        updateRanking();
+        $rootScope.$on('auth.hasLoggedIn', updateRanking);
+        $rootScope.$on('auth.hasLoggedOut', updateRanking);
+        $rootScope.$on('auth.hasLoggedOut', function() {
+            $scope.bar.search = "";
+        });
 
 
         $scope.query = {
@@ -46,9 +49,11 @@ angular.module('bars.magicbar', [
             suggest: []
         };
 
-        $scope.$watch('bar.search', function(qo) {
-            analyse(qo, $scope);
-        });
+        $scope.analyse = function (qo) {
+            $scope.query = analyse(qo, $scope);
+            return $scope.query.suggest;
+        };
+
 		$scope.urank = function (e) {
 			if (e.food && e.food.urank > 0) {
 				return -e.food.urank;
@@ -64,11 +69,11 @@ angular.module('bars.magicbar', [
 				var barcode = $scope.bar.search;
 				if (barcode && !isNaN(barcode)) {
 					var buy_item = _.find(BuyItem.all(), function (bi) {
-						return bi.filter(barcode);
+						return barcode == bi.barcode;
 					});
 					if (buy_item) {
 						$scope.bar.search = buy_item.details.stockitem.sellitem.name;
-						$('#q_alim').eq(0).val(buy_item.details.stockitem.sellitem.name + " ").trigger("input");
+						$('#magic_bar').eq(0).val(buy_item.details.stockitem.sellitem.name + " ").trigger("input");
 					}
 				}
 			}
@@ -120,7 +125,7 @@ angular.module('bars.magicbar', [
 							APIAction[type](req).then(function() {
 								$modalInstance.close();
 								$timeout(function () {
-									document.getElementById('q_alim').focus();
+									document.getElementById('magic_bar').focus();
 								}, 500);
 			                });
 	                    };
@@ -137,10 +142,10 @@ angular.module('bars.magicbar', [
     }])
 
 .factory('magicbar.analyse',
-	['$filter',  'api.models.sellitem', 'api.models.buyitem', 'bars.meal', 'auth.user',
-	function($filter, SellItem, BuyItem, Meal, AuthUser) {
-	    var analyse = function(qo, $scope) {
-	        $scope.query = {
+	['$filter',  'api.models.sellitem', 'api.models.buyitem', 'api.models.account', 'bars.meal', 'auth.user',
+	function($filter, SellItem, BuyItem, Account, Meal, AuthUser) {
+	    var analyse = function(qo) {
+	        var query = {
 	            type: '',
 	            qty: 1,
 	            unit_name: '',
@@ -149,7 +154,6 @@ angular.module('bars.magicbar', [
 	            errorMessage: '',
 	            suggest: []
 	        };
-	        var query = $scope.query;
 
 	        if(typeof qo !== 'string' && !(qo instanceof String) || qo === "") {
 	            return query;
@@ -178,7 +182,7 @@ angular.module('bars.magicbar', [
 					delete humanTypes[k];
 				}
 			});
-			humanTypes['add'] = 'ajouter';
+			humanTypes.add = 'ajouter';
 
 	        var units = [
 	            'g',
@@ -295,7 +299,7 @@ angular.module('bars.magicbar', [
 	            }
 
 	            // Account
-	            var accounts = _.filter($scope.bar.accounts, function (o) {
+	            var accounts = _.filter(Account.all(), function (o) {
 					return o.filter(term);
 	            });
 	            if (accounts.length >= 1) {
@@ -391,8 +395,8 @@ angular.module('bars.magicbar', [
 						} else {
 							res.type = res.type || 'buy';
 						}
-						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory')
-								|| res.unit_name === "€"){
+						if((res.type !== 'buy' && res.type !== 'throw' && res.type !== 'appro' && res.type !== 'add' && res.type !== 'inventory') ||
+							res.unit_name === "€") {
 							return []; // Discard
 						}
 						if (res.unit_name) {
@@ -406,6 +410,9 @@ angular.module('bars.magicbar', [
 									res.qty = res.qty / unitsr[res.unit_name][sti.details.unit] / sti.details.container_qty / sti.sell_to_buy;
 								}
 							}
+						}
+						if (!res.food.sell_fraction) {
+						    res.qty = Math.ceil(res.qty);
 						}
 					}
 					res.qty = res.qty || 1;
@@ -421,35 +428,6 @@ angular.module('bars.magicbar', [
 				}
 				return out;
 			});
-
-
-	        /*
-	        // Erreurs
-	        if (query.type == 'buy' || query.type == 'throw' || query.type == 'appro') {
-	            if (query.food === null) {
-	                query.hasError = true;
-	                query.errorMessage = "Cet aliment n'existe pas dans ce bar.";
-	            }
-	        }
-	        if (query.type == 'give' || query.type == 'punish') {
-	            if (query.account === null) {
-	                query.hasError = true;
-	                query.errorMessage = "Aucun utilisateur à ce nom dans ce bar.";
-	            }
-	        }
-	        if (query.type == 'give') {
-	            if (query.account !== null && $scope.user.account.id == query.account.id) {
-	                query.hideAnalysis = true;
-	                query.hasError = true;
-	                query.errorMessage = "Réfléchis mon grand ! On ne peut pas se faire de don à soi-même !";
-	            }
-	            if (query.qty <= 0) {
-	                query.hideAnalysis = true;
-	                query.hasError = true;
-	                query.errorMessage = "On ne peut donner que des montants strictement positifs.";
-	            }
-	        }
-	        */
 
 	        return query;
 	    };

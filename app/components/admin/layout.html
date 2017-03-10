@@ -4,7 +4,7 @@
             <a title="Dashboard" ui-sref="bar.admin({ bar: bar.id })"><span class="glyphicon glyphicon-dashboard"></span> <span class="hidden-xs">Dashboard</span></a>
         </li>
         <li ng-class="admin.active == 'food' && 'active'" class="dropdown dropdownli" dropdown ng-if="user.can('add_sellitem')">
-            <a title="Aliments" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false">
+            <a title="Aliments" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false" id="admin-food">
                 <span class="glyphicon glyphicon-cutlery"></span> <span class="hidden-xs">Aliments</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
@@ -14,18 +14,17 @@
                 <li><a ui-sref="bar.admin.food.inventory({ bar: bar.id })" ng-if="user.can('add_inventorytransaction')">Faire un inventaire</a></li>
                 <li><a ui-sref="bar.admin.food.stockitems_list({ bar: bar.id })" ng-if="user.can('add_sellitem')">Liste des aliments achetés</a></li>
                 <li><a ui-sref="bar.admin.food.regroup({ bar: bar.id })" ng-if="user.can('add_sellitem')">Regrouper des articles</a></li>
+                <li><a ui-sref="bar.admin.suggesteditem.list({ bar: bar.id })" ng-if="user.can('change_suggesteditem')">Aliments suggérés</a></li>
                 <li><a ui-sref="bar.admin.food.graphs({ bar: bar.id })" ng-if="false">Graphiques</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'account' && 'active'" class="dropdown dropdownli" dropdown ng-if="user.can('add_account') || user.can('add_collectivePaymenttransaction')">
-            <a title="Utilisateurs" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false">
+            <a title="Utilisateurs" class="dropdown-toggle link" dropdown-toggle role="button" aria-expanded="false" id="admin-user">
                 <span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">Utilisateurs</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="bar.admin.account.add({ bar: bar.id })" ng-if="user.can('add_user')">Créer un utilisateur</a></li>
-                <li><a ui-sref="bar.admin.account.link({ bar: bar.id })" ng-if="user.can('add_account')">Importer un utilisateur existant</a></li>
+                <li><a ui-sref="bar.admin.account.add({ bar: bar.id })" ng-if="user.can('add_user') && user.can('add_account')">Créer un compte</a></li>
                 <li><a ui-sref="bar.admin.account.collectivePayment({ bar: bar.id })" ng-if="user.can('add_collectivePaymenttransaction')">Paiement collectif</a></li>
-                <li><a ui-sref="bar.admin.account.import({ bar: bar.id })" ng-if="false">Importer des utilisateurs de bars</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'news' && 'active'" class="dropdown dropdownli" dropdown ng-if="user.can('add_news')">
@@ -36,6 +35,7 @@
                 <li><a ui-sref="bar.admin.news.next-appro({ bar: bar.id })">Annoncer la prochaine appro</a></li>
                 <li><a ui-sref="bar.admin.news.add({ bar: bar.id })" ng-if="user.can('add_news')">Ajouter une news</a></li>
                 <li><a ui-sref="bar.admin.news.list({ bar: bar.id })" ng-if="user.can('change_news') || user.can('delete_news')">Liste des news</a></li>
+                <li><a ui-sref="bar.admin.news.mail({ bar: bar.id })" ng-if="user.can('add_news')">Envoyer un message aux utilisateurs</a></li>
             </ul>
         </li>
         <li ng-class="admin.active == 'compta' && 'active'" class="dropdown dropdownli" dropdown>

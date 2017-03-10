@@ -1,8 +1,25 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
     <h3>Faire une appro</h3>
     <div>
-        <alert ng-repeat="alert in appro.errors" type="danger" close="closeAlert($index)">{{ alert }}</alert>
+        <alert ng-repeat="alert in appro.errors track by $index" type="danger" close="closeAlert($index)">{{ alert }}</alert>
         <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Importer depuis</label>
+                <div class="col-sm-10">
+                    <span class="h3">
+                        <input type="button" class="btn btn-success btn-xs" ui-sref="bar.admin.food.autoappro.ooshop({bar: bar.id})" value="Ooshop" />
+                    </span>
+                    <span class="h3">
+                        <input type="button" class="btn btn-danger btn-xs" ui-sref="bar.admin.food.autoappro.intermarche({bar: bar.id})" value="Intermarché" />
+                    </span>
+                    <span class="h3">
+                        <input type="button" class="btn btn-info btn-xs" ui-sref="bar.admin.food.autoappro.picard({bar: bar.id})" value="Picard" />
+                    </span>
+                    <span class="h3">
+                        <input type="button" class="btn btn-warning btn-xs" ui-sref="bar.admin.food.autoappro.houra({bar: bar.id})" value="Houra" />
+                    </span>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="addApproItemInput">Ajouter</label>
                 <div class="col-sm-10">
@@ -27,6 +44,41 @@
                     <input type="button" class="btn btn-primary" ng-disabled="!appro.in()" ng-click="appro.validate()" value="Valider l'appro" />
                 </div>
             </div>
+            <div class="form-group" ng-if="appro.failedAutoAppro.length > 0">
+                <label class="col-sm-2 control-label">Aliments non importés</label>
+                <div class="col-sm-10">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Code-barre</th>
+                                <th>Nom</th>
+                                <th>Quantité</th>
+                                <th>Prix</th>
+                                <th>Marquer ajouté</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(k, item) in appro.failedAutoAppro">
+                                <td>{{ :: item.barcode }}</td>
+                                <td>
+                                    <a href="{{ :: item.link }}" target="_blank">
+                                        {{ :: item.name }}
+                                    </a>
+                                    <br />
+                                    {{ :: item.container }}
+                                </td>
+                                <td>{{ :: item.qty }}</td>
+                                <td>{{ :: item.totalPrice | currency }}</td>
+                                <td class="vmiddle">
+                                    <a title="Supprimer cet aliment de la liste" ng-click="appro.failedAutoAppro.splice(k, 1)" class="link">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </form>
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
@@ -37,16 +89,26 @@
                 <tr>
                     <th>Nom</th>
                     <th>Quantité</th>
-                    <th>Total</th>
+                    <th>
+                        <span tooltip="Prix total">Prix</span>
+                    </th>
+                    <th>
+                        <span tooltip="Cocher cette case si ce changement de prix est permanent">
+                            Permanent
+                        </span>
+                    </th>
                     <th> </th>
                 </tr>
                 <tr ng-repeat="(i, item) in appro.itemsList | orderBy:'nb':true | filter:filterItemsl">
                     <td class="vmiddle"><bars:buyitem buyitem="item.buyitemprice.buyitem"></bars:buyitem></td>
                     <td class="vmiddle">
-                        <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" />
+                        <input type="number" ng-model="item.qty" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}1" step="any" min="0" />
                     </td>
                     <td class="vmiddle">
-                        <input type="number" ng-model="item.price" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}2" />&nbsp;€
+                        <input type="number" ng-model="item.price" class="form-control input-sm pqty" ng-change="appro.recomputeAmount()" tabindex="{{ i }}2" step="any" min="0" />&nbsp;€
+                    </td>
+                    <td class="vmiddle">
+                        <input type="checkbox" ng-model="item.permanent" />
                     </td>
                     <td class="vmiddle">
                         <a title="Supprimer de l'appro cet aliment" ng-click="appro.removeItem(item)" class="link">

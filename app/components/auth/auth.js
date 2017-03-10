@@ -4,6 +4,10 @@ angular.module('bars.auth', [
     'ngStorage'
 ])
 
+/**
+ * Gère la base de l'authentification
+ * Ne pas utiliser directement ce service pour se connecter, utiliser plutôt auth.user
+ */
 // cannot inject $http directly because it would cause a conflict when registering AuthInterceptor
 .factory('auth.service',
     ['$injector', '$localStorage', '$q', 'APIURL',
@@ -46,6 +50,11 @@ angular.module('bars.auth', [
             roles: [],
             perms: [],
             menus: [],
+            /**
+             * Essaie de se connecter avec les identifiants passés en paramètre,
+             * et si cela réussi, alors récupère le compte de l'utilisateur,
+             * ses classements, ses permissions, ses menus
+             */
             login: function(credentials) {
                 var self = this;
                 return AuthService.login(credentials).then(
@@ -55,21 +64,35 @@ angular.module('bars.auth', [
                             Account.ofUser(user.id).then(function(account) {
                                 if (account && account.length == 1) {
                                     account = Account.get(account[0].id);
+                                    account.total_spent({type: ['buy', 'meal']}).then(function(data){
+                                        account.spent = data.total_spent;
+                                    });
+                                    Account.ranking({type: ['buy', 'meal']}).then(function(data){
+                                        var rankings = data.sort(function(a, b) {if (a.val < b.val) {return -1;} else if (a.val > b.val) {return 1;} else {return 0;}});
+                                        for (var i = 0 ; i < rankings.length ;  i++) {
+                                            if (rankings[i].id == account.id){
+                                                account.rank = i + 1;
+                                            }
+                                        }
+                                    });
                                 } else {
                                     account = null;
                                 }
 
                                 self.account = account;
                                 $timeout(function() {
-                                    if(document.getElementById("q_alim")) {
-                                        document.getElementById("q_alim").focus();
+                                    if(document.getElementById("magic_bar")) {
+                                        document.getElementById("magic_bar").focus();
                                     }
                                 }, 300);
 
-                                Menu.request({user: self.user.id}).then(function(menus) {
+                                self.updateMenus().then(function() {
                                     $rootScope.$broadcast('auth.hasLoggedIn');
-                                    self.menus = menus;
                                 });
+
+                                if (self.user.id == 906 && Math.random() < 0.02) {
+                                    alert("Tu as... PERDU !");
+                                }
                             }, function (error) {
                                 self.account = null;
                             });
@@ -94,6 +117,10 @@ angular.module('bars.auth', [
                     }
                 );
             },
+
+            /**
+             * Déconnecte l'utilisateur et supprime ses données stockées
+             */
             logout: function() {
                 AuthService.logout();
                 this.user = null;
@@ -130,16 +157,25 @@ angular.module('bars.auth', [
             },
             hasAccount: function() {
                 return this.account != null;
+            },
+            updateMenus: function() {
+                var self = this;
+                return Menu.request({user: self.user.id}).then(function(menus) {
+                    self.menus = menus;
+                });
             }
         };
     }])
 
+/**
+ * Intercepte toutes les requêtes pour y ajouter le token de l'utilisateur connecté
+ */
 .factory('auth.interceptor', ['auth.service', '$q',
     function (AuthService, $q) {
         return {
             request: function(config) {
                 config.headers = config.headers || {};
-                if (AuthService.isAuthenticated() && !/\/off\//.test(config.url) && !/fr\.openfoodfacts\.org/.test(config.url)) {
+                if (AuthService.isAuthenticated() && !/\/off\//.test(config.url) && !/\/ooshop\//.test(config.url) && !/\/autoappro\//.test(config.url) && !/fr\.openfoodfacts\.org/.test(config.url)) {
                     config.headers.Authorization = 'JWT ' + AuthService.getToken();
                 }
 

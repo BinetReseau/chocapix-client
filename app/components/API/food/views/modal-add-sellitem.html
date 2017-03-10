@@ -5,23 +5,26 @@
     <h4 class="modal-title" id="attachModalLabel">Attacher un article à cet aliment</h4>
 </div>
 <div class="modal-body">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label class="col-sm-3 control-label" for="itemToAttachInput">Aliment à attacher</label>
-                <div class="col-sm-9">
-                    <input type="text" id="itemToAttachInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list | filter:{deleted: false} | filter:filterItems | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" />
+    <alert ng-repeat="error in errors" type="danger" close="closeAlert($index)">{{ error }}</alert>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="itemToAttachInput">Aliment à attacher</label>
+            <div class="col-sm-9">
+                <input type="text" id="itemToAttachInput" class="form-control" placeholder="Article à associer à l'aliment" typeahead="item.name for item in sellitem_list | filter:{deleted: false} | filter:filterItems | limitTo:7" ng-model="searchl" autocomplete="off" typeahead-on-select="addItem($item)" />
+
+                <p class="help-block"><strong>Attention :</strong> vous ne pouvez pas attacher un aliment dont le stock est négatif.</p>
+            </div>
+        </div>
+        <div class="form-group" ng-if="itemToAttach != null">
+            <label class="col-sm-3 control-label" for="unitFactorInput">1 {{ food_item.unit_name && food_item.unit_name + ' de ' }}{{ food_item.name }} = </label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input type="number" min="0" step="any" ng-model="itemToAttach.unit_factor" class="form-control input-sm pqty" />
+                    <span class="input-group-addon">{{ (itemToAttach.unit_factor > 1 && itemToAttach.unit_name_plural) && itemToAttach.unit_name_plural || itemToAttach.unit_name }} de {{ itemToAttach.name }}</span>
                 </div>
             </div>
-            <div class="form-group" ng-if="itemToAttach != null">
-                <label class="col-sm-3 control-label" for="unitFactorInput">1 {{ food_item.unit_name && food_item.unit_name + ' de ' }}{{ food_item.name }} = </label>
-                <div class="col-sm-9">
-                    <div class="input-group">
-                        <input type="number" ng-model="itemToAttach.unit_factor" class="form-control input-sm pqty" />
-                        <span class="input-group-addon">{{ (itemToAttach.unit_factor > 1 && itemToAttach.unit_name_plural) && itemToAttach.unit_name_plural || itemToAttach.unit_name }} de {{ itemToAttach.name }}</span>
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>
+    </form>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">Annuler</button>

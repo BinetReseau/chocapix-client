@@ -6,7 +6,7 @@
         Liste des news
     </h3>
 
-    <div ng-repeat="news in news_list | orderBy:'-last_modified'" class="panel panel-default">
+    <div ng-repeat="news in news_list | filter:onlyBar | orderBy:'-last_modified'" class="panel panel-default">
         <div class="panel-heading">
             <div class="pull-right">
                 <a ng-click="upNews(news)" class="btn btn-info btn-xs atooltip" tooltip="Afficher sur la page d'accueil"><span class="glyphicon glyphicon-arrow-up"></span> Remonter</a>

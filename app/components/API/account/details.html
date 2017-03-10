@@ -17,7 +17,7 @@
                     <option value="refund" ng-if="user.can('add_refundtransaction')">Rembourser une appro</option>
                     <option value="withdraw" ng-if="user.can('add_withdrawtransaction')">Retirer de l'argent</option>
                 </select>
-                <input type="number" step="any" class="form-control number" ng-model="query.qty" select-on-click />
+                <input type="number" step="any" min="0" class="form-control number" ng-model="query.qty" select-on-click />
                 <span ng-switch on="query.type">
                     <input ng-switch-when="punish" type="text" class="form-control large" ng-model="query.motive" placeholder="Motif de l'amende" />
                     <input ng-switch-when="refund" type="text" class="form-control large" ng-model="query.motive" placeholder="Motif du remboursement" />
@@ -151,7 +151,7 @@
                                             <div class="col-sm-10">
                                                 <select class="form-control" ng-options="key as value for (key, value) in rolesNameAuthorized" ng-model="rolen">
                                                 </select>
-                                                <span class="help-block">Pour ajouter les rôles respo bar, respo appro ou respo inventaire envoie un mail à <a href="mailto:babe@eleves.polytechnique.fr">babe@eleves.polytechnique.fr</a>.</span>
+                                                <span class="help-block">Pour ajouter les rôles respo bar, respo appro ou respo inventaire envoie un mail à <a href="mailto:babe@binets.polytechnique.fr">babe@binets.polytechnique.fr</a>.</span>
                                             </div>
                                         </div>
                                         <div class="form-group">

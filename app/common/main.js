@@ -10,8 +10,9 @@ angular.module('bars.main', [
         .state('bar', {
             url: "/{bar:(?!home)[^/]+}",
             resolve: {
-                api: ['APIInterface' , '$stateParams', function(APIInterface, $stateParams) {
+                api: ['APIInterface', 'storage.bar', '$stateParams', function(APIInterface, storage, $stateParams) {
                     APIInterface.setBar($stateParams.bar);
+                    storage.setBar($stateParams.bar);
                 }],
                 bar: ['api.models.bar', 'api.models.barsettings', '$stateParams', function(Bar, BarSettings, $stateParams) { // BarSettings necessary to register the model in APIModel
                     return Bar.get($stateParams.bar);
@@ -108,7 +109,21 @@ angular.module('bars.main', [
                     return News.request({bar: [bar.id, 'root']}).then(function (o) {
                         $rootScope.$broadcast('api.News.loaded');
                         return o;
+                    }, function (err) {
+                        $rootScope.$broadcast('api.News.error');
                     });
+                }],
+                suggesteditems: ['api.models.suggesteditem', '$rootScope', function(SuggestedItem, $rootScope) {
+                    SuggestedItem.clear();
+                    return SuggestedItem.reload().then(function (o) {
+                        $rootScope.$broadcast('api.SuggestedItem.loaded');
+                        return o;
+                    }, function (err) {
+                        $rootScope.$broadcast('api.SuggestedItem.error');
+                    });
+                }],
+                food_list: ['api.models.sellitem', function(SellItem) {
+                    return SellItem.all();
                 }]
             },
             views: {
@@ -203,8 +218,8 @@ angular.module('bars.main', [
 
 .controller(
     'main.ctrl.bar',
-    ['$scope','news', 'auth.user', '$timeout',
-    function($scope, news, AuthUser, $timeout) {
+    ['$scope', 'news', 'auth.user', '$timeout', 'suggesteditems', 'food_list',
+    function($scope, news, AuthUser, $timeout, suggesteditems, food_list) {
         $scope.bar.active = 'index';
         $scope.list_news = function () {
             return _.sortBy(_.reject(news, 'deleted'), 'last_modified');
@@ -235,13 +250,17 @@ angular.module('bars.main', [
         };
 
         if (AuthUser.isAuthenticated()) {
-            document.getElementById("q_alim").focus();
+            document.getElementById("magic_bar").focus();
         } else {
             document.getElementById("floginc").focus();
         }
         var now = new Date();
         var dateAppro = new Date($scope.bar.infos.next_scheduled_appro);
         $scope.thereIsAnAppro = dateAppro >= now;
+
+        $scope.suggestions = suggesteditems;
+
+        $scope.list = food_list;
 
         $timeout(function() {
             var $div = $('#lnews');
@@ -284,11 +303,18 @@ angular.module('bars.main', [
     function($scope, AuthUser, Account, User, Role, Meal, user, account, rolesc, rolesg, menus) {
         if (account && account.length > 0) {
             account = Account.get(account[0].id);
-        } else {
-            account = null;
-        }
+            account.total_spent({type: ['buy', 'meal']}).then(function(data){
+                account.spent = data.total_spent;
+            });
+            Account.ranking({type: ['buy', 'meal']}).then(function(data){
+                var rankings = data.sort(function(a, b) {if (a.val < b.val) {return -1;} else if (a.val > b.val) {return 1;} else {return 0;}});
+                for (var i = 0 ; i < rankings.length ;  i++) {
+                    if (rankings[i].id == account.id){
+                        account.rank = i + 1;
+                    }
+                }
+            });
 
-        if (user) {
             AuthUser.account = account;
             AuthUser.user = user;
             AuthUser.menus = menus;
@@ -298,6 +324,9 @@ angular.module('bars.main', [
             }
             Meal.account = AuthUser.account;
             Meal.init();
+            Meal.restore();
+        } else {
+            account = null;
         }
 
         $scope.meal = Meal;

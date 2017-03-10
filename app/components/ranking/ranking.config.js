@@ -17,7 +17,7 @@ angular.module('bars.ranking', [
                     return Account.ranking({type: ['buy', 'meal'], date_start: moment().subtract(1, 'months').toDate()});
                 }],
                 best_coheze: ['api.models.account', function(Account) {
-                    return Account.ranking({type: 'meal'});
+                    return Account.coheze_ranking({});
                 }],
                 best_sellitem_ever: ['bar', function(bar) {
                     return bar.sellitem_ranking({});

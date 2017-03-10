@@ -27,19 +27,17 @@ angular.module('bars.admin.news', [
         .state('bar.admin.news.list', {
             url: '/list',
             templateUrl: "components/admin/news/list.html",
-            controller: 'admin.ctrl.news.list',
-            resolve: {
-                news_list_bar: ['api.models.news', function(News) {
-                    News.clear();
-                    News.reload();
-                    return News.all();
-                }]
-            }
+            controller: 'admin.ctrl.news.list'
         })
         .state('bar.admin.news.edit', {
             url: '/edit/:id',
             templateUrl: "components/admin/news/form.html",
             controller: 'admin.ctrl.news.edit'
+        })
+        .state('bar.admin.news.mail', {
+            url: '/mail',
+            templateUrl: "components/admin/news/mail.html",
+            controller: 'admin.ctrl.news.mail'
         })
     ;
 }])
@@ -77,8 +75,8 @@ angular.module('bars.admin.news', [
     }
 ])
 .controller('admin.ctrl.news.add',
-    ['$scope', 'api.models.news', 'api.models.user', '$state',
-    function($scope, News, User, $state) {
+    ['$scope', 'api.models.news', 'api.models.user', '$state', 'news', 'bar',
+    function($scope, News, User, $state, news, bar) {
         $scope.formType = 'add';
         $scope.admin.active = 'news';
         $scope.news = News.create();
@@ -86,6 +84,7 @@ angular.module('bars.admin.news', [
             $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
             $scope.news.deleted = false;
             $scope.news.$save().then(function(newNews) {
+                news.push(newNews);
                 $state.go('bar.admin.news.list');
             }, function(errors) {
                 // TODO: display form errors
@@ -94,10 +93,13 @@ angular.module('bars.admin.news', [
     }
 ])
 .controller('admin.ctrl.news.list',
-    ['$scope', 'api.models.news', 'api.models.account', 'news_list_bar',
-    function($scope, News, Account, news_list) {
+    ['$scope', 'api.models.news', 'api.models.account', 'news', 'bar',
+    function($scope, News, Account, news_list, bar) {
         $scope.admin.active = 'news';
         $scope.news_list = news_list;
+        $scope.onlyBar = function(n) {
+            return n.bar.id == bar.id;
+        };
         $scope.trash = function(news) {
             news.deleted = true;
             news.$save();
@@ -107,26 +109,40 @@ angular.module('bars.admin.news', [
             news.$save();
         };
         $scope.upNews = function(news) {
-            news.$save().then(function() {
-                $scope.news_list = News.all();
-            });
+            news.$save();
         };
     }
 ])
 .controller('admin.ctrl.news.edit',
-    ['$scope', 'api.models.news', 'api.models.user', '$stateParams', '$state',
-    function($scope, News, User, $stateParams, $state) {
+    ['$scope', 'api.models.news', 'api.models.user', '$stateParams', '$state', 'news',
+    function($scope, News, User, $stateParams, $state, news) {
         $scope.formType = 'edit';
         $scope.admin.active = 'news';
-        $scope.news = News.get($stateParams.id);
+        $scope.news = _.find(news, function(n) {
+            return n.id == $stateParams.id;
+        });
         $scope.saveNews = function() {
             $scope.news.name = $scope.news.name == '' ? 'Informations' : $scope.news.name;
             $scope.news.$save().then(function(newNews) {
                 $state.go('bar.admin.news.list');
             }, function(errors) {
-                    // TODO: display form errors
+                // TODO: display form errors
             });
         };
     }]
 )
+.controller('admin.ctrl.news.mail',
+    ['$scope', 'api.models.account',
+    function($scope, Account) {
+        $scope.admin.active = 'news';
+        var emails_list = _.map(
+            _.filter(Account.all(), function(a) { return !a.deleted && a.owner.is_active && a.owner.email; }),
+            function (a) {
+                return a.owner.email;
+            }
+        );
+
+        $scope.emails = emails_list.join(', ');
+    }
+])
 ;
