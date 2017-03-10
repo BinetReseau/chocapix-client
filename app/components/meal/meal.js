@@ -202,7 +202,7 @@ angular.module('bars.meal', [
                     document.getElementById("magic_bar").focus();
                 })
                 .catch(function() {
-                    refThis.error("Impossible d'enregistrer la bouffe à plusieurs");
+                    refThis.error("Impossible d'enregistrer la bouffe à plusieurs : solde négatif ?");
                 });
             },
             /**
@@ -214,7 +214,7 @@ angular.module('bars.meal', [
             error: function(message, duration) {
                 var _this = this;
                 _this.errorMessage = message;
-                duration = duration || 4000;
+                duration = duration || 7000;
                 $timeout(function () {
                     _this.errorMessage = "";
                 }, duration);
