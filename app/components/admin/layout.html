@@ -43,7 +43,7 @@
                 <span class="glyphicon glyphicon-piggy-bank"></span> <span class="hidden-xs">Comptabilité</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="bar.admin.compta.infos({ bar: bar.id })">État du bar</a></li>
+                <li class=""><a ui-sref="bar.admin.compta.infos({ bar: bar.id })">État du bar</a></li>
                 <li><a ui-sref="bar.admin.compta.investment({ bar: bar.id })" ng-if="user.can('add_barInvestmenttransaction')">Loguer du matériel</a></li>
             </ul>
         </li>
