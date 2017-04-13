@@ -55,6 +55,11 @@ angular.module('bars.admin.food', [
                 templateUrl: "components/admin/food/autoappro/houra.html",
                 controller: 'admin.ctrl.food.autoappro.houra'
             })
+            .state('bar.admin.food.autoappro.chicandrun', {
+                url: "/chicandrun",
+                templateUrl: "components/admin/food/autoappro/chicandrun.html",
+                controller: 'admin.ctrl.food.autoappro.chicandrun'
+            })
         .state('bar.admin.food.approhelper', {
             url: "/appro-helper",
             templateUrl: "components/admin/food/approhelper.html",
@@ -507,6 +512,112 @@ angular.module('bars.admin.food', [
         };
     }
 ])
+.controller('admin.ctrl.food.autoappro.chicandrun',
+    ['$scope', '$http', '$modal', '$state', 'admin.appro',
+    function($scope, $http, $modal, $state, Appro) {
+        //api.chicandrun.fr futur url prévu, contact@chicandrun.fr si plus de données sont désirées
+        var CHICANDRUN_URL = 'http://api.coeuracoeur.tk'; 
+        var token;
+        function connexion(login, password) {
+            $scope.stape1.loading = true;
+            $http.post(CHICANDRUN_URL , {email: login, password: password}).then(function(result) {
+                console.log(result);
+                if (!result.data.token) {
+                    throw("Wrong Chic and run password");
+                }
+                token = result.data.token;
+                return $http.post(CHICANDRUN_URL, {token: token});
+            }).then(function(result2) {
+                $scope.stape = 2;
+                $scope.stape1.loading = false;
+                $scope.stape2.orders = result2.data.orders;
+            }).catch(function() {
+                $scope.stape1.password = '';
+                $scope.stape1.loading = false;
+            });
+        }
+         function getOrder(id) {
+             return $http.post(CHICANDRUN_URL, {token: token, order: id}).then(function(r) {
+                    console.log(r.data);
+                    _.forEach(r.data, function (p) {
+                        p.price = parseFloat(p.unit_price_tax_incl.replace('€', '').replace(',', '.'));
+                        p.amount = parseFloat(p.product_quantity);
+                        p.total_price = p.price*p.amount;
+                        p.barcode = p.ean13;
+                    });
+                return r;
+            });
+        }
+        function previewOrder(order) {
+            order.loadingp = true;
+            getOrder(order.id).then(function(result) {
+                order.loadingp = false;
+                var modalOrder = $modal.open({
+                    templateUrl: 'components/admin/food/autoappro/chicandrun-modal-order.html',
+                    controller: ['$scope', 'items', function ($scope, items) {
+                        $scope.items = items;
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return result.data;
+                        }
+                    }
+                });
+            });
+        }
+        
+        function selectOrder(order) {
+            order.loadings = true;
+            getOrder(order.id).then(function(result) {
+                _.forEach(result.data, function(item, key) {
+                    var details = [];
+                    if (!Appro.addItemFromBarcode(item.barcode, item.amount, item.total_price)) {
+                        Appro.failedAutoAppro.push({
+                            name: item.product_name,
+                            qty: item.amount,                            
+                            totalPrice: item.total_price,
+                            barcode: item.barcode,
+                            //futur url normalement prévu
+                            link: "http://www.shop.chicandrun.fr/index.php?id_product="+item.product_id+"&id_product_attribute="+item.product_attribute_id+"&controller=product",
+                            itemObj: item,
+                            key: key
+                        });
+                        //Variable pour l'éventuel modal addproduct
+                        details.name = item.product_name;
+                        details.name_plural = item.product_name;
+                        details.unit = item.product_unity;
+                        details.unit_plural = item.product_unity;
+                        details.container_qty = Number(item.product_value);
+                        if(item.manufacturer){
+                            details.brand = item.manufacturer;
+                        }else if(item.supplier){
+                            details.brand = item.supplier;
+                        }
+                        item['details']=details;
+                        item.itemqty=1;
+                        item.new_appro=true;
+                    }
+                });
+
+            });
+            order.loadings = false;
+            $state.go('bar.admin.food.appro', {bar: $scope.bar.id}); 
+        }
+        $scope.stape = 1;
+        $scope.stape1 = {
+            login: '',
+            password: '',
+            validate: connexion,
+            loading: false
+        };
+        $scope.stape2 = {
+            orders: [],
+            preview: previewOrder,
+            select: selectOrder,
+        };
+    }
+])
 .controller('admin.ctrl.food.approhelper',
     ['$scope', 'bar', 'api.models.sellitem', '$q',
     function($scope, bar, SellItem, $q) {
@@ -707,12 +818,20 @@ angular.module('bars.admin.food', [
         // Si un barcode est fourni au chargement, on s'en occupe
         data.barcode = $scope.barcode;
         if (data.barcode && data.barcode != "") {
-            $scope.allow_barcode_edit = false;
+            if($scope.buy_item.new_appro){
+                $scope.allow_barcode_edit = $scope.buy_item.new_appro;
+            }else{
+                $scope.allow_barcode_edit = false;
+            }
             search(data.barcode);
         }
         // Si un BuyItem est fourni au chargement, on s'en occupe
-        if ($scope.buy_item) {
-            $scope.allow_barcode_edit = false;
+        if ($scope.buy_item) {           
+            if($scope.buy_item.new_appro){
+                $scope.allow_barcode_edit = $scope.buy_item.new_appro;
+            }else{
+                $scope.allow_barcode_edit = false;
+            }
             data.barcode = $scope.buy_item.barcode;
             fillWithBuyItem($scope.buy_item);
         }
@@ -847,18 +966,20 @@ angular.module('bars.admin.food', [
                 $scope.block = true;
                 return true;
             } else {
-                data.bi_id = null;
-                data.bi_itemqty = '';
-                data.id_id = null;
-                data.id_name = '';
-                data.id_name_plural = '';
-                data.id_container = '';
-                data.id_container_plural = '';
-                data.id_unit = '';
-                data.id_unit_plural = '';
-                data.id_container_qty = '';
-                data.id_brand = '';
-                data.itemInPack = '';
+                if(!$scope.buy_item.new_appro){
+                    data.bi_id = null;
+                    data.bi_itemqty = '';
+                    data.id_id = null;
+                    data.id_name = '';
+                    data.id_name_plural = '';
+                    data.id_container = '';
+                    data.id_container_plural = '';
+                    data.id_unit = '';
+                    data.id_unit_plural = '';
+                    data.id_container_qty = '';
+                    data.id_brand = '';
+                    data.itemInPack = '';
+                }
             }
             if (basic) {
                 $scope.block = false;
@@ -1284,8 +1405,8 @@ angular.module('bars.admin.food', [
     }
 ])
 .factory('admin.appro',
-    ['api.models.stockitem', 'api.models.buyitemprice', 'api.services.action',
-    function (StockItem, BuyItemPrice, APIAction) {
+    ['api.models.stockitem', 'api.models.buyitemprice', 'api.services.action', '$modal',
+    function (StockItem, BuyItemPrice, APIAction, $modal) {
         var nb = 0;
         return {
             itemsList: [],
@@ -1309,6 +1430,37 @@ angular.module('bars.admin.food', [
                 this.itemsList = [];
                 this.totalPrice = 0;
                 this.inRequest = false;
+            },
+            newProd: function (item){
+                var modalNewFood = $modal.open({
+                    templateUrl: 'components/admin/food/modalAdd.html',
+                    size: 'lg',
+                    controller: 'admin.ctrl.food.addModal',
+                    resolve: {
+                        barcode: function () {
+                            return item.itemObj.barcode;
+                        },
+                        buy_item: function () {
+                            return item.itemObj;
+                        },
+                    }
+                });
+
+                var vm=this;
+                modalNewFood.result.then(function (buyItemPrice) {
+                    //console.dir(buyItemPrice);
+                    if (vm.addItemFromBarcode(buyItemPrice.buyitem.barcode, item.itemObj.amount, item.itemObj.total_price)) {
+                        var newFailedAutoAppro = [];
+                        _.forEach(vm.failedAutoAppro, function(itemFail) {
+                            if(itemFail.itemObj != item.itemObj){
+                                newFailedAutoAppro.push(itemFail);
+                            }
+                        });
+                        vm.failedAutoAppro = newFailedAutoAppro;
+                        console.dir(vm.failedAutoAppro);
+                    }
+                }, function () {
+                });
             },
             recomputeAmount: function() {
                 var totalPrice = 0;
