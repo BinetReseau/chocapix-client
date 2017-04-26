@@ -1,0 +1,69 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <h3>Auto-Appro : Chic and run</h3>
+    <div class="row" ng-show="stape == 1">
+        <div class="col-md-2 text-right h3">
+            Étape 1<br />
+            <small>Connexion</small>
+        </div>
+        <div class="col-md-10">
+            <form class="form-horizontal" ng-submit="stape1.validate(stape1.login, stape1.password, stape1.zipcode)">
+                <div class="form-group">
+                    <label class="col-md-4 col-lg-2 control-label">Adresse email</label>
+                    <div class="col-md-8 col-lg-10">
+                        <input type="email" class="form-control" placeholder="louis.vaneau@polytechnique.edu" ng-model="stape1.login" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-lg-2 control-label">Mot de passe</label>
+                    <div class="col-md-8 col-lg-10">
+                        <input type="password" class="form-control" placeholder="****" ng-model="stape1.password" />
+                    </div>
+                </div>
+          
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8 col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-success" ng-class="stape1.loading && 'disabled' || ''">
+                            Connexion à Chic and run <span class="glyphicon-refresh-animate glyphicon glyphicon-refresh" ng-show="stape1.loading"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" ng-show="stape == 2">
+        <div class="col-md-2 text-right h3">
+            Étape 2<br />
+            <small>Choix de la commande</small>
+        </div>
+        <div class="col-md-10">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Numéro de commande</th>
+                        <th>Total</th>
+                        <th class="text-center">Prévisualiser</th>
+                        <th class="text-center">Sélectionner</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="order in stape2.orders.order">
+
+                        <td>{{ order.date_add | amCalendar }}</td>
+                        <td>{{ order.reference }}</td>
+                        <td>{{ order.total_paid_real }}</td>
+                        <td class="text-center">
+                            <a href ng-click="stape2.preview(order)" ng-show="!order.loadingp">Prévisualiser</a>
+                            <span class="glyphicon-refresh-animate glyphicon glyphicon-refresh" ng-if="order.loadingp"></span>
+                        </td>
+                        <td class="text-center">
+                            <a href ng-click="stape2.select(order)" ng-show="!order.loadings">Sélectionner</a>
+                            <span class="glyphicon-refresh-animate glyphicon glyphicon-refresh" ng-if="order.loadings"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
