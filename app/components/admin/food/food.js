@@ -265,7 +265,7 @@ angular.module('bars.admin.food', [
 
             return pdfToText(receiptPdf).then(function(result) {
                 function addItemToAutoAppro(qty, price, barcode, name) {
-                    if (qty != 0 && !Appro.addItemFromBarcode(barcode, price / qty, price))
+                    if (qty != 0 && !Appro.addItemFromBarcode(barcode, qty, price))
                         Appro.failedAutoAppro.push({name: name, qty: qty, totalPrice: price, barcode: barcode});
                 }
                 for (var j = 0, m = result.length ; j < m ; ++j) {
