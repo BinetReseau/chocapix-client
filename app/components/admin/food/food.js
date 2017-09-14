@@ -229,28 +229,98 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.ooshop',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        function parseOrder(bill) {
-            var lines = bill.split('\n');
-            for (var i = 0, n = lines.length ; i < n ; ++i) {
-                var line = lines[i];
-                // Les lignes qui correspondent à un aliment dans la facture sont de la forme (les champs séparés par des '\t') :
-                // code_barre	nom_de_l’aliment	qté_commandée	qté_reçue	TVA_%	prix_unit.	prix_total
-                var fields = line.split(/ *\t */);
-                if (fields.length >= 4 && -1 != fields[0].search(/^[0-9]{13}$/)) {
-                    if (!Appro.addItemFromBarcode(fields[0], parseFloat(fields[3]), parseFloat(fields[6].replace(",", ".")))) {
-                        Appro.failedAutoAppro.push({
-                            name: fields[1],
-                            qty: parseFloat(fields[3]),
-                            totalPrice: parseFloat(fields[6].replace(",", ".")),
-                            barcode: fields[0]
-                        });
-                    }
+
+        /**
+         * Extract text from a pdf file.
+         * Returns an array of arrays of strings.
+         * Found on:
+         * https://stackoverflow.com/questions/1554280/extract-text-from-pdf-in-javascript#29111164
+         */
+        function pdfToText(data) {
+            PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+            PDFJS.cMapUrl = 'js/vendor/pdfjs/cmaps/';
+            PDFJS.cMapPacked = true;
+
+            return PDFJS.getDocument(data).then(function(pdf) {
+                var pages = [];
+                for (var i = 0; i < pdf.numPages; i++) {
+                    pages.push(i);
                 }
-            }
-            $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+                return Promise.all(pages.map(function(pageNumber) {
+                    return pdf.getPage(pageNumber + 1).then(function(page) {
+                        return page.getTextContent().then(function(textContent) {
+                            return textContent.items.map(function(item) {
+                                return item.str;
+                            });
+                        });
+                    });
+                })).then(function(pages) {
+                    return pages;
+                });
+            });
         }
+
+        function parseReceipt(receiptPdf) {
+            // receiptPdf must be a path to a pdf file or a Buffer.
+
+            return pdfToText(receiptPdf).then(function(result) {
+                function addItemToAutoAppro(qty, price, barcode, name) {
+                    if (qty != 0 && !Appro.addItemFromBarcode(barcode, price / qty, price))
+                        Appro.failedAutoAppro.push({name: name, qty: qty, totalPrice: price, barcode: barcode});
+                }
+                for (var j = 0, m = result.length ; j < m ; ++j) {
+                    var page = result[j];
+                    var step = 0;
+                    var ean13 = '', libelle = '', qte_livree = 0, montant_ttc = 0;
+                    for (var i = 0, n = page.length ; i < n ; ++i) {
+                        var line = page[i];
+                        if (step == 0 && line.search(/^[0-9]{13}$/) != -1) { ean13 = line; ++step; }
+                        else if (step == 1) { name = line; ++step; }
+                        else if (step == 3) { qte_livree = parseInt(line); ++step; }
+                        else if (step == 7) { montant_ttc = parseFloat(line); ++step; }
+                        else if (step == 8) {
+                            if (line[0] == ' ') {
+                                name += line;
+                            } else {
+                                addItemToAutoAppro(qte_livree, montant_ttc, ean13, name);
+                                step = 0;
+                                --i; // Relire la ligne car c’est sûrement le code barre de l’aliment suivant
+                                ean13 = '';
+                            }
+                        }
+                        else if (step != 0) ++step;
+                    }
+                    if (ean13 != '')
+                        addItemToAutoAppro(qte_livree, montant_ttc, ean13, name);
+                }
+            });
+        }
+
+        function getReceipt() {
+            $scope.parsing_receipt = true;
+            var receipt = document.getElementById("receipt_pdf").files[0];
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(receipt);
+            reader.onload = function (evt) {
+                parseReceipt(evt.target.result).then(function() {
+                    $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
+                }, function (err) {
+                    $scope.parsing_receipt = false;
+                    allowValidate = true;
+                });
+            }
+        }
+
         $scope.input = '';
-        $scope.validate = parseOrder;
+        $scope.parsing_receipt = false;
+
+        var allowValidate = true;
+        $scope.validate = function () {
+            if (allowValidate) {
+                allowValidate = false;
+                getReceipt();
+            }
+        }
     }
 ])
 .controller('admin.ctrl.food.autoappro.intermarche',
