@@ -3,7 +3,7 @@
     <h3>Auto-Appro : Ooshop</h3>
 	<div class="col-md-10">
         <div class="well">
-            Séléctionne la facture de l’appro (à télécharger sur la page <a href="https://www.ooshop.carrefour.com/orders">Mes dernières commandes</a>).
+            Séléctionne la facture de l’appro au format PDF (à télécharger sur la page <a href="https://www.ooshop.carrefour.com/orders">Mes dernières commandes</a>).
         </div>
         <form class="form-horizontal" ng-submit="validate()">
             <div class="form-group">
@@ -11,6 +11,6 @@
                 <button type="submit" class="btn btn-success" ng-class="parsing_receipt && 'disabled' || ''">Valider</button>
             </div>
         </form>
-        <p ng-show="parsing_receipt">Analyse du pdf en cours…</p>
+        <p ng-show="parsing_receipt">Analyse du PDF en cours…</p>
     </div>
 </div>
