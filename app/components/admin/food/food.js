@@ -284,7 +284,7 @@ angular.module('bars.admin.food', [
                             } else {
                                 addItemToAutoAppro(qte_livree, montant_ttc, ean13, name);
                                 step = 0;
-                                --i; // Relire la ligne car c’est sûrement le code barre de l’aliment suivant
+                                --i; // Relire la ligne car c'est surement le code barre de l'aliment suivant
                                 ean13 = '';
                             }
                         }
