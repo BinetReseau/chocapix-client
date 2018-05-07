@@ -237,11 +237,11 @@ angular.module('bars.admin.food', [
          * https://stackoverflow.com/questions/1554280/extract-text-from-pdf-in-javascript#29111164
          */
         function pdfToText(data) {
-            PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
-            PDFJS.cMapUrl = 'js/vendor/pdfjs/cmaps/';
-            PDFJS.cMapPacked = true;
+            pdfjsLib.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+            pdfjsLib.cMapUrl = 'js/vendor/pdfjs/cmaps/';
+            pdfjsLib.cMapPacked = true;
 
-            return PDFJS.getDocument(data).then(function(pdf) {
+            return pdfjsLib.getDocument(data).then(function(pdf) {
                 var pages = [];
                 for (var i = 0; i < pdf.numPages; i++) {
                     pages.push(i);
