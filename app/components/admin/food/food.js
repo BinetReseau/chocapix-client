@@ -229,80 +229,28 @@ angular.module('bars.admin.food', [
 .controller('admin.ctrl.food.autoappro.ooshop',
     ['$scope', '$http', '$modal', '$state', 'admin.appro',
     function($scope, $http, $modal, $state, Appro) {
-        // var OOSHOP_URL = 'http://mshop.carrefour.com/convertigo/projects/ooshop/.json'; // Original URL but no Access-Control-Origin header
-        // var OOSHOP_URL = 'https://neo.ntag.fr/ooshop/'; // Reverse proxy by ntag
-        var OOSHOP_URL = AUTOAPPRO_URL + '/ooshop/.json'; // Reverse proxy in the school
-        var cli_id;
-        function connexion(login, password) {
-            $scope.stape1.loading = true;
-            $http.get(OOSHOP_URL + '?__sequence=Login&login=' + login + '&password=' + password).then(function(result) {
-                if (result.data.document.isLogged == "false") {
-                    throw("Wrong Ooshop password");
-                }
-                cli_id = result.data.document.cli_id;
-                return $http.get(OOSHOP_URL + '?__sequence=GetMyAccount&cli_id=' + cli_id);
-            }).then(function(result2) {
-                $scope.stape = 2;
-                $scope.stape1.loading = false;
-                $scope.stape2.orders = result2.data.document.commandes.commande;
-            }).catch(function() {
-                $scope.stape1.password = '';
-                $scope.stape1.loading = false;
-            });
-        }
-        function getOrder(id) {
-            return $http.get(OOSHOP_URL + '?__sequence=GetCmdProduct&cli_id=' + cli_id + '&id=' + id);
-        }
-        function previewOrder(order) {
-            order.loadingp = true;
-            getOrder(order.id).then(function(result) {
-                order.loadingp = false;
-                var modalOrder = $modal.open({
-                    templateUrl: 'components/admin/food/autoappro/ooshop-modal-order.html',
-                    controller: ['$scope', 'items', function ($scope, items) {
-                        $scope.items = items;
-                    }],
-                    size: 'lg',
-                    resolve: {
-                        items: function () {
-                            return result.data.document.items.TABLE;
-                        }
-                    }
-                });
-            });
-        }
-        function selectOrder(order) {
-            order.loadings = true;
-            getOrder(order.id).then(function(result) {
-                _.forEach(result.data.document.items.TABLE, function(item) {
-                    var barcode = item.img_product_url.replace("Media/ProdImages/Produit/Images/", "").replace(".gif", "");
-                    if (!Appro.addItemFromBarcode(barcode, parseFloat(item.art_qte), parseFloat(item.uvc_buy)*parseFloat(item.art_qte))) {
+        function parseOrder(bill) {
+            var lines = bill.split('\n');
+            for (var i = 0, n = lines.length ; i < n ; ++i) {
+                var line = lines[i];
+                // Les lignes qui correspondent à un aliment dans la facture sont de la forme (les champs séparés par des '\t') :
+                // code_barre	nom_de_l’aliment	qté_commandée	qté_reçue	TVA_%	prix_unit.	prix_total
+                var fields = line.split(/ *\t */);
+                if (fields.length >= 4 && -1 != fields[0].search(/^[0-9]{13}$/)) {
+                    if (!Appro.addItemFromBarcode(fields[0], parseFloat(fields[3]), parseFloat(fields[6].replace(",", ".")))) {
                         Appro.failedAutoAppro.push({
-                            name: item.title,
-                            qty: parseFloat(item.art_qte),
-                            totalPrice: parseFloat(item.uvc_buy)*parseFloat(item.art_qte),
-                            barcode: barcode,
-                            container: item.contenance,
-                            link: "http://www.ooshop.com/courses-en-ligne/ContentNavigation.aspx?NOEUD_IDFO=" + item.id
+                            name: fields[1],
+                            qty: parseFloat(fields[3]),
+                            totalPrice: parseFloat(fields[6].replace(",", ".")),
+                            barcode: fields[0]
                         });
                     }
-                });
-                order.loadings = false;
-                $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
-            });
+                }
+            }
+            $state.go('bar.admin.food.appro', {bar: $scope.bar.id});
         }
-        $scope.stape = 1;
-        $scope.stape1 = {
-            login: '',
-            password: '',
-            validate: connexion,
-            loading: false
-        };
-        $scope.stape2 = {
-            orders: [],
-            preview: previewOrder,
-            select: selectOrder
-        };
+        $scope.input = '';
+        $scope.validate = parseOrder;
     }
 ])
 .controller('admin.ctrl.food.autoappro.intermarche',
