@@ -1,11 +1,24 @@
-bars-angular
-===========
+# Chocapix - Front end
+
+## Development
 Run:
+```
+npm install -g grunt bower
 
-  npm install && bower install
+npm install
+bower install
+grunt serve
+```
 
-  grunt serve
+Default backend logins: `admin:admin` `ntag:ntag` `tizot:tizot`
 
-or
+## Build for production
+```
+npm install -g gulp
+gulp build
+```
 
-  grunt build
+## Contacts
+* Basile Bruneau
+* Camille Masset
+* Guillaume Boisseau
