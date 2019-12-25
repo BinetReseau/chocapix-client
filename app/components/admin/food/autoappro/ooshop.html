@@ -1,17 +1,16 @@
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
 <div class="col-sm-12 col-md-12 col-lg-12">
     <h3>Auto-Appro : Ooshop</h3>
-    <div class="col-md-10">
+	<div class="col-md-10">
         <div class="well">
-            Rendez-vous sur www.ooshop.com, dans l’onglet <a href="http://www.ooshop.com/courses-en-ligne/WebForms/Utilisateur/MesCommandes.aspx">Mes commandes</a>, puis séléctionnez "Imprimer la facture" pour la commande voulue. Refusez l’impression, mais copiez la facture intégralement (avec ctrl-A ctrl-C par exemple), puis collez-la dans l’encadré suivant (ctrl-V).
+            Séléctionne la facture de l’appro au format PDF (à télécharger sur la page <a href="https://www.ooshop.carrefour.com/orders">Mes dernières commandes</a>).
         </div>
-        <form class="form-horizontal" ng-submit="validate(input)">
+        <form class="form-horizontal" ng-submit="validate()">
             <div class="form-group">
-                <label class="col-md-4 col-lg-2 control-label">Copiez votre facture Ooshop ici</label>
-                <div class="col-md-8 col-lg-10">
-                    <textarea name="Facture" class="form-control" ng-model="input" />
-                </div>
-                <button type="submit" class="btn btn-success" ng-class="input == '' && 'disabled' || ''">Valider</button>
+                <input required id="receipt_pdf" type="file" />
+                <button type="submit" class="btn btn-success" ng-class="parsing_receipt && 'disabled' || ''">Valider</button>
             </div>
         </form>
+        <p ng-show="parsing_receipt">Analyse du PDF en cours...</p>
     </div>
 </div>
